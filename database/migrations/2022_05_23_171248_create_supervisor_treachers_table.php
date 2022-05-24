@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateSupervisorsTable extends Migration
+class CreateSupervisorTeachersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,21 +13,15 @@ class CreateSupervisorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('supervisors', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
+        Schema::create('supervisor_teachers', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('school_id');
-
-            $table->boolean('active')->default(0);
-            $table->rememberToken();
-            $table->dateTime('last_login')->nullable();
+            $table->unsignedBigInteger('lesson_id');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('school_id')->references('id')->on('schools')->cascadeOnDelete();
-
+            $table->foreign('lesson_id')->references('id')->on('lessons')->cascadeOnDelete();
         });
     }
 
@@ -37,6 +32,6 @@ class CreateSupervisorsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('supervisors');
+        Schema::dropIfExists('supervisor_teachers');
     }
 }
