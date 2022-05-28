@@ -15,13 +15,13 @@ class CreateSupervisorTeachersTable extends Migration
     {
         Schema::create('supervisor_teachers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('school_id');
-            $table->unsignedBigInteger('lesson_id');
+            $table->unsignedBigInteger('supervisor_id');
+            $table->unsignedBigInteger('teacher_id');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('school_id')->references('id')->on('schools')->cascadeOnDelete();
-            $table->foreign('lesson_id')->references('id')->on('lessons')->cascadeOnDelete();
+            $table->foreign('supervisor_id')->references('id')->on('supervisors')->cascadeOnDelete();
+            $table->foreign('teacher_id')->references('id')->on('teachers')->cascadeOnDelete();
         });
     }
 

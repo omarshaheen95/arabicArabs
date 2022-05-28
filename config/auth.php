@@ -82,22 +82,22 @@ return [
     'providers' => [
         'supervisors' => [
             'driver' => 'eloquent',
-            'model' => App\Supervisor::class,
+            'model' => \App\Models\Supervisor::class,
         ],
 
         'teachers' => [
             'driver' => 'eloquent',
-            'model' => App\Teacher::class,
+            'model' => \App\Models\Teacher::class,
         ],
 
         'schools' => [
             'driver' => 'eloquent',
-            'model' => App\School::class,
+            'model' => \App\Models\School::class,
         ],
 
         'managers' => [
             'driver' => 'eloquent',
-            'model' => App\Manager::class,
+            'model' => \App\Models\Manager::class,
         ],
 
         'users' => [
