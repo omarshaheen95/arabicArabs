@@ -14,7 +14,8 @@ class User extends Authenticatable
     use HasApiTokens, SoftDeletes, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'mobile', 'school_id', 'grade', 'alternate_grade', 'year_learning', 'section', 'country_code', 'short_country',
+        'name', 'email', 'password', 'mobile', 'school_id', 'grade_id', 'alternate_grade_id', 'year_learning',
+        'section', 'country_code', 'short_country',
         'active', 'type', 'active_from', 'active_to', 'package_id', 'manager_id', 'year_id', 'last_login'
     ];
 
@@ -43,5 +44,13 @@ class User extends Authenticatable
     public function year()
     {
         return $this->belongsTo(Year::class);
+    }
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
+    }
+    public function alternateGrade()
+    {
+        return $this->belongsTo(Grade::class, 'alternate_grade_id');
     }
 }

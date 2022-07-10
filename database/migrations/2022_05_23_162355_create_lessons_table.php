@@ -17,13 +17,17 @@ class CreateLessonsTable extends Migration
             $table->id();
             $table->string('name');
             $table->longText('content')->nullable();
-            $table->integer('grade');
+            $table->unsignedBigInteger('grade_id');
             $table->enum('lesson_type', ['reading', 'writing', 'listening', 'speaking', 'grammar']);
+            $table->enum('section_type', ['informative', 'literary'])->nullable();
+            $table->string('color')->nullable();
             $table->tinyInteger('ordered')->default(1);
             $table->integer('success_mark')->default(60);
             $table->boolean('active');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('grade_id')->references('id')->on('grades')->cascadeOnDelete();
         });
     }
 

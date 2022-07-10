@@ -26,7 +26,7 @@
 
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 justify-center" style="text-align: center">
                 <div style="width: 100%" class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                    <img class="justify-center" src="{{asset('main_logo.png')}}" width="40%" style="margin: auto" alt="">
+                    <img class="justify-center" src="{{asset('logo.png')}}" width="40%" style="margin: auto" alt="">
                 </div>
 
                 <h1 class="p-6 underline text-gray-900 dark:text-white" style="text-align: center">Coming Soon .</h1>

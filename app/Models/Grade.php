@@ -10,6 +10,6 @@ class Grade extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'name', 'grade_number', 'reading', 'writing', 'listening', 'speaking', 'grammar', 'active',
+        'name', 'grade_number', 'reading', 'writing', 'listening', 'speaking', 'grammar', 'active', 'ordered',
     ];
 }

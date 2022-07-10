@@ -26,8 +26,6 @@ Route::group(['prefix' => 'manager'], function () {
   Route::post('/login', 'ManagerAuth\LoginController@login');
   Route::post('/logout', 'ManagerAuth\LoginController@logout')->name('logout');
 
-  Route::get('/register', 'ManagerAuth\RegisterController@showRegistrationForm')->name('register');
-  Route::post('/register', 'ManagerAuth\RegisterController@register');
 
   Route::post('/password/email', 'ManagerAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
   Route::post('/password/reset', 'ManagerAuth\ResetPasswordController@reset')->name('password.email');
@@ -54,8 +52,6 @@ Route::group(['prefix' => 'teacher'], function () {
   Route::post('/login', 'TeacherAuth\LoginController@login');
   Route::post('/logout', 'TeacherAuth\LoginController@logout')->name('logout');
 
-  Route::get('/register', 'TeacherAuth\RegisterController@showRegistrationForm')->name('register');
-  Route::post('/register', 'TeacherAuth\RegisterController@register');
 
   Route::post('/password/email', 'TeacherAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
   Route::post('/password/reset', 'TeacherAuth\ResetPasswordController@reset')->name('password.email');
@@ -68,11 +64,23 @@ Route::group(['prefix' => 'supervisor'], function () {
   Route::post('/login', 'SupervisorAuth\LoginController@login');
   Route::post('/logout', 'SupervisorAuth\LoginController@logout')->name('logout');
 
-  Route::get('/register', 'SupervisorAuth\RegisterController@showRegistrationForm')->name('register');
-  Route::post('/register', 'SupervisorAuth\RegisterController@register');
 
   Route::post('/password/email', 'SupervisorAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
   Route::post('/password/reset', 'SupervisorAuth\ResetPasswordController@reset')->name('password.email');
   Route::get('/password/reset', 'SupervisorAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
   Route::get('/password/reset/{token}', 'SupervisorAuth\ResetPasswordController@showResetForm');
+});
+
+Route::get('migrate', function (){
+    \Illuminate\Support\Facades\Artisan::call('migrate');
+});
+Route::get('view', function (){
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+});
+Route::get('command', function (){
+    \Illuminate\Support\Facades\Artisan::call('schedule:work');
+});
+Route::get('cache', function (){
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    \Illuminate\Support\Facades\Artisan::call('config:cache');
 });

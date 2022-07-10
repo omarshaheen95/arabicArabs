@@ -25,8 +25,8 @@ class CreateUsersTable extends Migration
 
 
 
-            $table->integer('grade');
-            $table->integer('alternate_grade')->nullable();
+            $table->unsignedBigInteger('grade_id');
+            $table->unsignedBigInteger('alternate_grade_id')->nullable();
 
 
 
@@ -58,6 +58,8 @@ class CreateUsersTable extends Migration
             $table->foreign('package_id')->references('id')->on('packages')->cascadeOnDelete();
             $table->foreign('manager_id')->references('id')->on('managers')->cascadeOnDelete();
             $table->foreign('year_id')->references('id')->on('years')->cascadeOnDelete();
+            $table->foreign('grade_id')->references('id')->on('grades')->cascadeOnDelete();
+            $table->foreign('alternate_grade_id')->references('id')->on('grades')->cascadeOnDelete();
         });
     }
 

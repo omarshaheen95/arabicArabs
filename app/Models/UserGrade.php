@@ -10,11 +10,15 @@ class UserGrade extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'user_id', 'grade',
+        'user_id', 'grade_id',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
     }
 }

@@ -16,9 +16,13 @@ class CreateUserGradesTable extends Migration
         Schema::create('user_grades', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->integer('grade');
+            $table->unsignedBigInteger('grade_id');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('grade_id')->references('id')->on('grades')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+
         });
     }
 

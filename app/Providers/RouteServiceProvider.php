@@ -37,6 +37,10 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
+        $this->mapManagerRoutes();
+        $this->mapSchoolRoutes();
+        $this->mapSupervisorRoutes();
+        $this->mapTeacherRoutes();
 
         $this->routes(function () {
             Route::prefix('api')
@@ -59,6 +63,54 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
+    }
+
+    protected function mapManagerRoutes()
+    {
+        Route::group([
+            'middleware' => ['web', 'manager', 'auth:manager'],
+            'prefix' => 'manager',
+            'as' => 'manager.',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            require base_path('routes/manager.php');
+        });
+    }
+
+    protected function mapSchoolRoutes()
+    {
+        Route::group([
+            'middleware' => ['web', 'school', 'auth:school'],
+            'prefix' => 'school',
+            'as' => 'school.',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            require base_path('routes/school.php');
+        });
+    }
+
+    protected function mapSupervisorRoutes()
+    {
+        Route::group([
+            'middleware' => ['web', 'supervisor', 'auth:supervisor'],
+            'prefix' => 'supervisor',
+            'as' => 'supervisor.',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            require base_path('routes/supervisor.php');
+        });
+    }
+
+    protected function mapTeacherRoutes()
+    {
+        Route::group([
+            'middleware' => ['web', 'teacher', 'auth:teacher'],
+            'prefix' => 'teacher',
+            'as' => 'teacher.',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            require base_path('routes/teacher.php');
         });
     }
 }
