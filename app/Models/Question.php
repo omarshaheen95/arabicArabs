@@ -28,7 +28,7 @@ class Question extends Model implements HasMedia
 
     public function matches()
     {
-        return $this->hasMany(Match::class);
+        return $this->hasMany(QMatch::class);
     }
 
     public function sortWords()
@@ -44,10 +44,10 @@ class Question extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this
-            ->addMediaCollection('t_audioQuestion')
+            ->addMediaCollection('audioQuestion')
             ->singleFile();
         $this
-            ->addMediaCollection('t_imageQuestion')
+            ->addMediaCollection('imageQuestion')
             ->singleFile();
     }
 }

@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Match extends Model implements HasMedia
+class QMatch extends Model implements HasMedia
 {
     use SoftDeletes, InteractsWithMedia;
+
+    protected $table = 'matches';
+
     protected $fillable = [
         'question_id', 'content', 'result',
     ];
