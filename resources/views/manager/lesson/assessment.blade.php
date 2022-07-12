@@ -60,7 +60,6 @@ WhatsApp +972592554320
                                           action="{{ route('manager.lesson.update_assessment', [$lesson->id, 1]) }}"
                                           method="post">
                                         {{ csrf_field() }}
-                                        <h4>صح Or خطأ</h4>
                                         @if(isset($t_f_questions) && count($t_f_questions))
                                             @php
                                                 $i = 1;
@@ -158,7 +157,6 @@ WhatsApp +972592554320
                                           action="{{ route('manager.lesson.update_assessment', [$lesson->id, 2]) }}"
                                           method="post">
                                         {{ csrf_field() }}
-                                        <h4>Choose Answer</h4>
                                         @if(isset($c_questions) && count($c_questions))
                                             @php
                                                 $i = 1;
@@ -312,7 +310,6 @@ WhatsApp +972592554320
                                           action="{{ route('manager.lesson.update_assessment', [$lesson->id, 3]) }}"
                                           method="post">
                                         {{ csrf_field() }}
-                                        <h4>Match Answer</h4>
                                         @if(isset($m_questions) && count($m_questions))
                                             @php
                                                 $i = 1;
@@ -476,7 +473,6 @@ WhatsApp +972592554320
                                           action="{{ route('manager.lesson.update_assessment', [$lesson->id, 4]) }}"
                                           method="post">
                                         {{ csrf_field() }}
-                                        <h4>Sort Answer</h4>
                                         @if(isset($s_questions) && count($s_questions))
                                             @php
                                                 $i = 1;

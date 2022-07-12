@@ -18,6 +18,16 @@ class AssessmentController extends Controller
         $title = 'الاختبار';
         $lesson = Lesson::query()->with(['media'])->findOrFail($id);
         if (!in_array($lesson->lesson_type, ['reading', 'listening'])) {
+            if ($lesson->lesson_type == 'writing')
+            {
+                $questions = Question::query()->where('type', 5)->where('lesson_id', $lesson->id)->with(['media'])->get();
+                return view('manager.lesson.assessment_listening_speaking', compact('title', 'lesson', 'questions'));
+            }
+            if ($lesson->lesson_type == 'speaking')
+            {
+                $questions = Question::query()->where('type', 6)->where('lesson_id', $lesson->id)->with(['media'])->get();
+                return view('manager.lesson.assessment_listening_speaking', compact('title', 'lesson', 'questions'));
+            }
             return $this->redirectWith(false, 'manager.lesson.index', 'لا يمكن اضافة اختبار لهذا الدرس', 'error');
         }
         $t_f_questions = Question::query()->where('type', 1)->with('trueFalse', 'media')->get();
@@ -46,6 +56,14 @@ class AssessmentController extends Controller
             case 4:
 //                dd($request->all());
                 $this->sortAssessment($request, $lesson);
+                return redirect()->route('manager.lesson.assessment', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+            case 'writing':
+//                dd($request->all());
+                $this->writingAssessment($request, $lesson);
+                return redirect()->route('manager.lesson.assessment', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+            case 'speaking':
+//                dd($request->all());
+                $this->speakingAssessment($request, $lesson);
                 return redirect()->route('manager.lesson.assessment', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
         }
     }
@@ -325,5 +343,98 @@ class AssessmentController extends Controller
                 }
             }
         }
+    }
+
+    public function writingAssessment(Request $request, $lesson)
+    {
+        $lesson->update([
+            'content' => $request->get('content', null),
+        ]);
+
+        $questions = $request->get('old_questions', []);
+        $marks = $request->get("old_mark", []);
+
+        Question::query()->where('lesson_id', $lesson->id)->where('type', 5)->whereNotIn('id', array_keys($questions))->delete();
+        foreach ($questions as $key => $question) {
+            $old_question = Question::query()->find($key);
+            if ($old_question)
+            {
+                $old_question->update([
+                    'content' => isset($question) ? $question : 'no question',
+                    'lesson_id' => $lesson->id,
+                    'mark' => $marks[$key],
+                ]);
+            }
+            if ($request->hasFile("old_attachment.$key")) {
+                $question->addMediaFromRequest("old_attachment.$key")
+                    ->toMediaCollection('imageQuestion');
+            }
+        }
+
+        $questions = $request->get('questions', []);
+        $marks = $request->get("mark", []);
+        foreach ($questions as $key => $question) {
+            $question = Question::query()->create([
+                'content' => isset($question) ? $question : 'no question',
+                'type' => 5,
+                'lesson_id' => $lesson->id,
+                'mark' => $marks[$key],
+            ]);
+            if ($request->hasFile("attachment.$key")) {
+                $question->addMediaFromRequest("attachment.$key")
+                    ->toMediaCollection('imageQuestion');
+            }
+        }
+
+
+
+        return true;
+
+    }
+
+    public function speakingAssessment(Request $request, $lesson)
+    {
+        $lesson->update([
+            'content' => $request->get('content', null),
+        ]);
+
+        $questions = $request->get('old_questions', []);
+        $marks = $request->get("old_mark", []);
+
+        Question::query()->where('lesson_id', $lesson->id)->where('type', 6)->whereNotIn('id', array_keys($questions))->delete();
+        foreach ($questions as $key => $question) {
+            $old_question = Question::query()->find($key);
+            if ($old_question)
+            {
+                $old_question->update([
+                    'content' => isset($question) ? $question : 'no question',
+                    'lesson_id' => $lesson->id,
+                    'mark' => $marks[$key],
+                ]);
+            }
+            if ($request->hasFile("old_attachment.$key")) {
+                $old_question->addMediaFromRequest("old_attachment.$key")
+                    ->toMediaCollection('imageQuestion');
+            }
+        }
+
+        $questions = $request->get('questions', []);
+        $marks = $request->get("mark", []);
+        foreach ($questions as $key => $question) {
+            $question = Question::query()->create([
+                'content' => isset($question) ? $question : 'no question',
+                'type' => 6,
+                'lesson_id' => $lesson->id,
+                'mark' => $marks[$key],
+            ]);
+            if ($request->hasFile("attachment.$key")) {
+                $question->addMediaFromRequest("attachment.$key")
+                    ->toMediaCollection('imageQuestion');
+            }
+        }
+
+
+
+        return true;
     }
 }
