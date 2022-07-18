@@ -311,7 +311,7 @@ class AssessmentController extends Controller
         $old_s_q_options = $request->get('old_s_q_option', []);
 
         foreach ($s_questions as $key => $s_question) {
-            $question = Questions::query()->where('lesson_id', $lesson->id)->find($key);
+            $question = Question::query()->where('lesson_id', $lesson->id)->find($key);
             if ($question) {
                 $question->update([
                     'content' => $s_question ? $s_question : 'no question',

@@ -30,6 +30,10 @@ class GradesTableSeeder extends Seeder
                 'listening' => 1,
                 'speaking' => 1,
                 'grammar' => 0,
+                'true_false' => 0,
+                'choose' => 0,
+                'match' => 0,
+                'sort' => 0,
                 'active' => 1,
                 'ordered' => 1,
             ]);

@@ -158,28 +158,28 @@
                         </li>
                         <li class="kt-menu__item  @if(Request::is('manager/school*') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="" class="kt-menu__link ">
+                            <a href="{{route('manager.school.index')}}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-architecture-and-city"></i>
                                 <span class="kt-menu__link-text">المدارس</span>
                             </a>
                         </li>
                         <li class="kt-menu__item  @if(Request::is('manager/supervisor*') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="" class="kt-menu__link ">
+                            <a href="{{route('manager.supervisor.index')}}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-user-outline-symbol"></i>
-                                <span class="kt-menu__link-text">المشرفين</span>
+                                <span class="kt-menu__link-text">المشرفون</span>
                             </a>
                         </li>
                         <li class="kt-menu__item  @if(Request::is('manager/teacher*') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="" class="kt-menu__link ">
+                            <a href="{{route('manager.teacher.index')}}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-user-outline-symbol"></i>
-                                <span class="kt-menu__link-text">المعلمين</span>
+                                <span class="kt-menu__link-text">المعلمون</span>
                             </a>
                         </li>
                         <li class="kt-menu__item  @if(Request::is('manager/user*') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="" class="kt-menu__link ">
+                            <a href="{{route('manager.user.index')}}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-group"></i>
                                 <span class="kt-menu__link-text">الطلاب</span>
                             </a>
@@ -200,7 +200,7 @@
                         </li>
                         <li class="kt-menu__item  @if(Request::is('manager/package*')) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="" class="kt-menu__link ">
+                            <a href="{{route('manager.package.index')}}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-layers-1"></i>
                                 <span class="kt-menu__link-text">الباقات</span>
                             </a>
@@ -223,13 +223,13 @@
                 <div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
                     <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout-default ">
                         <ul class="kt-menu__nav ">
-                            <li class="kt-menu__item"
-                                aria-haspopup="true">
-                                <a href="/" class="kt-menu__link ">
-                                    <i class="kt-menu__link-icon flaticon2-protection"></i>
-                                    <span class="kt-menu__link-text">معاينة</span>
-                                </a>
-                            </li>
+{{--                            <li class="kt-menu__item"--}}
+{{--                                aria-haspopup="true">--}}
+{{--                                <a href="/" class="kt-menu__link ">--}}
+{{--                                    <i class="kt-menu__link-icon flaticon2-protection"></i>--}}
+{{--                                    <span class="kt-menu__link-text">معاينة</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
 
                             <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel @if(Request::is('manager/settings*') || Request::is('manager/city*') || Request::is('manager/language*') || Request::is('manager/country*') || Request::is('manager/brand*') || Request::is('manager/manager*')) kt-menu__item--active @endif @if(Request::is('manager/roles*') ) kt-menu__item--active @endif @if(Request::is('manager/page*') ) kt-menu__item--active @endif"
                                 data-ktmenu-submenu-toggle="click" aria-haspopup="true">

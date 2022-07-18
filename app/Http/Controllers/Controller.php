@@ -11,6 +11,10 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    const ADDMESSAGE = "تم الإضافة بنجاح";
+    const EDITMESSAGE = "تم التعديل بنجاح";
+    const DELETEMESSAGE = "تم الحذف بنجاح";
+
     protected function sendResponse($result, $message = 'success',$code = 200)
     {
         $response = [
@@ -43,5 +47,15 @@ class Controller extends BaseController
             return redirect()->back()->with('message', $message)->with('m-class', $status);
 
         return redirect()->route($route)->with('message', $message)->with('m-class', $status);
+    }
+
+    protected function uploadImage($file,$path = ''){
+        $fileName = $file->getClientOriginalName();
+        $file_exe = $file->getClientOriginalExtension();
+        $new_name = uniqid().'.'.$file_exe;
+        $directory = 'uploads'.'/'.$path;
+        $destination = public_path($directory);
+        $file->move($destination , $new_name);
+        return $directory.'/'.$new_name;
     }
 }

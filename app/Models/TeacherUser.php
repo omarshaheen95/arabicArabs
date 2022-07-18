@@ -10,7 +10,7 @@ class TeacherUser extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'user_id', 'teacher_user',
+        'user_id', 'teacher_id',
     ];
 
     public function user()
