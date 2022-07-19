@@ -12,4 +12,9 @@ class Grade extends Model
     protected $fillable = [
         'name', 'grade_number', 'reading', 'writing', 'listening', 'speaking', 'grammar', 'active', 'ordered',
     ];
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
 }

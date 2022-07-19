@@ -27,7 +27,7 @@ function updateTeacherStatistics($teacher_id)
         });
     })->get();
 
-    $user_tests = \App\Models\StudentTest::query()->whereHas('user', function (\Illuminate\Database\Eloquent\Builder $query) use ($teacher){
+    $user_tests = \App\Models\UserTest::query()->whereHas('user', function (\Illuminate\Database\Eloquent\Builder $query) use ($teacher){
         $query->whereHas('teacher_student', function (\Illuminate\Database\Eloquent\Builder $query) use ($teacher){
             $query->where('teacher_id', $teacher->id);
         });

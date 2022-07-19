@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> R.B.T </title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+<body>
+    
+    <div class="loader"></div>
+
+    <header class="position-fixed w-100">
+            <div>
+                <div class="container">
+                    <div class="row align-items-center">
+                            <div class="col-md-3 text-right">
+                    <div class="logo"><a href="#"><img src="./img/logo.jpeg" alt="" height="60"></a></div>
+                </div>
+                <div class="col-md-9">
+                    <nav class="navbar-expand-lg navbar-light">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                              </button>
+                              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="list-inline m-0 p-0">
+                            <li class="list-inline-item text-right">
+                                <i class="fas fa-user fa-fw"></i>
+                                <span>الطالب: حسين جمال الاسناذ</span>
+                            </li>
+                            <li class="list-inline-item text-right">
+                                    <i class="fas fa-building fa-fw"></i>
+                            <span>المدرسة: ذكور الرمال الثانوي</span>
+                            </li>
+                            <li class="list-inline-item text-right">
+                                    <i class="fas fa-chart-area fa-fw"></i>
+                                    <span>المستوا: الاول</span>
+                            </li>
+                            <li class="list-inline-item text-right">
+                                    
+                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#logout">تسجيل الخروج</button>
+                            </li>
+                    </ul>
+                </div>
+                </nav>
+                </div>
+                </div>
+            </div>
+            </div>
+        </header>
+<section class="inner-page">
+    <section>
+            <div class="container text-right">
+        <div class="row">
+                <div class="col-12">
+                
+
+    <div class="box-shado-question">
+
+        <div class="bg-light text-secondary font-weight-bold py-3 px-4">
+        <div class="row align-items-center">
+            <div class="col-md-4 mob-text-center">نوع السؤال: اختبار من متعدد</div>
+            <div class="col-md-4 mob-text-center text-center"><p id="countdown" class="mb-0 text-danger"></p></div>
+            <div class="col-md-4 mob-text-center text-left">
+                السؤال
+                 <span id="questionNumber"></span>
+                 من
+                <span id="numberQuestions"></span>
+            </div>
+        </div>
+        </div>
+        
+<div class="p-50">
+
+        <div class="question-list">
+                <div class="question-item active" id="1">
+                        <h2> نص السؤال الكامل </h2>
+                        <div class="answers">
+                        <div class="row text-center">
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q1" value="a1"> 1- الاختبار الاول </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q1" value="a2"> 2- الاختيار الثاني </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q1" value="a3"> 3- الاختيار الثالث </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q1" value="a4"> 4- الاختيار الرابع</label></div>
+                        </div>
+                        </div>
+                </div>
+                <div class="question-item " id="2">
+                        <h2> نص السؤال الكامل </h2>
+                        <div class="answers">
+                        <div class="row text-center">
+                                <div class="col-md-3">
+                                    <label class="mb-0 d-block py-3">
+                                        <div class="question-img" style="background-image: url('./img/img1.jpg')" ></div>
+                                        <input type="radio" name="q2" value="a1"> 
+                                        <div class="d-block mt-2">1- الاختبار الاول </div>
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="mb-0 d-block py-3">
+                                        <div class="question-img" style="background-image: url('./img/img1.jpg')" ></div>
+                                        <input type="radio" name="q2" value="a1"> 
+                                        <div class="d-block mt-2">1- الاختبار الاول </div>
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="mb-0 d-block py-3">
+                                        <div class="question-img" style="background-image: url('./img/img1.jpg')" ></div>
+                                        <input type="radio" name="q2" value="a1"> 
+                                        <div class="d-block mt-2">1- الاختبار الاول </div>
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="mb-0 d-block py-3">
+                                        <div class="question-img" style="background-image: url('./img/img1.jpg')" ></div>
+                                        <input type="radio" name="q2" value="a1"> 
+                                        <div class="d-block mt-2">1- الاختبار الاول </div>
+                                    </label>
+                                </div>
+                        </div>
+                        </div>
+                </div>
+                <div class="question-item" id="3">
+                        <h2> نص السؤال الكامل </h2>
+                        <div class="answers">
+                        <div class="row text-center justify-content-center">
+                            <div class="col-md-3"><label class="mb-0 d-block py-3 fs-20"><input type="radio" name="q3" value="a1"> <i class="fa fa-check-circle fa-fw text-success"></i> صح </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3 fs-20"><input type="radio" name="q3" value="a2"> <i class="fa fa-times-circle fa-fw text-danger"></i> خطاء </label></div>
+                        </div>
+                        </div>
+                </div>
+                <div class="question-item" id="4">
+                        <h2> قم بسحب الإجابات إلى مكانها الصحيح فيما يلي:- </h2>
+                        <div class="answers">
+                                <div class="row justify-content-center">
+
+                                        <div class="col-md-12">
+                                                <ul id="sortable1" class="connectedSortable list-unstyled font-bold text-center d-flex justify-content-around">
+                                                    <li class="ui-state-default mb-2" data-id="2">
+                                                        <div>
+                                                            <text>التمكن من</text>
+                                                            <span class="float-right"></span>
+                                                            <input type="hidden" name="re[2]" id="" value="" >
+                                                        </div>
+                                                    </li>
+                                                    <li class="ui-state-default mb-2" data-id="3">
+                                                        <div>
+                                                            <text>التنشئة الاجتماعية</text>
+                                                            <span class="float-right"></span>
+                                                            <input type="hidden" name="re[3]" id="" value="" >
+                                                        </div>
+                                                    </li>
+                                                    <li class="ui-state-default mb-2" data-id="1">
+                                                        <div>
+                                                            <text>تبادل المعلومات</text>
+                                                            <span class="float-right"></span>
+                                                            <input type="hidden" name="re[1]" id="" value="" >
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                        <div class="col-md-12">
+                                            <div class="ewewe">
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                            <ul class="connectedNoSortable list-unstyled m-0 font-bold active text-right m-0 p-0">
+                                                                    <li class="ui-state-default mb-2"><span class="ml-3">س1</span> <text>إجادة التعامل  مع التقنيات والبيئات عبر الإنترنت</text>    </li>
+                                                                    <li class="ui-state-default mb-2"><span class="ml-3">س2</span> <text>البدء في تكوين مجتمع تعليمي تعاوني</text> </li>
+                                                                    <li class="ui-state-default mb-2"><span class="ml-3">س3</span> <text>العمل معًا لإنجاز المهام واكتساب الثقة</text> </li>
+                                                                </ul>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="position-relative">
+                                                        <ul class="m-0 p-0 list-unstyled add-ansar position-absolute w-100">
+                                                            <li>ضع الاجابة هنا</li>
+                                                            <li>ضع الاجابة هنا</li>
+                                                            <li>ضع الاجابة هنا</li>
+                                                        </ul>
+                                                            <ul id="sortable2" class="connectedSortable list-unstyled m-0 font-bold active text-center m-0 p-0">
+                                                                </ul>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            
+
+                                        </div>
+                                        </div>
+                                    </div>
+                        </div>
+                </div>
+                <div class="question-item" id="5">
+                        <h2> نص السؤال الكامل </h2>
+                        <div class="answers">
+                        <div class="row text-center">
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q5" value="a1"> 1- الاختبار الاول </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q5" value="a2"> 2- الاختيار الثاني </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q5" value="a3"> 3- الاختيار الثالث </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q5" value="a4"> 4- الاختيار الرابع</label></div>
+                        </div>
+                        </div>
+                </div>
+                <div class="question-item" id="6">
+                        <h2> نص السؤال الكامل </h2>
+                        <div class="answers">
+                        <div class="row text-center">
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q6" value="a1"> 1- الاختبار الاول </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q6" value="a2"> 2- الاختيار الثاني </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q6" value="a3"> 3- الاختيار الثالث </label></div>
+                            <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" name="q6" value="a4"> 4- الاختيار الرابع</label></div>
+                        </div>
+                        </div>
+                </div>
+        </div>
+
+
+                <div class="d-flex justify-content-center question-control">
+                    <div class="text-center"><button type="submit" class="theme-btn btn-style-one mx-4 d-none" id="previousQuestion"><i class="far fa-chevron-right position-relative ml-3" style="z-index: 9;"></i><span class="txt">  السؤال السابق </span></button></div>
+                    <div class="text-center"><button type="submit" class="theme-btn btn-style-one mx-4 d-none endExam" data-toggle="modal" data-target="#endExam"><span class="txt">انتهاء الاختبار </span></button></div>
+                    <div class="text-center"><button type="submit" class="theme-btn btn-style-one mx-4" id="nextQuestion"><span class="txt"> السؤال التالي  </span> <i class="far fa-chevron-left position-relative mr-3" style="z-index: 9;"></i> </button></div>
+                </div>
+            </div>
+
+            <div class="bg-light text-secondary font-weight-bold py-3 px-4">    
+        <ul class="list-inline m-0 p-0 w-100 text-center" id="questionListLink">
+
+        </ul>
+        </div>
+
+        
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="endExam" tabindex="-1" aria-labelledby="endExamLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body text-center py-5"> <h2 class="mb-0">هل انت متاكد من انهاء الاختبار </h2></div>
+                    <div class="modal-footer border-0 justify-content-center">
+                      <button type="button" class="theme-btn btn-style-one btnSecondary" data-dismiss="modal"><span class="txt"> متابعة الاختبار </span></button>
+                      <a href="home.html" class="theme-btn btn-style-one btnSuccess"><span class="txt"> انهاء الاختبار </span></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Modal -->
+      <div class="modal fade" id="logout" tabindex="-1" aria-labelledby="logoutLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-body text-center py-5"> <h2 class="mb-0"> هل انت متاكد من عملية تسجيل الخروج ؟ </h2></div>
+                  <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="theme-btn btn-style-one btnSecondary" data-dismiss="modal"><span class="txt"> البقاء بالموقع </span></button>
+                    <a href="index.html" class="theme-btn btn-style-one btnSuccess"><span class="txt"> تسجيل الخروج </span></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+    </div>
+   
+                    
+                </div>
+            </div>
+    </div>
+    </section>
+</section>
+
+
+<script src="js/jquery-3.4.1.min.js" ></script>
+<script src="js/popper.min.js" ></script>
+<script src="js/bootstrap.min.js" ></script>
+<script src="js/script.js" ></script>
+
+<script>
+// Set the date we're counting down to
+var countDownDate = new Date("aug 18, 2021 20:00:00").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Display the result in the element with id="countdown"
+  document.getElementById("countdown").innerHTML = hours + ":" + minutes + ":" + seconds;
+
+  // If the count down is finished, write some text
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("countdown").innerHTML = "EXPIRED";
+  }
+}, 1000);
+</script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="./js/jquery.ui.touch-punch.js"></script>
+
+<script>
+        $( function() {
+            $( "#sortable1, #sortable2" ).sortable({
+                connectWith: ".connectedSortable"
+            }).disableSelection();
+        } );
+    
+        $("#sortable2").droppable({
+            drop: function() {
+                setTimeout(function(){
+                    $('#sortable2 li span').each(function (i) {
+                        var humanNum = i + 1;
+                        $(this).html('ج' + humanNum);
+                    });
+                }, 1);
+                setTimeout(function(){
+                    $('#sortable2 li input').each(function (i) {
+                        //alert($(this).parent('li').attr("data-id"));
+                        var humanNum = i + 1;
+                        $(this).val(humanNum);
+                    });
+                }, 1);
+            }
+        });
+        $("#sortable1").droppable({
+            drop: function() {
+                setTimeout(function(){
+                    $('#sortable1 li span').each(function (i) {
+                        var humanNum = i + 1;
+                        $(this).html('');
+                    });
+                }, 1);
+            }
+        });
+    </script>
+
+</body>
+</html>

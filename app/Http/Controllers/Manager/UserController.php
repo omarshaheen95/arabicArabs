@@ -18,6 +18,7 @@ use App\Models\Teacher;
 use App\Models\TrueFalseResult;
 use App\Models\User;
 use App\Models\UserLesson;
+use App\Models\UserTest;
 use App\Models\UserTracker;
 use App\Models\Year;
 use Carbon\Carbon;
@@ -233,17 +234,17 @@ class UserController extends Controller
 
     public function correctTest()
     {
-        $users_tests = StudentTest::query()->select(['user_id', 'lesson_id', DB::raw('COUNT( * ) AS c')])->groupBy(['user_id', 'lesson_id'])->having('c', '>', 1)->get();
+        $users_tests = UserTest::query()->select(['user_id', 'lesson_id', DB::raw('COUNT( * ) AS c')])->groupBy(['user_id', 'lesson_id'])->having('c', '>', 1)->get();
 
 
 //        foreach ($users_tests as $user_tests)
 //        {
-//            $tests = StudentTest::query()->where('user_id', $user_tests->user_id)->where('lesson_id', $user_tests->lesson_id)
+//            $tests = UserTest::query()->where('user_id', $user_tests->user_id)->where('lesson_id', $user_tests->lesson_id)
 //                ->where('corrected', 1)->where('total', '>=', '40')->orderByDesc('total')->get();
 //
 //            if(optional($tests->first())->total >= 40)
 //            {
-//                StudentTest::query()->where('user_id', $user_tests->user_id)->where('lesson_id', $user_tests->lesson_id)
+//                UserTest::query()->where('user_id', $user_tests->user_id)->where('lesson_id', $user_tests->lesson_id)
 //                    ->where('id', '<>', $tests->first()->id)->update([
 //                        'approved' => 0,
 //                    ]);
@@ -283,8 +284,8 @@ class UserController extends Controller
         $start_date = $request->get('start_date', Carbon::now()->startOfMonth()->toDateString());
         $end_date = $request->get('end_date', Carbon::now()->endOfMonth()->toDateString());
         $grade = $request->get('grade', $user->grade);
-        $tests = StudentTest::query()->where('user_id', $id)->count();
-        $passed_tests = StudentTest::query()->where('user_id', $id)->where('total', '>=', 40)->count();
+        $tests = UserTest::query()->where('user_id', $id)->count();
+        $passed_tests = UserTest::query()->where('user_id', $id)->where('total', '>=', 40)->count();
         if ($user->user_grades()->count()) {
             $grades = $user->user_grades()->pluck('grade')->unique()->values()->all();
         } else {
@@ -373,7 +374,7 @@ class UserController extends Controller
                 $lesson_info['tracker'] = 0;
             }
 
-            $user_test = StudentTest::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->latest('total')->first();
+            $user_test = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->latest('total')->first();
             $lesson_info['user_test'] = $user_test;
             if (isset($user_test) && !is_null($user_test->start_at) && !is_null($user_test->end_at)) {
                 $time1 = new \DateTime($user_test->start_at);
@@ -476,33 +477,33 @@ class UserController extends Controller
 //        dd($students);
 
         foreach ($students as $student) {
-            $student_tests_lessons = StudentTest::query()->where('user_id', $student->id)->pluck('lesson_id')->unique()->values()->all();
+            $student_tests_lessons = UserTest::query()->where('user_id', $student->id)->pluck('lesson_id')->unique()->values()->all();
             foreach ($student_tests_lessons as $student_tests_lesson) {
                 $lesson = Lesson::query()->find($student_tests_lesson);
                 if ($lesson) {
                     $mark = $lesson->level->level_mark;
-                    $student_tests = StudentTest::query()->where('total', '>=', $mark)
+                    $student_tests = UserTest::query()->where('total', '>=', $mark)
                         ->where('user_id', $student->id)
                         ->where('lesson_id', $student_tests_lesson)->orderByDesc('total')->get();
 
-                    StudentTest::query()->where('user_id', $student->id)
+                    UserTest::query()->where('user_id', $student->id)
                         ->where('lesson_id', $student_tests_lesson)
                         ->where('total', '<', $mark)->update([
                             'status' => 'Fail',
                         ]);
-                    StudentTest::query()->where('user_id', $student->id)
+                    UserTest::query()->where('user_id', $student->id)
                         ->where('lesson_id', $student_tests_lesson)
                         ->where('total', '>=', $mark)->update([
                             'status' => 'Pass',
                         ]);
 
                     if (count($student_tests)) {
-                        StudentTest::query()->where('user_id', $student->id)
+                        UserTest::query()->where('user_id', $student->id)
                             ->where('lesson_id', $student_tests_lesson)
                             ->where('id', '<>', $student_tests->first()->id)->update([
                                 'approved' => 0,
                             ]);
-                        StudentTest::query()->where('user_id', $student->id)
+                        UserTest::query()->where('user_id', $student->id)
                             ->where('lesson_id', $student_tests_lesson)
                             ->where('id', $student_tests->first()->id)->update([
                                 'approved' => 1,

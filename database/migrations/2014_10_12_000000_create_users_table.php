@@ -39,14 +39,14 @@ class CreateUsersTable extends Migration
             $table->boolean('active')->default(1);
             $table->enum('type', ['trial', 'member'])->default('trial');
 
-            $table->dateTime('active_from');
-            $table->dateTime('active_to');
+            $table->dateTime('active_from')->nullable();
+            $table->dateTime('active_to')->nullable();
 
 
 
             $table->unsignedBigInteger('package_id');
-            $table->unsignedBigInteger('manager_id');
-            $table->unsignedBigInteger('year_id');
+            $table->unsignedBigInteger('manager_id')->nullable();
+            $table->unsignedBigInteger('year_id')->nullable();
 
             $table->rememberToken();
             $table->dateTime('last_login')->nullable();

@@ -39,22 +39,27 @@ class User extends Authenticatable
     {
         return $this->belongsTo(School::class);
     }
+
     public function package()
     {
         return $this->belongsTo(Package::class);
     }
+
     public function manager()
     {
         return $this->belongsTo(Manager::class);
     }
+
     public function year()
     {
         return $this->belongsTo(Year::class);
     }
+
     public function grade()
     {
         return $this->belongsTo(Grade::class);
     }
+
     public function alternateGrade()
     {
         return $this->belongsTo(Grade::class, 'alternate_grade_id');
@@ -97,4 +102,33 @@ class User extends Authenticatable
     {
         return is_null($value) ? asset('assets/media/icons/student.png'):asset($value);
     }
+
+    public function user_tracker()
+    {
+        return $this->hasMany(UserTracker::class);
+    }
+
+    public function user_test()
+    {
+        return $this->hasMany(UserTest::class);
+    }
+
+    public function user_grades()
+    {
+        return $this->hasMany(UserGrade::class);
+    }
+
+    public function user_lessons()
+    {
+        return $this->hasMany(UserLesson::class);
+    }
+
+    public function getCheckAttribute()
+    {
+        $button = '';
+        $button .= " <input type='checkbox' class='user_id' id='user_id[$this->id]' value='$this->id'>";
+        return $button;
+    }
+
+
 }

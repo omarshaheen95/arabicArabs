@@ -18,6 +18,7 @@ use App\Models\Supplier;
 use App\Models\Teacher;
 use App\Models\User;
 use App\Models\UserLesson;
+use App\Models\UserTest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -34,7 +35,7 @@ class SettingController extends Controller
         $supervisors = Supervisor::query()->count();
         $students = User::query()->count();
         $lessons = Lesson::query()->count();
-        $tests = 0;//StudentTest::query()->count();
+        $tests = 0;//UserTest::query()->count();
         $schools = School::query()->count();
         $teachers = Teacher::query()->count();
 
@@ -45,7 +46,7 @@ class SettingController extends Controller
                 DB::raw('COUNT(*) as counts')
             ));
         $tests_date = [];
-        //StudentTest::query()->groupBy('date')->orderBy('date', 'DESC')->whereMonth('created_at', now())
+        //UserTest::query()->groupBy('date')->orderBy('date', 'DESC')->whereMonth('created_at', now())
 //            ->whereYear('created_at', now())
 //            ->get(array(
 //                DB::raw('Date(created_at) as date'),
@@ -246,7 +247,7 @@ class SettingController extends Controller
                 });
             })->get();
 
-            $user_tests = StudentTest::query()->whereHas('user', function (Builder $query) use ($teacher){
+            $user_tests = UserTest::query()->whereHas('user', function (Builder $query) use ($teacher){
                 $query->whereHas('teacher_student', function (Builder $query) use ($teacher){
                     $query->where('teacher_id', $teacher->id);
                 });

@@ -111,5 +111,18 @@ class Lesson extends Model implements HasMedia
         return $btn;
     }
 
+    public function getSectionTypeNameAttribute()
+    {
+        if ($this->section_type == 'informative')
+        {
+            return 'معلوماتي';
+        }elseif ($this->section_type == 'literary')
+        {
+            return 'أدبي';
+        }else{
+            return null;
+        }
+    }
+
 
 }

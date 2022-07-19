@@ -11,6 +11,9 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    protected $validationRules = [];
+    protected $validationMessages = [];
+
     const ADDMESSAGE = "تم الإضافة بنجاح";
     const EDITMESSAGE = "تم التعديل بنجاح";
     const DELETEMESSAGE = "تم الحذف بنجاح";

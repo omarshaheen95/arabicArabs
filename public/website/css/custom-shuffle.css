@@ -1,0 +1,92 @@
+.filter-btn-group{
+    position: relative;
+    margin-bottom: 30px;
+}
+.filter-btn-group .btn{
+    position: relative;
+    border-radius: 0px;
+    margin: 0px;
+    padding: 0px 20px;
+    color: #dc3545;
+}
+.filter-btn-group .btn:after{
+    content: "|";
+    position: absolute;
+    right: -5px;
+    top: 0px;
+    bottom: 0px;
+}
+.filter-btn-group .btn:last-child:after{
+    content: "";
+}
+.filter-btn-group .btn.active{
+    color: #32324e;
+    font-weight: 600;
+}
+.theme-shuffle{
+    position: relative;
+    overflow: hidden;
+}
+.shuffle-image-item{
+    position: relative;
+    margin: 0px;
+    padding: 5px;
+}
+.shuffle-hover-effect{
+    position: relative;
+}
+.shuffle-hover-effect:before{
+    content: "";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #dc3545;
+    opacity: 0;
+    transition: all 0.4s;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -o-transition: all 0.4s;
+}
+.shuffle-hover-effect:hover:before,
+.shuffle-hover-effect-active:before{
+    opacity: .7;
+}
+.shuffle-image-item img{
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    -moz-object-fit: cover;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+.shuffle-image-item-warp{
+    position: absolute;
+    bottom: 100px;
+    width: 75%;
+    text-align: center;
+    opacity: 0;
+    animation-duration: 0;
+}
+.shuffle-image-item:hover .shuffle-image-item-warp,
+.shuffle-image-item-warp-active{
+    opacity: 1;
+    animation-name: fadeInRight;
+    animation-duration: .4s;
+}
+.shuffle-image-item-warp p{
+    margin-bottom: 0px;
+}
+.shuffle-image-item-warp .card{
+    background-color: #32324e;
+}
+.shuffle-image-item-warp .card .shuffle-content-title{
+    color: #fff;
+}
+.shuffle-image-item-warp .card .shuffle-content-content{
+    color: #ccc;
+}

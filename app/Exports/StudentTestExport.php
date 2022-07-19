@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\StudentTest;
 use App\Models\User;
+use App\Models\UserTest;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
@@ -76,7 +77,7 @@ class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromColl
         $teacher = $this->teacher_id;
         $school_id = $this->school_id;
 
-        $students = StudentTest::query()->whereHas('user', function (Builder $query) use ($teacher, $username, $school_id){
+        $students = UserTest::query()->whereHas('user', function (Builder $query) use ($teacher, $username, $school_id){
              $query->when($teacher, function (Builder $query) use ($teacher){
                  $query->whereHas('teacher_student', function (Builder $query) use($teacher){
                      $query->where('teacher_id', $teacher);
