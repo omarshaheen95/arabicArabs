@@ -33,6 +33,9 @@
         </li>
         <li class="breadcrumb-item">
             {{ isset($title) ? $title:'' }}
+
+            -
+            <a href="{{route('manager.lesson.review', [$lesson->id, 'learn'])}}" target="_blank">معاينة</a>
         </li>
     @endpush
     <div class="row">
@@ -143,7 +146,7 @@
     <script>
         (function () {
             const editorInstance = new FroalaEditor('.edit', {
-                key: "aLF3c1B10D6D5D3F2F2C-7jjhB6iB-11kiC-7A3md1C-13mD6F5F4B3E1B9A6C3F5F6==",
+                key: "uXD2lA5D6C4F4G3A3konmA2A-9oC-7H-7ibC4bvddtD3jefpF1F1E1G4F1C11B8C2E5D3==",
                 fontFamilySelection: true,
                 heightMin: 500,
                 paragraphStyles: {

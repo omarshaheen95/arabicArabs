@@ -16,7 +16,7 @@ WhatsApp +972592554320
 @section('content')
     @push('breadcrumb')
         <li class="breadcrumb-item">
-            <a href="{{ route('manager.lesson.index') }}">الدروس</a>
+            <a href="{{ route('manager.lesson.index') }}">{{$lesson->grade->grade_number}}</a>
         </li>
         <li class="breadcrumb-item">
             {{ isset($title) ? $title:'' }}
@@ -28,7 +28,9 @@ WhatsApp +972592554320
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title">الدرس : {{$lesson->name}}
-                            - {{$lesson->grade->name}}</h3>
+                            - {{$lesson->grade->name}} -
+                        <a href="{{route('manager.lesson.review', [$lesson->id, 'test'])}}" target="_blank">معاينة</a>
+                        </h3>
                     </div>
                 </div>
 
@@ -37,23 +39,32 @@ WhatsApp +972592554320
                     <div class="kt-section kt-section--first">
                         <div class="kt-section__body">
                             <ul class="nav nav-tabs nav-fill" role="tablist">
+                                @if($lesson->grade->true_false)
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab"
                                        href="#kt_tabs_1_1">صح و خطأ</a>
                                 </li>
+                                @endif
+                                @if($lesson->grade->choose)
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab"
                                        href="#kt_tabs_1_2">اختر الإجابة</a>
                                 </li>
+                                @endif
+                                @if($lesson->grade->match)
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#kt_tabs_1_3">التوصيل</a>
                                 </li>
+                                @endif
+                                @if($lesson->grade->sort)
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab"
                                        href="#kt_tabs_1_4">ترتيب الكلمات</a>
                                 </li>
+                                @endif
                             </ul>
                             <div class="tab-content">
+                                @if($lesson->grade->true_false)
                                 <div class="tab-pane active" id="kt_tabs_1_1" role="tabpanel">
                                     <form enctype="multipart/form-data" id="form_information"
                                           class="kt-form kt-form--label-right"
@@ -65,13 +76,23 @@ WhatsApp +972592554320
                                                 $i = 1;
                                             @endphp
                                             @foreach($t_f_questions as $t_f_question)
+                                                @php
+                                                if ($lesson->grade->grade_number >= 7)
+                                                {
+                                                    $mark = 6;
+                                                }elseif ($lesson->grade->grade_number >= 4){
+                                                    $mark = 6;
+                                                }else{
+                                                    $mark = 6;
+                                                }
+                                                @endphp
                                                 <div class="form-group row">
                                                     <div class="col-lg-7">
-                                                        <label>س {{$i}}:</label>
+                                                        <label class="text-info">س {{$i}}:</label>
                                                         <input required class="form-control"
                                                                name="old_t_f_question[{{$t_f_question->id}}]" type="text"
                                                                value="{{$t_f_question->content}}">
-                                                        <input type="hidden" name="mark[{{$t_f_question->id}}]" value="6"/>
+                                                        <input type="hidden" name="mark[{{$t_f_question->id}}]" value="{{$mark}}"/>
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label>الإجابة الصحيحة:</label>
@@ -111,13 +132,23 @@ WhatsApp +972592554320
                                                 @endphp
                                             @endforeach
                                         @else
-                                            @for($i = 1; $i<=3;$i++)
+                                            @for($i = 1; $i<=$lesson->grade->true_false;$i++)
+                                                @php
+                                                    if ($lesson->grade->grade_number >= 7)
+                                                    {
+                                                        $mark = 6;
+                                                    }elseif ($lesson->grade->grade_number >= 4){
+                                                        $mark = 6;
+                                                    }else{
+                                                        $mark = 6;
+                                                    }
+                                                @endphp
                                                 <div class="form-group row">
                                                     <div class="col-lg-7">
                                                         <label>س {{$i}}:</label>
                                                         <input required class="form-control" name="t_f_question[{{$i}}]"
                                                                type="text">
-                                                        <input type="hidden" name="mark[{{$i}}]" value="6"/>
+                                                        <input type="hidden" name="mark[{{$i}}]" value="{{$mark}}"/>
 
                                                     </div>
                                                     <div class="col-lg-2">
@@ -151,6 +182,8 @@ WhatsApp +972592554320
                                         </div>
                                     </form>
                                 </div>
+                                @endif
+                                @if($lesson->grade->choose)
                                 <div class="tab-pane" id="kt_tabs_1_2" role="tabpanel">
                                     <form enctype="multipart/form-data" id="form_information"
                                           class="kt-form kt-form--label-right"
@@ -158,86 +191,106 @@ WhatsApp +972592554320
                                           method="post">
                                         {{ csrf_field() }}
                                         @if(isset($c_questions) && count($c_questions))
-                                            @php
-                                                $i = 1;
-                                            @endphp
-                                            @foreach($c_questions as $c_question)
-                                                <div class="form-group row">
-                                                    <div class="col-lg-6">
-                                                        <label>س {{$i}}:</label>
-                                                        <input required class="form-control"
-                                                               name="old_c_question[{{$c_question->id}}]" type="text"
-                                                               value="{{$c_question->content}}">
-                                                        @if($i == 3)
-                                                            <input type="hidden" name="mark[{{$c_question->id}}]" value="8"/>
-                                                        @else
-                                                            <input type="hidden" name="mark[{{$c_question->id}}]" value="7"/>
-                                                        @endif
-                                                    </div>
-                                                    <div class="col-lg-3">
-                                                        <label>الإجابة الصحيحة:</label>
-                                                        <div class="kt-radio-inline">
-                                                            @php
-                                                                $o_counter = 1;
-                                                            @endphp
-                                                            @foreach($c_question->options as $option)
-                                                                <label class="kt-radio">
-                                                                    <input required
-                                                                           {{$option->result == 1 ? 'checked':''}} type="radio"
-                                                                           value="{{$option->id}}"
-                                                                           name="old_c_q_a[{{$c_question->id}}]"> {{$o_counter}}
-                                                                    <span></span>
-                                                                </label>
-                                                                @php
-                                                                    $o_counter ++;
-                                                                @endphp
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3">
-                                                        <label>مرفق : @if($c_question->getFirstMediaUrl('imageQuestion')) <a
-                                                                href="{{$c_question->getFirstMediaUrl('imageQuestion')}}"
-                                                                class="kt-font-warning"
-                                                                target="_blank">استعراض</a>  |
-                                                            <a href="#deleteModel" data-id="{{$c_question->id}}"
-                                                                    data-toggle="modal" data-target="#deleteModel"
-                                                                    class="text-warning deleteRecord">(حذف)
-                                                            </a>  @endif</label>
-                                                        <input type="file" name="old_c_q_attachment[{{$c_question->id}}]"
-                                                               class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    @php
-                                                        $o_counter = 1;
-                                                    @endphp
-                                                    @foreach($c_question->options as $option)
-                                                        <div class="col-lg-3">
-                                                            <label>{{$o_counter}} :</label>
-                                                            <input required type="text" class="form-control"
-                                                                   name="old_c_q_option[{{$c_question->id}}][{{$option->id}}]"
-                                                                   value="{{$option->content}}">
-                                                        </div>
-                                                        @php
-                                                            $o_counter ++;
-                                                        @endphp
-                                                    @endforeach
-                                                </div>
                                                 @php
-                                                    $i ++;
+                                                    $i = 1;
                                                 @endphp
-                                            @endforeach
-                                        @else
-                                            @for($i = 1; $i<=3;$i++)
+                                                @foreach($c_questions as $c_question)
+                                                    @php
+                                                        if ($lesson->grade->grade_number >= 7)
+                                                        {
+                                                            $mark = 7;
+                                                        }elseif ($lesson->grade->grade_number >= 4){
+                                                            $mark = 6;
+                                                        }else{
+                                                            $mark = 7;
+                                                        }
+                                                    @endphp
+                                                    <div class="form-group row">
+                                                        <div class="col-lg-6">
+                                                            <label class="text-info">س {{$i}}:</label>
+                                                            <input required class="form-control"
+                                                                   name="old_c_question[{{$c_question->id}}]" type="text"
+                                                                   value="{{$c_question->content}}">
+                                                            @if($i == 3 && $lesson->grade->grade_number <= 3)
+                                                                <input type="hidden" name="mark[{{$c_question->id}}]" value="8"/>
+                                                            @else
+                                                                <input type="hidden" name="mark[{{$c_question->id}}]" value="{{$mark}}"/>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>الإجابة الصحيحة:</label>
+                                                            <div class="kt-radio-inline">
+                                                                @php
+                                                                    $o_counter = 1;
+                                                                @endphp
+                                                                @foreach($c_question->options as $option)
+                                                                    <label class="kt-radio">
+                                                                        <input required
+                                                                               {{$option->result == 1 ? 'checked':''}} type="radio"
+                                                                               value="{{$option->id}}"
+                                                                               name="old_c_q_a[{{$c_question->id}}]"> {{$o_counter}}
+                                                                        <span></span>
+                                                                    </label>
+                                                                    @php
+                                                                        $o_counter ++;
+                                                                    @endphp
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <label>مرفق : @if($c_question->getFirstMediaUrl('imageQuestion')) <a
+                                                                    href="{{$c_question->getFirstMediaUrl('imageQuestion')}}"
+                                                                    class="kt-font-warning"
+                                                                    target="_blank">استعراض</a>  |
+                                                                <a href="#deleteModel" data-id="{{$c_question->id}}"
+                                                                        data-toggle="modal" data-target="#deleteModel"
+                                                                        class="text-warning deleteRecord">(حذف)
+                                                                </a>  @endif</label>
+                                                            <input type="file" name="old_c_q_attachment[{{$c_question->id}}]"
+                                                                   class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        @php
+                                                            $o_counter = 1;
+                                                        @endphp
+                                                        @foreach($c_question->options as $option)
+                                                            <div class="col-lg-3">
+                                                                <label>{{$o_counter}} :</label>
+                                                                <input required type="text" class="form-control"
+                                                                       name="old_c_q_option[{{$c_question->id}}][{{$option->id}}]"
+                                                                       value="{{$option->content}}">
+                                                            </div>
+                                                            @php
+                                                                $o_counter ++;
+                                                            @endphp
+                                                        @endforeach
+                                                    </div>
+                                                    @php
+                                                        $i ++;
+                                                    @endphp
+                                                @endforeach
+                                            @else
+                                                @for($i = 1; $i<=$lesson->grade->choose;$i++)
+                                                    @php
+                                                    if ($lesson->grade->grade_number >= 7)
+                                                    {
+                                                        $mark = 7;
+                                                    }elseif ($lesson->grade->grade_number >= 4){
+                                                        $mark = 6;
+                                                    }else{
+                                                        $mark = 7;
+                                                    }
+                                                @endphp
                                                 <div class="form-group row">
                                                     <div class="col-lg-6">
                                                         <label>س {{$i}}:</label>
                                                         <input required class="form-control" name="c_question[{{$i}}]"
                                                                type="text">
-                                                        @if($i == 3)
+                                                        @if($i == 3 && $lesson->grade->grade_number <= 3)
                                                         <input type="hidden" name="mark[{{$i}}]" value="8"/>
                                                         @else
-                                                            <input type="hidden" name="mark[{{$i}}]" value="7"/>
+                                                            <input type="hidden" name="mark[{{$i}}]" value="{{$mark}}"/>
                                                         @endif
 
                                                     </div>
@@ -304,6 +357,8 @@ WhatsApp +972592554320
                                         </div>
                                     </form>
                                 </div>
+                                @endif
+                                @if($lesson->grade->match)
                                 <div class="tab-pane" id="kt_tabs_1_3" role="tabpanel">
                                     <form enctype="multipart/form-data" id="form_information"
                                           class="kt-form kt-form--label-right"
@@ -312,12 +367,22 @@ WhatsApp +972592554320
                                         {{ csrf_field() }}
                                         @if(isset($m_questions) && count($m_questions))
                                             @php
+                                                if ($lesson->grade->grade_number >= 7)
+                                                {
+                                                    $mark = 0;
+                                                }elseif ($lesson->grade->grade_number >= 4){
+                                                    $mark = 8;
+                                                }else{
+                                                    $mark = 8;
+                                                }
+                                            @endphp
+                                            @php
                                                 $i = 1;
                                             @endphp
                                             @foreach($m_questions as $m_question)
                                             <div class="form-group row">
                                                 <div class="col-lg-9">
-                                                    <label>س {{$i}}:</label>
+                                                    <label class="text-info">س {{$i}}:</label>
                                                     <input required class="form-control"
                                                            name="old_m_question[{{$m_question->id}}]" type="text"
                                                            value="{{$m_question->content}}">
@@ -379,13 +444,23 @@ WhatsApp +972592554320
                                             @endforeach
                                             @endforeach
                                         @else
-                                            @for($i=0; $i<3; $i++)
+                                            @for($i=0; $i<$lesson->grade->match; $i++)
+                                                @php
+                                                    if ($lesson->grade->grade_number >= 7)
+                                                    {
+                                                        $mark = 0;
+                                                    }elseif ($lesson->grade->grade_number >= 4){
+                                                        $mark = 8;
+                                                    }else{
+                                                        $mark = 8;
+                                                    }
+                                                @endphp
                                             <div class="form-group row">
                                                 <div class="col-lg-9">
-                                                    <label>س {{$i + 1}}:</label>
+                                                    <label class="text-info">س {{$i + 1}}:</label>
                                                     <input required class="form-control" name="m_question[{{$i}}]"
                                                            type="text">
-                                                    <input type="hidden" name="mark[{{$i}}]" value="8">
+                                                    <input type="hidden" name="mark[{{$i}}]" value="{{$mark}}">
 
                                                 </div>
                                                 <div class="col-lg-3">
@@ -467,6 +542,8 @@ WhatsApp +972592554320
                                         </div>
                                     </form>
                                 </div>
+                                @endif
+                                @if($lesson->grade->sort)
                                 <div class="tab-pane" id="kt_tabs_1_4" role="tabpanel">
                                     <form enctype="multipart/form-data" id="form_information"
                                           class="kt-form kt-form--label-right"
@@ -475,16 +552,26 @@ WhatsApp +972592554320
                                         {{ csrf_field() }}
                                         @if(isset($s_questions) && count($s_questions))
                                             @php
+                                                if ($lesson->grade->grade_number >= 7)
+                                                {
+                                                    $mark = 0;
+                                                }elseif ($lesson->grade->grade_number >= 4){
+                                                    $mark = 8;
+                                                }else{
+                                                    $mark = 6;
+                                                }
+                                            @endphp
+                                            @php
                                                 $i = 1;
                                             @endphp
                                             @foreach($s_questions as $s_question)
                                                 <div class="form-group row">
                                                     <div class="col-lg-8">
-                                                        <label>س {{$i}}:</label>
+                                                        <label class="text-info">س {{$i}}:</label>
                                                         <input required class="form-control"
                                                                name="old_s_question[{{$s_question->id}}]" type="text"
                                                                value="{{$s_question->content}}">
-                                                        <input type="hidden" name="mark[{{$s_question->id}}]" value="6">
+                                                        <input type="hidden" name="mark[{{$s_question->id}}]" value="{{$mark}}">
                                                     </div>
                                                     <div class="col-lg-3">
                                                         <label>مرفق : @if($s_question->getFirstMediaUrl('imageQuestion')) <a
@@ -535,13 +622,13 @@ WhatsApp +972592554320
                                             @endforeach
                                         @else
 
-                                            @for($i=1;$i<=6;$i++)
+                                            @for($i=1;$i<=$lesson->grade->sort;$i++)
                                                 <div class="form-group row">
                                                     <div class="col-lg-8">
-                                                        <label>س {{$i}}:</label>
+                                                        <label class="text-info">س {{$i}}:</label>
                                                         <input required class="form-control" name="s_question[{{$i}}]"
                                                                type="text">
-                                                        <input type="hidden" name="mark[{{$i}}]" value="6">
+                                                        <input type="hidden" name="mark[{{$i}}]" value="{{$mark}}">
 
 
                                                     </div>
@@ -585,6 +672,7 @@ WhatsApp +972592554320
                                         </div>
                                     </form>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>

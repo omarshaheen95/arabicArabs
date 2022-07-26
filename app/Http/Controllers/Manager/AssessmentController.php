@@ -30,10 +30,10 @@ class AssessmentController extends Controller
             }
             return $this->redirectWith(false, 'manager.lesson.index', 'لا يمكن اضافة اختبار لهذا الدرس', 'error');
         }
-        $t_f_questions = Question::query()->where('type', 1)->with('trueFalse', 'media')->get();
-        $c_questions = Question::query()->where('type', 2)->with('options', 'media')->get();
-        $m_questions = Question::query()->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();
-        $s_questions = Question::query()->where('type', 4)->with(['sortWords', 'media'])->get();
+        $t_f_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();
+        $c_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();
+        $m_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();
+        $s_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 4)->with(['sortWords', 'media'])->get();
 
         return view('manager.lesson.assessment', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 's_questions'));
     }

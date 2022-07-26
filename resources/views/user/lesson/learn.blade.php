@@ -117,8 +117,7 @@
                                         <i class="fa fa-play-circle fa-2x"></i>
 
                                     </button>
-                                    <audio style="display:none" id="audio{{$lesson->id}}"
-                                           data-id="{{$lesson->id}}" src="{{$lesson->getFirstMediaUrl('audioLessons')}}"></audio>
+                                    <audio style="display:none" id="audio{{$lesson->id}}" data-id="{{$lesson->id}}" src="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}"></audio>
                                     @endif
                                     <div class="col-md-12 mt-4">
                                         {!! $lesson->content !!}

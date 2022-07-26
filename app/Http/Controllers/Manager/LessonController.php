@@ -12,7 +12,9 @@ use App\Models\TOption;
 use App\Models\TQuestion;
 use App\Models\TSortWord;
 use App\Models\TTrueFalse;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class LessonController extends Controller
@@ -124,11 +126,23 @@ class LessonController extends Controller
     public function uploadImageLesson(Request $request)
     {
         if ($request->hasFile('imageFile')) {
-            $image = asset($this->uploadQImage($request->file('imageFile'), 'lesson_images'));
+            $image = asset($this->uploadImage($request->file('imageFile'), 'lesson_images'));
             return response()->json(["link" => $image]);
         } else {
             return false;
         }
+    }
+
+    public function lessonReview($id, $step)
+    {
+        $lesson = Lesson::query()->findOrFail($id);
+        $user = User::query()->first();
+        if (!$user)
+        {
+            return redirect()->route('manager.home')->with('m-class', 'error')->with('message', 'لا يوجد أي حساب مستخدم للمتابعة');
+        }
+        Auth::guard('web')->loginUsingId($id);
+        return redirect()->route('lesson', [$id, $step]);
     }
 
 

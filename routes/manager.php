@@ -29,6 +29,7 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::get('getTeacherBySchool/{lid}', 'TeacherController@getTeacherBySchool')->name('getTeacherBySchool');
 
     Route::get('lesson/{id}/learn', [LessonController::class,'lessonLearn'])->name('lesson.learn');
+    Route::get('lesson/{id}/review/{step}', [LessonController::class,'lessonReview'])->name('lesson.review');
     Route::post('lesson/{id}/learn', [LessonController::class,'updateLessonLearn'])->name('lesson.update_learn');
     Route::post('lesson/{id}/remove_lesson_audio', [LessonController::class,'deleteLessonAudio'])->name('lesson.remove_lesson_audio');
 

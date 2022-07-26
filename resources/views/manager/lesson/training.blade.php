@@ -20,6 +20,9 @@ WhatsApp +972592554320
         </li>
         <li class="breadcrumb-item">
             {{ isset($title) ? $title:'' }}
+
+            -
+            <a href="{{route('manager.lesson.review', [$lesson->id, 'training'])}}" target="_blank">معاينة</a>
         </li>
     @endpush
     <div class="row">
@@ -37,30 +40,38 @@ WhatsApp +972592554320
                     <div class="kt-section kt-section--first">
                         <div class="kt-section__body">
                             <ul class="nav nav-tabs nav-fill" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab"
-                                       href="#kt_tabs_1_1">صح و خطأ</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab"
-                                       href="#kt_tabs_1_2">اختر الإجابة</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#kt_tabs_1_3">التوصيل</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab"
-                                       href="#kt_tabs_1_4">ترتيب الكلمات</a>
-                                </li>
+                                @if($lesson->grade->true_false)
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab"
+                                           href="#kt_tabs_1_1">صح و خطأ</a>
+                                    </li>
+                                @endif
+                                @if($lesson->grade->choose)
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab"
+                                           href="#kt_tabs_1_2">اختر الإجابة</a>
+                                    </li>
+                                @endif
+                                @if($lesson->grade->match)
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#kt_tabs_1_3">التوصيل</a>
+                                    </li>
+                                @endif
+                                @if($lesson->grade->sort)
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab"
+                                           href="#kt_tabs_1_4">ترتيب الكلمات</a>
+                                    </li>
+                                @endif
                             </ul>
                             <div class="tab-content">
+                                @if($lesson->grade->true_false)
                                 <div class="tab-pane active" id="kt_tabs_1_1" role="tabpanel">
                                     <form enctype="multipart/form-data" id="form_information"
                                           class="kt-form kt-form--label-right"
                                           action="{{ route('manager.lesson.update_training', [$lesson->id, 1]) }}"
                                           method="post">
                                         {{ csrf_field() }}
-                                        <h4>صح Or خطأ</h4>
                                         @if(isset($t_f_questions) && count($t_f_questions))
                                             @php
                                                 $i = 1;
@@ -68,11 +79,13 @@ WhatsApp +972592554320
                                             @foreach($t_f_questions as $t_f_question)
                                                 <div class="form-group row">
                                                     <div class="col-lg-7">
-                                                        <label>س {{$i}}:</label>
+                                                        <label class="text-info">س {{$i}}:</label>
                                                         <input required class="form-control"
-                                                               name="old_t_f_question[{{$t_f_question->id}}]" type="text"
+                                                               name="old_t_f_question[{{$t_f_question->id}}]"
+                                                               type="text"
                                                                value="{{$t_f_question->content}}">
-                                                        <input type="hidden" name="mark[{{$t_f_question->id}}]" value="6"/>
+                                                        <input type="hidden" name="mark[{{$t_f_question->id}}]"
+                                                               value="6"/>
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label>الإجابة الصحيحة:</label>
@@ -94,13 +107,14 @@ WhatsApp +972592554320
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3">
-                                                        <label>مرفق : @if($t_f_question->getFirstMediaUrl('t_imageQuestion')) <a
+                                                        <label>مرفق
+                                                            : @if($t_f_question->getFirstMediaUrl('t_imageQuestion')) <a
                                                                 href="{{$t_f_question->getFirstMediaUrl('t_imageQuestion')}}"
                                                                 class="kt-font-warning"
                                                                 target="_blank">استعراض</a>  |
                                                             <a href="#deleteModel" data-id="{{$t_f_question->id}}"
-                                                                    data-toggle="modal" data-target="#deleteModel"
-                                                                    class="text-warning deleteRecord">(حذف)
+                                                               data-toggle="modal" data-target="#deleteModel"
+                                                               class="text-warning deleteRecord">(حذف)
                                                             </a>  @endif</label>
                                                         <input type="file"
                                                                name="old_t_f_q_attachment[{{$t_f_question->id}}]"
@@ -112,10 +126,10 @@ WhatsApp +972592554320
                                                 @endphp
                                             @endforeach
                                         @else
-                                            @for($i = 1; $i<=3;$i++)
+                                            @for($i = 1; $i<=$lesson->grade->true_false;$i++)
                                                 <div class="form-group row">
                                                     <div class="col-lg-7">
-                                                        <label>س {{$i}}:</label>
+                                                        <label class="text-info">س {{$i}}:</label>
                                                         <input required class="form-control" name="t_f_question[{{$i}}]"
                                                                type="text">
                                                         <input type="hidden" name="mark[{{$i}}]" value="6"/>
@@ -152,13 +166,14 @@ WhatsApp +972592554320
                                         </div>
                                     </form>
                                 </div>
+                                @endif
+                                @if($lesson->grade->choose)
                                 <div class="tab-pane" id="kt_tabs_1_2" role="tabpanel">
                                     <form enctype="multipart/form-data" id="form_information"
                                           class="kt-form kt-form--label-right"
                                           action="{{ route('manager.lesson.update_training', [$lesson->id, 2]) }}"
                                           method="post">
                                         {{ csrf_field() }}
-                                        <h4>Choose Answer</h4>
                                         @if(isset($c_questions) && count($c_questions))
                                             @php
                                                 $i = 1;
@@ -166,14 +181,16 @@ WhatsApp +972592554320
                                             @foreach($c_questions as $c_question)
                                                 <div class="form-group row">
                                                     <div class="col-lg-6">
-                                                        <label>س {{$i}}:</label>
+                                                        <label class="text-info">س {{$i}}:</label>
                                                         <input required class="form-control"
                                                                name="old_c_question[{{$c_question->id}}]" type="text"
                                                                value="{{$c_question->content}}">
                                                         @if($i == 3)
-                                                            <input type="hidden" name="mark[{{$c_question->id}}]" value="8"/>
+                                                            <input type="hidden" name="mark[{{$c_question->id}}]"
+                                                                   value="8"/>
                                                         @else
-                                                            <input type="hidden" name="mark[{{$c_question->id}}]" value="7"/>
+                                                            <input type="hidden" name="mark[{{$c_question->id}}]"
+                                                                   value="7"/>
                                                         @endif
                                                     </div>
                                                     <div class="col-lg-3">
@@ -197,15 +214,17 @@ WhatsApp +972592554320
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3">
-                                                        <label>مرفق : @if($c_question->getFirstMediaUrl('t_imageQuestion')) <a
+                                                        <label>مرفق
+                                                            : @if($c_question->getFirstMediaUrl('t_imageQuestion')) <a
                                                                 href="{{$c_question->getFirstMediaUrl('t_imageQuestion')}}"
                                                                 class="kt-font-warning"
                                                                 target="_blank">استعراض</a>  |
                                                             <a href="#deleteModel" data-id="{{$c_question->id}}"
-                                                                    data-toggle="modal" data-target="#deleteModel"
-                                                                    class="text-warning deleteRecord">(حذف)
+                                                               data-toggle="modal" data-target="#deleteModel"
+                                                               class="text-warning deleteRecord">(حذف)
                                                             </a>  @endif</label>
-                                                        <input type="file" name="old_c_q_attachment[{{$c_question->id}}]"
+                                                        <input type="file"
+                                                               name="old_c_q_attachment[{{$c_question->id}}]"
                                                                class="form-control">
                                                     </div>
                                                 </div>
@@ -230,14 +249,14 @@ WhatsApp +972592554320
                                                 @endphp
                                             @endforeach
                                         @else
-                                            @for($i = 1; $i<=3;$i++)
+                                            @for($i = 1; $i<=$lesson->grade->choose;$i++)
                                                 <div class="form-group row">
                                                     <div class="col-lg-6">
-                                                        <label>س {{$i}}:</label>
+                                                        <label class="text-info">س {{$i}}:</label>
                                                         <input required class="form-control" name="c_question[{{$i}}]"
                                                                type="text">
                                                         @if($i == 3)
-                                                        <input type="hidden" name="mark[{{$i}}]" value="8"/>
+                                                            <input type="hidden" name="mark[{{$i}}]" value="8"/>
                                                         @else
                                                             <input type="hidden" name="mark[{{$i}}]" value="7"/>
                                                         @endif
@@ -306,160 +325,172 @@ WhatsApp +972592554320
                                         </div>
                                     </form>
                                 </div>
+                                @endif
+                                @if($lesson->grade->match)
                                 <div class="tab-pane" id="kt_tabs_1_3" role="tabpanel">
                                     <form enctype="multipart/form-data" id="form_information"
                                           class="kt-form kt-form--label-right"
                                           action="{{ route('manager.lesson.update_training', [$lesson->id, 3]) }}"
                                           method="post">
                                         {{ csrf_field() }}
-                                        <h4>Match Answer</h4>
                                         @if(isset($m_questions) && count($m_questions))
                                             @php
                                                 $i = 1;
                                             @endphp
                                             @foreach($m_questions as $m_question)
-                                            <div class="form-group row">
-                                                <div class="col-lg-9">
-                                                    <label>س {{$i}}:</label>
-                                                    <input required class="form-control"
-                                                           name="old_m_question[{{$m_question->id}}]" type="text"
-                                                           value="{{$m_question->content}}">
-                                                    <input type="hidden" name="mark[{{$m_question->id}}]" value="8">
+                                                <div class="form-group row">
+                                                    <div class="col-lg-9">
+                                                        <label>س {{$i}}:</label>
+                                                        <input required class="form-control"
+                                                               name="old_m_question[{{$m_question->id}}]" type="text"
+                                                               value="{{$m_question->content}}">
+                                                        <input type="hidden" name="mark[{{$m_question->id}}]" value="8">
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <label>مرفق
+                                                            : @if($m_question->getFirstMediaUrl('t_imageQuestion')) <a
+                                                                href="{{$m_question->getFirstMediaUrl('t_imageQuestion')}}"
+                                                                class="kt-font-warning"
+                                                                target="_blank">استعراض</a>  |
+                                                            <a href="#deleteModel" data-id="{{$m_question->id}}"
+                                                               data-toggle="modal" data-target="#deleteModel"
+                                                               class="text-warning deleteRecord">(حذف)
+                                                            </a>  @endif</label>
+                                                        <input type="file"
+                                                               name="old_m_q_attachment[{{$m_question->id}}]"
+                                                               class="form-control">
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-3">
-                                                    <label>مرفق : @if($m_question->getFirstMediaUrl('t_imageQuestion')) <a
-                                                            href="{{$m_question->getFirstMediaUrl('t_imageQuestion')}}" class="kt-font-warning"
-                                                            target="_blank">استعراض</a>  |
-                                                        <a href="#deleteModel" data-id="{{$m_question->id}}"
-                                                                data-toggle="modal" data-target="#deleteModel"
-                                                                class="text-warning deleteRecord">(حذف)
-                                                        </a>  @endif</label>
-                                                    <input type="file" name="old_m_q_attachment[{{$m_question->id}}]"
-                                                           class="form-control">
-                                                </div>
-                                            </div>
                                                 @php
                                                     $i ++;
                                                 @endphp
-                                            @php
-                                                $o_counter = 1;
-                                            @endphp
-                                            @foreach($m_question->matches as $match)
+                                                @php
+                                                    $o_counter = 1;
+                                                @endphp
+                                                @foreach($m_question->matches as $match)
+                                                    <div class="form-group row">
+                                                        <div class="col-lg-8">
+                                                            <label>خيار {{$o_counter}}:</label>
+                                                            <input required class="form-control"
+                                                                   name="old_m_q_option[{{$match->id}}]"
+                                                                   value="{{$match->content}}" type="text">
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <label>الإجابة:</label>
+                                                            <input required class="form-control"
+                                                                   name="old_m_q_answer[{{$match->id}}]"
+                                                                   value="{{$match->result}}" type="text">
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <label>صورة:
+                                                                @if($match->getFirstMediaUrl('t_match'))
+                                                                    <a href="{{$match->getFirstMediaUrl('t_match')}}"
+                                                                       class="kt-font-warning"
+                                                                       target="_blank">استعراض</a>
+                                                                    |
+                                                                    <a href="#deleteMatchImageModel"
+                                                                       data-id="{{$match->id}}"
+                                                                       data-toggle="modal"
+                                                                       data-target="#deleteMatchImageModel"
+                                                                       class="text-warning deleteMatchImageRecord">
+                                                                        (حذف)
+                                                                    </a>
+                                                                @endif
+                                                            </label>
+                                                            <input class="form-control"
+                                                                   name="old_m_q_image[{{$match->id}}]"
+                                                                   type="file">
+                                                        </div>
+                                                    </div>
+                                                    @php
+                                                        $o_counter ++;
+                                                    @endphp
+                                                @endforeach
+                                            @endforeach
+                                        @else
+                                            @for($i=0; $i<$lesson->grade->match; $i++)
+                                                <div class="form-group row">
+                                                    <div class="col-lg-9">
+                                                        <label class="text-info">س {{$i + 1}}:</label>
+                                                        <input required class="form-control" name="m_question[{{$i}}]"
+                                                               type="text">
+                                                        <input type="hidden" name="mark[{{$i}}]" value="8">
+
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <label>مرفق :</label>
+                                                        <input type="file" name="m_q_attachment[{{$i}}]"
+                                                               class="form-control">
+                                                    </div>
+                                                </div>
                                                 <div class="form-group row">
                                                     <div class="col-lg-8">
-                                                        <label>خيار {{$o_counter}}:</label>
-                                                        <input required class="form-control"
-                                                               name="old_m_q_option[{{$match->id}}]"
-                                                               value="{{$match->content}}" type="text">
+                                                        <label>خيار 1:</label>
+                                                        <input required class="form-control" name="m_q_option[{{$i}}][]"
+                                                               type="text">
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label>الإجابة:</label>
-                                                        <input required class="form-control"
-                                                               name="old_m_q_answer[{{$match->id}}]"
-                                                               value="{{$match->result}}" type="text">
+                                                        <input required class="form-control" name="m_q_answer[{{$i}}][]"
+                                                               type="text">
                                                     </div>
                                                     <div class="col-lg-2">
-                                                        <label>صورة:
-                                                            @if($match->getFirstMediaUrl('t_match'))
-                                                                <a href="{{$match->getFirstMediaUrl('t_match')}}" class="kt-font-warning"
-                                                                   target="_blank">استعراض</a>
-                                                                |
-                                                                <a href="#deleteMatchImageModel" data-id="{{$match->id}}"
-                                                                        data-toggle="modal"
-                                                                        data-target="#deleteMatchImageModel"
-                                                                        class="text-warning deleteMatchImageRecord">
-                                                                    (حذف)
-                                                                </a>
-                                                            @endif
-                                                        </label>
-                                                        <input class="form-control" name="old_m_q_image[{{$match->id}}]"
+                                                        <label>صورة:</label>
+                                                        <input class="form-control" name="m_q_image[{{$i}}][]"
                                                                type="file">
                                                     </div>
                                                 </div>
-                                                @php
-                                                    $o_counter ++;
-                                                @endphp
-                                            @endforeach
-                                            @endforeach
-                                        @else
-                                            @for($i=0; $i<3; $i++)
-                                            <div class="form-group row">
-                                                <div class="col-lg-9">
-                                                    <label>س {{$i + 1}}:</label>
-                                                    <input required class="form-control" name="m_question[{{$i}}]"
-                                                           type="text">
-                                                    <input type="hidden" name="mark[{{$i}}]" value="8">
-
+                                                <div class="form-group row">
+                                                    <div class="col-lg-8">
+                                                        <label>خيار 2:</label>
+                                                        <input required class="form-control" name="m_q_option[{{$i}}][]"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <label>الإجابة:</label>
+                                                        <input required class="form-control" name="m_q_answer[{{$i}}][]"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <label>صورة:</label>
+                                                        <input class="form-control" name="m_q_image[{{$i}}][]"
+                                                               type="file">
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-3">
-                                                    <label>مرفق :</label>
-                                                    <input type="file" name="m_q_attachment[{{$i}}]" class="form-control">
+                                                <div class="form-group row">
+                                                    <div class="col-lg-8">
+                                                        <label>خيار 3:</label>
+                                                        <input required class="form-control" name="m_q_option[{{$i}}][]"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <label>الإجابة:</label>
+                                                        <input required class="form-control" name="m_q_answer[{{$i}}][]"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <label>صورة:</label>
+                                                        <input class="form-control" name="m_q_image[{{$i}}][]"
+                                                               type="file">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-8">
-                                                    <label>خيار 1:</label>
-                                                    <input required class="form-control" name="m_q_option[{{$i}}][]"
-                                                           type="text">
+                                                <div class="form-group row">
+                                                    <div class="col-lg-8">
+                                                        <label>خيار 4:</label>
+                                                        <input required class="form-control" name="m_q_option[{{$i}}][]"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <label>الإجابة:</label>
+                                                        <input required class="form-control" name="m_q_answer[{{$i}}][]"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <label>صورة:</label>
+                                                        <input class="form-control" name="m_q_image[{{$i}}][]"
+                                                               type="file">
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-2">
-                                                    <label>الإجابة:</label>
-                                                    <input required class="form-control" name="m_q_answer[{{$i}}][]"
-                                                           type="text">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <label>صورة:</label>
-                                                    <input class="form-control" name="m_q_image[{{$i}}][]" type="file">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-8">
-                                                    <label>خيار 2:</label>
-                                                    <input required class="form-control" name="m_q_option[{{$i}}][]"
-                                                           type="text">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <label>الإجابة:</label>
-                                                    <input required class="form-control" name="m_q_answer[{{$i}}][]"
-                                                           type="text">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <label>صورة:</label>
-                                                    <input class="form-control" name="m_q_image[{{$i}}][]" type="file">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-8">
-                                                    <label>خيار 3:</label>
-                                                    <input required class="form-control" name="m_q_option[{{$i}}][]"
-                                                           type="text">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <label>الإجابة:</label>
-                                                    <input required class="form-control" name="m_q_answer[{{$i}}][]"
-                                                           type="text">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <label>صورة:</label>
-                                                    <input class="form-control" name="m_q_image[{{$i}}][]" type="file">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-8">
-                                                    <label>خيار 4:</label>
-                                                    <input required class="form-control" name="m_q_option[{{$i}}][]"
-                                                           type="text">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <label>الإجابة:</label>
-                                                    <input required class="form-control" name="m_q_answer[{{$i}}][]"
-                                                           type="text">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <label>صورة:</label>
-                                                    <input class="form-control" name="m_q_image[{{$i}}][]" type="file">
-                                                </div>
-                                            </div>
                                             @endfor
                                         @endif
                                         <hr/>
@@ -470,13 +501,14 @@ WhatsApp +972592554320
                                         </div>
                                     </form>
                                 </div>
+                                @endif
+                                @if($lesson->grade->sort)
                                 <div class="tab-pane" id="kt_tabs_1_4" role="tabpanel">
                                     <form enctype="multipart/form-data" id="form_information"
                                           class="kt-form kt-form--label-right"
                                           action="{{ route('manager.lesson.update_training', [$lesson->id, 4]) }}"
                                           method="post">
                                         {{ csrf_field() }}
-                                        <h4>Sort Answer</h4>
                                         @if(isset($s_questions) && count($s_questions))
                                             @php
                                                 $i = 1;
@@ -484,22 +516,24 @@ WhatsApp +972592554320
                                             @foreach($s_questions as $s_question)
                                                 <div class="form-group row">
                                                     <div class="col-lg-8">
-                                                        <label>س {{$i}}:</label>
+                                                        <label class="text-info">س {{$i}}:</label>
                                                         <input required class="form-control"
                                                                name="old_s_question[{{$s_question->id}}]" type="text"
                                                                value="{{$s_question->content}}">
                                                         <input type="hidden" name="mark[{{$s_question->id}}]" value="6">
                                                     </div>
                                                     <div class="col-lg-3">
-                                                        <label>مرفق : @if($s_question->getFirstMediaUrl('t_imageQuestion')) <a
+                                                        <label>مرفق
+                                                            : @if($s_question->getFirstMediaUrl('t_imageQuestion')) <a
                                                                 href="{{$s_question->getFirstMediaUrl('t_imageQuestion')}}"
                                                                 class="kt-font-warning"
                                                                 target="_blank">استعراض</a>  |
                                                             <a href="#deleteModel" data-id="{{$s_question->id}}"
-                                                                    data-toggle="modal" data-target="#deleteModel"
-                                                                    class="text-warning deleteRecord">(حذف)
+                                                               data-toggle="modal" data-target="#deleteModel"
+                                                               class="text-warning deleteRecord">(حذف)
                                                             </a>  @endif</label>
-                                                        <input type="file" name="old_s_q_attachment[{{$s_question->id}}]"
+                                                        <input type="file"
+                                                               name="old_s_q_attachment[{{$s_question->id}}]"
                                                                class="form-control">
                                                     </div>
                                                     <div class="col-lg-1 text-center">
@@ -539,10 +573,10 @@ WhatsApp +972592554320
                                             @endforeach
                                         @else
 
-                                            @for($i=1;$i<=6;$i++)
+                                            @for($i=1;$i<=$lesson->grade->sort;$i++)
                                                 <div class="form-group row">
                                                     <div class="col-lg-8">
-                                                        <label>س {{$i}}:</label>
+                                                        <label class="text-info">س {{$i}}:</label>
                                                         <input required class="form-control" name="s_question[{{$i}}]"
                                                                type="text">
                                                         <input type="hidden" name="mark[{{$i}}]" value="6">
@@ -589,6 +623,7 @@ WhatsApp +972592554320
                                         </div>
                                     </form>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>
