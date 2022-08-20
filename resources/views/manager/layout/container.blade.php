@@ -198,6 +198,13 @@
                                 <span class="kt-menu__link-text">الدروس</span>
                             </a>
                         </li>
+                        <li class="kt-menu__item  @if(Request::is('manager/story*') || Request::is('manager/story*')) kt-menu__item--active @endif"
+                            aria-haspopup="true">
+                            <a href="{{route('manager.story.index')}}" class="kt-menu__link ">
+                                <i class="kt-menu__link-icon flaticon2-open-text-book"></i>
+                                <span class="kt-menu__link-text">القصص</span>
+                            </a>
+                        </li>
                         <li class="kt-menu__item  @if(Request::is('manager/package*')) kt-menu__item--active @endif"
                             aria-haspopup="true">
                             <a href="{{route('manager.package.index')}}" class="kt-menu__link ">

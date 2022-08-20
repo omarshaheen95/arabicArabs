@@ -21,7 +21,7 @@ class CreateLessonsTable extends Migration
             $table->enum('lesson_type', ['reading', 'writing', 'listening', 'speaking', 'grammar']);
             $table->enum('section_type', ['informative', 'literary'])->nullable();
             $table->string('color')->nullable();
-            $table->tinyInteger('ordered')->default(1);
+            $table->integer('ordered')->default(1);
             $table->integer('success_mark')->default(60);
             $table->boolean('active');
             $table->timestamps();

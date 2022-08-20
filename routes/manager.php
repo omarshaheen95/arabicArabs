@@ -24,6 +24,16 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::post('approve_teacher', 'TeacherController@approveTeacher')->name('teacher.approveTeacher');
     Route::post('activate_teacher', 'TeacherController@activeTeacher')->name('teacher.activateTeacher');
     Route::post('export_teachers_excel', 'TeacherController@exportTeachersExcel')->name('teacher.export_teachers_excel');
+    //Story
+    Route::resource('story', 'StoryController');
+    Route::get('story_assessment/{id}', 'StoryController@storyAssessment')->name('story.assessment');
+    Route::post('story_assessment/{id}/{step}', 'StoryController@storeAssessmentStory')->name('story.storeAssessment');
+    Route::post('story_update_assessment/{id}/{step}', 'StoryController@updateAssessmentStory')->name('story.updateAssessment');
+    Route::post('story_remove_attachment/{id}', 'StoryController@removeAttachment')->name('story.remove_attachment');
+    Route::post('story_remove_sort_word/{id}', 'StoryController@removeSortWord')->name('story.remove_sort_word');
+    Route::post('story_remove_match_attachment/{id}', 'StoryController@removeMatchAttachment')->name('story.remove_match_attachment');
+
+
 
 
     Route::get('getTeacherBySchool/{lid}', 'TeacherController@getTeacherBySchool')->name('getTeacherBySchool');
