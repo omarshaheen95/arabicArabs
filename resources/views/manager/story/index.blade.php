@@ -9,7 +9,7 @@
         </li>
     @endpush
     @push('search')
-        <div class="kt-subheader-search" style="background: linear-gradient(to right,#5762e7,#3B47CB);">
+        <div class="kt-subheader-search" style="background: linear-gradient(to right,#31ab3f,#31ab3f);">
             <h3 class="kt-subheader-search__title">
                 {{ t('search') }}
             </h3>
