@@ -22,17 +22,17 @@
                         <a href="{{route('lessons', [$grade->id, 'reading'])}}" class="url-box">
                             <figure class='newsCard news-Slide-up '>
                                 <img
-                                    src="{{optional($grade)->image ?? 'https://source.unsplash.com/1600x900/?background'}}"/>
+                                    src="{{asset('steps/reading.png')}}"/>
                                 <div class='newsCaption px-4'>
                                     <div class="d-flex align-items-center justify-content-center cnt-title text-center">
                                         <h5 class='newsCaption-title m-0'>
-                                            مهارة القراءة
+{{--                                            مهارة القراءة--}}
                                         </h5>
                                     </div>
                                     <div class='newsCaption-content justify-content-center d-flex text-center'>
                                         <h5 class="col-10 py-3 px-0">
 
-                                            {{$grade->name}}
+{{--                                            {{$grade->name}}--}}
                                         </h5>
                                     </div>
                                 </div>
@@ -46,17 +46,17 @@
                         <a href="{{route('lessons', [$grade->id, 'writing'])}}" class="url-box">
                             <figure class='newsCard news-Slide-up '>
                                 <img
-                                    src="{{optional($grade)->image ?? 'https://source.unsplash.com/1600x900/?background'}}"/>
+                                    src="{{asset('steps/writing.png')}}"/>
                                 <div class='newsCaption px-4'>
                                     <div class="d-flex align-items-center justify-content-center cnt-title text-center">
                                         <h5 class='newsCaption-title m-0'>
-                                            مهارة الكتابة
+{{--                                            مهارة الكتابة--}}
                                         </h5>
                                     </div>
                                     <div class='newsCaption-content justify-content-center d-flex text-center'>
                                         <h5 class="col-10 py-3 px-0">
 
-                                            {{$grade->name}}
+{{--                                            {{$grade->name}}--}}
                                         </h5>
                                     </div>
                                 </div>
@@ -70,17 +70,17 @@
                         <a href="{{route('lessons', [$grade->id, 'listening'])}}" class="url-box">
                             <figure class='newsCard news-Slide-up '>
                                 <img
-                                    src="{{optional($grade)->image ?? 'https://source.unsplash.com/1600x900/?background'}}"/>
+                                    src="{{asset('steps/listening.png')}}"/>
                                 <div class='newsCaption px-4'>
                                     <div class="d-flex align-items-center justify-content-center cnt-title text-center">
                                         <h5 class='newsCaption-title m-0'>
-                                            مهارة الاستماع
+{{--                                            مهارة الاستماع--}}
                                         </h5>
                                     </div>
                                     <div class='newsCaption-content justify-content-center d-flex text-center'>
                                         <h5 class="col-10 py-3 px-0">
 
-                                            {{$grade->name}}
+{{--                                            {{$grade->name}}--}}
                                         </h5>
                                     </div>
                                 </div>
@@ -94,17 +94,17 @@
                         <a href="{{route('lessons', [$grade->id, 'speaking'])}}" class="url-box">
                             <figure class='newsCard news-Slide-up '>
                                 <img
-                                    src="{{optional($grade)->image ?? 'https://source.unsplash.com/1600x900/?background'}}"/>
+                                    src="{{asset('steps/speaking.png')}}"/>
                                 <div class='newsCaption px-4'>
                                     <div class="d-flex align-items-center justify-content-center cnt-title text-center">
                                         <h5 class='newsCaption-title m-0'>
-                                            مهارة التحدث
+{{--                                            مهارة التحدث--}}
                                         </h5>
                                     </div>
                                     <div class='newsCaption-content justify-content-center d-flex text-center'>
                                         <h5 class="col-10 py-3 px-0">
 
-                                            {{$grade->name}}
+{{--                                            {{$grade->name}}--}}
                                         </h5>
                                     </div>
                                 </div>
@@ -129,18 +129,18 @@
                             <a href="{{route('lessons', [$alternate_grade->id, 'reading'])}}" class="url-box">
                                 <figure class='newsCard news-Slide-up '>
                                     <img
-                                        src="{{optional($alternate_grade)->image ?? 'https://source.unsplash.com/1600x900/?background'}}"/>
+                                        src="{{asset('steps/reading.png')}}"/>
                                     <div class='newsCaption px-4'>
                                         <div
                                             class="d-flex align-items-center justify-content-center cnt-title text-center">
                                             <h5 class='newsCaption-title m-0'>
-                                                مهارة القراءة
+{{--                                                مهارة القراءة--}}
                                             </h5>
                                         </div>
                                         <div class='newsCaption-content justify-content-center d-flex text-center'>
                                             <h5 class="col-10 py-3 px-0">
 
-                                                {{$alternate_grade->name}}
+{{--                                                {{$alternate_grade->name}}--}}
                                             </h5>
                                         </div>
                                     </div>
@@ -154,18 +154,18 @@
                             <a href="{{route('lessons', [$alternate_grade->id, 'writing'])}}" class="url-box">
                                 <figure class='newsCard news-Slide-up '>
                                     <img
-                                        src="{{optional($alternate_grade)->image ?? 'https://source.unsplash.com/1600x900/?background'}}"/>
+                                        src="{{asset('steps/writing.png')}}"/>
                                     <div class='newsCaption px-4'>
                                         <div
                                             class="d-flex align-items-center justify-content-center cnt-title text-center">
                                             <h5 class='newsCaption-title m-0'>
-                                                مهارة الكتابة
+{{--                                                مهارة الكتابة--}}
                                             </h5>
                                         </div>
                                         <div class='newsCaption-content justify-content-center d-flex text-center'>
                                             <h5 class="col-10 py-3 px-0">
 
-                                                {{$alternate_grade->name}}
+{{--                                                {{$alternate_grade->name}}--}}
                                             </h5>
                                         </div>
                                     </div>
@@ -179,18 +179,18 @@
                             <a href="{{route('lessons', [$alternate_grade->id, 'listening'])}}" class="url-box">
                                 <figure class='newsCard news-Slide-up '>
                                     <img
-                                        src="{{optional($alternate_grade)->image ?? 'https://source.unsplash.com/1600x900/?background'}}"/>
+                                        src="{{asset('steps/listening.png')}}"/>
                                     <div class='newsCaption px-4'>
                                         <div
                                             class="d-flex align-items-center justify-content-center cnt-title text-center">
                                             <h5 class='newsCaption-title m-0'>
-                                                مهارة الاستماع
+{{--                                                مهارة الاستماع--}}
                                             </h5>
                                         </div>
                                         <div class='newsCaption-content justify-content-center d-flex text-center'>
                                             <h5 class="col-10 py-3 px-0">
 
-                                                {{$alternate_grade->name}}
+{{--                                                {{$alternate_grade->name}}--}}
                                             </h5>
                                         </div>
                                     </div>
@@ -204,18 +204,18 @@
                             <a href="{{route('lessons', [$alternate_grade->id, 'speaking'])}}" class="url-box">
                                 <figure class='newsCard news-Slide-up '>
                                     <img
-                                        src="{{optional($alternate_grade)->image ?? 'https://source.unsplash.com/1600x900/?background'}}"/>
+                                        src="{{asset('steps/speaking.png')}}"/>
                                     <div class='newsCaption px-4'>
                                         <div
                                             class="d-flex align-items-center justify-content-center cnt-title text-center">
                                             <h5 class='newsCaption-title m-0'>
-                                                مهارة التحدث
+{{--                                                مهارة التحدث--}}
                                             </h5>
                                         </div>
                                         <div class='newsCaption-content justify-content-center d-flex text-center'>
                                             <h5 class="col-10 py-3 px-0">
 
-                                                {{$alternate_grade->name}}
+{{--                                                {{$alternate_grade->name}}--}}
                                             </h5>
                                         </div>
                                     </div>
