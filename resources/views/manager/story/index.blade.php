@@ -8,28 +8,7 @@
             القصص
         </li>
     @endpush
-    @push('search')
-        <div class="kt-subheader-search" style="background: linear-gradient(to right,#31ab3f,#31ab3f);">
-            <h3 class="kt-subheader-search__title">
-                {{ t('search') }}
-            </h3>
-            <form class="kt-form">
-                <div class="kt-grid kt-grid--desktop kt-grid--ver-desktop">
-                    <div class="row" style="width: 100%">
-                        <div class="col-lg-6">
-                            <div class="kt-input-icon kt-input-icon--pill kt-input-icon--right">
-                                <input style="background: white" type="text" id="search" class="form-control form-control-pill" placeholder="{{ t('keywords') }}">
-                                <span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la la-search"></i></span></span>
-                            </div>
 
-                        </div>
-                        <div class="col-lg-2">
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    @endpush
     <div class="row">
         <div class="col-md-12">
             <div class="kt-portlet kt-portlet--height-fluid">
@@ -51,6 +30,39 @@
                     </div>
                 </div>
                 <div class="kt-portlet__body">
+                    <form class="kt-form kt-form--fit kt-margin-b-15" action="" id="search_form" method="get">
+                        <div class="row ">
+                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
+                                <label>الاسم :</label>
+                                <input type="text" name="name" id="name" class="form-control kt-input"
+                                       placeholder="الاسم ">
+                            </div>
+                            <div class="col-lg-2 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
+                                <label>الصف :</label>
+                                <select class="form-control select2L" name="grade">
+                                    <option selected value="">الكل</option>
+                                    <option value="1" {{isset($story) && $story->grade == 1 ? 'selected':''}}>Grade 1</option>
+                                    <option value="2" {{isset($story) && $story->grade == 2 ? 'selected':''}}>Grade 2</option>
+                                    <option value="3" {{isset($story) && $story->grade == 3 ? 'selected':''}}>Grade 3</option>
+                                    <option value="4" {{isset($story) && $story->grade == 4 ? 'selected':''}}>Grade 4</option>
+                                    <option value="5" {{isset($story) && $story->grade == 5 ? 'selected':''}}>Grade 5</option>
+                                    <option value="6" {{isset($story) && $story->grade == 6 ? 'selected':''}}>Grade 6</option>
+                                    <option value="7" {{isset($story) && $story->grade == 7 ? 'selected':''}}>Grade 7</option>
+                                    <option value="8" {{isset($story) && $story->grade == 8 ? 'selected':''}}>Grade 8</option>
+                                    <option value="9" {{isset($story) && $story->grade == 9 ? 'selected':''}}>Grade 9</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
+                                <label>الإجراءات:</label>
+                                <br/>
+                                <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
+                                    <i class="la la-search"></i>
+                                    بحث
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
                     <table class="table text-center" id="users-table">
                         <thead>
                         <th>الاسم</th>
@@ -118,7 +130,10 @@
                     ajax: {
                         url : '{{ route('manager.story.index') }}',
                         data: function (d) {
-                            d.search = $("#search").val();
+                            var frm_data = $('#search_form').serializeArray();
+                            $.each(frm_data, function (key, val) {
+                                d[val.name] = val.value;
+                            });
                         }
                     },
                     columns: [
@@ -128,7 +143,8 @@
                     ],
                 });
             });
-            $('#search').keyup(function(){
+            $('#kt_search').click(function (e) {
+                e.preventDefault();
                 $('#users-table').DataTable().draw(true);
             });
         });

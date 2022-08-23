@@ -49,7 +49,7 @@ class StoryController extends Controller
 
     public function create()
     {
-        $title = t('Add Story');
+        $title = 'إضافة قصة';
         return view('manager.story.edit', compact('title',));
     }
 
@@ -69,7 +69,7 @@ class StoryController extends Controller
 
     public function edit($id)
     {
-        $title = t('Edit Story');
+        $title = "تعديل القصة";
         $story = Story::query()->findOrFail($id);
         return view('manager.story.edit', compact('title',  'story'));
     }
@@ -100,7 +100,7 @@ class StoryController extends Controller
 
     public function storyAssessment($id)
     {
-        $title = t('Edit Story Assessment');
+        $title = 'أسئلة القصة';
         $story = Story::query()->findOrFail($id);
 
         $t_f_questions = StoryQuestion::query()->where('story_id', $id)->where('type', 1)->get();

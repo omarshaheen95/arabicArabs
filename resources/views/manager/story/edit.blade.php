@@ -80,9 +80,9 @@
                                                 <option value="7" {{isset($story) && $story->grade == 7 ? 'selected':''}}>Grade 7</option>
                                                 <option value="8" {{isset($story) && $story->grade == 8 ? 'selected':''}}>Grade 8</option>
                                                 <option value="9" {{isset($story) && $story->grade == 9 ? 'selected':''}}>Grade 9</option>
-                                                <option value="10" {{isset($story) && $story->grade == 10 ? 'selected':''}}>Grade 10</option>
-                                                <option value="11" {{isset($story) && $story->grade == 11 ? 'selected':''}}>Grade 11</option>
-                                                <option value="12" {{isset($story) && $story->grade == 12 ? 'selected':''}}>Grade 12</option>
+{{--                                                <option value="10" {{isset($story) && $story->grade == 10 ? 'selected':''}}>Grade 10</option>--}}
+{{--                                                <option value="11" {{isset($story) && $story->grade == 11 ? 'selected':''}}>Grade 11</option>--}}
+{{--                                                <option value="12" {{isset($story) && $story->grade == 12 ? 'selected':''}}>Grade 12</option>--}}
                                             </select>
                                         </div>
                                     </div>
