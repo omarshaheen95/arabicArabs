@@ -1,0 +1,11 @@
+<svg id="check" xmlns="http://www.w3.org/2000/svg" width="102" height="102" viewBox="0 0 102 102">
+  <g id="Ellipse_361" data-name="Ellipse 361" fill="#fff" stroke="#dc3545" stroke-width="1">
+    <circle cx="51" cy="51" r="51" stroke="none"/>
+    <circle cx="51" cy="51" r="50.5" fill="none"/>
+  </g>
+  <circle id="Ellipse_362" data-name="Ellipse 362" cx="41" cy="41" r="41" transform="translate(10 10)" fill="#dc3545"/>
+  <g id="close" transform="translate(38.938 38.938)">
+    <line id="Line_1" data-name="Line 1" x2="26" y2="26" transform="translate(-0.938 -0.938)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="6"/>
+    <line id="Line_2" data-name="Line 2" x1="26" y2="26" transform="translate(-0.938 -0.938)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="6"/>
+  </g>
+</svg>

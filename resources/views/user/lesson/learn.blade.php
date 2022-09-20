@@ -2,7 +2,7 @@
     Devomar095@gmail.com
     WhatsApp +972592554320
     --}}
-@extends('user.layout.container')
+@extends('user.layout.container_v2')
 @section('style')
     <link rel="stylesheet" type="text/css"
           href="https://cdn.jsdelivr.net/gh/greghub/green-audio-player/dist/css/green-audio-player.min.css">
@@ -80,340 +80,123 @@
     </li>
 @endpush
 @section('content')
-    <section class="inner-page">
-        <section>
-            <div class="text-right">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card mb-4 border-0">
-                            <div class="card-header bg-white  font-weight-bold">
-                                <div class="row">
-                                    <div class="col-md-4"><a href="{{route('home')}}" class="btn btn-lg btn-danger"><i
-                                                class="fa fa-arrow-right"></i> العودة للدروس </a></div>
-                                    <div class="col-md-4 text-center"><h3>{{$lesson->name}}
-                                            - {{$lesson->section_type_name}}</h3></div>
-                                    <div class="col-md-4 text-left"><a
-                                            href="{{route('lesson', [$lesson->id,'training'])}}"
-                                            class="btn btn-lg btn-info">الذهاب للتدريب <i class="fa fa-arrow-left"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body pb-0">
-
-
-
-                                <hr/>
-                                <h5 class="mt-3  w-100 mb-5 text-center"
-                                    style="color: #FFF;font-weight: bold;background-color: #F00;padding: 10px;border-radius: 25px;">
-                                    Read loudly أقرأ بصوتٍ عالٍ - Do you want to practice your reading? it’s your turn
-                                    now
-                                </h5>
-
-                                <div class="row px-4 my-2" id="tasks"
-                                     style="border: 2px solid #999;margin: 20px;border-radius: 20px;padding: 20px 10px; overflow: scroll">
-                                    @if($lesson->getFirstMediaUrl('audioLessons'))
-                                    <button type="button" data-id="{{$lesson->id}}"
-                                            class="audio btn btn-success btn-elevate btn-circle btn-icon">
-                                        <i class="fa fa-play-circle fa-2x"></i>
-
-                                    </button>
-                                    <audio style="display:none" id="audio{{$lesson->id}}" data-id="{{$lesson->id}}" src="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}"></audio>
-                                    @endif
-                                    <div class="col-md-12 mt-4">
-                                        {!! $lesson->content !!}
-                                    </div>
-                                </div>
-                                <hr/>
-
-
-                            </div>
-
-
-                        </div>
+    <section class="login-home user-home lessons-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title mb-4">
+                        <h3 class="title"> الصف : {{$lesson->grade->grade_number}} </h3>
+                        <nav class="breadcrumb">
+                            <a class="breadcrumb-item" href="{{route('lessons', [$lesson->grade_id, $lesson->lesson_type])}}">
+                                {{$lesson->type_name}} </a>
+                            <span class="breadcrumb-item active" aria-current="page">الدروس </span>
+                        </nav>
                     </div>
                 </div>
             </div>
-        </section>
+            <div class="exercise-box" id="exercise-1">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <a href="{{route('lessons', [$lesson->grade_id, $lesson->lesson_type])}}" class=" btn btn-theme px-5">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        الدروس
+                    </a>
+                    {{--                            @if(!is_null($level))--}}
+                    {{--                                <div class="exercise-box-header text-center text-danger" style="font-size: 18px;font-weight: 700;">--}}
+                    {{--                                    <span class="title">{{$level->level_note}}  </span>--}}
+                    {{--                                </div>--}}
+                    {{--                            @endif--}}
+                    <a href="{{route('lesson', [$lesson->id,'training'])}}" class=" btn btn-theme px-5">
+                        التدريب
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                </div>
+                <div class="exercise-box-header">
+                                    <span class="icon">
+                                        <svg id="icon" xmlns="http://www.w3.org/2000/svg" width="33" height="33"
+                                             viewBox="0 0 33 33">
+                                            <g id="message-question">
+                                                <path id="Vector" d="M0,0H33V33H0Z" fill="none" opacity="0"/>
+                                                <path id="Vector-2" data-name="Vector"
+                                                      d="M20.625,22h-5.5L9.006,26.07a1.371,1.371,0,0,1-2.131-1.141V22A6.5,6.5,0,0,1,0,15.125V6.875A6.5,6.5,0,0,1,6.875,0h13.75A6.5,6.5,0,0,1,27.5,6.875v8.25A6.5,6.5,0,0,1,20.625,22Z"
+                                                      transform="translate(2.75 3.341)" fill="#223f99" opacity="0.4"/>
+                                                <g id="Group" transform="translate(13.186 8.401)">
+                                                    <path id="Vector-3" data-name="Vector"
+                                                          d="M3.314,8.25A1.039,1.039,0,0,1,2.282,7.219V6.93A3.2,3.2,0,0,1,3.891,4.249c.509-.344.674-.577.674-.935a1.251,1.251,0,1,0-2.5,0A1.039,1.039,0,0,1,1.031,4.345,1.039,1.039,0,0,1,0,3.314a3.314,3.314,0,1,1,6.627,0,3.154,3.154,0,0,1-1.581,2.64c-.536.358-.7.591-.7.976v.289A1.03,1.03,0,0,1,3.314,8.25Z"
+                                                          fill="#223f99"/>
+                                                </g>
+                                                <g id="Group-2" data-name="Group" transform="translate(15.469 18.012)">
+                                                    <path id="Vector-4" data-name="Vector"
+                                                          d="M1.031,2.063A1.031,1.031,0,1,1,2.063,1.031,1.03,1.03,0,0,1,1.031,2.063Z"
+                                                          fill="#223f99"/>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                    <span class="number"> 01 </span>
+                    <span class="title">أقرأ بصوتٍ عالٍ</span>
+                </div>
+                <div class="exercise-box-body">
+                    <div class="table-responsove">
+                        <table class="table">
+                            @if($lesson->getFirstMediaUrl('audioLessons'))
+                                <tr>
+                                    <td>
+                                        <a href="#!" class="play-and-listen" data-recorde-id="{{$lesson->id}}"
+                                           data-recorde-url="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                                                 viewBox="0 0 39 39">
+                                                <g id="play" transform="translate(7.618 6.252)">
+                                                    <rect id="bg" width="39" height="39" rx="19.5"
+                                                          transform="translate(-7.618 -6.252)"
+                                                          fill="rgba(217,227,253)" opacity="0.1"/>
+                                                    <path id="Vector"
+                                                          d="M16.535,6.358.157,16.178A4.449,4.449,0,0,1,0,15.008V4.5A4.5,4.5,0,0,1,6.749.61l4.544,2.621,4.555,2.632A3.81,3.81,0,0,1,16.535,6.358Z"
+                                                          transform="translate(4.499 3.742)" fill="#223f99"/>
+                                                    <path id="Vector-2" data-name="Vector"
+                                                          d="M15.039,6.085,10.483,8.717,5.939,11.338A4.485,4.485,0,0,1,0,10.022l.472-.281L16.715,0A4.5,4.5,0,0,1,15.039,6.085Z"
+                                                          transform="translate(5.309 11.304)" fill="#223f99"
+                                                          opacity="0.4"/>
+                                                </g>
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endif
+                        </table>
+                    </div>
+                    <div class="exercise-question">
+                        {!! $lesson->content !!}
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
+    <audio class="play-and-listen-audio" src=""></audio>
+
 @endsection
 @section('script')
-    <script src="{{asset('s_website/js/playerjs.js')}}"></script>
-    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-    <script type="text/javascript" src="https://www.arabic-keyboard.org/keyboard/keyboard.js" charset="UTF-8"></script>
-
-{{--    <script type="text/javascript" src="{{asset('mok/dist/main.js')}}"></script>--}}
-{{--    <link rel="stylesheet" type="text/css" href="{{asset('mok/dist/styles.css')}}">--}}
-    <script type="text/javascript">
-        // $(document).ready(function () {
-        //     $(document).keyboard({
-        //         language: 'arabic:العَرَبِيَّة',
-        //         keyboardPosition: 'bottom',
-        //         inputType: 	'text, textarea, number, password, search, tel, url, contenteditable',
-        //
-        //
-        //     });
-        // });
-    </script>
     <script>
 
 
         $(document).ready(function () {
-            $('.audio').click(function () {
-                var elem = $(this);
-                var data_id = $(this).attr('data-id');
-                $('audio').each(function () {
-                    this.pause(); // Stop playing
-                    this.currentTime = 0; // Reset time
-                    console.log('pause');
-                });
-                console.log('#audio' + data_id);
-                $('#audio' + data_id)[0].currentTime = 0;
-                $('#audio' + data_id)[0].play();
-                console.log('play');
+            $(document).on("click", ".play-and-listen", function (e) {
+                e.preventDefault();
+                var audio_ID = $(this).data("recorde-id"),
+                    audio_url = $(this).data("recorde-url");
+                if ($(this).hasClass("active")) {
+                    $(".play-and-listen-audio").attr("src", audio_url);
+                    $(".play-and-listen-audio").trigger("pause");
+                    $(".play-and-listen").removeClass("active");
+                } else {
+                    $(".play-and-listen-audio").attr("src", audio_url);
+                    $(".play-and-listen-audio").trigger("play");
 
+                    $(".play-and-listen").removeClass("active");
+                    $(this).addClass("active");
+                }
             });
-            setTimeout(function () {
-                let csrf = $('meta[name="csrf-token"]').attr('content');
-                var url = '{{route('track_lesson', [$lesson->id, 'learn'])}}';
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: {
-                        '_token': csrf,
-                    },
-                    success: function (data) {
-                    },
-                    error: function (errMsg) {
-                    }
-                });
-
-            }, 10000);
         });
 
-        //webkitURL is deprecated but nevertheless
-        URL = window.URL || window.webkitURL;
-
-        var bar = $('.bar');
-        var percent = $('.percent');
-        var status = $('#status');
-
-        var filename = '';
-        var testerAudio = '';
-        var gumStream; 						//stream from getUserMedia()
-        var rec; 							//Recorder.js object
-        var input; 							//MediaStreamAudioSourceNode we'll be recording
-
-        // shim for AudioContext when it's not avb.
-        var AudioContext = window.AudioContext || window.webkitAudioContext;
-        var audioContext //audio context to help us record
-
-        var recordButton = document.getElementById("start-btn");
-        var stopButton = document.getElementById("stop-btn");
-        var deleteButton = document.getElementById("delete-btn");
-        var recordingsList = document.getElementById("recordingslist");
-
-        //add events to those 2 buttons
-        recordButton.addEventListener("click", startRecording);
-        stopButton.addEventListener("click", stopRecording);
-        deleteButton.addEventListener("click", deleteRecording);
-
-        function startRecording() {
-            console.log("recordButton clicked");
-
-            /*
-            Simple constraints object, for more advanced audio features see
-            https://addpipe.com/blog/audio-constraints-getusermedia/
-            */
-
-            var constraints = {audio: true, video: false}
-
-            /*
-            Disable the record button until we get a success or fail from getUserMedia()
-            */
-
-            recordButton.disabled = true;
-            stopButton.disabled = false;
-            deleteButton.disabled = true
-
-            /*
-            We're using the standard promise based getUserMedia()
-            https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-            */
-
-            navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-                console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
-
-                /*
-                create an audio context after getUserMedia is called
-                sampleRate might change after getUserMedia is called, like it does on macOS when recording through AirPods
-                the sampleRate defaults to the one set in your OS for your playback device
-
-                */
-                audioContext = new AudioContext();
-
-//update the format
-// document.getElementById("formats").innerHTML="Format: 1 channel pcm @ "+audioContext.sampleRate/1000+"kHz"
-
-                /*  assign to gumStream for later use  */
-                gumStream = stream;
-
-                /* use the stream */
-                input = audioContext.createMediaStreamSource(stream);
-
-                /*
-                Create the Recorder object and configure to record mono sound (1 channel)
-                Recording 2 channels  will double the file size
-                */
-                rec = new Recorder(input, {numChannels: 1})
-
-//start the recording process
-                rec.record()
-
-                console.log("Recording started");
-
-            }).catch(function (err) {
-//enable the record button if getUserMedia() fails
-                recordButton.disabled = false;
-                stopButton.disabled = true;
-                deleteButton.disabled = true
-            });
-        }
-
-        function deleteRecording() {
-            console.log("deleteButton clicked rec.recording=", rec.recording);
-            event.stopPropagation();
-            $('#recordingslist').empty();
-            testerAudio = '';
-// Disable Record button and enable stop button !
-            recordButton.disabled = false;
-            stopButton.disabled = true;
-            deleteButton.disabled = true;
-        }
-
-        function stopRecording() {
-            console.log("stopButton clicked");
-
-//disable the stop button, enable the record too allow for new recordings
-            stopButton.disabled = true;
-            recordButton.disabled = true;
-            deleteButton.disabled = false;
-
-//reset button just in case the recording is stopped while paused
-// deleteButton.innerHTML="Pause";
-
-//tell the recorder to stop the recording
-            rec.stop();
-
-//stop microphone access
-            gumStream.getAudioTracks()[0].stop();
-
-//create the wav blob and pass it on to createDownloadLink
-            rec.exportWAV(createDownloadLink);
-        }
-
-        function createDownloadLink(blob) {
-            testerAudio = blob;
-            var url = URL.createObjectURL(blob);
-            var au = document.createElement('audio');
-            var li = document.createElement('li');
-// var link = document.createElement('a');
-
-//name of .wav file to use during upload and download (without extendion)
-            filename = new Date().toISOString();
-
-//add controls to the <audio> element
-            au.controls = true;
-            au.src = url;
-
-// //save to disk link
-// link.href = url;
-// link.download = filename+".wav"; //download forces the browser to donwload the file using the  filename
-// link.innerHTML = "Save to disk";
-
-//add the new audio element to li
-            li.appendChild(au);
-
-//add the filename to the li
-// li.appendChild(document.createTextNode(filename+".wav "))
-
-// //add the save to disk link to li
-// li.appendChild(link);
-//
-// //upload link
-// var upload = document.createElement('a');
-// upload.href="#";
-// upload.innerHTML = "Upload";
-// li.appendChild(document.createTextNode (" "))//add a space in between
-// li.appendChild(upload)//add the upload link to li
-
-//add the li element to the ol
-            recordingsList.appendChild(li);
-        }
-
-
-        $("#save").click(function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-            $('#save').prop('disabled', true);
-            document.getElementById("start-btn").disabled = true;
-            document.getElementById("stop-btn").disabled = true;
-            document.getElementById("delete-btn").disabled = true;
-// $(this).prop('disabled', true);
-            if (testerAudio == '') {
-                testerAudio = new Blob(['no file'], {type: "text/plain"});
-            }
-            uploadBlob(testerAudio);
-
-            function uploadBlob(testerAudio) {
-                var reader = new FileReader();
-// this function is triggered once a call to readAsDataURL returns
-                reader.onload = function (event) {
-                    var fd = new FormData($("#lesson_form")[0]);
-                    fd.append('record1', testerAudio, filename);
-                    console.log(fd);
-                    $.ajax({
-                        url: '{{ route('user_lesson', $lesson->id) }}',
-                        data: fd,
-                        processData: false,
-                        contentType: false,
-                        type: 'POST',
-                        xhr: function () {
-                            var xhr = $.ajaxSettings.xhr();
-                            xhr.onprogress = function e() {
-// For downloads
-                                if (e.lengthComputable) {
-                                    console.log(e.loaded / e.total);
-                                }
-                            };
-                            xhr.upload.onprogress = function (e) {
-                                $('.progress').show();
-                                $('#message').show();
-                                var percent_value = 0;
-                                var position = event.loaded || event.position;
-                                var total = event.total;
-                                if (event.lengthComputable) {
-                                    percent_value = Math.ceil(position / total * 100);
-                                }
-//update progressbar
-                                var percentVal = percent_value + '%';
-                                bar.width(percentVal)
-                                percent.html(percentVal);
-                            };
-                            return xhr;
-                        },
-                        success: function (data) {
-                            toastr.success(data);
-                        }
-                    }).done(function (data) {
-                        setTimeout(function () {
-                            window.location.href = "{{route('lesson', [$lesson->id, 'training'])}}";
-                        }, 4000);
-                    });
-                };
-// trigger the read from the reader...
-                reader.readAsDataURL(testerAudio);
-            }
-        });
 
     </script>
 @endsection

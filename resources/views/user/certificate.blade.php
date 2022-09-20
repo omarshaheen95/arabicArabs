@@ -2,7 +2,7 @@
     Devomar095@gmail.com
     WhatsApp +972592554320
     --}}
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
@@ -49,7 +49,8 @@
             margin: 0;
             padding: 0;
             background-color: #FAFAFA;
-            font: 12pt "Tahoma";
+            font: 12pt "Open Sans', sans-serif", sans-serif !important;
+            direction: rtl !important;
         }
 
         * {
@@ -78,10 +79,12 @@
         }
         .subpage h2{
             font-size: 54px !important;
+            font-family: "Open Sans', sans-serif", sans-serif !important;
             color: #c8ae17 !important;
         }
         .subpage h3{
             font-size: 34px !important;
+            font-family: "Open Sans', sans-serif", sans-serif !important;
         }
 
         .subpage .content{
@@ -120,41 +123,41 @@
         <div class="subpage">
             <div class="row mb-5">
                 <div class="cursive col-md-12 text-center">
-                    <h2 class="bold">Certificate of achievement</h2>
+                    <h2 class="bold">شهادة إنجاز</h2>
                 </div>
             </div>
             <br />
             <div class="row mt-2">
-                <div class="col-md-12 text-center block bold cursive mb-4" dir="ltr">
-                    <h3 class="bold">This Certificate Awarded to : <span class="underline" style="color: #FF0000;">{{$student_test->user->name}}.</span></h3>
+                <div class="col-md-12 text-center block bold cursive mb-4">
+                    <h3 class="bold">تم منح هذه الشهادة لـ :  <span class="underline" style="color: #FF0000;">{{$student_test->user->name}}.</span></h3>
                 </div>
             </div>
-            <div class="row mt-5">
-                <div class="col-md-12 text-center pm-credits-text block bold sans content">
-                    In appreciation of passing the assessment of lesson
-                    <span class="underline" style="color: #FF0000">{{$student_test->lesson->translate('en')->name}} - {{$student_test->lesson->translate('ar')->name}}</span>
+            <div class="row mt-3">
+                <div class="col-md-12 text-center pm-credits-text block bold sans content" style="font-size: 25px !important;">
+                    تقديرًا لاجتياز تقييم الدرس
+                    <span class="underline" style="color: #FF0000">{{$student_test->lesson->name}}</span>
                     <br />
-                    in the level {{$student_test->lesson->level->translate('en')->name}}
+                    في المستوى {{$student_test->lesson->grade->grade_number}}
                     <br />
-                    with the percentage of {{$student_test->total_per}}
+                    بنسبة  {{$student_test->total}}%
                     <br />
-                    During the journey of learning Arabic from the Non-Arabs platform.
+                    خلال رحلة تعلم اللغة العربية من منصة لغتي الأولى.
                 </div>
             </div>
             <div class="row mt-5 text-center">
-                <div class="col-md-4">
-                    <img src="{{asset('s_website/img/stamp.png')}}" width="100%">
+                <div class="col-md-5">
+                    <img src="{{asset('s_website/img/stamp.png')}}" width="70%">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="mt-4 bold cursive content">
-                        Date :
+                        منحت بتاريخ :
                         <br />
 
                         {{$student_test->created_at->format('Y-m-d')}}
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <img src="{{asset('website/images/main_logo.png')}}" width="100%">
+                <div class="col-md-5 mt-4">
+                    <img src="{{asset('web_assets/img/logo.svg')}}" width="100%">
                 </div>
             </div>
         </div>

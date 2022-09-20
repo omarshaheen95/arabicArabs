@@ -1,0 +1,10 @@
+<svg id="vuesax_linear_user-octagon" data-name="vuesax/linear/user-octagon" xmlns="http://www.w3.org/2000/svg" width="28.113" height="28.113" viewBox="0 0 28.113 28.113">
+  <g id="user-octagon">
+    <path id="Vector" d="M21.284,7.708V15.72a3.718,3.718,0,0,1-1.839,3.2l-6.958,4.018a3.705,3.705,0,0,1-3.69,0L1.839,18.918A3.689,3.689,0,0,1,0,15.72V7.708a3.718,3.718,0,0,1,1.839-3.2L8.8.492a3.705,3.705,0,0,1,3.69,0L19.445,4.51A3.7,3.7,0,0,1,21.284,7.708Z" transform="translate(3.409 2.343)" fill="none" stroke="#0f893b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+    <g id="Group" transform="translate(9.371 7.426)">
+      <path id="Vector-2" data-name="Vector" d="M5.459,2.729A2.729,2.729,0,1,1,2.729,0,2.729,2.729,0,0,1,5.459,2.729Z" transform="translate(1.956)" fill="none" stroke="#0f893b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+      <path id="Vector-3" data-name="Vector" d="M9.371,3.819C9.371,1.71,7.274,0,4.685,0S0,1.71,0,3.819" transform="translate(0 8.27)" fill="none" stroke="#0f893b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+    </g>
+    <path id="Vector-4" data-name="Vector" d="M0,0H28.113V28.113H0Z" fill="none" opacity="0"/>
+  </g>
+</svg>

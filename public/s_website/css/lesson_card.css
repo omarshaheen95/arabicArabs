@@ -37,6 +37,7 @@
     text-align: center;
     background-color: #fff;
     background-color: rgba(255, 255, 255, 1);
+    height: 350px;
 }
 .lesson_done{
     position: absolute;

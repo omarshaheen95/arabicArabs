@@ -96,19 +96,35 @@ Route::group(['namespace' => 'User', 'middleware' => ['auth']], function (){
     Route::post('confirm_package_upgrade', 'UserController@payPackageUpgrade')->name('post_package_upgrade');
 
     Route::get('/home', 'HomeController@home')->name('home');
+    Route::get('levels', 'HomeController@levels')->name('levels');
+    Route::get('stories', 'HomeController@storiesLevels')->name('levels.stories');
 
     Route::group(['middleware' => 'activeAccount'], function (){
+        Route::get('stories/{id}', 'HomeController@stories')->name('stories.list');
+        Route::get('stories/{id}/{key}', 'HomeController@story')->name('stories.show');
+        Route::post('stories/{id}/record', 'HomeController@recordStory')->name('stories.record');
+
+        Route::post('story_test/{id}', 'StoryController@storyTest')->name('story_test');
+        Route::get('story_test/{id}/result', 'StoryController@storyTestResult')->name('story_test_result');
+
         Route::get('lessons/{id}/{type}', 'HomeController@lessons')->name('lessons');
         Route::get('lesson/{id}/{key}', 'HomeController@lesson')->name('lesson');
 
         Route::post('lesson_test/{id}', 'LessonController@lessonTest')->name('lesson_test');
+        Route::post('lesson_writing_test/{id}', 'LessonController@lessonWritingTest')->name('lesson_writing_test');
+        Route::post('lesson_speaking_test/{id}', 'LessonController@lessonSpeakingTest')->name('lesson_speaking_test');
         Route::get('lesson_test/{id}/result', 'LessonController@lessonTestResult')->name('lesson_test_result');
 
         Route::get('certificates', 'HomeController@certificates')->name('certificates');
         Route::get('certificate/{id}', 'HomeController@certificate')->name('certificate');
         Route::get('certificate/{id}/answers', 'HomeController@certificateAnswers')->name('certificate.answers');
 
+        Route::get('story_certificates', 'StoryController@certificates')->name('story.certificates');
+        Route::get('story_certificate/{id}', 'StoryController@certificate')->name('story.certificate');
+        Route::get('story_certificate/{id}/answers', 'StoryController@certificateAnswers')->name('story.certificate.answers');
+
         Route::get('assignments', 'HomeController@assignments')->name('assignments');
+        Route::get('stories_assignments', 'HomeController@storiesAssignments')->name('stories_assignments');
 
         Route::post('track_lesson/{id}/{type}', 'UserController@trackLesson')->name('track_lesson');
         Route::post('user_lesson/{id}', 'UserController@userLesson')->name('user_lesson');

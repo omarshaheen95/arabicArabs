@@ -1,0 +1,230 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1350" height="695.196" viewBox="0 0 1350 695.196">
+  <defs>
+    <filter id="bg" x="941.8" y="438.386" width="229.6" height="241.81" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-color="#041637" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="bg-2" x="728.2" y="209.682" width="259.6" height="485.514" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="10" result="blur-2"/>
+      <feFlood flood-color="#041637" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="bg-3" x="529.6" y="156.257" width="259.6" height="538.939" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="10" result="blur-3"/>
+      <feFlood flood-color="#041637" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur-3"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="bg-4" x="331" y="102.831" width="259.6" height="592.365" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="10" result="blur-4"/>
+      <feFlood flood-color="#041637" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur-4"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="bg-5" x="132.4" y="52.298" width="259.6" height="642.898" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="10" result="blur-5"/>
+      <feFlood flood-color="#041637" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur-5"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="bg-6" x="0" y="0" width="193.069" height="695.196" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="10" result="blur-6"/>
+      <feFlood flood-color="#041637" flood-opacity="0.102"/>
+      <feComposite operator="in" in2="blur-6"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="table" transform="translate(25.5 30.5)">
+    <g id="clmn_01" transform="translate(1125.4 52.298)">
+      <path id="bg-7" data-name="bg" d="M0,0H183.6a15,15,0,0,1,15,15v88.959a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(0 477.939)" fill="#f6f1e7" stroke="#a77a18" stroke-miterlimit="10" stroke-width="1"/>
+      <text id="label_01" data-name="label 01" transform="translate(99.064 502.652)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-32.832" y="0">Level M+</tspan></text>
+      <text id="label_01-2" data-name="label 01" transform="translate(99.064 556.078)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-32.832" y="0">Level M+</tspan></text>
+      <text id="label" transform="translate(99.3 517.652)" fill="#a77a18" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-2" data-name="label" transform="translate(99.3 571.078)" fill="#a77a18" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <line id="Line_40" data-name="Line 40" x1="197" transform="translate(1.1 531.365)" fill="none" stroke="#eee5d2" stroke-width="1"/>
+    </g>
+    <g id="clmn_02" transform="translate(926.8 52.298)">
+      <g transform="matrix(1, 0, 0, 1, -952.3, -82.8)" filter="url(#bg)">
+        <path id="bg-8" data-name="bg" d="M0,0H183.6a15,15,0,0,1,15,15V210.81a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(952.3 453.89)" fill="#f1f1f2" stroke="#041637" stroke-miterlimit="10" stroke-width="1"/>
+      </g>
+      <text id="label_01-3" data-name="label 01" transform="translate(99.064 449.226)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-27.499" y="0">Level M</tspan></text>
+      <text id="label_01-4" data-name="label 01" transform="translate(99.064 395.8)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-27.499" y="0">Level M</tspan></text>
+      <text id="label_01-5" data-name="label 01" transform="translate(99.064 502.652)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-27.499" y="0">Level M</tspan></text>
+      <text id="label_01-6" data-name="label 01" transform="translate(99.064 556.078)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-27.499" y="0">Level M</tspan></text>
+      <text id="label-3" data-name="label" transform="translate(99.3 464.226)" fill="#041637" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-4" data-name="label" transform="translate(99.3 410.8)" fill="#041637" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-5" data-name="label" transform="translate(99.3 517.652)" fill="#041637" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-6" data-name="label" transform="translate(99.3 571.078)" fill="#041637" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <line id="Line_41" data-name="Line 41" x1="198.072" transform="translate(0.528 477.939)" fill="none" stroke="#cdd0d5" stroke-width="1"/>
+      <line id="Line_38" data-name="Line 38" x1="198.072" transform="translate(0.528 424.513)" fill="none" stroke="#cdd0d5" stroke-width="1"/>
+      <line id="Line_40-2" data-name="Line 40" x1="197.9" transform="translate(0.7 531.365)" fill="none" stroke="#cdd0d5" stroke-width="1"/>
+    </g>
+    <g id="clmn_03" transform="translate(728.2 52.298)">
+      <g transform="matrix(1, 0, 0, 1, -753.7, -82.8)" filter="url(#bg-2)">
+        <path id="bg-9" data-name="bg" d="M0,0H183.6a15,15,0,0,1,15,15V424.513a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(753.7 240.18)" fill="#e8ebf5" stroke="#223f99" stroke-miterlimit="10" stroke-width="1"/>
+      </g>
+      <text id="label_01-7" data-name="label 01" transform="translate(99.064 235.523)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-31.184" y="0">Level D+</tspan></text>
+      <text id="label_01-8" data-name="label 01" transform="translate(99.064 342.375)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-31.184" y="0">Level D+</tspan></text>
+      <text id="label_01-9" data-name="label 01" transform="translate(99.064 449.226)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-31.184" y="0">Level D+</tspan></text>
+      <text id="label_01-10" data-name="label 01" transform="translate(99.064 182.097)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-31.184" y="0">Level D+</tspan></text>
+      <text id="label_01-11" data-name="label 01" transform="translate(99.064 288.949)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-31.184" y="0">Level D+</tspan></text>
+      <text id="label_01-12" data-name="label 01" transform="translate(99.064 395.8)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-31.184" y="0">Level D+</tspan></text>
+      <text id="label_01-13" data-name="label 01" transform="translate(99.064 502.652)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-31.184" y="0">Level D+</tspan></text>
+      <text id="label_01-14" data-name="label 01" transform="translate(99.064 556.078)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-31.184" y="0">Level D+</tspan></text>
+      <text id="label-7" data-name="label" transform="translate(99.3 250.523)" fill="#223f99" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-8" data-name="label" transform="translate(99.3 357.375)" fill="#223f99" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-9" data-name="label" transform="translate(99.3 464.226)" fill="#223f99" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-10" data-name="label" transform="translate(99.3 197.097)" fill="#223f99" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-11" data-name="label" transform="translate(99.3 303.949)" fill="#223f99" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-12" data-name="label" transform="translate(99.3 410.8)" fill="#223f99" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-13" data-name="label" transform="translate(99.3 517.652)" fill="#223f99" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-14" data-name="label" transform="translate(99.3 571.078)" fill="#223f99" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <line id="Line_37" data-name="Line 37" x1="198.6" transform="translate(0 264.236)" fill="none" stroke="#d3d9ec" stroke-width="1"/>
+      <line id="Line_39" data-name="Line 39" x1="198.6" transform="translate(0 371.088)" fill="none" stroke="#d3d9ec" stroke-width="1"/>
+      <line id="Line_41-2" data-name="Line 41" x1="198.6" transform="translate(0 477.939)" fill="none" stroke="#d3d9ec" stroke-width="1"/>
+      <line id="Line_34" data-name="Line 34" x1="198.6" transform="translate(0 210.81)" fill="none" stroke="#d3d9ec" stroke-width="1"/>
+      <line id="Line_36" data-name="Line 36" x1="198.6" transform="translate(0 317.662)" fill="none" stroke="#d3d9ec" stroke-width="1"/>
+      <line id="Line_38-2" data-name="Line 38" x1="198.6" transform="translate(0 424.513)" fill="none" stroke="#d3d9ec" stroke-width="1"/>
+      <line id="Line_40-3" data-name="Line 40" x1="198.6" transform="translate(0 531.365)" fill="none" stroke="#d3d9ec" stroke-width="1"/>
+    </g>
+    <g id="clmn_04" transform="translate(529.6 52.298)">
+      <g transform="matrix(1, 0, 0, 1, -555.1, -82.8)" filter="url(#bg-3)">
+        <path id="bg-10" data-name="bg" d="M0,0H183.6a15,15,0,0,1,15,15V477.939a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(555.1 186.76)" fill="#e9faf0" stroke="#2ecc71" stroke-miterlimit="10" stroke-width="1"/>
+      </g>
+      <text id="label_01-15" data-name="label 01" transform="translate(99.064 128.671)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.851" y="0">Level D</tspan></text>
+      <text id="label_01-16" data-name="label 01" transform="translate(99.064 235.523)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.851" y="0">Level D</tspan></text>
+      <text id="label_01-17" data-name="label 01" transform="translate(99.064 342.375)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.851" y="0">Level D</tspan></text>
+      <text id="label_01-18" data-name="label 01" transform="translate(99.064 449.226)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.851" y="0">Level D</tspan></text>
+      <text id="label_01-19" data-name="label 01" transform="translate(99.064 182.097)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.851" y="0">Level D</tspan></text>
+      <text id="label_01-20" data-name="label 01" transform="translate(99.064 288.949)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.851" y="0">Level D</tspan></text>
+      <text id="label_01-21" data-name="label 01" transform="translate(99.064 395.8)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.851" y="0">Level D</tspan></text>
+      <text id="label_01-22" data-name="label 01" transform="translate(99.064 502.652)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.851" y="0">Level D</tspan></text>
+      <text id="label_01-23" data-name="label 01" transform="translate(99.064 556.078)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.851" y="0">Level D</tspan></text>
+      <text id="label-15" data-name="label" transform="translate(99.3 143.672)" fill="#2ecc71" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-16" data-name="label" transform="translate(99.3 250.523)" fill="#2ecc71" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-17" data-name="label" transform="translate(99.3 357.375)" fill="#2ecc71" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-18" data-name="label" transform="translate(99.3 464.226)" fill="#2ecc71" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-19" data-name="label" transform="translate(99.3 197.097)" fill="#2ecc71" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-20" data-name="label" transform="translate(99.3 303.949)" fill="#2ecc71" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-21" data-name="label" transform="translate(99.3 410.8)" fill="#2ecc71" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-22" data-name="label" transform="translate(99.3 517.652)" fill="#2ecc71" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-23" data-name="label" transform="translate(99.3 571.078)" fill="#2ecc71" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <line id="Line_35" data-name="Line 35" x1="198.6" transform="translate(0 157.384)" fill="none" stroke="#d5f6e3" stroke-width="1"/>
+      <line id="Line_37-2" data-name="Line 37" x1="198.6" transform="translate(0 264.236)" fill="none" stroke="#d5f6e3" stroke-width="1"/>
+      <line id="Line_39-2" data-name="Line 39" x1="198.6" transform="translate(0 371.088)" fill="none" stroke="#d5f6e3" stroke-width="1"/>
+      <line id="Line_41-3" data-name="Line 41" x1="198.6" transform="translate(0 477.939)" fill="none" stroke="#d5f6e3" stroke-width="1"/>
+      <line id="Line_34-2" data-name="Line 34" x1="198.6" transform="translate(0 210.81)" fill="none" stroke="#d5f6e3" stroke-width="1"/>
+      <line id="Line_36-2" data-name="Line 36" x1="198.6" transform="translate(0 317.662)" fill="none" stroke="#d5f6e3" stroke-width="1"/>
+      <line id="Line_38-3" data-name="Line 38" x1="198.6" transform="translate(0 424.513)" fill="none" stroke="#d5f6e3" stroke-width="1"/>
+      <line id="Line_40-4" data-name="Line 40" x1="198.6" transform="translate(0 531.365)" fill="none" stroke="#d5f6e3" stroke-width="1"/>
+    </g>
+    <g id="clmn_05" transform="translate(331 52.298)">
+      <g transform="matrix(1, 0, 0, 1, -356.5, -82.8)" filter="url(#bg-4)">
+        <path id="bg-11" data-name="bg" d="M0,0H183.6a15,15,0,0,1,15,15V531.365a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(356.5 133.33)" fill="#fcf5eb" stroke="#ffcb57" stroke-miterlimit="10" stroke-width="1"/>
+      </g>
+      <text id="label_01-24" data-name="label 01" transform="translate(99.064 128.671)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label_01-25" data-name="label 01" transform="translate(99.064 235.523)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label_01-26" data-name="label 01" transform="translate(99.064 342.375)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label_01-27" data-name="label 01" transform="translate(99.064 449.226)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label_01-28" data-name="label 01" transform="translate(99.064 75.246)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label_01-29" data-name="label 01" transform="translate(99.064 182.097)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label_01-30" data-name="label 01" transform="translate(99.064 288.949)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label_01-31" data-name="label 01" transform="translate(99.064 395.8)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label_01-32" data-name="label 01" transform="translate(99.064 502.652)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label_01-33" data-name="label 01" transform="translate(99.064 556.078)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-30.463" y="0">Level B+</tspan></text>
+      <text id="label-24" data-name="label" transform="translate(99.3 143.672)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-25" data-name="label" transform="translate(99.3 250.523)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-26" data-name="label" transform="translate(99.3 357.375)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-27" data-name="label" transform="translate(99.3 464.226)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-28" data-name="label" transform="translate(99.3 90.246)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-29" data-name="label" transform="translate(99.3 197.097)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-30" data-name="label" transform="translate(99.3 303.949)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-31" data-name="label" transform="translate(99.3 410.8)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-32" data-name="label" transform="translate(99.3 517.652)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-33" data-name="label" transform="translate(99.3 571.078)" fill="#dcb04c" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <line id="Line_35-2" data-name="Line 35" x1="198.6" transform="translate(0 157.384)" fill="none" stroke="#f6e8cc" stroke-width="1"/>
+      <line id="Line_37-3" data-name="Line 37" x1="198.6" transform="translate(0 264.236)" fill="none" stroke="#f6e8cc" stroke-width="1"/>
+      <line id="Line_39-3" data-name="Line 39" x1="198.6" transform="translate(0 371.088)" fill="none" stroke="#f6e8cc" stroke-width="1"/>
+      <line id="Line_41-4" data-name="Line 41" x1="198.6" transform="translate(0 477.939)" fill="none" stroke="#f6e8cc" stroke-width="1"/>
+      <line id="Line_33" data-name="Line 33" x1="198.6" transform="translate(0 103.959)" fill="none" stroke="#f6e8cc" stroke-width="1"/>
+      <line id="Line_34-3" data-name="Line 34" x1="198.6" transform="translate(0 210.81)" fill="none" stroke="#f6e8cc" stroke-width="1"/>
+      <line id="Line_36-3" data-name="Line 36" x1="198.6" transform="translate(0 317.662)" fill="none" stroke="#f6e8cc" stroke-width="1"/>
+      <line id="Line_38-4" data-name="Line 38" x1="198.6" transform="translate(0 424.513)" fill="none" stroke="#f6e8cc" stroke-width="1"/>
+      <line id="Line_40-5" data-name="Line 40" x1="198.6" transform="translate(0 531.365)" fill="none" stroke="#f6e8cc" stroke-width="1"/>
+    </g>
+    <g id="clmn_06" transform="translate(132.4 52.298)">
+      <g transform="matrix(1, 0, 0, 1, -157.9, -82.8)" filter="url(#bg-5)">
+        <path id="bg-12" data-name="bg" d="M0,0H183.6a15,15,0,0,1,15,15V581.9a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(157.9 82.8)" fill="#fef4f5" stroke="#fbe0e3" stroke-miterlimit="10" stroke-width="1"/>
+      </g>
+      <text id="label_01-34" data-name="label 01" transform="translate(99.064 21.82)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-35" data-name="label 01" transform="translate(99.064 128.671)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-36" data-name="label 01" transform="translate(99.064 235.523)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-37" data-name="label 01" transform="translate(99.064 342.375)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-38" data-name="label 01" transform="translate(99.064 449.226)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-39" data-name="label 01" transform="translate(99.064 75.246)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-40" data-name="label 01" transform="translate(99.064 182.097)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-41" data-name="label 01" transform="translate(99.064 288.949)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-42" data-name="label 01" transform="translate(99.064 395.8)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-43" data-name="label 01" transform="translate(99.064 502.652)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label_01-44" data-name="label 01" transform="translate(99.064 556.078)" fill="#041637" font-size="15" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-25.13" y="0">Level B</tspan></text>
+      <text id="label-34" data-name="label" transform="translate(99.3 36.82)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-35" data-name="label" transform="translate(99.3 143.672)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-36" data-name="label" transform="translate(99.3 250.523)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-37" data-name="label" transform="translate(99.3 357.375)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-38" data-name="label" transform="translate(99.3 464.226)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-39" data-name="label" transform="translate(99.3 90.246)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-40" data-name="label" transform="translate(99.3 197.097)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-41" data-name="label" transform="translate(99.3 303.949)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-42" data-name="label" transform="translate(99.3 410.8)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-43" data-name="label" transform="translate(99.3 517.652)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <text id="label-44" data-name="label" transform="translate(99.3 571.078)" fill="#dc3545" font-size="11" font-family="SegoeUI, Segoe UI" letter-spacing="0.004em"><tspan x="-68.192" y="0">First Year of Learning Arabic</tspan></text>
+      <line id="Line_21" data-name="Line 21" x1="198.6" transform="translate(0 50.533)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+      <line id="Line_35-3" data-name="Line 35" x1="198.6" transform="translate(0 157.384)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+      <line id="Line_37-4" data-name="Line 37" x1="198.6" transform="translate(0 264.236)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+      <line id="Line_39-4" data-name="Line 39" x1="198.6" transform="translate(0 371.088)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+      <line id="Line_41-5" data-name="Line 41" x1="198.6" transform="translate(0 477.939)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+      <line id="Line_33-2" data-name="Line 33" x1="198.6" transform="translate(0 103.959)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+      <line id="Line_34-4" data-name="Line 34" x1="198.6" transform="translate(0 210.81)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+      <line id="Line_36-4" data-name="Line 36" x1="198.6" transform="translate(0 317.662)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+      <line id="Line_38-5" data-name="Line 38" x1="198.6" transform="translate(0 424.513)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+      <line id="Line_40-6" data-name="Line 40" x1="198.6" transform="translate(0 531.365)" fill="none" stroke="#fbe0e3" stroke-width="1"/>
+    </g>
+    <g id="clmn_07">
+      <g transform="matrix(1, 0, 0, 1, -25.5, -30.5)" filter="url(#bg-6)">
+        <path id="bg-13" data-name="bg" d="M15,0H117.069a15,15,0,0,1,15,15V634.2a0,0,0,0,1,0,0H15a15,15,0,0,1-15-15V15A15,15,0,0,1,15,0Z" transform="translate(25.5 30.5)" fill="#fafafa" stroke="#e5e6e8" stroke-miterlimit="10" stroke-width="1"/>
+      </g>
+      <text id="label-45" data-name="label" transform="translate(64.966 31.219)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 12</tspan></text>
+      <text id="label-46" data-name="label" transform="translate(65.295 83.517)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 11</tspan></text>
+      <text id="label-47" data-name="label" transform="translate(64.636 135.815)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 10</tspan></text>
+      <text id="label-48" data-name="label" transform="translate(64.642 188.113)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 09</tspan></text>
+      <text id="label-49" data-name="label" transform="translate(65.307 240.411)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 08</tspan></text>
+      <text id="label-50" data-name="label" transform="translate(65.307 292.709)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 07</tspan></text>
+      <text id="label-51" data-name="label" transform="translate(64.642 345.007)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 06</tspan></text>
+      <text id="label-52" data-name="label" transform="translate(65.307 397.305)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 05</tspan></text>
+      <text id="label-53" data-name="label" transform="translate(64.642 449.603)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 04</tspan></text>
+      <text id="label-54" data-name="label" transform="translate(65.307 501.901)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 03</tspan></text>
+      <text id="label-55" data-name="label" transform="translate(65.307 554.199)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 02</tspan></text>
+      <text id="label-56" data-name="label" transform="translate(64.636 613.117)" fill="#041637" font-size="16" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.004em"><tspan x="-34.091" y="0">Grade 01</tspan></text>
+      <line id="Line_1" data-name="Line 1" x1="132.069" transform="translate(0.331 52.298)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_2" data-name="Line 2" x1="132.069" transform="translate(0.331 104.596)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_3" data-name="Line 3" x1="132.069" transform="translate(0.331 156.894)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_4" data-name="Line 4" x1="132.069" transform="translate(0.331 209.192)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_5" data-name="Line 5" x1="132.069" transform="translate(0.331 261.49)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_6" data-name="Line 6" x1="132.069" transform="translate(0.331 313.788)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_7" data-name="Line 7" x1="132.069" transform="translate(0.331 366.086)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_8" data-name="Line 8" x1="132.069" transform="translate(0.331 418.384)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_9" data-name="Line 9" x1="132.069" transform="translate(0.331 470.682)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_10" data-name="Line 10" x1="132.069" transform="translate(0.331 522.98)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+      <line id="Line_11" data-name="Line 11" x1="132.069" transform="translate(0.331 581.898)" fill="none" stroke="#e5e6e8" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

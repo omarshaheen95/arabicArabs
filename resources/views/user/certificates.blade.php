@@ -2,59 +2,60 @@
     Devomar095@gmail.com
     WhatsApp +972592554320
     --}}
-@extends('user.layout.container')
-@section('style')
-    <style>
-        .table-bordered{
-            border: 3px solid #dee2e6;
-        }
-    </style>
-@endsection
+@extends('user.layout.container_v2')
 @section('content')
-    <section class="inner-page">
-        <section>
-            <div class="card mt-3 mb-4 border-0">
-                <div class="card-header bg-white text-center">
-                    <h4 style="font-weight: bold">
-                        نتائج الاختبارات  - Tests results
-                    </h4>
+    <section class="login-home user-home lessons-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h1 class="title"> الشهادات </h1>
+                        <nav class="breadcrumb">
+                            <a class="breadcrumb-item" href="/home"> الرئيسية </a>
+                            <span class="breadcrumb-item active" aria-current="page"> الشهادات </span>
+                        </nav>
+                    </div>
                 </div>
-                <div class="card-body pb-0">
-
-                    <div class="row justify-content-center">
-                        <div class="col-md-12 text-center justify-content-center">
-                            <table class="table table-bordered w-100 text-center justify-content-center">
-                                <thead class="table-danger">
-                                    <td style="font-weight: bold">Lesson name</td>
-                                    <td style="font-weight: bold">Level</td>
-                                    <td style="font-weight: bold">Grade</td>
-                                    <td style="font-weight: bold">Score</td>
-                                    <td style="font-weight: bold">Certificates</td>
-                                </thead>
-                                <tbody>
-                                    @foreach($student_tests as $student_test)
-                                        @if($student_test->total >= $student_test->lesson->level->level_mark)
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <div class="title"> نتائج الاختبارات </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <td style="font-weight: bold">الدرس</td>
+                                    <td style="font-weight: bold">المستوى</td>
+                                    <td style="font-weight: bold">الدرجة</td>
+                                    <td style="font-weight: bold">استحقت في</td>
+                                    <td style="font-weight: bold">الشهادة</td>
+                                </tr>
+                                @foreach($student_tests as $student_test)
+                                        @if($student_test->total >= 50)
                                             <tr>
-                                                <td>{{$student_test->lesson->translate('ar')->name}} - {{$student_test->lesson->translate('en')->name}}</td>
-                                                <td>{{$student_test->lesson->level->translate('en')->name}}</td>
-                                                <td>{{$student_test->lesson->level->grade}}</td>
-                                                <td>{{$student_test->total_per}}</td>
+                                                <td>{{$student_test->lesson->name}}</td>
+                                                <td>{{$student_test->lesson->grade->grade_number}}</td>
+                                                <td>%{{$student_test->total}}</td>
+                                                <td>{{$student_test->created_at->format('Y-m-d H:i')}}</td>
                                                 <td>
-                                                    <a href="{{route('certificate', $student_test->id)}}">{{t('Preview')}}</a> -
-                                                    <a href="{{route('certificate.answers', $student_test->id)}}">{{t('Answers')}}</a>
+                                                    <a href="{{route('certificate', $student_test->id)}}">معاينة</a> -
+                                                    <a href="{{route('certificate.answers', $student_test->id)}}">الإجابات</a>
                                                 </td>
                                             </tr>
                                         @endif
                                     @endforeach
-                                </tbody>
+
                             </table>
-
                         </div>
-                        {!! $student_tests->links() !!}
-                    </div>
 
+                        <div class="table-footer">
+                            {!! $student_tests->links() !!}
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
     </section>
 @endsection

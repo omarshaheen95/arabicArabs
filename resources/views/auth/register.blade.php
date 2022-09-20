@@ -1,201 +1,173 @@
-@extends('layouts.container')
-@section('style')
-    <link href="{{asset('intl-tel-input-master/build/css/intlTelInput.min.css')}}" rel="stylesheet">
-    <style>
-        .hide{
-            display: none;
-        }
-    </style>
-        <style>
-            .iti * {
-                direction: ltr;
-            }
-        </style>
-        <script src="{{asset('intl-tel-input-master/build/js/intlTelInput.min.js')}}"></script>
+@extends('layouts.container_2')
 
-
-
-@endsection
 @section('content')
-    <!-- START SLIDER -->
-    <div id="slider" class="aos-item slider-bg theme-bg-secondary-light" data-aos="fade-in">
-        <div class="container">
-
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <div class="section-warp">
-                        <div class="section-header">
-                            <h1 class="section-title"> تسجيل حساب جديد  </h1>
-                            <p>يرجى إدخال كافة البيانات بصورة صحيحة</p>
+    <main class="wrapper" id="login-home">
+        <!-- Start login-home -->
+        <section class="login-home login-student pt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title text-center mb-5">
+                            <h1 class="title"> تسجيل حساب جديد </h1>
+                            <p class="info"> يرجى إدخال كافة البيانات بصورة صحيحة </p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-7">
-                    <div class="contact-item">
-                        <div class="card">
-                            <div class="card-body">
-                                <form class="col-form" id="form_information" action="/register" method="post">
-                                    @csrf
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" name="name" placeholder="الاسم">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <input type="email" class="form-control" name="email" placeholder="البريد الإلكتروني">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <input class="form-control" id="Phone" name="phone" type="text" value="{{old('mobile')}}">
-                                                <input type="hidden" id="country-code" name="country_code" value="{{old('country_code')}}">
-                                                <input type="hidden" id="short-country" name="short_country" value="{{old('short_country')}}">
-                                                <input type="hidden" placeholder="الموبايل" name="mobile" id="mobileHidden" value="{{old('mobile')}}" class="form-control form-control-lg">
-                                                <span id="valid-msg" class="hide">✓ فعال</span>
-                                                <span id="error-msg" class="hide"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <input type="password" class="form-control" name="password" placeholder="كلمة المرور">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <input type="password" class="form-control" name="password_confirmation" placeholder="تأكيد كلمة المرور">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <select class="form-control" name="school_id">
-                                                    <option selected disabled value="">اختر مدرسة</option>
-                                                    @foreach($schools as $school)
-                                                    <option value="{{$school->id}}">{{$school->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <select class="form-control" name="grade_id">
-                                                    <option selected disabled value="">اختر صف</option>
-                                                    @foreach($grades as $grade)
-                                                    <option value="{{$grade->id}}">{{$grade->name}}</option>
-                                                    @endforeach
-                                                </select>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12 mb-20px">
-                                            <div class="form-group">
-                                                <p class="mt-3">سنوات تعلم اللغة العربية</p>
-                                                <div class="range-wrap">
-                                                    <input name="year_learning" type="range" class="range" step="1" min="1" max="12" value="1">
-                                                    <output class="bubble" style="right: calc(41% + 1.85px);" >41</output>
+                <div class="row justify-content-center">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-warning">
+                            <ul style="width: 100%;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="col-lg-6 col-md-9">
+                        <div class="form form-login">
+                            <form action="/register" method="post" class="needs-validation" novalidate>
+                                @csrf
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="username" class="form-label"> الاسم </label>
+                                            <div class="form-control-icon">
+                                                <div class="icon">
+                                                    <img src="{{asset('web_assets/img/username.svg')}}" alt="">
                                                 </div>
+                                                <input type="text" name="name" id="username" class="form-control" placeholder="مثلاً: محمد خالد الاميري"
+                                                       required autocomplete="off" autofocus>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <select class="form-control" name="package_id">
-                                                    <option selected disabled value="">اختر باقة</option>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="email" class="form-label"> البريد الإلكتروني</label>
+                                            <div class="form-control-icon">
+                                                <div class="icon">
+                                                    <img src="{{asset('web_assets/img/mail.svg')}}" alt="">
+                                                </div>
+                                                <input type="email" name="email" id="email" class="form-control" placeholder=" ex: example@domain.com"
+                                                       required autocomplete="off" autofocus pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="forget-password-label">
+                                                <label for="password" class="form-label"> كلمه المرور </label>
+                                            </div>
+                                            <div class="form-control-icon">
+                                                <div class="icon">
+                                                    <img src="{{asset('web_assets/img/password.svg')}}" alt="">
+                                                </div>
+                                                <input type="password" name="password" id="password" class="form-control" placeholder=" **********" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="forget-password-label">
+                                                <label for="password_confirmation" class="form-label"> تأكيد كلمة المرور </label>
+                                            </div>
+                                            <div class="form-control-icon">
+                                                <div class="icon">
+                                                    <img src="{{asset('web_assets/img/password.svg')}}" alt="">
+                                                </div>
+                                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder=" **********" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="mobile" class="form-label"> الموبايل </label>
+                                            <div class="form-control-icon phone">
+                                                <div class="icon">
+                                                    <img src="{{asset('web_assets/img/phone.svg')}}" alt="">
+                                                </div>
+                                                <input type="tel" class="form-control phone-input" name="mobile" id="mobile-1" data-country="sa" onblur="getPhoneKey(this.id)" required>
+                                                <input type="hidden" class="form-control"  id="mobile-1-code" name="country_code">
+                                                <input type="hidden" class="form-control"  id="mobile-1-country" name="short_country">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="universtiy" class="form-label"> اختر المدرسة </label>
+                                            <div class="form-control-icon">
+                                                <div class="icon">
+                                                    <img src="{{asset('web_assets/img/school.svg')}}" alt="">
+                                                </div>
+                                                <select name="school_id" id="universtiy" class="form-control form-select" required>
+                                                    @foreach($schools as $school)
+                                                        <option value="{{$school->id}}">{{$school->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="class" class="form-label"> اختر الصف </label>
+                                            <div class="form-control-icon">
+                                                <div class="icon">
+                                                    <img src="{{asset('web_assets/img/class.svg')}}" alt="">
+                                                </div>
+                                                <select name="grade_id" id="class" class="form-control form-select" required>
+                                                    @foreach($grades as $grade)
+                                                        <option value="{{$grade->id}}">{{$grade->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="package" class="form-label"> اختر باقة </label>
+                                            <div class="form-control-icon">
+                                                <div class="icon">
+                                                    <img src="{{asset('web_assets/img/package.svg')}}" alt="">
+                                                </div>
+                                                <select name="package_id" id="package" class="form-control form-select" required>
                                                     @foreach($packages as $package)
                                                         <option value="{{$package->id}}" {{request()->get('package_id', false) && request()->get('package_id', false) == $package->id ? 'selected':''}}>{{$package->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                         </div>
-
-                                        <div class="col-lg-12 mt-30px">
-                                            <button type="submit" class="theme-btn theme-btn-default btn-block theme-btn-ss">
-                                                تسجيل  <i class="flaticon-double-right-arrows-angles"></i></button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group p">
+                                            <label for="years" class="form-label">سنوات تعلم اللغة العربية</label>
+                                            <div class="form-control-icon">
+                                                <div class="icon">
+                                                    <div id="range_count" class="range-count">6</div>
+                                                </div>
+                                                <input type="range" name="year_learning" min="1" max="12" step="1" value="6" class=" form-range" id="years" required>
+                                            </div>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-theme btn-submit">
+                                        <span class="spinner-border d-none"></span>
+                                        <span class="text"> تسجيل </span>
+                                    </button>
+                                </div>
+                                <div class="form-group text-center">
+                                    <a href="/login" class="form-link"> العودة لتسجيل الدخول </a>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-
-        </div>
-    </div>
-    <!-- END SLIDER -->
+        </section>
+        <!-- End login-home -->
+    </main>
 @endsection
 @section('script')
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
     {!! $validator->selector('#form_information') !!}
-    <script src="{{asset('intl-tel-input-master/build/js/intlTelInput.min.js')}}"></script>
-    <script type="text/javascript">
-        var input = document.querySelector("#Phone");
-        window.intlTelInput(input, {
-            formatOnDisplay:false,
-            initialCountry: "auto",
-            geoIpLookup: function(callback) {
-                $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                    var countryCode = (resp && resp.country) ? resp.country : "ae";
-                    callback(countryCode);
-                });
-            },
-            utilsScript: "{{ asset('intl-tel-input-master/build/js/utils.js?1562189064761')}}",
-        });
-        errorMsg = document.querySelector("#error-msg"),
-            validMsg = document.querySelector("#valid-msg");
-        countryCode = document.querySelector("#country-code");
-        shortCountry = document.querySelector("#short-country");
-
-        // here, the index maps to the error code returned from getValidationError - see readme
-        var errorMap = ["رقم خاطئ", "رمز الدولة خاطئ", "قصير للغاية", "طويل للغاية", "رقم خاطئ"];
-
-        // initialise plugin
-        var iti = window.intlTelInput(input, {
-            initialCountry: "auto",
-            geoIpLookup: function(callback) {
-                $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
-                    var countryCode = (resp && resp.country) ? resp.country : "";
-                    callback(countryCode);
-                });
-            },
-            utilsScript: "{{ asset('intl-tel-input-master/build/js/utils.js?1562189064761')}}",
-        });
-
-
-
-        var reset = function() {
-            input.classList.remove("error");
-            errorMsg.innerHTML = "";
-            errorMsg.classList.add("hide");
-            validMsg.classList.add("hide");
-            if (input.value.trim()) {
-                if (iti.isValidNumber()) {
-                    countryCode.value = iti.getSelectedCountryData().dialCode;
-                    shortCountry.value = iti.getSelectedCountryData().iso2;
-                    validMsg.classList.remove("hidden");
-                } else {
-                    input.classList.add("error");
-                    var errorCode = iti.getValidationError();
-                    errorMsg.innerHTML = errorMap[errorCode];
-                    errorMsg.classList.remove("hidden");
-                }
-            }
-        };
-
-        // on blur: validate
-        input.addEventListener('blur', reset);
-
-        // on keyup / change flag: reset
-        input.addEventListener('change', reset);
-        input.addEventListener('keyup', reset);
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#Phone').keyup(function () {
-                $('#mobileHidden').val(iti.getNumber());
-                console.log(iti.getNumber());
-            });
-        });
-    </script>
 
 @endsection

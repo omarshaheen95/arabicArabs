@@ -1,4 +1,4 @@
-@extends('layouts.container')
+@extends('layouts.container_2')
 
 @section('content')
     <!-- START SLIDER -->
@@ -9,7 +9,7 @@
                 <div class="col-lg-12">
                     <div class="section-warp">
                         <div class="section-header">
-                            <h1 class="section-title"> إستعادة كلمة المرور </h1>
+                            <h1 class="section-title"> استعادة كلمة المرور </h1>
                         </div>
                     </div>
                 </div>
@@ -64,13 +64,13 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
-                                            <button type="submit" class="theme-btn theme-btn-default btn-block">تغيير كلمة المرور  <i class="flaticon-double-right-arrows-angles"></i></button>
+                                            <button type="submit" class="theme-btn theme-btn-default btn-block">تغيير كلمة المرور <i class="flaticon-double-right-arrows-angles"></i></button>
                                         </div>
                                         <div class="col-lg-6 mt-4">
                                             <a href="/login">تسجيل الدخول</a>
                                         </div>
                                         <div class="col-lg-6 mt-4 text-left">
-                                            <a href="/register">إنشاء حساب جديد</a>
+                                            <a href="/register">تسجيل حساب جديد</a>
                                         </div>
                                     </div>
                                 </form>

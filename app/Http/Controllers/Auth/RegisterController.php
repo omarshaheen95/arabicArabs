@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Proengsoft\JsValidation\Facades\JsValidatorFacade as JsValidator;
+use Propaganistas\LaravelPhone\PhoneNumber;
 
 class RegisterController extends Controller
 {
@@ -53,8 +54,8 @@ class RegisterController extends Controller
         $this->validationRules["year_learning"] = 'required';
         $this->validationRules['country_code'] = 'required';
         $this->validationRules['short_country'] = 'required';
-        $this->validationRules["phone"] = ['required'];
-        $this->validationRules['mobile'] = ['required', 'phone:' . request()->get('short_country')];
+        $this->validationRules["mobile"] = ['required'];
+//        $this->validationRules['mobile'] = ['required', 'phone:' . request()->get('short_country')];
 
     }
 
@@ -63,7 +64,7 @@ class RegisterController extends Controller
         $title = "إنشاء حساب جديد";
         $schools = School::query()->where('active', 1)->orderBy('name')->get();
         $validator = JsValidator::make($this->validationRules, $this->validationMessages);
-        $packages = Package::query()->get();
+        $packages = Package::query()->where('active', 1)->get();
         $grades = Grade::query()->get();
         return view('auth.register', compact('schools', 'title', 'validator', 'packages', 'grades'));
     }
@@ -90,6 +91,7 @@ class RegisterController extends Controller
         $data['password'] = Hash::make($data['password']);
         $data['active_from'] = now();
         $data['active_to'] = now();
+        $data['mobile'] = PhoneNumber::make($data['mobile'])->ofCountry($data['short_country']);
         $user = User::query()->create($data);
         return $user;
     }

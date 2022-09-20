@@ -16,7 +16,7 @@
             <div class="card mt-3 mb-4 border-0">
                 <div class="card-header bg-white text-center">
                     <h4 style="font-weight: bold">
-                        إجابات الأسئلة  - Questions answers
+                        إجابات الأسئلة
                     </h4>
                 </div>
                 <div class="card-body pb-0">
@@ -25,28 +25,31 @@
                         <div class="col-md-12 text-center justify-content-center">
                             <table class="table table-bordered w-100 text-center justify-content-center">
                                 <thead class="table-danger">
-                                    <td style="font-weight: bold">Right Answer</td>
-                                    <td style="font-weight: bold">Student Answer</td>
-                                    <td style="font-weight: bold">Question Type</td>
-                                    <td style="font-weight: bold">Question</td>
-                                    <td style="font-weight: bold">#</td>
+                                <td style="font-weight: bold">#</td>
+                                <td style="font-weight: bold">Question</td>
+                                <td style="font-weight: bold">Question Type</td>
+                                <td style="font-weight: bold">Student Answer</td>
+                                <td style="font-weight: bold">Right Answer</td>
                                 </thead>
                                 <tbody>
                                     @foreach($questions as $key => $question)
                                             <tr class="text-center">
+                                                <td>{{$key + 1}}</td>
+                                                <td>{{$question->content}}</td>
+                                                <td>{{$question->type_name}}</td>
                                                 @php
                                                     $data = $question->studentAnswer($student_test->id);
                                                 @endphp
-
-                                                <td>
-                                                    {!! isset($data['question_answer']) ? $data['question_answer']:'' !!}
-                                                </td>
                                                 <td class="{{isset($data['class']) ? $data['class']:''}}">
                                                     {!! isset($data['student_answer']) ? $data['student_answer']:'' !!}
                                                 </td>
-                                                <td>{{$question->type_eng_name}}</td>
-                                                <td>{{$question->content}}</td>
-                                                <td>{{$key + 1}}</td>
+                                                <td>
+                                                    {!! isset($data['question_answer']) ? $data['question_answer']:'' !!}
+                                                </td>
+
+
+
+
                                             </tr>
                                     @endforeach
                                 </tbody>

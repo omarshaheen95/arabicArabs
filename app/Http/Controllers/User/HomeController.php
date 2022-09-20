@@ -19,11 +19,19 @@ class HomeController extends Controller
     public function home()
     {
         $title = "الصفحة الرئيسية";
+        return view('user.home', compact('title'));
+    }
+
+    public function levels()
+    {
+//        Log::critical(date('Y-m-d'));
+//        Log::critical(Carbon::createFromFormat('Y-m-d', '2021-07-01'));
+        $title = 'المستويات والمهارات';
         $grade = Grade::query()->where('id', Auth::user()->grade_id)->first();
 
         $alternate_grade = Grade::query()->where('id', Auth::user()->alternate_grade_id)->first();
 
-        return view('user.home', compact('title', 'grade', 'alternate_grade'));
+        return view('user.levels', compact('title', 'grade', 'alternate_grade'));
     }
 
     public function lessons($id, $type)
@@ -55,6 +63,16 @@ class HomeController extends Controller
                 return view('user.lesson.training', compact('lesson', 'tf_questions', 'c_questions', 'm_questions', 's_questions'));
             case 'test':
                 $questions = Question::query()->where('lesson_id', $id)->get();
+                if ($lesson->lesson_type == 'writing')
+                {
+                    return view('user.lesson.writing_test', compact('questions', 'lesson'));
+
+                }
+                if ($lesson->lesson_type == 'speaking')
+                {
+                    return view('user.lesson.speaking_test', compact('questions', 'lesson'));
+
+                }
                 return view('user.lesson.test', compact('questions', 'lesson'));
             default:
                 return redirect()->route('home');

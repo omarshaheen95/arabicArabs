@@ -2,358 +2,548 @@
     Devomar095@gmail.com
     WhatsApp +972592554320
     --}}
-@extends('user.layout.container')
-@section('style')
-    <style>
-        text{
-            font-size: 14px;
-        }
-    </style>
-@endsection
-@push('breadcrumb')
-    <li class="breadcrumb-item">
-        <a href="{{ route('lessons', [$lesson->grade_id, $lesson->lesson_type]) }}" @if(isset($level) && !is_null($level->text_color)) style="color: {{$level->text_color}} !important; font-weight: bold" @endif>الدروس</a>
-    </li>
-@endpush
-@section('content')
-    <section class="inner-page">
-        <section>
-            <div class="container text-right">
-                <div class="row">
-                    <div class="col-12">
-                    </div>
-                    <div class="col-12">
+@extends('user.layout.container_v2')
 
+@section('content')
+    <section class="login-home user-home lessons-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title mb-4">
+                        <h3 class="title"> الصف : {{$lesson->grade->grade_number}} </h3>
+                        <h1 class="title"><p id="countdown" class="mb-0 text-danger" style="font-size:32px"></p></h1>
+
+                        <nav class="breadcrumb">
+                            <a class="breadcrumb-item" href="{{route('lessons', [$lesson->grade_id, $lesson->lesson_type])}}">
+                                {{$lesson->type_name}} </a>
+                            <span class="breadcrumb-item active" aria-current="page">الدروس </span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="exam-card box-shado-question" dir="rtl">
+                    <div class="exam-body question-list">
                         <form action="{{route('lesson_test', $lesson->id)}}" id="term_form" method="post">
                             {{csrf_field()}}
                             <input type="hidden" name="start_at" value="{{\Carbon\Carbon::now()}}">
+                            <div class="justify-content-between align-items-center mb-4">
 
-                            <div class="box-shado-question">
-                                <div class="bg-light text-secondary font-weight-bold py-3 px-4">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4 mob-text-center" style="font-size: 20px;color: #000;"> {{$lesson->name}}</div>
-                                        <div class="col-md-4 mob-text-center text-center"><p id="countdown" class="mb-0 text-danger"></p></div>
-                                        <div class="col-md-4 mob-text-center text-left" style="color: #000;">
-                                            الأسئلة
-                                            <span id="questionNumber"></span>
-                                            من
-                                            <span id="numberQuestions"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-50" style="border: 3px #067af1 solid;">
-                                    <div class="question-list">
-                                        @php
-                                            $counter = 1;
-                                        @endphp
-                                        @foreach($questions as $question)
-                                                @if($question->type == 1)
-                                                    <div class="question-item {{$loop->first ? 'active':''}}" id="{{$counter}}">
-                                                        <h3 class="text-danger"> أكد إذا كانت هذه الجملة صواب أم خطأ </h3>
-                                                        <hr />
-                                                        <div class="row mt-4 justify-content-center">
-                                                            <div class="col-8">
-                                                                <div class="w-100 text-center mt-4">
-                                                                    <h2>  {{$question->content}} </h2>
-                                                                </div>
-                                                            </div>
-                                                            @if(!is_null($question->attachment))
-                                                                <div class="col-4">
-                                                                    @if(!\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
-                                                                        <div class="w-100 text-center">
-                                                                            <img src="{{asset($question->attachment)}}" width="300px">
+
+
+                            </div>
+
+                            <div class="question-list">
+                                @php
+                                    $counter = 1;
+                                @endphp
+                                @foreach($questions as $question)
+                                    @if($question->type == 1)
+                                        <div id="{{$counter}}" class="exercise-box @if($loop->first) active @endif question-item">
+                                            <div class="exercise-box-header text-center">
+                                                <span class="number"> {{$counter}} : </span>
+                                                <span class="title">   أكد إذا كانت هذه الجمل صواب أم خطأ - Confirm whether these sentences
+                                                are true or false  </span>
+                                            </div>
+                                            <div class="exercise-box-body">
+                                                <div class="exercise-question">
+                                                    <div class="exercise-question-data border-0">
+                                                        <div class="info">
+                                                            {{$question->content}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="exercise-question-answer text-center my-4">
+
+                                                        @if(!is_null($question->attachment))
+
+                                                            <div class="row justify-content-center py-3">
+                                                                <div class="col-lg-6 col-md-8">
+                                                                    @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
+                                                                        <div class="recorder-player" id="voice_audio_2">
+                                                                            <div class="audio-player">
+                                                                                <audio crossorigin>
+                                                                                    <source
+                                                                                        src="{{asset($question->attachment)}}"
+                                                                                        type="audio/mpeg">
+                                                                                </audio>
+                                                                            </div>
                                                                         </div>
                                                                     @else
-                                                                        <div class="w-100 text-center mt-4">
-                                                                            <button type="button" data-id="{{$question->id}}" class="audio btn btn-success btn-elevate btn-circle btn-icon">
-                                                                                <i class="fa fa-play-circle fa-2x"></i>
-                                                                            </button>
-                                                                            <audio controls style="display:none" id="audio{{$question->id}}" src="{{asset($question->attachment)}}"></audio>
+                                                                        <div class="w-100 text-center">
+                                                                            <img src="{{asset($question->attachment)}}"
+                                                                                 width="300px">
                                                                         </div>
                                                                     @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
-                                                        <div class="answers">
-                                                            <div class="row text-center justify-content-center">
-                                                                <div class="col-md-3"><label class="mb-0 d-block py-3 fs-20"><input type="radio" question-grop-name="q{{$counter}}" name="tf[{{$question->id}}]" value="1"> <i class="fa fa-check-circle fa-fw text-success fa-2x"></i></label></div>
-                                                                <div class="col-md-3"><label class="mb-0 d-block py-3 fs-20"><input type="radio" question-grop-name="q{{$counter}}" name="tf[{{$question->id}}]" value="0"> <i class="fa fa-times-circle fa-fw text-danger fa-2x"></i></label></div>
+                                                            </div>
+                                                        @endif
+
+                                                        <div class="true-false-question">
+                                                            <div class="answer-box">
+                                                                <input
+                                                                    type="radio" question-grop-name="q{{$counter}}"
+                                                                    name="tf[{{$question->id}}]" value="1"
+                                                                    id="true-{{$question->id}}" class="d-none">
+                                                                <label for="true-{{$question->id}}"
+                                                                       class="option option-true">
+                                                                    <svg id="Group_68450" data-name="Group 68450"
+                                                                         xmlns="http://www.w3.org/2000/svg" width="80"
+                                                                         height="80" viewBox="0 0 102 102">
+                                                                        <g id="Ellipse_360" data-name="Ellipse 360"
+                                                                           fill="#fff"
+                                                                           stroke="#2ecc71" stroke-width="1">
+                                                                            <circle cx="51" cy="51" r="51"
+                                                                                    stroke="none"/>
+                                                                            <circle cx="51" cy="51" r="50.5"
+                                                                                    fill="none"/>
+                                                                        </g>
+                                                                        <circle id="Ellipse_180" data-name="Ellipse 180"
+                                                                                cx="41"
+                                                                                cy="41" r="41"
+                                                                                transform="translate(10 10)"
+                                                                                fill="#2ecc71"/>
+                                                                        <path id="Shape"
+                                                                              d="M12.176,23.045,3.093,13.962,0,17.033,12.176,29.209,38.314,3.071,35.243,0Z"
+                                                                              transform="translate(32.856 37.409)"
+                                                                              fill="#fff"/>
+                                                                    </svg>
+                                                                </label>
+                                                            </div>
+                                                            <div class="answer-box">
+                                                                <input
+                                                                    type="radio" question-grop-name="q{{$counter}}"
+                                                                    name="tf[{{$question->id}}]" value="0"
+                                                                    id="false-{{$question->id}}" class="d-none">
+                                                                <label for="false-{{$question->id}}"
+                                                                       class="option option-false">
+                                                                    <svg id="Group_68451" data-name="Group 68451"
+                                                                         xmlns="http://www.w3.org/2000/svg" width="80"
+                                                                         height="80" viewBox="0 0 102 102">
+                                                                        <g id="Ellipse_361" data-name="Ellipse 361"
+                                                                           fill="#fff"
+                                                                           stroke="#dc3545" stroke-width="1">
+                                                                            <circle cx="51" cy="51" r="51"
+                                                                                    stroke="none"/>
+                                                                            <circle cx="51" cy="51" r="50.5"
+                                                                                    fill="none"/>
+                                                                        </g>
+                                                                        <circle id="Ellipse_362" data-name="Ellipse 362"
+                                                                                cx="41"
+                                                                                cy="41" r="41"
+                                                                                transform="translate(10 10)"
+                                                                                fill="#dc3545"/>
+                                                                        <g id="close"
+                                                                           transform="translate(38.938 38.938)">
+                                                                            <line id="Line_1" data-name="Line 1" x2="26"
+                                                                                  y2="26"
+                                                                                  transform="translate(-0.938 -0.938)"
+                                                                                  fill="none" stroke="#fff"
+                                                                                  stroke-linecap="round"
+                                                                                  stroke-width="6"/>
+                                                                            <line id="Line_2" data-name="Line 2" x1="26"
+                                                                                  y2="26"
+                                                                                  transform="translate(-0.938 -0.938)"
+                                                                                  fill="none" stroke="#fff"
+                                                                                  stroke-linecap="round"
+                                                                                  stroke-width="6"/>
+                                                                        </g>
+                                                                    </svg>
+                                                                </label>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @elseif($question->type == 2)
-                                                    <div class="question-item {{$loop->first ? 'active':''}}" id="{{$counter}}">
-                                                        <h3 class="text-danger"> اختر الإجابة الصحيحة </h3>
-                                                        <hr />
-                                                        <div class="row mt-4 justify-content-center">
-                                                            <div class="col-8">
-                                                                <div class="w-100 text-center mt-4">
-                                                                    <h2>  {{$question->content}} </h2>
-                                                                </div>
-                                                            </div>
-                                                            @if(!is_null($question->attachment))
-                                                                <div class="col-4">
-                                                                    @if(!\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
-                                                                        <div class="w-100 text-center">
-                                                                            <img src="{{asset($question->attachment)}}" width="300px">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @elseif($question->type == 2)
+                                        <div id="{{$counter}}" class="exercise-box @if($loop->first) active @endif question-item">
+                                            <div class="exercise-box-header text-center">
+                                                <span class="number"> {{$counter}} : </span>
+                                                <span
+                                                    class="title"> اختر الإجابة الصحيحة - Choose the correct answer</span>
+                                            </div>
+                                            <div class="exercise-box-body">
+                                                <div class="exercise-question">
+                                                    <div class="exercise-question-data border-0">
+                                                        <div class="info">
+                                                            {{$question->content}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="exercise-question-answer text-center my-4">
+
+                                                        @if(!is_null($question->attachment))
+
+                                                            <div class="row justify-content-center py-3">
+                                                                <div class="col-lg-6 col-md-8">
+                                                                    @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
+                                                                        <div class="recorder-player" id="voice_audio_2">
+                                                                            <div class="audio-player">
+                                                                                <audio crossorigin>
+                                                                                    <source
+                                                                                        src="{{asset($question->attachment)}}"
+                                                                                        type="audio/mpeg">
+                                                                                </audio>
+                                                                            </div>
                                                                         </div>
                                                                     @else
-                                                                        <div class="w-100 text-center mt-4">
-                                                                            <button type="button" data-id="{{$question->id}}" class="audio btn btn-success btn-elevate btn-circle btn-icon">
-                                                                                <i class="fa fa-play-circle fa-2x"></i>
-                                                                            </button>
-                                                                            <audio controls style="display:none" id="audio{{$question->id}}" src="{{asset($question->attachment)}}"></audio>
+                                                                        <div class="w-100 text-center">
+                                                                            <img src="{{asset($question->attachment)}}"
+                                                                                 width="300px">
                                                                         </div>
                                                                     @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
-                                                        <div class="answers">
-                                                            <div class="row text-center">
+                                                            </div>
+                                                        @endif
+
+                                                        <div class="exercise-question-answer text-center my-4">
+
+                                                            <div class="multi-choice-question">
                                                                 @foreach($question->options as $option)
-                                                                    <div class="col-md-3"><label class="mb-0 d-block py-3"><input type="radio" question-grop-name="q{{$counter}}" name="option[{{$question->id}}]" value="{{$option->id}}"> {{$option->content}} </label></div>
+                                                                    <div class="answer-box">
+                                                                        <input id="option-{{$option->id}}"
+                                                                               type="radio"
+                                                                               question-grop-name="q{{$counter}}"
+                                                                               name="option[{{$question->id}}]"
+                                                                               value="{{$option->id}}"
+                                                                               class="co_q d-none">
+
+                                                                        <label for="option-{{$option->id}}"
+                                                                               class="option option-true">
+                                                                            {{$option->content}}
+                                                                        </label>
+                                                                    </div>
                                                                 @endforeach
                                                             </div>
+
                                                         </div>
+
                                                     </div>
-                                                @elseif($question->type == 3)
-                                                    <div class="question-item {{$loop->first ? 'active':''}}" id="{{$counter}}">
-                                                        <h3 class="text-danger"> اسحب الإجابات إلى الأماكن الصحيحة في الأسفل  </h3>
-                                                        <hr />
-                                                        <div class="row mt-4 justify-content-center">
-                                                            <div class="col-8">
-                                                                <div class="w-100 text-center mt-4">
-                                                                    <h2>  {{$question->content}} </h2>
-                                                                </div>
-                                                            </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @elseif($question->type == 3)
+                                        <div id="{{$counter}}" class="exercise-box @if($loop->first) active @endif question-item">
+                                            <div class="exercise-box-header text-center">
+                                                <span class="number"> {{$counter}} : </span>
+                                                <span class="title"> اسحب الإجابات إلى الأماكن الصحيحة في الأسفل – Drag the answers in the
+                                        right places below </span>
+                                            </div>
+                                            <div class="exercise-box-body">
+                                                <div class="exercise-question">
+                                                    <div class="exercise-question-data border-0">
+                                                        <div class="info">
+                                                            {{$question->content}}
+                                                        </div>
+                                                        <div class="exercise-question-answer text-center my-4">
                                                             @if(!is_null($question->attachment))
-                                                                <div class="col-4">
-                                                                    @if(!\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
-                                                                        <div class="w-100 text-center">
-                                                                            <img src="{{asset($question->attachment)}}" width="300px">
-                                                                        </div>
-                                                                    @else
-                                                                        <div class="w-100 text-center mt-4">
-                                                                            <button type="button" data-id="{{$question->id}}" class="audio btn btn-success btn-elevate btn-circle btn-icon">
-                                                                                <i class="fa fa-play-circle fa-2x"></i>
-                                                                            </button>
-                                                                            <audio controls style="display:none" id="audio{{$question->id}}" src="{{asset($question->attachment)}}"></audio>
-                                                                        </div>
-                                                                    @endif
+
+                                                                <div class="row justify-content-center py-3">
+                                                                    <div class="col-lg-6 col-md-8">
+                                                                        @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
+                                                                            <div class="recorder-player"
+                                                                                 id="voice_audio_2">
+                                                                                <div class="audio-player">
+                                                                                    <audio crossorigin>
+                                                                                        <source
+                                                                                            src="{{asset($question->attachment)}}"
+                                                                                            type="audio/mpeg">
+                                                                                    </audio>
+                                                                                </div>
+                                                                            </div>
+                                                                        @else
+                                                                            <div class="w-100 text-center">
+                                                                                <img
+                                                                                    src="{{asset($question->attachment)}}"
+                                                                                    width="300px">
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                             @endif
-                                                        </div>
-                                                        <div class="answers">
-                                                            <div class="row justify-content-center">
+                                                            <div class="multi-choice-question">
+                                                                <div class="w-100 answers">
+                                                                    <div class="row justify-content-center">
 
-                                                                <div class="col-md-12">
-                                                                    <ul id="" class="sortable1 connectedSortable list-unstyled font-bold text-center d-flex justify-content-around">
-                                                                        @foreach($question->matches()->inRandomOrder()->get() as $match)
-                                                                            <li class="ui-state-default mb-2" data-id="{{$match->id}}">
-                                                                                <div>
-                                                                                    <text>{{$match->result}} </text>
-                                                                                    <span class="float-right"></span>
-                                                                                    <input type="hidden" name="re[{{$question->id}}][{{$match->id}}]" id="" value="" >
-                                                                                </div>
-                                                                            </li>
-                                                                        @endforeach
-                                                                    </ul>
-                                                                </div>
+                                                                        <div class="col-md-12">
+                                                                            <ul id="match_{{$question->id}}_result"
+                                                                                class="sortable1 connectedSortable list-unstyled font-bold text-center d-flex justify-content-around">
+                                                                                @foreach($question->matches()->inRandomOrder()->get() as $match)
+                                                                                    <li class="ui-state-default mb-2"
+                                                                                        data-id="{{$match->id}}">
+                                                                                        <div>
+                                                                                            <text>{{$match->result}} </text>
+                                                                                            <span
+                                                                                                class="float-right"></span>
+                                                                                            <input type="hidden"
+                                                                                                   name="re[{{$question->id}}][{{$match->id}}]"
+                                                                                                   id="" value="">
+                                                                                        </div>
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            </ul>
+                                                                        </div>
 
-                                                                <div class="col-md-12">
-                                                                    <div class="ewewe">
-                                                                        <div class="row">
-                                                                            <div class="col-lg-8">
-                                                                                <ul class="connectedNoSortable list-unstyled m-0 font-bold active text-right m-0 p-0">
-                                                                                    @php
-                                                                                        $n_counter = 1;
-                                                                                    @endphp
-                                                                                    @foreach($question->matches as $match)
-                                                                                        <li class="ui-state-default mb-2">
-                                                                                            @if(!is_null($match->image))
-                                                                                                <div
-                                                                                                    class="row justify-content-center ">
-                                                                                                    <div
-                                                                                                        class="col-md-12 text-center">
-                                                                                                        <img
-                                                                                                            src="{{asset($match->image)}}"
-                                                                                                            style="width:100%; max-width: 100px"/>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            @else
-                                                                                                <span class="ml-3"></span>
-
-                                                                                                <text>{{$match->content}}</text>
-                                                                                            @endif
-                                                                                        </li>
-                                                                                        @php
-                                                                                            $n_counter ++;
-                                                                                        @endphp
-                                                                                    @endforeach
-                                                                                </ul>
-                                                                            </div>
-                                                                            <div class="col-lg-4">
-                                                                                <div class="position-relative">
-                                                                                    <ul class="m-0 p-0 list-unstyled add-ansar position-absolute w-100">
-                                                                                        @foreach($question->matches as $match)
-                                                                                            @if(is_null($match->image))
-                                                                                                @php
-                                                                                                    $styleClass = "textOnly";
-                                                                                                @endphp
-                                                                                                <li></li>
-                                                                                            @else
-                                                                                                @php
-                                                                                                    $styleClass = "imageOnly";
-                                                                                                @endphp
-                                                                                                <li class="ui-state-default mb-2"
-                                                                                                    style="height: auto !important;">
-                                                                                                    <div
-                                                                                                        class="row justify-content-center">
+                                                                        <div class="col-md-12">
+                                                                            <div class="ewewe">
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-8">
+                                                                                        <ul class="connectedNoSortable list-unstyled m-0 font-bold active text-right m-0 p-0">
+                                                                                            @php
+                                                                                                $n_counter = 1;
+                                                                                            @endphp
+                                                                                            @foreach($question->matches as $match)
+                                                                                                <li class="ui-state-default mb-2">
+                                                                                                    @if(!is_null($match->image))
                                                                                                         <div
-                                                                                                            class="col-12">
-                                                                                                            <div>
-                                                                                                                <div
-                                                                                                                    style="width: 100px; height: 122px"></div>
+                                                                                                            class="row justify-content-center ">
+                                                                                                            <div
+                                                                                                                class="col-md-12 text-center">
+                                                                                                                <img
+                                                                                                                    src="{{asset($match->image)}}"
+                                                                                                                    style="width:100%; max-width: 100px"/>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                    </div>
+                                                                                                    @else
+                                                                                                        <span
+                                                                                                            class="ml-3"></span>
+
+                                                                                                        <text>{{$match->content}}</text>
+                                                                                                    @endif
                                                                                                 </li>
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                    </ul>
-                                                                                    <ul id="" question-id="{{$counter}}" class="sortable2 connectedSortable list-unstyled m-0 font-bold active {{$styleClass}} text-center m-0 p-0">
-                                                                                    </ul>
+                                                                                                @php
+                                                                                                    $n_counter ++;
+                                                                                                @endphp
+                                                                                            @endforeach
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                    <div class="col-lg-4 ">
+                                                                                        <div class="position-relative">
+                                                                                            <ul class="m-0 p-0 list-unstyled add-ansar position-absolute w-100">
+                                                                                                @foreach($question->matches as $match)
+                                                                                                    @if(is_null($match->image))
+                                                                                                        @php
+                                                                                                            $styleClass = "textOnly";
+                                                                                                        @endphp
+                                                                                                        <li></li>
+                                                                                                    @else
+                                                                                                        @php
+                                                                                                            $styleClass = "imageOnly";
+                                                                                                        @endphp
+                                                                                                        <li class="ui-state-default mb-2"
+                                                                                                            style="height: auto !important;">
+                                                                                                            <div
+                                                                                                                class="row justify-content-center">
+                                                                                                                <div
+                                                                                                                    class="col-12">
+                                                                                                                    <div>
+                                                                                                                        <div
+                                                                                                                            style="width: 100px; height: 122px"></div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </li>
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                            </ul>
+                                                                                            <ul id="match_{{$question->id}}_answer"
+                                                                                                question-id="{{$counter}}"
+                                                                                                class="sortable2 connectedSortable list-unstyled m-0 font-bold {{$styleClass}} active text-center m-0 p-0">
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
+
+
                                                                             </div>
                                                                         </div>
-
-
                                                                     </div>
                                                                 </div>
                                                             </div>
+
                                                         </div>
                                                     </div>
-                                                @elseif($question->type == 4)
-                                                    <div class="question-item {{$loop->first ? 'active':''}}" id="{{$counter}}">
-                                                        <h3 class="text-danger"> اسحب ورتب الإجابات في المكان أدناه  </h3>
-                                                        <hr />
-                                                        <div class="row mt-4 justify-content-center">
-                                                            <div class="col-8">
-                                                                <div class="w-100 text-center mt-4">
-                                                                    <h2>  {{$question->content}} </h2>
-                                                                </div>
-                                                            </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    @elseif($question->type == 4)
+                                        <div id="{{$counter}}" class="exercise-box @if($loop->first) active @endif question-item">
+                                            <div class="exercise-box-header text-center">
+                                                <span class="number"> {{$counter}} : </span>
+                                                <span class="title"> اسحب الإجابات إلى الأماكن الصحيحة في الأسفل –  Drag and order the answers in the below box - اسحب ورتب الإجابات في
+                                        المكان أدناه </span>
+                                            </div>
+                                            <div class="exercise-box-body">
+                                                <div class="exercise-question">
+                                                    <div class="exercise-question-data border-0">
+                                                        <div class="info">
+                                                            {{$question->content}}
+                                                        </div>
+                                                        <div class="exercise-question-answer text-center my-4">
                                                             @if(!is_null($question->attachment))
-                                                                <div class="col-4">
-                                                                    @if(!\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
-                                                                        <div class="w-100 text-center">
-                                                                            <img src="{{asset($question->attachment)}}" width="300px">
-                                                                        </div>
-                                                                    @else
-                                                                        <div class="w-100 text-center mt-4">
-                                                                            <button type="button" data-id="{{$question->id}}" class="audio btn btn-success btn-elevate btn-circle btn-icon">
-                                                                                <i class="fa fa-play-circle fa-2x"></i>
-                                                                            </button>
-                                                                            <audio controls style="display:none" id="audio{{$question->id}}" src="{{asset($question->attachment)}}"></audio>
-                                                                        </div>
-                                                                    @endif
+
+                                                                <div class="row justify-content-center py-3">
+                                                                    <div class="col-lg-6 col-md-8">
+                                                                        @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
+                                                                            <div class="recorder-player"
+                                                                                 id="voice_audio_2">
+                                                                                <div class="audio-player">
+                                                                                    <audio crossorigin>
+                                                                                        <source
+                                                                                            src="{{asset($question->attachment)}}"
+                                                                                            type="audio/mpeg">
+                                                                                    </audio>
+                                                                                </div>
+                                                                            </div>
+                                                                        @else
+                                                                            <div class="w-100 text-center">
+                                                                                <img
+                                                                                    src="{{asset($question->attachment)}}"
+                                                                                    width="300px">
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                             @endif
-                                                        </div>
-                                                        <div class="answers">
-                                                            <div class="row justify-content-center">
+                                                            <div class="answers">
+                                                                <div class="row justify-content-center">
 
-                                                                <div class="col-md-12">
-                                                                    <ul id="" class="sortable1 connectedSortable list-unstyled font-bold text-center d-flex justify-content-around">
-                                                                        @foreach($question->sortWords()->inRandomOrder()->get() as $word)
-                                                                            <li class="ui-state-default mb-2" data-id="{{$word->id}}">
-                                                                                <div>
-                                                                                    <text>{{$word->content}} </text>
-                                                                                    <span class="float-right"></span>
-                                                                                    <input type="hidden" name="sort[{{$question->id}}][{{$word->id}}]" id="" value="" >
-                                                                                </div>
-                                                                            </li>
-                                                                        @endforeach
-                                                                    </ul>
-                                                                </div>
+                                                                    <div class="col-md-12">
+                                                                        <ul id="sort_{{$question->id}}_answer"
+                                                                            class="sortable1 connectedSortable list-unstyled font-bold text-center d-flex justify-content-around">
+                                                                            @foreach($question->sortWords()->inRandomOrder()->get() as $word)
+                                                                                <li class="ui-state-default mb-2"
+                                                                                    data-id="{{$word->id}}">
+                                                                                    <div>
+                                                                                        <text>{{$word->content}} </text>
+                                                                                        <span
+                                                                                            class="float-right"></span>
+                                                                                        <input type="hidden"
+                                                                                               name="sort[{{$question->id}}][{{$word->id}}]"
+                                                                                               id="" value="">
+                                                                                    </div>
+                                                                                </li>
+                                                                            @endforeach
+                                                                        </ul>
+                                                                    </div>
 
-                                                                <div class="col-md-12">
-                                                                    <div class="ewewe" style="border: #0043b3 solid 2px !important; box-shadow: none;">
-                                                                        <div class="row">
-                                                                            <div class="col-lg-12">
-                                                                                <div class="position-relative">
-                                                                                    <ul class="m-0 p-0 list-unstyled add-ansar  position-absolute w-100">
+                                                                    <div class="col-md-12">
+                                                                        <div class="ewewe">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12">
+                                                                                    <div class="position-relative">
+                                                                                        <ul class="m-0 p-0 list-unstyled add-ansar  position-absolute w-100">
 
-                                                                                    </ul>
-                                                                                    <ul id="" question-id="{{$counter}}" class="sortable2 sort_words connectedSortable list-unstyled m-0 font-bold active text-center m-0 p-0">
-                                                                                    </ul>
+                                                                                        </ul>
+                                                                                        <ul id=""
+                                                                                            question-id="{{$counter}}"
+                                                                                            class="sortable2 sort_words connectedSortable list-unstyled m-0 font-bold active text-center m-0 p-0">
+                                                                                        </ul>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
+
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+
                                                         </div>
                                                     </div>
-                                                @endif
-                                            @php
-                                                $counter ++;
-                                            @endphp
-                                        @endforeach
-                                    </div>
-                                    <div class="d-flex justify-content-center question-control">
-                                        <div class="text-center"><button type="button" class="theme-btn btn-style-one mx-4 d-none" id="previousQuestion"><i class="far fa-chevron-right position-relative ml-3" style="z-index: 9;"></i><span class="txt" style="font-size: 18px">  السؤال السابق </span></button></div>
-                                        <div class="text-center"><button type="button" class="theme-btn btn-style-one mx-4 d-none endExam" id="confirmed_modal" data-toggle="modal" data-target="#endExam"><span class="txt" style="font-size: 18px">حفظ الاختبار</span></button></div>
-                                        <div class="text-center"><button type="button" class="theme-btn btn-style-one mx-4" id="nextQuestion"><span class="txt" style="font-size: 18px"> السؤال التالي  </span> <i class="far fa-chevron-left position-relative mr-3" style="z-index: 9;"></i> </button></div>
-                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    @endif
+                                    @php
+                                        $counter ++;
+                                    @endphp
+                                @endforeach
+                            </div>
+                            <div class="d-flex justify-content-center question-control btn-wizard">
+                                <div class="text-center">
+                                    <button type="button" class="d-none btn btn-light border"
+                                            id="previousQuestion"><span class="txt"
+                                                                        style="font-size: 18px">  السابق </span>
+                                    </button>
                                 </div>
-                                <div class="bg-light text-secondary font-weight-bold py-3 px-4">
-                                    <ul class="list-inline m-0 p-0 w-100 text-center" id="questionListLink">
-                                    </ul>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-theme d-none endExam" id="confirmed_modal"
+                                            data-toggle="modal" data-target="#endExam"
+                                            style="font-weight: bold;background-color: #0043b3;">
+                                        <span class="txt" style="font-size: 18px">إنهاء</span>
+                                    </button>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-theme"
+                                            id="nextQuestion">
+                                        <span class="txt" style="font-size: 18px"> التالي  </span></button>
                                 </div>
                             </div>
+
+
+                            <div class="table-footer font-weight-bold">
+                                <ul class="list-inline m-0 p-0 w-100 text-center" id="questionListLink">
+                                </ul>
+                            </div>
                             <!-- Modal -->
-                            <div class="modal fade" id="endExam" tabindex="-1" aria-labelledby="endExamLabel" aria-hidden="true">
+
+                            <div class="modal fade" id="endExam" tabindex="-1" role="dialog"
+                                 aria-labelledby="endExamLabel" aria-hidden="true">
+
                                 <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-body text-center py-5"> <h2 class="mb-0" style="direction: ltr">هل أنت متأكد من حفظ الإختبار </h2></div>
+                                    <div class="modal-content" style="padding: 15px;">
+                                        <div class="modal-header border-0">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center py-5"><h2 class="mb-0"
+                                                                                     style="direction: ltr">
+                                                هل أنت متأكد من حفظ الإختبار </h2>
+                                        </div>
                                         <div class="modal-footer border-0 justify-content-center">
-                                            <button type="submit" class="theme-btn btn-style-one btnSecondary" id="save_assessment"><span class="txt"> نعم إحفظ الإختبار</span></button>
-                                            <button type="button" class="theme-btn btn-style-one btnSuccess" data-dismiss="modal"><span class="txt"> أريد البفاء في الإختبار </span></button>
+                                            <button type="submit" class="btn btn-soft-danger me-3"
+                                                    id="save_assessment"><span
+                                                    class="txt">  نعم إحفظ الإختبار</span></button>
+                                            <button type="button" class="btn btn-light border"
+                                                    data-bs-dismiss="modal"><span
+                                                    class="txt"> أريد البفاء في الإختبار </span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </section>
 
 @endsection
 @section('script')
-    <script>
-
-    </script>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="{{asset('s_website/js/jquery.ui.touch-punch.js')}}"></script>
 
     <script>
-        $(document).ready(function (){
-            $('#save_assessment').click(function (e){
+        $(document).ready(function () {
+            $('#confirmed_modal').click(function (e) {
+                $("#endExam").modal("show");
+            });
+            $('#save_assessment').click(function (e) {
                 e.preventDefault();
                 $(this).attr('disabled', true);
                 $('#confirmed_modal').attr('disabled', true);
                 $('#term_form').submit();
             })
-            $('.audio').click(function(){
+            $('.audio').click(function () {
                 var elem = $(this);
                 var data_id = $(this).attr('data-id');
-                $('audio').each(function(){
+                $('audio').each(function () {
                     this.pause(); // Stop playing
                     this.currentTime = 0; // Reset time
                     console.log('pause');
@@ -366,15 +556,15 @@
             });
         });
 
-        Date.prototype.addHours = function(h) {
-            this.setTime(this.getTime() + (h*60*60*1000));
+        Date.prototype.addHours = function (h) {
+            this.setTime(this.getTime() + (h * 60 * 60 * 1000));
             return this;
         }
         // Set the date we're counting down to
         var countDownDate = new Date().addHours(0.1666666).getTime();
 
         // Update the count down every 1 second
-        var x = setInterval(function() {
+        var x = setInterval(function () {
 
             // Get today's date and time
             var now = new Date().getTime();
@@ -398,34 +588,29 @@
                 document.getElementById("countdown").innerHTML = "EXPIRED";
             }
         }, 1000);
-        $( function() {
-            $( ".sortable1, .sortable2" ).sortable({
+        $(function () {
+            $(".sortable1, .sortable2").sortable({
                 connectWith: ".connectedSortable"
             }).disableSelection();
-        } );
-
-
-
-
-
+        });
 
 
         $(".sortable2").droppable({
-            drop: function() {
+            drop: function () {
 
                 $questionId = $(this).attr('question-id');
                 //alert($questionId);
 
 
-                setTimeout(function(){
+                setTimeout(function () {
                     $i = 1;
-                    $('.sortable2[question-id = '+ $questionId +'] li span').each(function () {
+                    $('.sortable2[question-id = ' + $questionId + '] li span').each(function () {
                         //$(this).html($i++ );
                     });
                 }, 1);
-                setTimeout(function(){
+                setTimeout(function () {
                     $i = 1;
-                    $('.sortable2[question-id = '+ $questionId +'] li input').each(function () {
+                    $('.sortable2[question-id = ' + $questionId + '] li input').each(function () {
                         $(this).val($i++);
                     });
                 }, 1);
@@ -433,16 +618,15 @@
         });
 
 
-
         $(".sortable1").droppable({
-            drop: function() {
-                setTimeout(function(){
+            drop: function () {
+                setTimeout(function () {
                     $('.sortable1 li span').each(function (i) {
                         var humanNum = i + 1;
                         $(this).html('');
                     });
                 }, 1);
-                setTimeout(function(){
+                setTimeout(function () {
                     $('.sortable1 li input').each(function (i) {
                         var humanNum = i + 1;
                         $(this).val('');
@@ -452,5 +636,4 @@
         });
     </script>
 @endsection
-
 

@@ -9,26 +9,24 @@ if($('html').height()<=$(window).height()){
 }
 
 
-$(".answers label input").click(function(){
-    $rr = $(this).attr('question-grop-name');
-    $('input[question-grop-name = '+ $rr +']').parent('label').removeClass('active');
-  $(this).parent('label').addClass('active');
-    var ans = $(this).attr('data-ans');
-    $('audio').each(function () {
-        this.pause(); // Stop playing
-        this.currentTime = 0; // Reset time
-        console.log('pause');
-    });
-    if (ans === 'true'){
-        $('#ture_audio')[0].currentTime = 0;
-        $('#ture_audio')[0].play();
-        console.log('play');
-    }else{
-        $('#false_audio')[0].currentTime = 0;
-        $('#false_audio')[0].play();
-        console.log('play');
-    }
-});
+  $(".answer-box input").change(function () {
+      $rr = $(this).attr('question-grop-name');
+      $('input[question-grop-name = ' + $rr + ']').parent('label').removeClass('active');
+      $(this).parent('label').addClass('active');
+      var ans = $(this).attr('data-ans');
+      $('audio').each(function () {
+          this.pause(); // Stop playing
+          this.currentTime = 0; // Reset time
+      });
+      if (ans === 'true') {
+          $('#ture_audio')[0].currentTime = 0;
+          $('#ture_audio')[0].play();
+          console.log('play');
+      } else {
+          $('#false_audio')[0].currentTime = 0;
+          $('#false_audio')[0].play();
+      }
+  });
 
   const equals = (a, b) =>
       a.length === b.length &&

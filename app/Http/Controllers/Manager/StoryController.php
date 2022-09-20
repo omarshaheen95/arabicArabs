@@ -108,7 +108,7 @@ class StoryController extends Controller
         $m_questions = StoryQuestion::query()->where('story_id', $id)->where('type', 3)->get();
         $s_questions = StoryQuestion::query()->where('story_id', $id)->where('type', 4)->get();
         $questions = StoryQuestion::query()->where('story_id', $id)->get();
-        if ($story->grade >= 1 && $story->grade <= 4)
+        if ($story->grade >= 1 && $story->grade <= 2)
         {
             $true_false_count = 4;
             $true_false_mark = 2.5;
@@ -122,7 +122,7 @@ class StoryController extends Controller
 
             $sort_count = 4;
             $sort_mark = 4;
-        }elseif($story->grade >= 5 && $story->grade <= 8)
+        }elseif($story->grade >= 3 && $story->grade <= 5)
         {
             $true_false_count = 5;
             $true_false_mark = 1;
@@ -165,13 +165,13 @@ class StoryController extends Controller
 //            return redirect()->back()->with('message', 'Question added previously')->with('m-class', 'error');
 //        }
 
-        if ($story->grade >= 1 && $story->grade <= 4)
+        if ($story->grade >= 1 && $story->grade <= 2)
         {
             $true_false_mark = 2.5;
             $chose_mark = 4;
             $match_mark = 3;
             $sort_mark = 4;
-        }elseif($story->grade >= 5 && $story->grade <= 8)
+        }elseif($story->grade >= 3 && $story->grade <= 5)
         {
             $true_false_mark = 1;
             $chose_mark = 3;

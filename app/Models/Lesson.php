@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
@@ -122,6 +123,28 @@ class Lesson extends Model implements HasMedia
         }else{
             return null;
         }
+    }
+
+    public function getStudentTestedAttribute()
+    {
+        $student_test = UserTest::query()->where('lesson_id', $this->id)->where('user_id', Auth::user()->id)
+            ->where('approved', 1)->where('total', '>=', 50)->first();
+        if ($student_test)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public function getStudentTestedTaskAttribute()
+    {
+        $student_test = UserTest::query()->where('lesson_id', $this->id)->where('user_id', Auth::user()->id)
+            ->first();
+        if ($student_test)
+        {
+            return true;
+        }
+        return false;
     }
 
 
