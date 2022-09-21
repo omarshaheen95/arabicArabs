@@ -96,10 +96,10 @@
 ->where('completed', 0)
 ->count();
                         $userStoryAssignmentsCount = 0;
-                        /*\App\Models\UserStoryAssignment::query()
+                        \App\Models\StoryAssignment::query()
 ->where('user_id', Auth::user()->id)
 ->where('completed', 0)
-->count();*/
+->count();
 
                     $userAssignmentsCount += $userStoryAssignmentsCount;
                     @endphp
@@ -110,14 +110,14 @@
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> الشهادات </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownId">
                             <a class="dropdown-item" href="{{ route('certificates') }}"> شهادات الدروس </a>
-{{--                            <a class="dropdown-item" href="{{ route('story.certificates') }}"> شهادات القصص </a>--}}
+                            <a class="dropdown-item" href="{{ route('story.certificates') }}"> شهادات القصص </a>
                         </div>
                     </li>
                     <li class="nav-item dropdown {{Request::is('assignments') || Request::is('stories_assignments') ? 'active':''}}">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> الواجبات <span class="badge ms">{{$userAssignmentsCount}}</span></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownId">
                             <a class="dropdown-item" href="{{ route('assignments') }}"> واجبات الدروس </a>
-{{--                            <a class="dropdown-item" href="{{ route('stories_assignments') }}"> واجبات القصص </a>--}}
+                            <a class="dropdown-item" href="{{ route('stories_assignments') }}"> واجبات القصص </a>
                         </div>
                     </li>
                     {{--                    <li class="nav-item">--}}

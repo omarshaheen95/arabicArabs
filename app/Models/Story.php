@@ -20,6 +20,11 @@ class Story extends Model
         'image', 'video'
     ];
 
+    public function questions()
+    {
+        return $this->hasMany(StoryQuestion::class);
+    }
+
     public function getGradeNameAttribute()
     {
         switch($this->grade){

@@ -9,9 +9,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title">
-                        <h1 class="title"> الشهادات </h1>
+                        <h1 class="title"> الإجابات </h1>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="{{route('certificates')}}"> الشهادات </a>
+                            <a class="breadcrumb-item" href="{{route('certificates')}}">الإجابات</a>
                             <span class="breadcrumb-item active" aria-current="page"> إجابات الأسئلة </span>
                         </nav>
                     </div>
@@ -21,7 +21,7 @@
                 <div class="col-lg-12">
                     <div class="table-card">
                         <div class="table-header">
-                            <div class="title">إجابات الأسئلة </div>
+                            <div class="title"> إجابات الاختبار </div>
                         </div>
                         <div class="table-responsive">
                             <table class="table">
@@ -47,7 +47,6 @@
                                         <td>
                                             {!! isset($data['question_answer']) ? $data['question_answer']:'' !!}
                                         </td>
-
                                     </tr>
                                 @endforeach
 

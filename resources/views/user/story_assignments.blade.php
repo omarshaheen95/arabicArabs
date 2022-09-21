@@ -12,7 +12,7 @@
                     <div class="section-title">
                         <h1 class="title"> {{$title}} </h1>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="/home"> الرئيسية </a>
+                            <a class="breadcrumb-item" href="/home"> Home </a>
                             <span class="breadcrumb-item active" aria-current="page"> {{$title}} </span>
                         </nav>
                     </div>
@@ -25,38 +25,30 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <tr>
-                                    <td style="font-weight: bold">الدرس</td>
-                                    <td style="font-weight: bold">المستوى</td>
-                                    <td style="font-weight: bold">تعيين مهمة</td>
-                                    <td style="font-weight: bold">تعيين اختبار</td>
-                                    <td style="font-weight: bold">الحالة</td>
+                                    <td style="font-weight: bold">Story name</td>
+                                    <td style="font-weight: bold">Grade</td>
+                                    <td style="font-weight: bold">Test Assignment</td>
+                                    <td style="font-weight: bold">Status</td>
                                 </tr>
                                 @foreach($student_assignments as $student_assignment)
                                     <tr>
-                                        <td>{{$student_assignment->lesson->name}}</td>
-                                        <td>{{$student_assignment->lesson->grade->grade_number}}</td>
-                                        <td>@if($student_assignment->done_tasks_assignment)
-                                                مكتمل
-                                            @elseif($student_assignment->tasks_assignment != 0)
-                                                <a href="{{route('lesson', [$student_assignment->lesson_id, 'learn'])}}#tasks">
-                                                    الذهاب للمهمة</a>
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
+                                        <td>{{$student_assignment->story->translate('ar')->name}}
+                                            - {{$student_assignment->story->translate('en')->name}}</td>
+                                        <td>{{$student_assignment->story->grade}}</td>
                                         <td>@if($student_assignment->done_test_assignment)
-                                                مكتمل
+                                                Completed
                                             @elseif($student_assignment->test_assignment != 0)
-                                                <a href="{{route('lesson', [$student_assignment->lesson_id, 'test'])}}">الضهاب للاختبار</a>
+                                                <a href="{{route('lesson', [$student_assignment->lesson_id, 'test'])}}">Go
+                                                    to test</a>
                                             @else
                                                 -
                                             @endif
                                         </td>
                                         <td>
                                             @if($student_assignment->completed)
-                                                مكتمل
+                                                Completed Assignment
                                             @else
-                                                غير مكتمل
+                                                UnCompleted Assignment
                                             @endif
                                         </td>
                                     </tr>
