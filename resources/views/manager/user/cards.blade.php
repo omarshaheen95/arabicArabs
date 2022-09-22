@@ -139,7 +139,7 @@
                                     </p>
                                     <p class="info" >Teacher Name:
                                         <span class="bolder red-font" style="font-size: 12px;">
-                                            {{ optional(optional($std->teacher_student)->teacher)->name }}
+                                            {{ optional(optional($std->teacherUser)->teacher)->name }}
                                         </span>
                                     </p>
                                     <p class="info">Years of learning Arabic:

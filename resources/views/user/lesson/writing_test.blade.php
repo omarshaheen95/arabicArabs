@@ -3,14 +3,90 @@
     WhatsApp +972592554320
     --}}
 @extends('user.layout.container_v2')
+@section('style')
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.jsdelivr.net/gh/greghub/green-audio-player/dist/css/green-audio-player.min.css">
+    <link rel="stylesheet" type="text/css" href="https://www.arabic-keyboard.org/keyboard/keyboard.css">
+    <style>
+        .leftDirection {
+            direction: ltr !important;
+        }
 
+        .rightDirection {
+            direction: rtl !important;
+        }
+
+        .progress {
+            position: relative;
+            width: 100%;
+            height: 30px;
+            border: 1px solid #7F98B2;
+            border-radius: 3px;
+            border-radius: 36px !important;
+            display: none;
+        }
+
+        .bar {
+            background-color: #17C41A;
+            width: 0%;
+            height: 30px;
+            border-radius: 3px;
+        }
+
+        .percent {
+            position: absolute;
+            display: inline-block;
+            top: 4px;
+            left: 48%;
+            color: #000;
+        }
+
+        .text-success {
+            color: #0F0 !important;
+        }
+
+        .box-style {
+            color: #FF0000;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: #EFEFEF;
+            padding: 10px;
+            border-left: 5px solid #F00;;
+            border-right: 5px solid #F00;
+            border-top: 5px solid #000;
+            border-bottom: 5px solid #000;
+        }
+
+        #recordingslist {
+            list-style: none;
+        }
+
+        #keyboardInputLayout {
+            direction: ltr !important;
+        }
+
+        #keyboardInputMaster tbody tr td div#keyboardInputLayout table tbody tr td {
+            font: normal 30px 'Lucida Console', monospace;
+        }
+
+        .keyboardInputInitiator {
+            width: 50px
+        }
+
+        .exercise-question .exercise-question-data .info {
+            font-size: 18px
+        }
+    </style>
+
+@endsection
 @section('content')
+
     <section class="login-home user-home lessons-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title mb-4">
-                        <h3 class="title"> الصف : {{$lesson->grade->grade_number}} </h3>
+                        <h3 class="title"> الصف : {{$lesson->grade_name}} </h3>
 {{--                        <h1 class="title"><p id="countdown" class="mb-0 text-danger" style="font-size:32px"></p></h1>--}}
 
                         <nav class="breadcrumb">
@@ -55,23 +131,23 @@
                                                 </div>
                                                 <div class="exercise-question-answer text-center my-4">
 
-                                                    @if(!is_null($question->attachment))
+                                                    @if($question->getFirstMediaUrl('imageQuestion'))
 
                                                         <div class="row justify-content-center py-3">
                                                             <div class="col-lg-6 col-md-8">
-                                                                @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
+                                                                @if(\Illuminate\Support\Str::contains($question->getFirstMediaUrl('imageQuestion'), '.mp3'))
                                                                     <div class="recorder-player" id="voice_audio_2">
                                                                         <div class="audio-player">
                                                                             <audio crossorigin>
                                                                                 <source
-                                                                                    src="{{asset($question->attachment)}}"
+                                                                                    src="{{asset($question->getFirstMediaUrl('imageQuestion'))}}"
                                                                                     type="audio/mpeg">
                                                                             </audio>
                                                                         </div>
                                                                     </div>
                                                                 @else
                                                                     <div class="w-100 text-center">
-                                                                        <img src="{{asset($question->attachment)}}"
+                                                                        <img src="{{asset($question->getFirstMediaUrl('imageQuestion'))}}"
                                                                              width="300px">
                                                                     </div>
                                                                 @endif
@@ -177,15 +253,15 @@
                                         </div>
                                         <div class="modal-body text-center py-5"><h2 class="mb-0"
                                                                                      style="direction: ltr">
-                                                هل أنت متأكد من حفظ الإختبار </h2>
+                                                هل أنت متأكد من حفظ الاختبار </h2>
                                         </div>
                                         <div class="modal-footer border-0 justify-content-center">
                                             <button type="submit" class="btn btn-soft-danger me-3"
                                                     id="save_assessment"><span
-                                                    class="txt">  نعم إحفظ الإختبار</span></button>
+                                                    class="txt">  نعم احفظ الاختبار</span></button>
                                             <button type="button" class="btn btn-light border"
                                                     data-bs-dismiss="modal"><span
-                                                    class="txt"> أريد البفاء في الإختبار </span>
+                                                    class="txt"> أريد البقاء في الاختبار </span>
                                             </button>
                                         </div>
                                     </div>
@@ -204,6 +280,8 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="{{asset('s_website/js/jquery.ui.touch-punch.js')}}"></script>
+    <script type="text/javascript" src="https://www.arabic-keyboard.org/keyboard/keyboard.js" charset="UTF-8"></script>
+
 
     <script>
         $(document).ready(function () {

@@ -69,5 +69,13 @@ Route::group(['namespace' => 'Manager'], function(){
 //    Route::get('userGrades', 'UserController@userGrades')->name('userGrades');
 //    Route::get('updateUsers', 'UserController@updateUsers')->name('updateUsers');
 
+    //import Users
+    Route::get('users_import', 'SettingController@importUserExcelView')->name('import.users_import_view');
+    Route::post('users_import', 'SettingController@importUserExcel')->name('import.users_import');
+//    Route::get('updateUsers', 'UserController@updateUsers')->name('updateUsers');
+    //import Teachers
+    Route::get('teachers_import', 'SettingController@importTeachersExcelView')->name('import.teachers_import_view');
+    Route::post('teachers_import', 'SettingController@importTeachersExcel')->name('import.teachers_import');
+
 });
 

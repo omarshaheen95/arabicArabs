@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title mb-4">
-                        <h3 class="title"> الصف : {{$lesson->grade->grade_number}} </h3>
+                        <h3 class="title"> الصف : {{$lesson->grade_name}} </h3>
 {{--                        <h1 class="title"><p id="countdown" class="mb-0 text-danger" style="font-size:32px"></p></h1>--}}
 
                         <nav class="breadcrumb">
@@ -55,23 +55,23 @@
                                                 </div>
                                                 <div class="exercise-question-answer text-center my-4">
 
-                                                    @if(!is_null($question->attachment))
+                                                    @if($question->getFirstMediaUrl('imageQuestion'))
 
                                                         <div class="row justify-content-center py-3">
                                                             <div class="col-lg-6 col-md-8">
-                                                                @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
+                                                                @if(\Illuminate\Support\Str::contains($question->getFirstMediaUrl('imageQuestion'), '.mp3'))
                                                                     <div class="recorder-player" id="voice_audio_2">
                                                                         <div class="audio-player">
                                                                             <audio crossorigin>
                                                                                 <source
-                                                                                    src="{{asset($question->attachment)}}"
+                                                                                    src="{{asset($question->getFirstMediaUrl('imageQuestion'))}}"
                                                                                     type="audio/mpeg">
                                                                             </audio>
                                                                         </div>
                                                                     </div>
                                                                 @else
                                                                     <div class="w-100 text-center">
-                                                                        <img src="{{asset($question->attachment)}}"
+                                                                        <img src="{{asset($question->getFirstMediaUrl('imageQuestion'))}}"
                                                                              width="300px">
                                                                     </div>
                                                                 @endif
@@ -272,15 +272,15 @@
                                         </div>
                                         <div class="modal-body text-center py-5"><h2 class="mb-0"
                                                                                      style="direction: ltr">
-                                                هل أنت متأكد من حفظ الإختبار </h2>
+                                                هل أنت متأكد من حفظ الاختبار </h2>
                                         </div>
                                         <div class="modal-footer border-0 justify-content-center">
                                             <button type="submit" class="btn btn-soft-danger me-3"
                                                     id="save_assessment"><span
-                                                    class="txt">  نعم إحفظ الإختبار</span></button>
+                                                    class="txt">  نعم احفظ الاختبار</span></button>
                                             <button type="button" class="btn btn-light border"
                                                     data-bs-dismiss="modal"><span
-                                                    class="txt"> أريد البفاء في الإختبار </span>
+                                                    class="txt"> أريد البقاء في الاختبار </span>
                                             </button>
                                         </div>
                                     </div>

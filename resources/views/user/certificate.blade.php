@@ -135,13 +135,19 @@
             <div class="row mt-3">
                 <div class="col-md-12 text-center pm-credits-text block bold sans content" style="font-size: 25px !important;">
                     تقديرًا لاجتياز تقييم الدرس
+
+                    @if($student_test->lesson->lesson_type == 'reading' || $student_test->lesson->lesson_type == 'listening' )
+                        {{$student_test->lesson->section_type_name}}
+                    @endif
                     <span class="underline" style="color: #FF0000">{{$student_test->lesson->name}}</span>
+
                     <br />
-                    في المستوى {{$student_test->lesson->grade->grade_number}}
+                    مهارة {{$student_test->lesson->type_name}} -
+                     الصف {{$student_test->lesson->grade_name}}
                     <br />
                     بنسبة  {{$student_test->total}}%
                     <br />
-                    خلال رحلة تعلم اللغة العربية من منصة لغتي الأولى.
+                    خلال رحلة تعلم اللغة العربية في منصة لغتي الأولى.
                 </div>
             </div>
             <div class="row mt-5 text-center">

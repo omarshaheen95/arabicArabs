@@ -24,8 +24,8 @@
                             </svg>
                         </div>
                         <div class="content">
-                            <h2 class="title"> المستويات والدروس </h2>
-                            <h2 class="title"> Levels & Lessons </h2>
+                            <h2 class="title"> المهارات والدروس </h2>
+                            <h2 class="title"> Skills & Lessons </h2>
                         </div>
                     </a>
                 </div>
@@ -60,8 +60,8 @@
                             </svg>
                         </div>
                         <div class="content">
-                            <h2 class="title"> مكتبة القصص </h2>
-                            <h2 class="title"> The Arabic library </h2>
+                            <h2 class="title"> مكتبتي العربية </h2>
+                            <h2 class="title"> My Arabic library </h2>
                         </div>
                     </a>
                 </div>

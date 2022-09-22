@@ -370,10 +370,10 @@
                             <div class="modal fade" id="endExam" tabindex="-1" aria-labelledby="endExamLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-body text-center py-5"> <h2 class="mb-0" style="direction: ltr">هل أنت متأكد من حفظ الإختبار </h2></div>
+                                        <div class="modal-body text-center py-5"> <h2 class="mb-0" style="direction: ltr">هل أنت متأكد من حفظ الاختبار </h2></div>
                                         <div class="modal-footer border-0 justify-content-center">
-                                            <button type="submit" class="theme-btn btn-style-one btnSecondary" id="save_assessment"><span class="txt"> نعم إحفظ الإختبار</span></button>
-                                            <button type="button" class="theme-btn btn-style-one btnSuccess" data-dismiss="modal"><span class="txt"> أريد البفاء في الإختبار </span></button>
+                                            <button type="submit" class="theme-btn btn-style-one btnSecondary" id="save_assessment"><span class="txt"> نعم احفظ الاختبار</span></button>
+                                            <button type="button" class="theme-btn btn-style-one btnSuccess" data-dismiss="modal"><span class="txt"> أريد البقاء في الاختبار </span></button>
                                         </div>
                                     </div>
                                 </div>

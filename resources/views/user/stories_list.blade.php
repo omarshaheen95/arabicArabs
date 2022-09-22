@@ -35,7 +35,7 @@
                                     <a href="{{route('stories.show', [$story->id, 'test'])}}"
                                        class="btn btn-soft-danger"> اختبر نفسك </a>
                                     <a href="{{route('stories.show', [$story->id, 'read'])}}"
-                                       class="btn btn-soft-info"> إقرأ القصة </a>
+                                       class="btn btn-soft-info"> اقرأ القصة </a>
                                 </div>
                             </div>
                         </div>

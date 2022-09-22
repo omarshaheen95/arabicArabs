@@ -14,7 +14,7 @@
                     <div class="section-title">
                         <h1 class="title"> {{$story->name}}</h1>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="{{route('stories.list', $story->grade)}}"> المستويات </a>
+                            <a class="breadcrumb-item" href="{{route('stories.list', $story->grade)}}"> المهارات والدروس </a>
                             <span class="breadcrumb-item active" aria-current="page">القصص </span>
                         </nav>
                     </div>

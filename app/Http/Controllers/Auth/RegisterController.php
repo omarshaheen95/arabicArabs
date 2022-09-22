@@ -51,7 +51,7 @@ class RegisterController extends Controller
         $this->validationRules["school_id"] = 'required|exists:schools,id';
         $this->validationRules["package_id"] = 'required|exists:packages,id';
         $this->validationRules["grade_id"] = 'required';
-        $this->validationRules["year_learning"] = 'required';
+//        $this->validationRules["year_learning"] = 'required';
         $this->validationRules['country_code'] = 'required';
         $this->validationRules['short_country'] = 'required';
         $this->validationRules["mobile"] = ['required'];

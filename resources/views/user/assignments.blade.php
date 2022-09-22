@@ -12,7 +12,7 @@
                     <div class="section-title">
                         <h1 class="title"> {{$title}} </h1>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="/home"> الرئيسية </a>
+                            <a class="breadcrumb-item" href="/home"> الرئيسة </a>
                             <span class="breadcrumb-item active" aria-current="page"> {{$title}} </span>
                         </nav>
                     </div>
@@ -34,7 +34,7 @@
                                 @foreach($student_assignments as $student_assignment)
                                     <tr>
                                         <td>{{$student_assignment->lesson->name}}</td>
-                                        <td>{{$student_assignment->lesson->grade->grade_number}}</td>
+                                        <td>الصف {{$student_assignment->lesson->grade_name}}</td>
                                         <td>@if($student_assignment->done_tasks_assignment)
                                                 مكتمل
                                             @elseif($student_assignment->tasks_assignment != 0)

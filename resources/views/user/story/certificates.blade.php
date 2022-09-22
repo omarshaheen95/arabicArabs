@@ -12,7 +12,7 @@
                     <div class="section-title">
                         <h1 class="title"> شهادات القصص </h1>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="/home"> الرئيسية </a>
+                            <a class="breadcrumb-item" href="/home"> الرئيسة </a>
                             <span class="breadcrumb-item active" aria-current="page"> الشهادات </span>
                         </nav>
                     </div>

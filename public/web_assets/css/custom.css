@@ -935,7 +935,7 @@ form.disabled {
     border-radius: 32px;
     padding: 30px;
     background-color: #fff;
-    border: 1px solid #D9E3FD;
+    border: 1px solid #0f893b;
     transition: all .3s ease;
 }
 
@@ -1576,7 +1576,7 @@ form.disabled {
 
 .exercise-box .exercise-box-header .title {
     font-weight: 800;
-    font-size: 14px;
+    font-size: 18px;
     color: var(--color-theme);
 }
 

@@ -119,7 +119,7 @@
                                 <li class="breadcrumb-item">
                                     <a href="{{ url('/home') }}"
                                        @if(isset($level) && !is_null($level->text_color)) style="color: {{$level->text_color}} !important; font-weight: bold"
-                                       @else style="font-weight: bold" @endif>الرئيسية</a>
+                                       @else style="font-weight: bold" @endif>الرئيسة</a>
                                 </li>
                                 @stack('breadcrumb')
                             </ul>

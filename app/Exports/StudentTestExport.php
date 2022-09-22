@@ -79,7 +79,7 @@ class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromColl
 
         $students = UserTest::query()->whereHas('user', function (Builder $query) use ($teacher, $username, $school_id){
              $query->when($teacher, function (Builder $query) use ($teacher){
-                 $query->whereHas('teacher_student', function (Builder $query) use($teacher){
+                 $query->whereHas('teacherUser', function (Builder $query) use($teacher){
                      $query->where('teacher_id', $teacher);
                  });
              });

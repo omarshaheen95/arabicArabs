@@ -30,6 +30,16 @@ class UserTest extends Model
         return $button;
     }
 
+    public function getTeacherActionButtonsAttribute()
+    {
+        $button = "";
+        if(!$this->corrected)
+        {
+            $button .= '<a target="_blank" href="'.route('teacher.students_tests.show', $this->id).'" class="btn btn-success">تصحيح </a>';
+        }
+        return $button;
+    }
+
     public function getReadingBenchmarkAttribute()
     {
         if ($this->total >= 61){
@@ -50,6 +60,16 @@ class UserTest extends Model
         } else {
             return 'Below';
         }
+    }
+
+    public function speakingResults()
+    {
+        return $this->hasMany(SpeakingResult::class);
+    }
+
+    public function writingResults()
+    {
+        return $this->hasMany(WritingResult::class);
     }
 
 }

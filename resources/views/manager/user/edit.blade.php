@@ -119,7 +119,7 @@ WhatsApp +972592554320
                                             @isset($user)
                                                 @foreach($teachers as $teacher)
                                                     <option
-                                                        value="{{$teacher->id}}" {{isset($user) && optional($user->teacher_student)->teacher_id == $teacher->id ? 'selected':''}}>{{$teacher->name}}</option>
+                                                        value="{{$teacher->id}}" {{isset($user) && optional($user->teacherUser)->teacher_id == $teacher->id ? 'selected':''}}>{{$teacher->name}}</option>
                                                 @endforeach
                                             @endisset
                                         </select>

@@ -10,6 +10,7 @@ use App\Models\Item;
 use App\Models\Lesson;
 use App\Models\Level;
 use App\Models\Order;
+use App\Models\Package;
 use App\Models\School;
 use App\Models\Setting;
 use App\Models\StudentTest;
@@ -31,7 +32,7 @@ class SettingController extends Controller
 {
     public function home()
     {
-        $title = "الرئيسية";
+        $title = "الرئيسة";
         $supervisors = Supervisor::query()->count();
         $students = User::query()->count();
         $lessons = Lesson::query()->count();
@@ -161,12 +162,24 @@ class SettingController extends Controller
     public function importUserExcelView(Request $request)
     {
         $title = t('Users Import');
-        return view('manager.setting.import_users',compact('title'));
+        $schools = School::query()->get();
+        $packages = Package::query()->get();
+        return view('manager.setting.import_users',compact('title', 'schools', 'packages'));
     }
 
     public function importUserExcel(Request $request)
     {
-        $importedFile = new ImportUserExcel();
+        $request->validate([
+            'school_id' => 'required|exists:schools,id',
+            'package_id' => 'required|exists:packages,id',
+            'import_file' => 'required',
+            'active_to' => 'required',
+            'last_of_email' => 'required',
+            'default_mobile' => 'required',
+            'country_code' => 'required',
+            'short_country' => 'required',
+        ]);
+        $importedFile = new ImportUserExcel($request);
         Excel::import($importedFile, $request->file('import_file'));
         $assessmentsStudents = $importedFile->getDuplicateEmails();
         return $assessmentsStudents;
@@ -176,12 +189,16 @@ class SettingController extends Controller
     public function importTeachersExcelView(Request $request)
     {
         $title = t('Teachers Import');
-        return view('manager.setting.import_teachers',compact('title'));
+        $schools = School::query()->get();
+        return view('manager.setting.import_teachers',compact('title', 'schools'));
     }
 
     public function importTeachersExcel(Request $request)
     {
-        Excel::import(new TeacherImport(), $request->file('import_file'));
+        $request->validate([
+            'school_id' => 'required|exists:schools,id',
+        ]);
+        Excel::import(new TeacherImport($request), $request->file('import_file'));
         return $this->redirectWith(true, null, 'تم استيراد المعلمين بنجاح');
     }
 
@@ -242,13 +259,13 @@ class SettingController extends Controller
         foreach ($teachers as $teacher)
         {
             $user_lessons = UserLesson::query()->whereHas('user', function (Builder $query) use ($teacher){
-                $query->whereHas('teacher_student', function (Builder $query) use ($teacher){
+                $query->whereHas('teacherUser', function (Builder $query) use ($teacher){
                     $query->where('teacher_id', $teacher->id);
                 });
             })->get();
 
             $user_tests = UserTest::query()->whereHas('user', function (Builder $query) use ($teacher){
-                $query->whereHas('teacher_student', function (Builder $query) use ($teacher){
+                $query->whereHas('teacherUser', function (Builder $query) use ($teacher){
                     $query->where('teacher_id', $teacher->id);
                 });
             })->get();

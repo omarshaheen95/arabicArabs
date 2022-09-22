@@ -71,7 +71,7 @@ class StudentInformation implements WithMapping, Responsable, WithHeadings, From
             '123456',
             $student->mobile . ' ',
             optional($student->school)->name,
-            optional(optional($student->teacher_student)->teacher)->name,
+            optional(optional($student->teacherUser)->teacher)->name,
 
         ];
     }
@@ -82,12 +82,13 @@ class StudentInformation implements WithMapping, Responsable, WithHeadings, From
 
         $students = User::query()->latest()->search($this->request);
 
+
         if ($students->count() >= 1) {
             $this->length = $students->count() + 1;
         }
 
         $this->length = $students->count() + 1;
-        return $students->orderBy('grade', 'desc')->get();
+        return $students->orderBy('grade_id', 'desc')->get();
     }
 
     public function drawings()

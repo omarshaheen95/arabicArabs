@@ -41,9 +41,18 @@
                                 <h3 class="title">{{$package->name}}</h3>
                                 <h4 class="price">{{$package->price}}$</h4>
                                 <div class="price-day">
-                                    <div class="day">{{$package->days}} يوم </div>
+                                    <div class="day" dir="rtl" style="direction:rtl !important">
+                                        {{$package->days}}
+                                        @if($package->days < 10)
+                                            أيام
+                                        @else
+                                            يوم
+                                        @endif
+
+
+                                    </div>
                                     <button type="button" class="btn btn-theme"
-                                            href="/register?package_id={{$package->id}}"> إشتراك </button>
+                                            href="/register?package_id={{$package->id}}"> اشتراك </button>
                                 </div>
                             </a>
                         @endforeach

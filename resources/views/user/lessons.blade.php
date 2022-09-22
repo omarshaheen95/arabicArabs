@@ -35,9 +35,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title mb-4">
-                        <h3 class="title"> الصف : {{$grade->grade_number}} </h3>
+                        <h3 class="title"> الصف : {{$grade->grade_name}} </h3>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="{{route('levels')}}"> المستويات </a>
+                            <a class="breadcrumb-item" href="{{route('levels')}}"> المهارات والدروس </a>
                             <span class="breadcrumb-item active" aria-current="page">الدروس </span>
                         </nav>
                     </div>
@@ -49,25 +49,44 @@
                         <div class="col-lg-4 col-md-6 col-sm-6">
                             <div class="lesson-box">
                                 <div class="pic">
+                                    @if($lesson->lesson_type == 'writing' || $lesson->lesson_type == 'speaking')
+                                        <img src="{{asset('web_assets/img/'.$lesson->lesson_type . '.jpg')}}" alt="">
+                                        @else
                                     <img src="{{isset($lesson) ? $lesson->getFirstMediaUrl('imageLessons'):''}}" alt="">
+                                        @endif
                                 </div>
                                 <div class="content">
-                                    <div class="title"> {{$lesson->name}} </div>
-                                    <div class="title"> {{$lesson->section_type_name ? "درس $lesson->section_type_name":null }} </div>
+                                    <div class="title text-success"> {{$lesson->name}} </div>
+                                    <div class="title text-warning"> {{$lesson->section_type_name ? "الدَّرسُ  $lesson->section_type_name":null }} </div>
 
                                     <div class="option">
                                         @if($lesson->lesson_type != 'writing' && $lesson->lesson_type != 'speaking')
                                             <a href="{{route('lesson', [$lesson->id, 'learn'])}}"
-                                               class="btn btn-soft-success"> تعلم </a>
+                                               class="btn btn-soft-success">
+                                                @if($lesson->lesson_type == 'reading')
+                                                    اقرأ
+                                                @else
+                                                    استمع
+                                                @endif
+                                            </a>
 
                                         <a href="{{route('lesson', [$lesson->id, 'training'])}}"
-                                           class="btn btn-soft-danger"> تدرب </a>
+                                           class="btn btn-soft-danger">
+                                            تدرب
+                                        </a>
                                         @endif
                                         <a href="{{route('lesson', [$lesson->id, 'test'])}}"
                                            class="btn btn-soft-info">
+                                            @if($lesson->lesson_type == 'writing')
+                                                اكتب
+                                            @elseif($lesson->lesson_type == 'speaking')
+                                                تحدث
+                                            @else
+                                                اختبر نفسك
+                                            @endif
 
-                                            اختبر نفسك
-                                            @if($lesson->lesson_type != 'writing' && $lesson->lesson_type != 'speaking')
+
+                                                @if($lesson->lesson_type != 'writing' && $lesson->lesson_type != 'speaking')
                                                 @if($lesson->student_tested)- مكتمل   @endif
                                                 @else
                                                 @if($lesson->student_tested_task)- مكتمل   @endif

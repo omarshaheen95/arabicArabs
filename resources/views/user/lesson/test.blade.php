@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title mb-4">
-                        <h3 class="title"> الصف : {{$lesson->grade->grade_number}} </h3>
+                        <h3 class="title"> الصف : {{$lesson->grade_name}} </h3>
                         <h1 class="title"><p id="countdown" class="mb-0 text-danger" style="font-size:32px"></p></h1>
 
                         <nav class="breadcrumb">
@@ -42,8 +42,7 @@
                                         <div id="{{$counter}}" class="exercise-box @if($loop->first) active @endif question-item">
                                             <div class="exercise-box-header text-center">
                                                 <span class="number"> {{$counter}} : </span>
-                                                <span class="title">   أكد إذا كانت هذه الجمل صواب أم خطأ - Confirm whether these sentences
-                                                are true or false  </span>
+                                                <span class="title">ضع علامة (صح) أو (خطأ)</span>
                                             </div>
                                             <div class="exercise-box-body">
                                                 <div class="exercise-question">
@@ -160,7 +159,7 @@
                                             <div class="exercise-box-header text-center">
                                                 <span class="number"> {{$counter}} : </span>
                                                 <span
-                                                    class="title"> اختر الإجابة الصحيحة - Choose the correct answer</span>
+                                                    class="title"> اختر الإجابة الصحيحة</span>
                                             </div>
                                             <div class="exercise-box-body">
                                                 <div class="exercise-question">
@@ -225,8 +224,7 @@
                                         <div id="{{$counter}}" class="exercise-box @if($loop->first) active @endif question-item">
                                             <div class="exercise-box-header text-center">
                                                 <span class="number"> {{$counter}} : </span>
-                                                <span class="title"> اسحب الإجابات إلى الأماكن الصحيحة في الأسفل – Drag the answers in the
-                                        right places below </span>
+                                                <span class="title"> اسحب الإجابات إلى الأماكن الصحيحة في الأسفل </span>
                                             </div>
                                             <div class="exercise-box-body">
                                                 <div class="exercise-question">
@@ -370,7 +368,7 @@
                                         <div id="{{$counter}}" class="exercise-box @if($loop->first) active @endif question-item">
                                             <div class="exercise-box-header text-center">
                                                 <span class="number"> {{$counter}} : </span>
-                                                <span class="title"> اسحب الإجابات إلى الأماكن الصحيحة في الأسفل –  Drag and order the answers in the below box - اسحب ورتب الإجابات في
+                                                <span class="title"> اسحب ورتب الإجابات في
                                         المكان أدناه </span>
                                             </div>
                                             <div class="exercise-box-body">
@@ -501,15 +499,15 @@
                                         </div>
                                         <div class="modal-body text-center py-5"><h2 class="mb-0"
                                                                                      style="direction: ltr">
-                                                هل أنت متأكد من حفظ الإختبار </h2>
+                                                هل أنت متأكد من حفظ الاختبار </h2>
                                         </div>
                                         <div class="modal-footer border-0 justify-content-center">
                                             <button type="submit" class="btn btn-soft-danger me-3"
                                                     id="save_assessment"><span
-                                                    class="txt">  نعم إحفظ الإختبار</span></button>
+                                                    class="txt">  نعم احفظ الاختبار</span></button>
                                             <button type="button" class="btn btn-light border"
                                                     data-bs-dismiss="modal"><span
-                                                    class="txt"> أريد البفاء في الإختبار </span>
+                                                    class="txt"> أريد البقاء في الاختبار </span>
                                             </button>
                                         </div>
                                     </div>

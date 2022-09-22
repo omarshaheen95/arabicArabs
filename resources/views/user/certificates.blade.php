@@ -11,7 +11,7 @@
                     <div class="section-title">
                         <h1 class="title"> الشهادات </h1>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="/home"> الرئيسية </a>
+                            <a class="breadcrumb-item" href="/home"> الرئيسة </a>
                             <span class="breadcrumb-item active" aria-current="page"> الشهادات </span>
                         </nav>
                     </div>
@@ -36,7 +36,7 @@
                                         @if($student_test->total >= 50)
                                             <tr>
                                                 <td>{{$student_test->lesson->name}}</td>
-                                                <td>{{$student_test->lesson->grade->grade_number}}</td>
+                                                <td>الصف {{$student_test->lesson->grade_name}}</td>
                                                 <td>%{{$student_test->total}}</td>
                                                 <td>{{$student_test->created_at->format('Y-m-d H:i')}}</td>
                                                 <td>

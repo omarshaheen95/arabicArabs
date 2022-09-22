@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title mb-4">
-                        <h3 class="title"> الصف : {{$lesson->grade->grade_number}} </h3>
+                        <h3 class="title"> الصف : {{$lesson->grade_name}} </h3>
                         <nav class="breadcrumb">
                             <a class="breadcrumb-item" href="{{route('lessons', [$lesson->grade_id, $lesson->lesson_type])}}">
                                 {{$lesson->type_name}} </a>
@@ -47,8 +47,7 @@
                                      class="exercise-box @if($loop->first) active @endif question-item">
                                     <div class="exercise-box-header text-center">
                                         <span class="number"> {{$counter}} : </span>
-                                        <span class="title">   أكد إذا كانت هذه الجمل صواب أم خطأ - Confirm whether these sentences
-                                                are true or false  </span>
+                                        <span class="title">ضع علامة (صح) أو (خطأ)</span>
                                     </div>
                                     <div class="exercise-box-body">
                                         <div class="exercise-question">
@@ -154,7 +153,7 @@
                                 <div id="{{$counter}}" class="exercise-box question-item">
                                     <div class="exercise-box-header text-center">
                                         <span class="number"> {{$counter}} : </span>
-                                        <span class="title"> اختر الإجابة الصحيحة - Choose the correct answer</span>
+                                        <span class="title"> اختر الإجابة الصحيحة</span>
                                     </div>
                                     <div class="exercise-box-body">
                                         <div class="exercise-question">
@@ -223,8 +222,7 @@
                                 <div id="{{$counter}}" class="exercise-box question-item">
                                     <div class="exercise-box-header text-center">
                                         <span class="number"> {{$counter}} : </span>
-                                        <span class="title"> اسحب الإجابات إلى الأماكن الصحيحة في الأسفل – Drag the answers in the
-                                        right places below </span>
+                                        <span class="title"> اسحب الإجابات إلى الأماكن الصحيحة في الأسفل</span>
                                     </div>
                                     <div class="exercise-box-body">
                                         <div class="exercise-question">
@@ -377,7 +375,7 @@
                                 <div id="{{$counter}}" class="exercise-box question-item">
                                     <div class="exercise-box-header text-center">
                                         <span class="number"> {{$counter}} : </span>
-                                        <span class="title"> اسحب الإجابات إلى الأماكن الصحيحة في الأسفل –  Drag and order the answers in the below box - اسحب ورتب الإجابات في
+                                        <span class="title">  اسحب ورتب الإجابات في
                                         المكان أدناه </span>
                                     </div>
                                     <div class="exercise-box-body">

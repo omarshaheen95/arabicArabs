@@ -60,15 +60,15 @@
                             <a href="#main-menu" class="navbar-close" data-bs-toggle="collapse"> &times; </a>
                         </div>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link"
-                           @if(Request::is(''))
-                           href="#home"
-                           @else
-                           href="/#home"
-                            @endif
-                        >الرئيسية</a>
-                    </li>
+{{--                    <li class="nav-item active">--}}
+{{--                        <a class="nav-link"--}}
+{{--                           @if(Request::is(''))--}}
+{{--                           href="#home"--}}
+{{--                           @else--}}
+{{--                           href="/#home"--}}
+{{--                            @endif--}}
+{{--                        >الرئيسة</a>--}}
+{{--                    </li>--}}
 
 {{--                    <li class="nav-item">--}}
 {{--                        <a class="nav-link"--}}
@@ -148,7 +148,7 @@
                                @else
                                href="/#home"
                                 @endif
-                            >الرئيسية</a>
+                            >الرئيسة</a>
                         </li>
 
 {{--                        <li class="nav-item">--}}
@@ -187,10 +187,10 @@
                         <a href="mailto:Support@abt-assessments.com">
                             <span dir="ltr"> Support@abt-assessments.com</span>
                         </a>
-                        <span class="mx-4"> - </span>
-                        <a href="mailto:Support@Non-Arabs.com">
-                            <span dir="ltr"> Support@Non-Arabs.com</span>
-                        </a>
+{{--                        <span class="mx-4"> - </span>--}}
+{{--                        <a href="mailto:Support@Non-Arabs.com">--}}
+{{--                            <span dir="ltr"> Support@Non-Arabs.com</span>--}}
+{{--                        </a>--}}
                     </div>
                     <div class="footer-box">
                         <ul class="nav nav-social-media">
@@ -227,7 +227,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="footer-copyright">
-                    <div class="text">2017 - 2023 © <a href="#!">ABT assessments</a>, جميع الجقوق محفوظة</div>
+                    <div class="text">2017 - 2023 © <a href="#!">ABT assessments</a>, جميع الحقوق محفوظة</div>
 
                     <ul class="nav links">
                         <li class="nav-itme">

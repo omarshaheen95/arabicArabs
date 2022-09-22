@@ -13,7 +13,10 @@ function schoolSections($school = false)
     $sections = \App\Models\User::query()
         ->when($school, function (\Illuminate\Database\Eloquent\Builder $query) use($school){
             $query->where('school_id', $school);
-        })->whereNotNull('section')->select('section')->orderBy('section')->get()->pluck('section')->unique()->values();
+        })->whereNotNull('section')
+        ->select('section')
+        ->orderBy('section')
+        ->get()->pluck('section')->unique()->values();
     return $sections;
 }
 
@@ -22,13 +25,13 @@ function updateTeacherStatistics($teacher_id)
 {
     $teacher = \App\Models\Teacher::query()->findOrFail($teacher_id);
     $user_lessons = \App\Models\UserLesson::query()->whereHas('user', function (\Illuminate\Database\Eloquent\Builder $query) use ($teacher){
-        $query->whereHas('teacher_student', function (\Illuminate\Database\Eloquent\Builder $query) use ($teacher){
+        $query->whereHas('teacherUser', function (\Illuminate\Database\Eloquent\Builder $query) use ($teacher){
             $query->where('teacher_id', $teacher->id);
         });
     })->get();
 
     $user_tests = \App\Models\UserTest::query()->whereHas('user', function (\Illuminate\Database\Eloquent\Builder $query) use ($teacher){
-        $query->whereHas('teacher_student', function (\Illuminate\Database\Eloquent\Builder $query) use ($teacher){
+        $query->whereHas('teacherUser', function (\Illuminate\Database\Eloquent\Builder $query) use ($teacher){
             $query->where('teacher_id', $teacher->id);
         });
     })->get();
@@ -89,6 +92,7 @@ function t($key,$placeholder=[],$locale=null)
 
     app('translator')->addLines($messages, $locale);
     $langs = config('translatable.locales');
+    return $key;
     foreach ($langs as $lang) {
         $translation_file = base_path() . '/resources/lang/'.$lang.'/' . $group . '.php';
         $fh = fopen($translation_file, 'r+');

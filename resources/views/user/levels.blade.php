@@ -11,7 +11,7 @@
         <div class="container">
             @if(isset($grade) && !is_null($grade))
                 <h2>
-                    <span style="font-weight: bold; color: red">{{$grade->name}}:</span>
+                    <span style="font-weight: bold; color: red">الصف {{$grade->grade_name}}:</span>
                 </h2>
                 <div class="row justify-content-center">
                     @if(isset($grade) && $grade->reading)
@@ -24,7 +24,7 @@
                                     <div class="title"> مهارة القراءة</div>
                                     <a href="{{route('lessons', [$grade->id, 'reading'])}}"
                                        class="btn   btn-theme w-75 mb-4">
-                                        ابدأ الأن
+                                        دخول
                                     </a>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                                     <div class="title"> مهارة الكتابة</div>
                                     <a href="{{route('lessons', [$grade->id, 'writing'])}}"
                                        class="btn   btn-theme w-75 mb-4">
-                                        ابدأ الأن
+                                        دخول
                                     </a>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                                     <div class="title"> مهارة الاستماع</div>
                                     <a href="{{route('lessons', [$grade->id, 'listening'])}}"
                                        class="btn   btn-theme w-75 mb-4">
-                                        ابدأ الأن
+                                        دخول
                                     </a>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                                     <div class="title"> مهارة التحدث</div>
                                     <a href="{{route('lessons', [$grade->id, 'speaking'])}}"
                                        class="btn   btn-theme w-75 mb-4">
-                                        ابدأ الأن
+                                        دخول
                                     </a>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
             @endif
             @if(isset($alternate_grade) && !is_null($alternate_grade))
                 <h2>
-                    <span style="font-weight: bold; color: red">{{$alternate_grade->name}}:</span>
+                    <span style="font-weight: bold; color: red">الصف {{$alternate_grade->grade_name}}:</span>
                 </h2>
                 <div class="row justify-content-center">
                     @if(isset($alternate_grade) && $alternate_grade->reading)
@@ -95,7 +95,7 @@
                                     <div class="title"> مهارة القراءة</div>
                                     <a href="{{route('lessons', [$alternate_grade->id, 'reading'])}}"
                                        class="btn   btn-theme w-75 mb-4">
-                                        ابدأ الأن
+                                        دخول
                                     </a>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                     <div class="title"> مهارة الكتابة</div>
                                     <a href="{{route('lessons', [$alternate_grade->id, 'writing'])}}"
                                        class="btn   btn-theme w-75 mb-4">
-                                        ابدأ الأن
+                                        دخول
                                     </a>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
                                     <div class="title"> مهارة الاستماع</div>
                                     <a href="{{route('lessons', [$alternate_grade->id, 'listening'])}}"
                                        class="btn   btn-theme w-75 mb-4">
-                                        ابدأ الأن
+                                        دخول
                                     </a>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
                                     <div class="title"> مهارة التحدث</div>
                                     <a href="{{route('lessons', [$alternate_grade->id, 'speaking'])}}"
                                        class="btn   btn-theme w-75 mb-4">
-                                        ابدأ الأن
+                                        دخول
                                     </a>
                                 </div>
                             </div>

@@ -31,7 +31,7 @@
                                         <div id="{{$counter}}" class="exercise-box @if($loop->first) active @endif question-item">
                                             <div class="exercise-box-header text-center">
                                                 <span class="number"> {{$counter}} : </span>
-                                                <span class="title">   أكد إذا كانت هذه الجمل صواب أم خطأ</span>
+                                                <span class="title">ضع علامة (صح) أو (خطأ)</span>
                                             </div>
                                             <div class="exercise-box-body">
                                                 <div class="exercise-question">
@@ -455,15 +455,15 @@
                                         </div>
                                         <div class="modal-body text-center py-5"><h2 class="mb-0"
                                                                                      style="direction: ltr">
-                                                هل أنت متأكد من حفظ الإختبار </h2>
+                                                هل أنت متأكد من حفظ الاختبار </h2>
                                         </div>
                                         <div class="modal-footer border-0 justify-content-center">
                                             <button type="submit" class="btn btn-soft-danger me-3"
                                                     id="save_assessment"><span
-                                                    class="txt">  نعم إحفظ الإختبار</span></button>
+                                                    class="txt">  نعم احفظ الاختبار</span></button>
                                             <button type="button" class="btn btn-light border"
                                                     data-bs-dismiss="modal"><span
-                                                    class="txt"> أريد البفاء في الإختبار </span>
+                                                    class="txt"> أريد البقاء في الاختبار </span>
                                             </button>
                                         </div>
                                     </div>

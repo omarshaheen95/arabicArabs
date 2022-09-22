@@ -17,7 +17,7 @@
                         <h1 class="title"> {{$story->name}} </h1>
                         <h1 class="title"> <p id="countdown" class="mb-0 text-danger" style="font-size:32px"></p>  </h1>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="{{route('stories.list', $story->grade)}}"> المستويات </a>
+                            <a class="breadcrumb-item" href="{{route('stories.list', $story->grade)}}"> المهارات والدروس </a>
                             <span class="breadcrumb-item active" aria-current="page"> القصص </span>
                         </nav>
                     </div>

@@ -16,7 +16,7 @@ WhatsApp +972592554320
 @section('content')
     @push('breadcrumb')
         <li class="breadcrumb-item">
-            <a href="{{ route('manager.lesson.index') }}">{{$lesson->grade->grade_number}}</a>
+            <a href="{{ route('manager.lesson.index') }}">الصف {{$lesson->grade_name}}</a>
         </li>
         <li class="breadcrumb-item">
             {{ isset($title) ? $title:'' }}

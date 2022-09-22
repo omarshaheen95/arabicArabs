@@ -2,7 +2,7 @@
     Devomar095@gmail.com
     WhatsApp +972592554320
     --}}
-@extends('user.layout.container')
+@extends('user.layout.container_v2')
 @section('style')
     <link href="{{asset('intl-tel-input-master/build/css/intlTelInput.min.css')}}" rel="stylesheet">
     <style>
@@ -19,162 +19,157 @@
     @endif
 @endsection
 @section('content')
-    @push('breadcrumb')
-        <li class="breadcrumb-item">
-            {{ t('Profile') }}
-        </li>
-    @endpush
-    <section class="inner-page">
-        <section>
-            <div class="card mt-3 mb-4 border-0">
-                <div class="card-header bg-white text-center">
-                    <h4 style="font-weight: bold">
-                        المعلومات الشخصية - Personal information
-                    </h4>
+    <section class="login-home user-home lessons-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h1 class="title"> الملف الشخصي </h1>
+                        <nav class="breadcrumb">
+                            <a class="breadcrumb-item" href="/home"> الرئيسة </a>
+                            <span class="breadcrumb-item active" aria-current="page"> الملف الشخصي </span>
+                        </nav>
+                    </div>
                 </div>
-                <form enctype="multipart/form-data" id="form_information" action="{{ route('profile_update') }}"
-                      method="post">
-                    @csrf
-                    <div class="card-body pb-0">
-
-                        <div class="form-group row">
-                            <label class="col-xl-1"></label>
-                            <label class="col-xl-3 col-lg-3 col-form-label"></label>
-                            <div class="col-xl-6">
-                                <div class="upload-btn-wrapper">
-                                    <button class="btn btn-danger">{{ t('Upload Image') }}</button>
-                                    <input name="image" class="imgInp" id="imgInp" type="file"/>
-                                </div>
-                                <img id="blah" @if(!isset($user) || is_null($user->image)) style="display:none"
-                                     @endif src="{{ isset($user) && !is_null($user->image)  ? $user->image:'' }}"
-                                     width="150" alt="No file chosen"/>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-xl-1"></label>
-                            <label class="col-xl-3 col-lg-3 col-form-label">Name</label>
-                            <div class="col-xl-6">
-                                <input class="form-control" name="name" type="text"
-                                       value="{{ isset($user->name) ? $user->name : old("name") }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-xl-1"></label>
-                            <label class="col-xl-3 col-lg-3 col-form-label">Email</label>
-                            <div class="col-xl-6">
-                                <input class="form-control" name="email" type="text"
-                                       value="{{ isset($user->email) ? $user->email : old("email") }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-xl-1"></label>
-                            <label class="col-xl-3 col-lg-3 col-form-label">Mobile</label>
-                            <div class="col-xl-6">
-                                <input class="form-control" id="Phone" name="phone" type="text"
-                                       value="{{ isset($user) ? $user->mobile : old('mobile') }}">
-                                <input type="hidden" id="country-code" name="country_code"
-                                       value="{{ isset($user) ? $user->country_code : old('country_code') }}">
-                                <input type="hidden" id="short-country" name="short_country"
-                                       value="{{ isset($user) ? $user->short_country : old('short_country') }}">
-                                <input type="hidden" placeholder="{{t('Mobile')}}" name="mobile" id="mobileHidden"
-                                       value="{{ isset($user) ? $user->mobile : old('mobile') }}"
-                                       class="form-control form-control-lg">
-                                <span id="valid-msg" class="hide">✓ {{ t('Valid') }}</span>
-                                <span id="error-msg" class="hide"></span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-xl-1"></label>
-                            <label class="col-xl-3 col-lg-3 col-form-label">School</label>
-                            <div class="col-xl-6">
-                                <select class="form-control" name="school_id">
-                                    <option value="" selected disabled>{{t('Select School')}}</option>
-                                    @foreach($schools as $school)
-                                        <option
-                                            value="{{$school->id}}" {{isset($user) && $user->school_id == $school->id ? 'selected':''}}>{{$school->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-xl-1"></label>
-                            <label class="col-xl-3 col-lg-3 col-form-label">Years of learning Arabic</label>
-                            <div class="col-xl-6">
-                                <select class="form-control" name="year_learning">
-                                    <option value="" selected>Select Year</option>
-                                    <option value="1" {{isset($user) && $user->year_learning == 1 ? 'selected':''}}>1</option>
-                                    <option value="2" {{isset($user) && $user->year_learning == 2 ? 'selected':''}}>2</option>
-                                    <option value="3" {{isset($user) && $user->year_learning == 3 ? 'selected':''}}>3</option>
-                                    <option value="4" {{isset($user) && $user->year_learning == 4 ? 'selected':''}}>4</option>
-                                    <option value="5" {{isset($user) && $user->year_learning == 5 ? 'selected':''}}>5</option>
-                                    <option value="6" {{isset($user) && $user->year_learning == 6 ? 'selected':''}}>6</option>
-                                    <option value="7" {{isset($user) && $user->year_learning == 7 ? 'selected':''}}>7</option>
-                                    <option value="8" {{isset($user) && $user->year_learning == 8 ? 'selected':''}}>8</option>
-                                    <option value="9" {{isset($user) && $user->year_learning == 9 ? 'selected':''}}>9</option>
-                                    <option value="10" {{isset($user) && $user->year_learning == 10 ? 'selected':''}}>10</option>
-                                    <option value="11" {{isset($user) && $user->year_learning == 11 ? 'selected':''}}>11</option>
-                                    <option value="12" {{isset($user) && $user->year_learning == 12 ? 'selected':''}}>12</option>
-                                </select>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="mt-4 card-footer bg-white text-left">
-                        <button type="submit" class="btn btn-danger">{{t('Complete & save')}}</button>
-                    </div>
-                </form>
             </div>
-        </section>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="profile-card form form-login">
+                        <div class="profile-header">
+                            <div class="title"> معلومات الحساب </div>
+                        </div>
+                        <form action="{{ route('profile_update') }}" enctype="multipart/form-data" method="post" class="needs-validation" novalidate>
+                            @csrf
+                            <div class="form-group">
+                                <label for="name" class="form-label"> الاسم كاملا </label>
+                                <div class="form-control-icon">
+                                    <div class="icon">
+                                        <img src="{{asset('web_assets/img/username.svg')}}" alt="">
+                                    </div>
+                                    <input type="text" name="name" id="name" value="{{ isset($user->name) ? $user->name : old("name") }}" class="form-control" placeholder=""
+                                           required autocomplete="off" autofocus>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="mobile-1" class="form-label"> الموبايل </label>
+                                <div class="form-control-icon phone">
+                                    <div class="icon">
+                                        <img src="{{asset('web_assets/img/phone.svg')}}" alt="">
+                                    </div>
+                                    <input type="tel" class="form-control phone-input" value="{{ isset($user) ? $user->mobile : old('mobile') }}" name="mobile" id="mobile-1" data-country="sa" onkeyup="getPhoneKey(this.id)" required>
+                                    <input type="hidden" class="form-control" value="{{ isset($user) ? $user->country_code : old('country_code') }}"  id="mobile-1-code" name="country_code">
+                                    <input type="hidden" class="form-control" value="{{ isset($user) ? $user->short_country : old('short_country') }}"  id="mobile-1-country" name="short_country">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label"> البريد الإلكتروني </label>
+                                <div class="form-control-icon">
+                                    <div class="icon">
+                                        <img src="{{asset('web_assets/img/mail.svg')}}" alt="">
+                                    </div>
+                                    <input type="email" name="email" id="email" class="form-control" placeholder=" ex: example@domain.com" value="{{ isset($user->email) ? $user->email : old("email") }}"
+                                           required autocomplete="off" autofocus pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="school_id" class="form-label"> المدرسة </label>
+                                <div class="form-control-icon">
+                                    <div class="icon">
+                                        <img src="{{asset('web_assets/img/school.svg')}}" alt="">
+                                    </div>
+                                    <select name="school_id" id="school_id" class="form-control form-select" required>
+                                        <option value="" selected disabled> Select School </option>
+                                        @foreach($schools as $school)
+                                            <option
+                                                value="{{$school->id}}" {{isset($user) && $user->school_id == $school->id ? 'selected':''}}>{{$school->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+{{--                            <div class="form-group">--}}
+{{--                                <label for="year_learning" class="form-label"> الصف </label>--}}
+{{--                                <div class="form-control-icon">--}}
+{{--                                    <div class="icon">--}}
+{{--                                        <img src="{{asset('web_assets/img/class.svg')}}" alt="">--}}
+{{--                                    </div>--}}
+{{--                                    <select name="year_learning" id="year_learning" class="form-control form-select" required>--}}
+{{--                                        <option value="" selected disabled> Select Grade </option>--}}
+{{--                                        <option value="1" {{isset($user) && $user->year_learning == 1 ? 'selected':''}}>1</option>--}}
+{{--                                        <option value="2" {{isset($user) && $user->year_learning == 2 ? 'selected':''}}>2</option>--}}
+{{--                                        <option value="3" {{isset($user) && $user->year_learning == 3 ? 'selected':''}}>3</option>--}}
+{{--                                        <option value="4" {{isset($user) && $user->year_learning == 4 ? 'selected':''}}>4</option>--}}
+{{--                                        <option value="5" {{isset($user) && $user->year_learning == 5 ? 'selected':''}}>5</option>--}}
+{{--                                        <option value="6" {{isset($user) && $user->year_learning == 6 ? 'selected':''}}>6</option>--}}
+{{--                                        <option value="7" {{isset($user) && $user->year_learning == 7 ? 'selected':''}}>7</option>--}}
+{{--                                        <option value="8" {{isset($user) && $user->year_learning == 8 ? 'selected':''}}>8</option>--}}
+{{--                                        <option value="9" {{isset($user) && $user->year_learning == 9 ? 'selected':''}}>9</option>--}}
+{{--                                        <option value="10" {{isset($user) && $user->year_learning == 10 ? 'selected':''}}>10</option>--}}
+{{--                                        <option value="11" {{isset($user) && $user->year_learning == 11 ? 'selected':''}}>11</option>--}}
+{{--                                        <option value="12" {{isset($user) && $user->year_learning == 12 ? 'selected':''}}>12</option>--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-theme btn-submit">
+                                    <span class="spinner-border d-none"></span>
+                                    <span class="text"> حفظ </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="profile-card form form-login">
+                        <div class="profile-header">
+                            <div class="title"> تغيير كلمة المرور </div>
+                        </div>
+                        <form id="form_password" action="{{ route('update_password') }}" method="post" class="needs-validation" novalidate>
+                            @csrf
+                            {{--                            <div class="form-group">--}}
+                            {{--                                <label for="old_password" class="form-label"> كلمة المرور الحالية </label>--}}
+                            {{--                                <div class="form-control-icon">--}}
+                            {{--                                    <div class="icon">--}}
+                            {{--                                        <img src="{{asset('web_assets/img/password.svg')}}" alt="">--}}
+                            {{--                                    </div>--}}
+                            {{--                                    <input type="password" name="old_password" id="old_password" class="form-control" placeholder=" ************"--}}
+                            {{--                                           required autocomplete="off">--}}
+                            {{--                                </div>--}}
+                            {{--                            </div>--}}
+                            <div class="form-group">
+                                <label for="password" class="form-label"> كلمة المرور </label>
+                                <div class="form-control-icon">
+                                    <div class="icon">
+                                        <img src="{{asset('web_assets/img/password.svg')}}" alt="">
+                                    </div>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder=" ************"
+                                           required autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password_confirmation" class="form-label">تأكيد كلمة المرور </label>
+                                <div class="form-control-icon">
+                                    <div class="icon">
+                                        <img src="{{asset('web_assets/img/password.svg')}}" alt="">
+                                    </div>
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder=" ************"
+                                           required autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-theme btn-submit">
+                                    <span class="spinner-border d-none"></span>
+                                    <span class="text"> حفظ البيانات </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
+
 @endsection
 
 @section('script')
-    <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! $validator->selector('#form_information') !!}
-    <script src="{{asset('intl-tel-input-master/build/js/intlTelInput.min.js')}}"></script>
-    <script type="text/javascript">
-        var input = document.querySelector("#Phone");
-        window.intlTelInput(input, {
-            formatOnDisplay: false,
-        });
-        errorMsg = document.querySelector("#error-msg"),
-            validMsg = document.querySelector("#valid-msg");
-        countryCode = document.querySelector("#country-code");
-        shortCountry = document.querySelector("#short-country");
-
-        // here, the index maps to the error code returned from getValidationError - see readme
-        var errorMap = ["{{ t('Invalid number') }}", "{{ t('Invalid country code') }}", "{{ t('Too short') }}", "{{ t('Too long') }}", "{{ t('Invalid number') }}"];
-
-        // initialise plugin
-        var iti = window.intlTelInput(input, {
-            utilsScript: "{{ asset('intl-tel-input-master/build/js/utils.js?1562189064761')}}"
-        });
-
-
-        var reset = function () {
-            input.classList.remove("error");
-            errorMsg.innerHTML = "";
-            errorMsg.classList.add("hide");
-            validMsg.classList.add("hide");
-            if (input.value.trim()) {
-                if (iti.isValidNumber()) {
-                    countryCode.value = iti.getSelectedCountryData().dialCode;
-                    shortCountry.value = iti.getSelectedCountryData().iso2;
-                    validMsg.classList.remove("hidden");
-                } else {
-                    input.classList.add("error");
-                    var errorCode = iti.getValidationError();
-                    errorMsg.innerHTML = errorMap[errorCode];
-                    errorMsg.classList.remove("hidden");
-                }
-            }
-        };
-
-        // on blur: validate
-        input.addEventListener('blur', reset);
-
-        // on keyup / change flag: reset
-        input.addEventListener('change', reset);
-        input.addEventListener('keyup', reset);
-    </script>
+    {{--    <script src="{{asset('intl-tel-input-master/build/js/intlTelInput.min.js')}}"></script>--}}
 @endsection

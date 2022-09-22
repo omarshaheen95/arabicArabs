@@ -180,45 +180,22 @@ class LessonController extends Controller
 
 
         $test->update([
+            'approved' => 1,
             'total' => $total,
             'start_at' => $request->get('start_at', now()),
             'end_at' => now(),
             'status' => $total >= $mark ? 'Pass':'Fail',
         ]);
 
-//        $student_tests_query = UserTest::query()->where('total', '>=', 40)
-//            ->where('total', '<=', $total)
-//            ->where('lesson_id', $id);
-//        $student_tests = $student_tests_query->get();
-//        if ($student_tests->count() >= 0 && $total >= 40)
-//        {
-//            Log::alert($student_tests->count());
-//            UserTest::query()->where('total', '>=', 40)
-//                ->where('total', '<=', $total)
-//                ->where('lesson_id', $id)->update([
-//                'approved' => 0,
-//            ]);
-//            $student_tests = UserTest::query()->where('total', '>=', 40)
-//                ->where('total', '>', $total)
-//                ->where('lesson_id', $id)->get();
-//            if ($student_tests->count() == 0)
-//            {
-//                $test->update([
-//                    'approved' => 1,
-//                ]);
-//            }
-//        }else if($total >= 40){
-//            $test->update([
-//                'approved' => 1,
-//            ]);
-//        }
 
 
 
-        $student_tests = UserTest::query()->where('total', '>=', $mark)
+        $student_tests = UserTest::query()
+//            ->where('total', '>=', $mark)
             ->where('user_id',  $student->id)
-            ->where('total', '<=', $total)
-            ->where('lesson_id', $id)->orderByDesc('total')->get();
+//            ->where('total', '<=', $total)
+            ->where('lesson_id', $id)
+            ->orderByDesc('total')->get();
 
 
 
@@ -247,9 +224,9 @@ class LessonController extends Controller
             'end_at' => now(),
         ]);
 
-        if ($test->user->teacher_student)
+        if ($test->user->teacherUser)
         {
-            updateTeacherStatistics($test->user->teacher_student->teacher_id);
+            updateTeacherStatistics($test->user->teacherUser->teacher_id);
         }
 
         $user_assignment = UserAssignment::query()->where('user_id', $student->id)
@@ -323,9 +300,9 @@ class LessonController extends Controller
             'end_at' => now(),
         ]);
 
-        if ($test->user->teacher_student)
+        if ($test->user->teacherUser)
         {
-            updateTeacherStatistics($test->user->teacher_student->teacher_id);
+            updateTeacherStatistics($test->user->teacherUser->teacher_id);
         }
 
         $user_assignment = UserAssignment::query()->where('user_id', $student->id)
@@ -414,9 +391,9 @@ class LessonController extends Controller
             'end_at' => now(),
         ]);
 
-        if ($test->user->teacher_student)
+        if ($test->user->teacherUser)
         {
-            updateTeacherStatistics($test->user->teacher_student->teacher_id);
+            updateTeacherStatistics($test->user->teacherUser->teacher_id);
         }
 
         $user_assignment = UserAssignment::query()->where('user_id', $student->id)

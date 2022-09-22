@@ -71,7 +71,7 @@ class StoryController extends Controller
     {
         $title = "تعديل القصة";
         $story = Story::query()->findOrFail($id);
-        dd($story->questions()->sum('mark'));
+//        dd($story->questions()->sum('mark'));
         return view('manager.story.edit', compact('title',  'story'));
     }
 

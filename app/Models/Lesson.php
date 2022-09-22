@@ -30,15 +30,15 @@ class Lesson extends Model implements HasMedia
     {
         switch ($this->lesson_type) {
             case 'reading':
-                return 'قراءة';
+                return 'القراءة';
             case 'writing':
-                return 'كتابة';
+                return 'الكتابة';
             case 'listening':
-                return 'استماع';
+                return 'الاستماع';
             case 'speaking':
-                return 'تحدث';
+                return 'التحدث';
             case 'grammar':
-                return 'قواعد';
+                return 'القواعد';
             default:
                 return 'غير مسجل';
         }
@@ -48,9 +48,9 @@ class Lesson extends Model implements HasMedia
     {
         switch ($this->section_type) {
             case 'informative':
-                return 'معلوماتي';
+                return 'المعلوماتي';
             case 'literary':
-                return 'أدبي';
+                return 'الأدبي';
             default:
                 return 'عام';
         }
@@ -116,10 +116,10 @@ class Lesson extends Model implements HasMedia
     {
         if ($this->section_type == 'informative')
         {
-            return 'معلوماتي';
+            return 'المعلوماتي';
         }elseif ($this->section_type == 'literary')
         {
-            return 'أدبي';
+            return 'الأدبي';
         }else{
             return null;
         }
@@ -145,6 +145,39 @@ class Lesson extends Model implements HasMedia
             return true;
         }
         return false;
+    }
+
+    public function getGradeNameAttribute()
+    {
+        switch($this->grade_id)
+        {
+            case 1:
+                return "الأول";
+            case 2:
+                return "الثاني";
+            case 3:
+                return "الثالث";
+            case 4:
+                return "الرابع";
+            case 5:
+                return "الخامس";
+            case 6:
+                return "السادس";
+            case 7:
+                return "السابع";
+            case 8:
+                return "الثامن";
+            case 9:
+                return "التاسع";
+            case 10:
+                return "العاشر";
+            case 11:
+                return "الحادي عشر";
+            case 12:
+                return "الثاني عشر";
+            default:
+                return '';
+        }
     }
 
 

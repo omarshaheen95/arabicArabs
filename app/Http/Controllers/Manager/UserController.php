@@ -98,7 +98,7 @@ class UserController extends Controller
                     return optional($row->school)->name;
                 })
                 ->addColumn('active_to', function ($row) {
-                    return is_null($row->active_to) ? 'unpaid' : optional($row->active_to)->format('Y-m-d');
+                    return is_null($row->active_to) ? 'غير مدفوع' : optional($row->active_to)->format('Y-m-d');
                 })
                 ->addColumn('package', function ($row) {
                     return optional($row->package)->name;
@@ -268,8 +268,8 @@ class UserController extends Controller
     {
         $title = "مراجعة سجل الطالب";
         $user = User::query()->findOrFail($id);
-        if ($user->teacher_student && $user->teacher_student->teacher) {
-            $teacher = $user->teacher_student->teacher;
+        if ($user->teacherUser && $user->teacherUser->teacher) {
+            $teacher = $user->teacherUser->teacher;
         } else {
             $teacher = false;
         }
@@ -328,8 +328,8 @@ class UserController extends Controller
     {
         $title = "تقرير الطالب";
         $student = User::query()->findOrFail($id);
-        if ($student->teacher_student && $student->teacher_student->teacher) {
-            $teacher = $student->teacher_student->teacher;
+        if ($student->teacherUser && $student->teacherUser->teacher) {
+            $teacher = $student->teacherUser->teacher;
         } else {
             $teacher = null;
         }
@@ -420,8 +420,8 @@ class UserController extends Controller
 
 
 
-        $students = User::query()->search($request)
-            ->orderBy('grade')->get();
+        $students = User::query()->with(['school', 'teacherUser'])->search($request)
+            ->orderBy('grade_id')->get();
 
         $students = $students->chunk(6);
         $school = School::query()->find($request->get('school_id'));

@@ -56,7 +56,7 @@
                 </div>
                 <div class="content">
                     <h3 class="username"> {{auth()->user()->name}} </h3>
-                    <p class="info"> الصف : {{Auth::user()->grade->grade_number}} </p>
+                    <p class="info"> الصف : {{Auth::user()->grade_name}} </p>
                 </div>
             </div>
             <div class="user-box">
@@ -104,7 +104,7 @@
                     $userAssignmentsCount += $userStoryAssignmentsCount;
                     @endphp
                     <li class="nav-item {{Request::is('/') || Request()->is('home') ? 'active':''}}">
-                        <a class="nav-link" href="/home">الرئيسية</a>
+                        <a class="nav-link" href="/home">الرئيسة</a>
                     </li>
                     <li class="nav-item dropdown {{Request::is('certificates') || Request::is('story_certificates') ? 'active':''}}">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> الشهادات </a>
@@ -176,10 +176,10 @@
                         <a href="mailto:Support@abt-assessments.com">
                             <span dir="ltr"> Support@abt-assessments.com</span>
                         </a>
-                        <span class="mx-4"> - </span>
-                        <a href="mailto:Support@Non-Arabs.com">
-                            <span dir="ltr"> Support@Non-Arabs.com</span>
-                        </a>
+{{--                        <span class="mx-4"> - </span>--}}
+{{--                        <a href="mailto:Support@Non-Arabs.com">--}}
+{{--                            <span dir="ltr"> Support@Non-Arabs.com</span>--}}
+{{--                        </a>--}}
                     </div>
                     <div class="footer-box">
                         <ul class="nav nav-social-media">
@@ -309,9 +309,9 @@
             event.preventDefault();
         }
     });
-    // document.addEventListener('contextmenu', function (e) {
-    //     e.preventDefault();
-    // });
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
 
 
     Push.Permission.get();

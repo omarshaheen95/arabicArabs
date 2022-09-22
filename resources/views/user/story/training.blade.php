@@ -78,7 +78,7 @@
                                             </g>
                                         </svg>
                                     </span>
-                            <span class="title">  إقرأ بصوتٍ عالٍ</span>
+                            <span class="title">  اقرأ بصوتٍ عالٍ</span>
                         </div>
                         <div class="exercise-box-body">
                             <div class="exercise-question">

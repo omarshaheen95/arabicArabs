@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Grade;
 use App\Models\Lesson;
 use App\Models\Package;
 use App\Models\Payment;
@@ -16,14 +17,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Proengsoft\JsValidation\Facades\JsValidatorFacade as JsValidator;
+use Propaganistas\LaravelPhone\PhoneNumber;
 use Ramsey\Uuid\Uuid;
 
 class UserController extends Controller
 {
     public function packageUpgrade()
     {
-        $title = t('Package upgrade');
-        $grades = [15, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        $title = "ترقية الإشتراك";
+        $grades = Grade::query()->get();
         $user = Auth::guard('web')->user();
         $packages = Package::query()->where('price', '>', 0)->get();
         return view('user.settings.packages', compact('title', 'grades', 'user', 'packages'));
@@ -65,9 +67,9 @@ class UserController extends Controller
 
             return redirect()->route('home');
         }else{
-            if ($request->get('grade', false))
+            if ($request->get('grade_id', false))
             {
-                return redirect()->route('subscribe_payment')->with('grade', $request->get('grade'));
+                return redirect()->route('subscribe_payment')->with('grade_id', $request->get('grade_id'));
             }else{
                 return redirect()->route('subscribe_payment');
             }
@@ -80,7 +82,7 @@ class UserController extends Controller
         $user = Auth::guard('web')->user();
         if (!$user->package)
         {
-            return redirect('home')->with('message', 'Subscribe package first')->with('m-class', 'error');
+            return redirect('home')->with('message', "يرجى اختيار باقة أولا")->with('m-class', 'error');
         }
         $total = $user->package->price;
         $array = array();
@@ -158,7 +160,7 @@ class UserController extends Controller
         $package = Package::query()->findOrFail($request->get('package_id'));
         $total = $package->price;
         $array = array();
-        $array["metadata"]["grade"] = (int) $request->get('grade');
+        $array["metadata"]["grade_id"] = (int) $request->get('grade_id');
         $array["metadata"]["user_id"] = $user->id;
         $array["metadata"]["package_id"] = $package->id;
 
@@ -274,11 +276,11 @@ class UserController extends Controller
                         }
 
 
-                        if (isset($parms_array['metadata']['grade']))
+                        if (isset($parms_array['metadata']['grade_id']))
                         {
-                            $grade_id = $parms_array['metadata']['grade'];
+                            $grade_id = $parms_array['metadata']['grade_id'];
                         }else{
-                            $grade_id = $user->grade;
+                            $grade_id = $user->grade_id;
                         }
 
 
@@ -292,7 +294,7 @@ class UserController extends Controller
                             {
                                 $user->update([
                                     'package_id' => $package->id,
-                                    'grade' => $grade_id,
+                                    'grade_id' => $grade_id,
                                     'active_from' => Carbon::now(),
                                     'active_to' => Carbon::now()->addDays($package->days),
                                 ]);
@@ -349,17 +351,19 @@ class UserController extends Controller
         $this->validationRules["email"] = "required|unique:users,email,$user->id,id,deleted_at,NULL";
         $this->validationRules["country_code"] = 'required';
         $this->validationRules["short_country"] = 'required';
-        $this->validationRules["phone"] = ['required'];
-        $this->validationRules["mobile"] = ['required', 'phone:'.request()->get('short_country')];
+        $this->validationRules["mobile"] = ['required'];
+//        $this->validationRules["mobile"] = ['required', 'phone:'.request()->get('short_country')];
         $this->validationRules["year_learning"] = 'nullable';
         $request->validate($this->validationRules);
         $data = $request->only(['image','name','email','mobile', 'year_learning']);
+        $data['mobile'] = PhoneNumber::make($request->get('mobile'))->ofCountry($request->get('short_country'));
+
         if ($request->hasFile('image'))
         {
             $data['image'] = $this->uploadImage($request->file('image'), 'users');
         }
         $user->update($data);
-        return $this->redirectWith(true, null, 'Successfully update personal information');
+        return $this->redirectWith(true, null, 'تم تحديث البيانات بنجاح');
 
     }
 
@@ -381,7 +385,7 @@ class UserController extends Controller
 //        if(Hash::check($request->get('current_password'), $user->password)) {
             $data['password'] = bcrypt($request->get('password'));
             $user->update($data);
-            return $this->redirectWith(true, null, 'Password successfully updated');
+            return $this->redirectWith(true, null, 'تم تحديث كلمة المرور بنجاح');
 //        }else{
 //            return $this->redirectWith(true, null, 'Current Password Invalid', 'error');
 //        }
@@ -467,9 +471,9 @@ class UserController extends Controller
 
         $user_lesson->save();
 
-        if ($user_lesson->user->teacher_student)
+        if ($user_lesson->user->teacherUser)
         {
-            updateTeacherStatistics($user_lesson->user->teacher_student->teacher_id);
+            updateTeacherStatistics($user_lesson->user->teacherUser->teacher_id);
         }
 
         $user_assignment = UserAssignment::query()->where('user_id', $user->id)

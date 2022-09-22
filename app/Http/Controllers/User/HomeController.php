@@ -24,7 +24,7 @@ class HomeController extends Controller
 {
     public function home()
     {
-        $title = "الصفحة الرئيسية";
+        $title = "الصفحة الرئيسة";
         return view('user.home', compact('title'));
     }
 
@@ -32,7 +32,7 @@ class HomeController extends Controller
     {
 //        Log::critical(date('Y-m-d'));
 //        Log::critical(Carbon::createFromFormat('Y-m-d', '2021-07-01'));
-        $title = 'المستويات والمهارات';
+        $title = 'المهارات والدروس';
         $grade = Grade::query()->where('id', Auth::user()->grade_id)->first();
 
         $alternate_grade = Grade::query()->where('id', Auth::user()->alternate_grade_id)->first();

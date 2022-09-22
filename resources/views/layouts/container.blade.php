@@ -70,7 +70,7 @@
                            @else
                            href="/#page-top"
                             @endif
-                        >الرئيسية</a></li>
+                        >الرئيسة</a></li>
                     <li><a class="nav-link js-scroll-trigger"
                            @if(Request::is(''))
                            href="#pricing"
