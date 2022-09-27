@@ -40,7 +40,7 @@ class WebController extends Controller
     {
         $data = [];
 
-        if($request->has('q')){
+        if($request->has('q') && $request->get('q', false)){
             $search = $request->q;
             $data = School::query()->select("id","name")
                 ->where('name','LIKE',"%$search%")
