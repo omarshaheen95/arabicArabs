@@ -177,13 +177,6 @@
                                 <span class="kt-menu__link-text">اختبارات الطلاب</span>
                             </a>
                         </li>
-                        <li class="kt-menu__item  @if(Request::is('teacher/students_works*') ) kt-menu__item--active @endif"
-                            aria-haspopup="true">
-                            <a href="{{ route('teacher.students_works.index') }}" class="kt-menu__link ">
-                                <i class="kt-menu__link-icon flaticon2-group"></i>
-                                <span class="kt-menu__link-text">تصحيح واجبات الطلاب</span>
-                            </a>
-                        </li>
                         <li class="kt-menu__item  @if(Request::is('teacher/students_assignment*') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
                             <a href="{{ route('teacher.student_assignments.index') }}" class="kt-menu__link ">
@@ -217,62 +210,62 @@
                                 <ul class="kt-menu__subnav">
                                     <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">المناهج والصفوف</span></span></li>
 
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 1)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 1)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف الأول</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 2)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 2)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف الثاني</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 3)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 3)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف الثالث</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 4)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 4)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف الرابع</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 5)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 5)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف الخامس</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 6)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 6)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف السادس</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 7)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 7)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف السابع</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 8)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 8)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف الثامن</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 9)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 9)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف التاسع</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 10)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 10)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف العاشر</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 11)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 11)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف الحادي عشر</span>
                                         </a>
                                     </li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.levels', 12)}}" class="kt-menu__link ">
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 12)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف الثاني عشر</span>
                                         </a>
@@ -309,50 +302,6 @@
 {{--                                </a>--}}
 {{--                            </li>--}}
 
-                            <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel @if(Request::is('teacher/settings*') || Request::is('teacher/city*') || Request::is('teacher/language*') || Request::is('teacher/country*') || Request::is('teacher/brand*') || Request::is('teacher/teacher*')) kt-menu__item--active @endif @if(Request::is('teacher/roles*') ) kt-menu__item--active @endif @if(Request::is('teacher/page*') ) kt-menu__item--active @endif"
-                                data-ktmenu-submenu-toggle="click" aria-haspopup="true">
-                                <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-                                    <span class="kt-menu__link-text">الإعدادات</span>
-                                    <i class="kt-menu__hor-arrow la la-angle-down"></i>
-                                    <i class="kt-menu__ver-arrow la la-angle-right"></i>
-                                </a>
-                                <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
-                                    <ul class="kt-menu__subnav">
-                                        <li class="kt-menu__item" aria-haspopup="true">
-                                            <a href="" class="kt-menu__link">
-                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                                    <span></span>
-                                                </i>
-                                                <span class="kt-menu__link-text">الإعدادات العامة</span>
-                                            </a>
-                                        </li>
-{{--                                        <li class="kt-menu__item" aria-haspopup="true">--}}
-{{--                                            <a href="{{route('teacher.teacher.index')}}" class="kt-menu__link">--}}
-{{--                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">--}}
-{{--                                                    <span></span>--}}
-{{--                                                </i>--}}
-{{--                                                <span class="kt-menu__link-text">المداراء</span>--}}
-{{--                                            </a>--}}
-{{--                                        </li>--}}
-{{--                                        <li class="kt-menu__item" aria-haspopup="true">--}}
-{{--                                            <a href="{{route('teacher.roles.index')}}" class="kt-menu__link">--}}
-{{--                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">--}}
-{{--                                                    <span></span>--}}
-{{--                                                </i>--}}
-{{--                                                <span class="kt-menu__link-text">الأدوار</span>--}}
-{{--                                            </a>--}}
-{{--                                        </li>--}}
-                                        <li class="kt-menu__item" aria-haspopup="true">
-                                            <a href="" class="kt-menu__link">
-                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                                    <span></span>
-                                                </i>
-                                                <span class="kt-menu__link-text">الصفحات</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
 
 
                         </ul>
@@ -455,7 +404,7 @@
                             <div class="kt-notification">
 {{--                                {{route('teacher.profile.update')}}--}}
 {{--                                {{route('teacher.password.update')}}--}}
-                                <a href="" class="kt-notification__item">
+                                <a href="{{route('teacher.profile.show')}}" class="kt-notification__item">
                                     <div class="kt-notification__item-icon">
                                         <i class="flaticon2-calendar-3 kt-font-success"></i>
                                     </div>
@@ -464,11 +413,11 @@
                                             الملف الشخصي
                                         </div>
                                         <div class="kt-notification__item-time">
-                                            إعدادات الملف الشخصي
+                                           إعدادات  الملف الشخصي
                                         </div>
                                     </div>
                                 </a>
-                                <a href="" class="kt-notification__item">
+                                <a href="{{route('teacher.password.show')}}" class="kt-notification__item">
                                     <div class="kt-notification__item-icon">
                                         <i class="flaticon2-calendar-3 kt-font-success"></i>
                                     </div>
@@ -477,18 +426,17 @@
                                             كلمة المرور
                                         </div>
                                         <div class="kt-notification__item-time">
-                                            تغيير كلمة المرور
+                                            تغيير  كلمة المرور
                                         </div>
                                     </div>
-                                </a>
-                                <div class="kt-notification__custom kt-space-between">
+                                </a>                                <div class="kt-notification__custom kt-space-between">
                                     <form id="logout-form" action="{{ url("/teacher/logout") }}" method="POST"
                                           style="display: none;">
                                         {{ csrf_field() }}
                                     </form>
                                     <a href="{{ url("/teacher/logout") }}" onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();"
-                                       class="btn btn-label btn-label-brand btn-sm btn-bold">تسجيل الخروج</a>
+                                       class="btn btn-label btn-label-brand btn-sm btn-bold">تسجيل الخورج</a>
                                 </div>
                             </div>
 

@@ -47,7 +47,7 @@
                                         <td>@if($student_assignment->done_test_assignment)
                                                 مكتمل
                                             @elseif($student_assignment->test_assignment != 0)
-                                                <a href="{{route('lesson', [$student_assignment->lesson_id, 'test'])}}">الضهاب للاختبار</a>
+                                                <a href="{{route('lesson', [$student_assignment->lesson_id, 'test'])}}">الذهاب للاختبار</a>
                                             @else
                                                 -
                                             @endif

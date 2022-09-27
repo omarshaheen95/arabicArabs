@@ -27,7 +27,7 @@ class StoryController extends Controller
                     $query->when($name, function (Builder $query) use ($name){
                         $query->where('name', 'like', '%'.$name.'%');
                     })->when($grade, function (Builder $query) use ($grade){
-                        $query->where('grade', $grade);
+                        $query->where('grade_id', $grade);
                     })->where('school_id', $teacher->school_id)
                         ->whereHas('teacherUser', function (Builder $query) use($teacher){
                             $query->where('teacher_id', $teacher->id);
@@ -58,7 +58,7 @@ class StoryController extends Controller
                     return $row->status_name;
                 })
                 ->addColumn('grade', function ($row) {
-                    return $row->user->grade;
+                    return $row->user->grade_id;
                 })
                 ->addColumn('level', function ($row) {
                     return $row->story->grade;
@@ -68,15 +68,15 @@ class StoryController extends Controller
                 })
                 ->make();
         }
-        $title = t('Students Stories Record');
+        $title = "تسجيلات القصص للطلاب";
 
         return view('teacher.student_story.index', compact('title'));
     }
     public function showStudentsRecords($id)
     {
-        $title = t('Show Student Story Records');
+        $title = "عرض تسجيل طالب";
         $teacher = Auth::guard('teacher')->user();
-        $user_record = UserRecord::query()
+        $user_record = StoryUserRecord::query()
             ->whereHas('user', function (Builder $query) use ($teacher){
                 $query->where('school_id', $teacher->school_id)
                     ->whereHas('teacherUser', function (Builder $query) use($teacher){

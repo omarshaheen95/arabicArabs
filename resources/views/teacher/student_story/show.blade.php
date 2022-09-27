@@ -26,7 +26,7 @@ WhatsApp +972592554320
 @section('content')
     @push('breadcrumb')
         <li class="breadcrumb-item">
-            <a href="{{ route('teacher.students_record.index') }}">{{t('Students Stories Record')}}</a>
+            <a href="{{ route('teacher.students_record.index') }}">تسجيلات القصص للطلاب</a>
         </li>
         <li class="breadcrumb-item">
             {{ $title }}
@@ -47,14 +47,14 @@ WhatsApp +972592554320
                         <div class="kt-section kt-section--first">
                             <div class="kt-section__body">
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Record answer') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">التسجيل</label>
                                     <div class="col-lg-9">
                                         <audio src="{{asset($user_record->record)}}" controls></audio>
                                     </div>
 
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Mark') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">الدرجة</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control" name="mark" type="number"
                                                value="{{ $user_record->mark }}">
@@ -63,22 +63,22 @@ WhatsApp +972592554320
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Status') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">الحالة</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <div class="kt-radio-list">
                                             <label class="kt-radio kt-radio--bold kt-radio--disabled ">
                                                 <input type="radio" disabled="disabled" value="" name="status"
-                                                       @if($user_record->status == 'pending') checked @endif> {{t(ucfirst('Waiting list'))}}
+                                                       @if($user_record->status == 'pending') checked @endif> قيد المراجعة
                                                 <span></span>
                                             </label>
                                             <label class="kt-radio kt-radio--bold kt-radio--success">
                                                 <input type="radio" name="status" value="corrected"
-                                                       @if($user_record->status == 'corrected') checked @endif> {{t(ucfirst('Marking Completed'))}}
+                                                       @if($user_record->status == 'corrected') checked @endif> مكتمل التصحيح
                                                 <span></span>
                                             </label>
                                             <label class="kt-radio kt-radio--bold kt-radio--brand">
                                                 <input type="radio" name="status" value="returned"
-                                                       @if($user_record->status == 'returned') checked @endif> {{t(ucfirst('Send back'))}}
+                                                       @if($user_record->status == 'returned') checked @endif> مرجع للطالب
                                                 <span></span>
                                             </label>
                                         </div>
@@ -86,17 +86,17 @@ WhatsApp +972592554320
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Show as model') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">عرض كنموذج للطلاب</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <div class="kt-radio-list">
                                             <label class="kt-radio kt-radio--bold kt-radio--warning">
                                                 <input type="radio" name="approved" value="0"
-                                                       @if($user_record->approved == 0) checked @endif> {{t('Do not Show as model')}}
+                                                       @if($user_record->approved == 0) checked @endif> عدم العرض كنموذج
                                                 <span></span>
                                             </label>
                                             <label class="kt-radio kt-radio--bold kt-radio--success">
                                                 <input type="radio" name="approved" value="1"
-                                                       @if($user_record->approved == 1) checked @endif> {{t('Show as model')}}
+                                                       @if($user_record->approved == 1) checked @endif> العرض كنموذج
                                                 <span></span>
                                             </label>
                                         </div>
@@ -109,7 +109,7 @@ WhatsApp +972592554320
                         <div class="kt-form__actions">
                             <div class="row">
                                 <div class="col-lg-12 text-right">
-                                    <button type="submit" id="save" class="btn btn-danger">{{ t('Save') }}</button>&nbsp;
+                                    <button type="submit" id="save" class="btn btn-danger">حفظ واعتماد</button>&nbsp;
                                 </div>
                             </div>
                         </div>

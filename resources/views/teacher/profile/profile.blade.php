@@ -8,7 +8,7 @@
 @section('content')
     @push('breadcrumb')
         <li class="breadcrumb-item">
-            {{ t('personal information') }}
+            {{$title}}
         </li>
     @endpush
     <div class="row">
@@ -16,7 +16,7 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">{{ t('personal information') }}</h3>
+                        <h3 class="kt-portlet__head-title">{{$title}}</h3>
                     </div>
                 </div>
                 <form enctype="multipart/form-data" id="form_information" class="kt-form kt-form--label-right" action="{{ route('teacher.profile.update') }}" method="post">
@@ -24,47 +24,25 @@
                     <div class="kt-portlet__body">
                         <div class="kt-section kt-section--first">
                             <div class="kt-section__body">
-                                <div class="row justify-content-center">
-                                    <div class="col-md-6">
-                                        @php
-                                            $school = Auth::user();
-                                        @endphp
-                                        <div class="form-group">
-                                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('logo') }}</label>
-                                            <div class="col-lg-9 col-xl-6">
-                                                <div class="upload-btn-wrapper">
-                                                    <button class="btn btn-danger">{{ t('upload logo') }}</button>
-                                                    <input name="logo" class="imgInp" id="imgInp" type="file" />
-                                                </div>
-                                                <img id="blah" @if(!isset($school) || is_null($school->logo)) style="display:none" @endif src="{{ isset($school) && !is_null($school->logo)  ? $school->logo:'' }}" width="150" alt="No file chosen" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('username') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">الاسم</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control" name="name" type="text" value="{{ Auth::user()->name }}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('E-mail') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">البريد الإلكتروني</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control" name="email" type="email" value="{{ Auth::user()->email }}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Mobile') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">الموبايل</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control" name="mobile" type="text" value="{{ Auth::user()->mobile }}">
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Website') }}</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control" name="website" type="text" value="{{ Auth::user()->website }}">
-                                    </div>
-                                </div>
+
 
                             </div>
                         </div>
@@ -75,7 +53,7 @@
                                 <div class="col-lg-3 col-xl-3">
                                 </div>
                                 <div class="col-lg-9 col-xl-9">
-                                    <button type="submit" class="btn btn-brand">{{ t('update') }}</button>&nbsp;
+                                    <button type="submit" class="btn btn-brand">حفظ</button>&nbsp;
                                 </div>
                             </div>
                         </div>

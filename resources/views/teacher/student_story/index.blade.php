@@ -32,34 +32,52 @@ WhatsApp +972592554320
                         {{csrf_field()}}
                         <div class="row kt-margin-b-20">
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Student name') }}:</label>
-                                <input type="text" name="name" id="name" class="form-control kt-input" placeholder="{{t('Student name')}}">
+                                <label>اسم الطالب:</label>
+                                <input type="text" name="name" id="name" class="form-control kt-input" placeholder="اسم الطالب">
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Grade') }}:</label>
+                                <label>الصف:</label>
                                 <select class="form-control grade" name="grade" id="grade">
-                                    <option selected value="">{{t('Select grade')}}</option>
-                                    <option value="15" >{{t('KG')}} 2</option>
-
-                                    <option value="1" >{{t('Grade')}} 1</option>
-                                    <option value="2" >{{t('Grade')}} 2</option>
-                                    <option value="3" >{{t('Grade')}} 3</option>
-                                    <option value="4" >{{t('Grade')}} 4</option>
-                                    <option value="5" >{{t('Grade')}} 5</option>
-                                    <option value="6" >{{t('Grade')}} 6</option>
-                                    <option value="7" >{{t('Grade')}} 7</option>
-                                    <option value="8" >{{t('Grade')}} 8</option>
-                                    <option value="9" >{{t('Grade')}} 9</option>
-                                    <option value="10" >{{t('Grade')}} 10</option>
+                                    <option selected value="">الصف</option>
+                                    <option value="1" >الصف 1</option>
+                                    <option value="2" >الصف 2</option>
+                                    <option value="3" >الصف 3</option>
+                                    <option value="4" >الصف 4</option>
+                                    <option value="5" >الصف 5</option>
+                                    <option value="6" >الصف 6</option>
+                                    <option value="7" >الصف 7</option>
+                                    <option value="8" >الصف 8</option>
+                                    <option value="9" >الصف 9</option>
+                                    <option value="10" >الصف 10</option>
+                                    <option value="11" >الصف 11</option>
+                                    <option value="12" >الصف 12</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+                                <label>الصف:</label>
+                                <select class="form-control level" name="level" id="level">
+                                    <option selected value="">المستوى</option>
+                                    <option value="1" >المستوى 1</option>
+                                    <option value="2" >المستوى 2</option>
+                                    <option value="3" >المستوى 3</option>
+                                    <option value="4" >المستوى 4</option>
+                                    <option value="5" >المستوى 5</option>
+                                    <option value="6" >المستوى 6</option>
+                                    <option value="7" >المستوى 7</option>
+                                    <option value="8" >المستوى 8</option>
+                                    <option value="9" >المستوى 9</option>
+                                    <option value="10" >المستوى 10</option>
+                                    <option value="11" >المستوى 11</option>
+                                    <option value="12" >المستوى 12</option>
                                 </select>
                             </div>
                             <input type="hidden" name="teacher_id" value="{{Auth::user()->id}}">
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Action') }}:</label>
+                                <label>الإجراءات:</label>
                                 <br />
                                 <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
                                     <i class="la la-search"></i>
-                                    {{t('Search')}}
+                                    بحث
                                 </button>
                             </div>
 
@@ -67,13 +85,13 @@ WhatsApp +972592554320
                     </form>
                     <table class="table text-center" id="users-table">
                         <thead>
-                        <th>{{ t('Student') }}</th>
-                        <th>{{ t('Grade') }}</th>
-                        <th>{{ t('Story') }}</th>
-                        <th>{{ t('Level') }}</th>
-                        <th>{{ t('Status') }}</th>
-                        <th>{{ t('Submitted at') }}</th>
-                        <th>{{ t('Actions') }}</th>
+                        <th>الطالب</th>
+                        <th>الصف</th>
+                        <th>القصة</th>
+                        <th>المستوى</th>
+                        <th>الحالة</th>
+                        <th>قدم في</th>
+                        <th>الإجراءات</th>
                         </thead>
                     </table>
                 </div>

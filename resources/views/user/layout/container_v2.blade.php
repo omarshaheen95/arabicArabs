@@ -95,8 +95,7 @@
 ->where('user_id', Auth::user()->id)
 ->where('completed', 0)
 ->count();
-                        $userStoryAssignmentsCount = 0;
-                        \App\Models\StoryAssignment::query()
+                        $userStoryAssignmentsCount = \App\Models\StoryAssignment::query()
 ->where('user_id', Auth::user()->id)
 ->where('completed', 0)
 ->count();

@@ -12,7 +12,7 @@
                     <div class="section-title">
                         <h1 class="title"> {{$title}} </h1>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="/home"> Home </a>
+                            <a class="breadcrumb-item" href="/home"> الرئيسة </a>
                             <span class="breadcrumb-item active" aria-current="page"> {{$title}} </span>
                         </nav>
                     </div>
@@ -25,30 +25,30 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <tr>
-                                    <td style="font-weight: bold">Story name</td>
-                                    <td style="font-weight: bold">Grade</td>
-                                    <td style="font-weight: bold">Test Assignment</td>
-                                    <td style="font-weight: bold">Status</td>
+                                    <td style="font-weight: bold">القصة</td>
+                                    <td style="font-weight: bold">المستوى</td>
+                                    <td style="font-weight: bold">تعيين الاختبار</td>
+                                    <td style="font-weight: bold">الحالة</td>
                                 </tr>
                                 @foreach($student_assignments as $student_assignment)
                                     <tr>
-                                        <td>{{$student_assignment->story->translate('ar')->name}}
-                                            - {{$student_assignment->story->translate('en')->name}}</td>
+                                        <td>{{$student_assignment->story->name}}</td>
                                         <td>{{$student_assignment->story->grade}}</td>
                                         <td>@if($student_assignment->done_test_assignment)
                                                 Completed
                                             @elseif($student_assignment->test_assignment != 0)
-                                                <a href="{{route('lesson', [$student_assignment->lesson_id, 'test'])}}">Go
-                                                    to test</a>
+                                                <a href="{{route('stories.show', [$student_assignment->story_id, 'test'])}}">
+                                                    الذهاب للاختبار
+                                                </a>
                                             @else
                                                 -
                                             @endif
                                         </td>
                                         <td>
                                             @if($student_assignment->completed)
-                                                Completed Assignment
+                                                مكتمل
                                             @else
-                                                UnCompleted Assignment
+                                                غير مكتمل
                                             @endif
                                         </td>
                                     </tr>

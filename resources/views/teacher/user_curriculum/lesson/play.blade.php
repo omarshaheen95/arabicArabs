@@ -3,7 +3,7 @@
     WhatsApp +972592554320
     --}}
 
-@extends('teacher.curriculum.lesson_layout')
+@extends('user.layout.container')
 @push('breadcrumb')
     <li class="breadcrumb-item">
         <a href="{{ route('lessons', $lesson->level_id) }}" @if(isset($level) && !is_null($level->text_color)) style="color: {{$level->text_color}} !important; font-weight: bold" @endif>{{ t('Lessons') }}</a>
@@ -33,4 +33,30 @@
             </div>
         </section>
     </section>
+@endsection
+
+@section('script')
+
+    <script>
+
+        $(document).ready(function(){
+            setTimeout(function(){
+                let csrf = $('meta[name="csrf-token"]').attr('content');
+                var url = '{{route('track_lesson', [$lesson->id, 'play'])}}';
+                $.ajax({
+                    url : url,
+                    type: 'POST',
+                    data : {
+                        '_token': csrf,
+                    },
+                    success: function (data) {
+                    },
+                    error: function(errMsg) {
+                    }
+                });
+
+            }, 10000);
+        });
+
+    </script>
 @endsection

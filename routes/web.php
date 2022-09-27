@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'WebController@home')->name('main');
 Route::get('page/{key}', 'WebController@page')->name('page');
 
+Route::get('/schools', 'WebController@schools')->name('schools');
 
 
 Auth::routes();
@@ -39,8 +40,8 @@ Route::group(['prefix' => 'school'], function () {
   Route::post('/login', 'SchoolAuth\LoginController@login');
   Route::post('/logout', 'SchoolAuth\LoginController@logout')->name('logout');
 
-  Route::get('/register', 'SchoolAuth\RegisterController@showRegistrationForm')->name('register');
-  Route::post('/register', 'SchoolAuth\RegisterController@register');
+//  Route::get('/register', 'SchoolAuth\RegisterController@showRegistrationForm')->name('register');
+//  Route::post('/register', 'SchoolAuth\RegisterController@register');
 
   Route::post('/password/email', 'SchoolAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');
   Route::post('/password/reset', 'SchoolAuth\ResetPasswordController@reset')->name('password.email');

@@ -28,7 +28,7 @@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 col-form-label">{{ t('School') }}</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        <select class="form-control" name="school_id">
+                                        <select class="form-control select2L" name="school_id">
                                             <option value="" selected disabled>{{t('Select School')}}</option>
                                             @foreach($schools as $school)
                                                 <option

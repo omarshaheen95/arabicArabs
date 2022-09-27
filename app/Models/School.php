@@ -60,7 +60,7 @@ class School extends Authenticatable
     public function scopeSearch(Builder $query, Request $request)
     {
         return $query->when($name = $request->get('name', false), function($query) use($name){
-            $query->where('name', '%' . $name . '%')
+            $query->where('name', 'like',  '%' . $name . '%')
                 ->orWhere('email', 'like', '%'.$name.'%')
                 ->orWhere('mobile', 'like', '%'.$name.'%');
         });

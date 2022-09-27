@@ -48,7 +48,7 @@ class SettingController extends Controller
 
     public function view_profile()
     {
-        $title = t('Show Profile');
+        $title = "الملف الشخصي";
         $this->validationRules = [
             'name' => 'required',
             'password' => 'nullable',
@@ -74,7 +74,7 @@ class SettingController extends Controller
 
     public function view_password()
     {
-        $title = t('Change Password');
+        $title = "تغيير كلمة المرور";
         $this->validationRules = [
             'current_password' => 'required',
             'password' => 'required|min:6|confirmed'
@@ -138,7 +138,7 @@ class SettingController extends Controller
             ->whereHas('teacherUser', function (Builder $query) use($user){
             $query->where('teacher_id', $user->id);
         })->where(function (Builder $query) use ($id){
-            $query->where('grade', $id)->orWhere('alternate_grade', $id);
+            $query->where('grade_id', $id)->orWhere('alternate_grade_id', $id);
             })
             ->when($section, function (Builder $query) use($section){
                 $query->where('section', $section);

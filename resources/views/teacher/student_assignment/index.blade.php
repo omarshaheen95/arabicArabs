@@ -25,7 +25,7 @@ WhatsApp +972592554320
 @section('content')
     @push('breadcrumb')
         <li class="breadcrumb-item">
-            {{ t('Students assignments') }}
+            {{$title}}
         </li>
     @endpush
     <div class="row">
@@ -34,7 +34,7 @@ WhatsApp +972592554320
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title">
-                            {{ t('Students assignments') }}
+                            {{$title}}
                         </h3>
                     </div>
                     <div class="kt-portlet__head-toolbar">
@@ -42,7 +42,7 @@ WhatsApp +972592554320
                             <div class="kt-portlet__head-actions">
                                 <button data-toggle="modal" data-target="#assignmentModel" class="btn btn-danger btn-elevate btn-icon-sm">
                                     <i class="la la-plus"></i>
-                                    {{ t('Add assignment') }}
+                                    إضافة واجب
                                 </button>
                             </div>
                         </div>
@@ -53,62 +53,58 @@ WhatsApp +972592554320
                         {{csrf_field()}}
                         <div class="row kt-margin-b-20">
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Student name') }}:</label>
-                                <input type="text" name="username" id="username" class="form-control kt-input" placeholder="{{t('Student name')}}">
+                                <label>اسم الطالب:</label>
+                                <input type="text" name="username" id="username" class="form-control kt-input" placeholder="اسم الطالب">
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Grade') }}:</label>
+                                <label>الصف:</label>
                                 <select class="form-control grade" name="grade" id="grade">
-                                    <option selected value="">{{t('Select grade')}}</option>
-                                    <option value="15" >{{t('KG')}} 2</option>
-
-                                    <option value="1" >{{t('Grade')}} 1</option>
-                                    <option value="2" >{{t('Grade')}} 2</option>
-                                    <option value="3" >{{t('Grade')}} 3</option>
-                                    <option value="4" >{{t('Grade')}} 4</option>
-                                    <option value="5" >{{t('Grade')}} 5</option>
-                                    <option value="6" >{{t('Grade')}} 6</option>
-                                    <option value="7" >{{t('Grade')}} 7</option>
-                                    <option value="8" >{{t('Grade')}} 8</option>
-                                    <option value="9" >{{t('Grade')}} 9</option>
+                                    <option selected value="">الصف</option>
+                                    <option value="1" >الصف 1</option>
+                                    <option value="2" >الصف 2</option>
+                                    <option value="3" >الصف 3</option>
+                                    <option value="4" >الصف 4</option>
+                                    <option value="5" >الصف 5</option>
+                                    <option value="6" >الصف 6</option>
+                                    <option value="7" >الصف 7</option>
+                                    <option value="8" >الصف 8</option>
+                                    <option value="9" >الصف 9</option>
+                                    <option value="10" >الصف 10</option>
+                                    <option value="11" >الصف 11</option>
+                                    <option value="12" >الصف 12</option>
                                 </select>
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Level') }}:</label>
-                                <select class="form-control level" name="level_id" id="level_id">
-                                    <option selected value="">{{t('Select level')}}</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Lesson') }}:</label>
+                                <label>الدرس:</label>
                                 <select class="form-control package" name="lesson_id" id="lesson_id">
-                                    <option selected value="">{{t('Select lesson')}}</option>
+                                    <option selected value="">اختر درس</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+                                <label>الحالة:</label>
+                                <select class="form-control" name="status" id="status">
+                                    <option selected value="">الكل</option>
+                                    <option value="1">مكتمل</option>
+                                    <option value="2">غير مكتمل</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Start at') }}:</label>
-                                <input class="form-control date" name="start_at" id="start_at" type="text" placeholder="{{t('Start at')}}">
+                            <div class="col-lg-2 kt-margin-b-10-tablet-and-mobile">
+                                <label>من تاريخ:</label>
+                                <input class="form-control date" name="start_at" id="start_at" type="text" placeholder="من تاريخ">
                             </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('End at') }}:</label>
-                                <input class="form-control date" name="end_at" id="end_at" type="text" placeholder="{{t('End at')}}">
+                            <div class="col-lg-2 kt-margin-b-10-tablet-and-mobile">
+                                <label>إلى تاريخ:</label>
+                                <input class="form-control date" name="end_at" id="end_at" type="text" placeholder="إلى تاريخ">
                             </div>
+
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Status') }}:</label>
-                                <select class="form-control" name="status" id="status">
-                                    <option selected value="">{{t('Select status')}}</option>
-                                    <option value="1">{{t('Completed')}}</option>
-                                    <option value="2">{{t('UnCompleted')}}</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Action') }}:</label>
+                                <label>الإجراءات:</label>
                                 <br />
                                 <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
                                     <i class="la la-search"></i>
-                                    {{t('Search')}}
+                                    بحث
                                 </button>
                                 &nbsp;&nbsp;
 
@@ -117,14 +113,12 @@ WhatsApp +972592554320
 {{--                    </form>--}}
                     <table class="table text-center" id="users-table">
                         <thead>
-                        <th>{{ t('Student') }}</th>
-                        <th>{{ t('Lesson') }}</th>
-                        <th>{{ t('Level') }}</th>
-                        <th>{{ t('Grade') }}</th>
-                        <th>{{ t('Tasks Assignment') }}</th>
-                        <th>{{ t('Test Assignment') }}</th>
-                        <th>{{ t('Status') }}</th>
-                        <th>{{ t('Submitted at') }}</th>
+                        <th>الطالب</th>
+                        <th>الدرس</th>
+                        <th>الصف</th>
+                        <th>إسناد واجب ( اختبار )	</th>
+                        <th>الحالة</th>
+                        <th>قدم في</th>
                         </thead>
                     </table>
                 </div>
@@ -135,7 +129,7 @@ WhatsApp +972592554320
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ t('Add assignment') }}</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">إضافة واجب</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     </button>
                 </div>
@@ -143,45 +137,37 @@ WhatsApp +972592554320
                     {{ csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group row">
-                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Grade') }}</label>
+                            <label class="col-xl-3 col-lg-3 col-form-label">الصف</label>
                             <div class="col-lg-9 col-xl-9">
                                 <select class="form-control assignment_grade" name="assignment_grade" id="assignment_grade">
-                                    <option selected value="">{{t('Select grade')}}</option>
-                                    <option value="15" >{{t('KG')}} 2</option>
-
-                                    <option value="1" >{{t('Grade')}} 1</option>
-                                    <option value="2" >{{t('Grade')}} 2</option>
-                                    <option value="3" >{{t('Grade')}} 3</option>
-                                    <option value="4" >{{t('Grade')}} 4</option>
-                                    <option value="5" >{{t('Grade')}} 5</option>
-                                    <option value="6" >{{t('Grade')}} 6</option>
-                                    <option value="7" >{{t('Grade')}} 7</option>
-                                    <option value="8" >{{t('Grade')}} 8</option>
-                                    <option value="9" >{{t('Grade')}} 9</option>
+                                    <option selected value="">الصف</option>
+                                    <option value="1" >الصف 1</option>
+                                    <option value="2" >الصف 2</option>
+                                    <option value="3" >الصف 3</option>
+                                    <option value="4" >الصف 4</option>
+                                    <option value="5" >الصف 5</option>
+                                    <option value="6" >الصف 6</option>
+                                    <option value="7" >الصف 7</option>
+                                    <option value="8" >الصف 8</option>
+                                    <option value="9" >الصف 9</option>
+                                    <option value="10" >الصف 10</option>
+                                    <option value="11" >الصف 11</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Level') }}</label>
-                            <div class="col-lg-9 col-xl-9">
-                                <select class="form-control assignment_level" name="assignment_level" id="assignment_level">
-                                    <option selected value="">{{t('Select Level')}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Lesson') }}</label>
+                            <label class="col-xl-3 col-lg-3 col-form-label">الدرس</label>
                             <div class="col-lg-9 col-xl-9">
                                 <select class="form-control assignment_lesson" name="assignment_lesson" id="assignment_lesson">
-                                    <option selected value="">{{t('Select Lesson')}}</option>
+                                    <option selected value="">اختر درس</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Section') }}</label>
+                            <label class="col-xl-3 col-lg-3 col-form-label">الشعبة</label>
                             <div class="col-lg-9 col-xl-9">
                                 <select class="form-control" name="section" id="section">
-                                    <option selected value="">{{t('Select section')}}</option>
+                                    <option selected value="">اختر شعبة</option>
                                     @foreach(schoolSections(Auth::guard('teacher')->user()->school_id) as $section)
                                         <option value="{{$section}}">{{$section}}</option>
                                     @endforeach
@@ -189,25 +175,25 @@ WhatsApp +972592554320
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Students') }}</label>
+                            <label class="col-xl-3 col-lg-3 col-form-label">الطلاب</label>
                             <div class="col-lg-9 col-xl-9 students">
                                 <select class="form-control assignment_students" multiple name="assignment_students[]" id="assignment_students">
-                                    <option selected value="">{{t('All')}}</option>
+                                    <option selected value="">الكل</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Tasks assignment') }}</label>
-                            <div class="col-lg-3 col-xl-3">
-                                <span class="kt-switch">
-                                    <label>
-                                    <input type="checkbox" checked value="1" name="tasks_assignment">
-                                    <span></span>
-                                    </label>
-                                </span>
-                            </div>
-                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Test assignment') }}</label>
+{{--                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Tasks assignment') }}</label>--}}
+{{--                            <div class="col-lg-3 col-xl-3">--}}
+{{--                                <span class="kt-switch">--}}
+{{--                                    <label>--}}
+{{--                                    <input type="checkbox" checked value="1" name="tasks_assignment">--}}
+{{--                                    <span></span>--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                            </div>--}}
+                            <label class="col-xl-3 col-lg-3 col-form-label">إسناد واجب اختبار</label>
                             <div class="col-lg-3 col-xl-3">
                                 <span class="kt-switch">
                                     <label>
@@ -219,8 +205,8 @@ WhatsApp +972592554320
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ t('Cancel') }}</button>
-                        <button type="submit" class="btn btn-warning">{{ t('Add') }}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-warning">حفظ</button>
                     </div>
                 </form>
             </div>
@@ -275,9 +261,8 @@ WhatsApp +972592554320
                     columns: [
                         {data: 'user', name: 'user'},
                         {data: 'lesson', name: 'lesson'},
-                        {data: 'level', name: 'level'},
                         {data: 'grade', name: 'grade'},
-                        {data: 'done_tasks_assignment', name: 'done_tasks_assignment'},
+                        // {data: 'done_tasks_assignment', name: 'done_tasks_assignment'},
                         {data: 'done_test_assignment', name: 'done_test_assignment'},
                         {data: 'completed', name: 'completed'},
                         {data: 'created_at', name: 'created_at'},
@@ -291,21 +276,9 @@ WhatsApp +972592554320
 
             $('select[name="grade"]').change(function () {
                 var id = $(this).val();
-                var url = '{{ route("teacher.getLevelsByGrade", ":id") }}';
+                var url = '{{ route("teacher.getLessonsByGrade", ":id") }}';
                 url = url.replace(':id', id );
 
-                $.ajax({
-                    type: "get",
-                    url: url,
-                }).done(function (data) {
-                    $('select[name="level_id"]').html(data.html);
-                    $('select[name="level_id"]').selectpicker('refresh');
-                });
-            });
-            $('select[name="level_id"]').change(function () {
-                var id = $(this).val();
-                var url = '{{ route("teacher.getLessonsByLevel", ":id") }}';
-                url = url.replace(':id', id );
                 $.ajax({
                     type: "get",
                     url: url,
@@ -317,7 +290,7 @@ WhatsApp +972592554320
 
             $('select[name="assignment_grade"]').change(function () {
                 var id = $(this).val();
-                var url = '{{ route("teacher.getLevelsByGrade", ":id") }}';
+                var url = '{{ route("teacher.getLessonsByGrade", ":id") }}';
                 url = url.replace(':id', id );
                 var students_url = '{{ route("teacher.getStudentsByGrade", ":id") }}';
                 students_url = students_url.replace(':id', id );
@@ -325,8 +298,8 @@ WhatsApp +972592554320
                     type: "get",
                     url: url,
                 }).done(function (data) {
-                    $('select[name="assignment_level"]').html(data.html);
-                    $('select[name="assignment_level"]').selectpicker('refresh');
+                    $('select[name="assignment_lesson"]').html(data.html);
+                    $('select[name="assignment_lesson"]').selectpicker('refresh');
                 });
                 $.ajax({
                     type: "get",
@@ -404,19 +377,6 @@ WhatsApp +972592554320
                 }
 
                 $('select[name="assignment_students[]"]').selectpicker('refresh');
-            });
-
-            $('select[name="assignment_level"]').change(function () {
-                var id = $(this).val();
-                var url = '{{ route("teacher.getLessonsByLevel", ":id") }}';
-                url = url.replace(':id', id );
-                $.ajax({
-                    type: "get",
-                    url: url,
-                }).done(function (data) {
-                    $('select[name="assignment_lesson"]').html(data.html);
-                    $('select[name="assignment_lesson"]').selectpicker('refresh');
-                });
             });
         });
     </script>

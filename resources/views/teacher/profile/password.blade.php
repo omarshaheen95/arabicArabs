@@ -8,7 +8,7 @@
 @section('content')
     @push('breadcrumb')
         <li class="breadcrumb-item">
-            {{ t('Change Password') }}
+            {{$title}}
         </li>
     @endpush
     <div class="row">
@@ -16,7 +16,7 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">{{ t('Change Password') }}</h3>
+                        <h3 class="kt-portlet__head-title">{{$title}}</h3>
                     </div>
                 </div>
                 <form enctype="multipart/form-data" id="form_information" class="kt-form kt-form--label-right" action="{{ route('teacher.password.update') }}" method="post">
@@ -25,19 +25,19 @@
                         <div class="kt-section kt-section--first">
                             <div class="kt-section__body">
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('current password') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">كلمة المرور الحالية</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control" name="current_password" type="password" value="">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('password') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">كلمة المرور الجديدة</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control" name="password" type="password" value="">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">{{ t('confirm password') }}</label>
+                                    <label class="col-xl-3 col-lg-3 col-form-label">تأكيد كلمة المرور الجديدة</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control" name="password_confirmation" type="password" value="">
                                     </div>
@@ -51,7 +51,7 @@
                                 <div class="col-lg-3 col-xl-3">
                                 </div>
                                 <div class="col-lg-9 col-xl-9">
-                                    <button type="submit" class="btn btn-brand">{{ t('update') }}</button>&nbsp;
+                                    <button type="submit" class="btn btn-brand">حفظ</button>&nbsp;
                                 </div>
                             </div>
                         </div>

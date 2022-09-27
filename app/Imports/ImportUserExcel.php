@@ -4,7 +4,6 @@ namespace App\Imports;
 
 use App\Models\Teacher;
 use App\Models\TeacherUser;
-use App\Models\TeacherUser;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,10 +34,10 @@ class ImportUserExcel implements ToModel, WithHeadingRow, WithValidation, SkipsO
     public function model(array $row)
     {
 
-        $grade = abs((int)filter_var($row['grade'], FILTER_SANITIZE_NUMBER_INT));
-        if ($grade > 10 && $grade != 15) {
-            $grade = 10;
-        }
+        $grade = abs((int)filter_var($row['grade'], FILTER_SANITIZE_NUMBER_INT));// - 1;
+//        if ($grade > 10 && $grade != 15) {
+//            $grade = 10;
+//        }
 
 
 //        $email_array = explode('@', $row['name']);

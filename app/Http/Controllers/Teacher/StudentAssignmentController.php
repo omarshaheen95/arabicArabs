@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Teacher\UserAssignmentRequest;
 use App\Http\Requests\Teacher\UserStoryAssignmentRequest;
+use App\Models\StoryAssignment;
 use App\Models\User;
 use App\Models\UserAssignment;
 use App\Models\UserStoryAssignment;
@@ -23,40 +24,42 @@ class StudentAssignmentController extends Controller
         {
             $username = $request->get('username', false);
             $grade = $request->get('grade', false);
-            $level_id = $request->get('level_id', false);
             $lesson_id = $request->get('lesson_id', false);
             $start_at = $request->get('start_at', false);
             $end_at = $request->get('end_at', false);
             $status = $request->get('status', false);
 
-            $rows = UserAssignment::query()->whereHas('user', function (Builder $query) use ($teacher, $username){
+            $rows = UserAssignment::query()
+                ->with(['user', 'lesson'])
+                ->whereHas('user', function (Builder $query) use ($teacher, $username){
                 $query->whereHas('teacherUser', function (Builder $query) use($teacher){
                     $query->where('teacher_id', $teacher->id);
                 });
                 $query->when($username, function (Builder $query) use ($username){
                     $query->where('name', 'like', '%'.$username.'%');
                 });
-            })->when($grade, function (Builder $query) use ($grade){
+            })
+                ->when($grade, function (Builder $query) use ($grade){
                 $query->whereHas('lesson', function (Builder $query) use ($grade){
-                    $query->whereHas('level', function (Builder $query) use ($grade){
-                        $query->where('grade', $grade);
-                    });
+                        $query->where('grade_id', $grade);
                 });
-            })->when($level_id, function (Builder $query) use ($level_id){
-                $query->whereHas('lesson', function (Builder $query) use ($level_id){
-                    $query->where('level_id', $level_id);
-                });
-            })->when($lesson_id, function (Builder $query) use ($lesson_id){
+            })
+                ->when($lesson_id, function (Builder $query) use ($lesson_id){
                 $query->where('lesson_id', $lesson_id);
-            })->when($start_at, function (Builder $query) use ($start_at){
+            })
+                ->when($start_at, function (Builder $query) use ($start_at){
                 $query->where('created_at', '<=', $start_at);
-            })->when($end_at, function (Builder $query) use ($end_at){
+            })
+                ->when($end_at, function (Builder $query) use ($end_at){
                 $query->where('created_at', '>=', $end_at);
-            })->when($status == 1, function (Builder $query) {
+            })
+                ->when($status == 1, function (Builder $query) {
                 $query->where('completed', 1);
-            })->when($status == 2, function (Builder $query) {
+            })
+                ->when($status == 2, function (Builder $query) {
                 $query->where('completed', 0);
-            })->latest();
+            })
+                ->latest();
 
             return DataTables::make($rows)
                 ->escapeColumns([])
@@ -69,24 +72,21 @@ class StudentAssignmentController extends Controller
                 ->addColumn('lesson', function ($row) {
                     return $row->lesson->name;
                 })
-                ->addColumn('level', function ($row) {
-                    return $row->lesson->level->name;
-                })
                 ->addColumn('grade', function ($row) {
-                    return t("Grade") ." ". $row->lesson->level->grade;
+                    return$row->lesson->grade_id;
                 })
                 ->addColumn('done_tasks_assignment', function ($row) {
-                    return !$row->tasks_assignment ? '-': ($row->done_tasks_assignment ? '<span class="text-success">'.t('Completed').'</span>':'<span class="text-red">'.t('UnCompleted').'</span>');
+                    return !$row->tasks_assignment ? '-': ($row->done_tasks_assignment ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>');
                 })
                 ->addColumn('done_test_assignment', function ($row) {
-                    return !$row->test_assignment ? '-': ($row->done_test_assignment ? '<span class="text-success">'.t('Completed').'</span>':'<span class="text-red">'.t('UnCompleted').'</span>');
+                    return !$row->test_assignment ? '-': ($row->done_test_assignment ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>');
                 })
                 ->addColumn('completed', function ($row) {
-                    return $row->completed ? '<span class="text-success">'.t('Completed').'</span>':'<span class="text-red">'.t('UnCompleted').'</span>';
+                    return $row->completed ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>';
                 })
                 ->make();
         }
-        $title = t('Show student assignments');
+        $title = "متابعة واجبات الدروس";
         return view('teacher.student_assignment.index', compact('title'));
     }
 
@@ -112,7 +112,8 @@ class StudentAssignmentController extends Controller
                 ->when(count($students_array), function (Builder $query) use ($students_array){
                     $query->whereIn('id', $students_array);
                 })
-                ->where('school_id', $teacher->school_id)->whereHas('teacherUser', function (Builder $query) use($teacher){
+                ->where('school_id', $teacher->school_id)
+                ->whereHas('teacherUser', function (Builder $query) use($teacher){
                     $query->where('teacher_id', $teacher->id);
                 })->get();
             foreach ($students as $student)
@@ -123,9 +124,8 @@ class StudentAssignmentController extends Controller
                         'user_id' => $student->id,
                         'lesson_id' => $lesson,
                     ],[
-                        'user_id' => $student,
+                        'user_id' => $student->id,
                         'lesson_id' => $lesson,
-                        'tasks_assignment' => $tasks_assignment,
                         'test_assignment' => $test_assignment,
                     ]);
                 }
@@ -141,14 +141,13 @@ class StudentAssignmentController extends Controller
                     ],[
                         'user_id' => $student,
                         'lesson_id' => $lesson,
-                        'tasks_assignment' => $tasks_assignment,
                         'test_assignment' => $test_assignment,
                     ]);
                 }
             }
         }
 
-        return $this->redirectWith(true, null, 'Successfully Added');
+        return $this->redirectWith(true, null, 'تم إضافة التعيين بنجاح');
     }
 
     public function indexStory(Request $request)
@@ -164,7 +163,7 @@ class StudentAssignmentController extends Controller
             $end_at = $request->get('end_at', false);
             $status = $request->get('status', false);
 
-            $rows = UserStoryAssignment::query()
+            $rows = StoryAssignment::query()
                 ->with(['user', 'story'])
                 ->whereHas('user', function (Builder $query) use ($teacher, $username){
                 $query->whereHas('teacherUser', function (Builder $query) use($teacher){
@@ -204,14 +203,14 @@ class StudentAssignmentController extends Controller
                     return t("Grade") ." ". $row->story->grade;
                 })
                 ->addColumn('done_test_assignment', function ($row) {
-                    return !$row->test_assignment ? '-': ($row->done_test_assignment ? '<span class="text-success">'.t('Completed').'</span>':'<span class="text-red">'.t('UnCompleted').'</span>');
+                    return !$row->test_assignment ? '-': ($row->done_test_assignment ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>');
                 })
                 ->addColumn('completed', function ($row) {
-                    return $row->completed ? '<span class="text-success">'.t('Completed').'</span>':'<span class="text-red">'.t('UnCompleted').'</span>';
+                    return $row->completed ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>';
                 })
                 ->make();
         }
-        $title = t('Show student stories assignments');
+        $title = "متابعة واجبات القصص";
         return view('teacher.student_story_assignment.index', compact('title'));
     }
 
@@ -243,11 +242,11 @@ class StudentAssignmentController extends Controller
             {
                 if ($student != '')
                 {
-                    UserStoryAssignment::query()->firstOrCreate([
+                    StoryAssignment::query()->firstOrCreate([
                         'user_id' => $student->id,
                         'story_id' => $story,
                     ],[
-                        'user_id' => $student,
+                        'user_id' => $student->id,
                         'story_id' => $story,
                         'test_assignment' => $test_assignment,
                     ]);
@@ -258,7 +257,7 @@ class StudentAssignmentController extends Controller
             {
                 if ($student != '')
                 {
-                    UserStoryAssignment::query()->firstOrCreate([
+                    StoryAssignment::query()->firstOrCreate([
                         'user_id' => $student,
                         'story_id' => $story,
                     ],[

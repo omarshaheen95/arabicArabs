@@ -1,5 +1,35 @@
 @extends('layouts.container_2')
-
+@section('p_style')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            padding-inline-start: 65px;
+            height: 65px;
+            border-radius: 20px;
+            border-color: #D9E3FD;
+            text-align: center;
+            vertical-align: middle;
+            padding-top: 18px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 26px;
+            position: absolute;
+            top: 20px;
+            right: 1px;
+            width: 20px;
+        }
+        .select2-container {
+            box-sizing: border-box;
+             display: inline;
+            margin: 0;
+            position: relative;
+            vertical-align: middle;
+        }
+    </style>
+@endsection
 @section('content')
     <main class="wrapper" id="login-home">
         <!-- Start login-home -->
@@ -98,10 +128,10 @@
                                                 <div class="icon">
                                                     <img src="{{asset('web_assets/img/school.svg')}}" alt="">
                                                 </div>
-                                                <select name="school_id" id="universtiy" class="form-control form-select" required>
-                                                    @foreach($schools as $school)
-                                                        <option value="{{$school->id}}">{{$school->name}}</option>
-                                                    @endforeach
+                                                <select name="school_id" id="universtiy" class="searchSelect form-control form-select " required>
+{{--                                                    @foreach($schools as $school)--}}
+{{--                                                        <option value="{{$school->id}}">{{$school->name}}</option>--}}
+{{--                                                    @endforeach--}}
                                                 </select>
                                             </div>
                                         </div>
@@ -168,6 +198,39 @@
 @endsection
 @section('script')
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script
     {!! $validator->selector('#form_information') !!}
+    <script type="text/javascript">
+        $('.searchSelect').select2({
+            placeholder: 'اختر مدرسة',
+            dir: "rtl",
+            language: {
+                // You can find all of the options in the language files provided in the
+                // build. They all must be functions that return the string that should be
+                // displayed.
+                inputTooShort: function () {
+                    return "يرجى ادخال اسم مدرسة للبحث";
+                },
+                noResults:function(){return"لا يوجد نتائج مطابقة"},
+                searching:function(){return"جاري البحث ..."}
+            },
+            ajax: {
 
+                url: '{{route('schools')}}',
+                dataType: 'json',
+                delay: 150,
+                processResults: function (data) {
+                    return {
+                        results:  $.map(data, function (item) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+    </script>
 @endsection

@@ -7,6 +7,7 @@ use App\Http\Requests\ContactUsRequest;
 use App\Models\ContactUs;
 use App\Models\Package;
 use App\Models\Page;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -33,5 +34,19 @@ class WebController extends Controller
             $file = $this->uploadImage($request->file('audio_data'), 'audio_records');
         }
         return redirect()->to('/record');
+    }
+
+    public function schools(Request $request)
+    {
+        $data = [];
+
+        if($request->has('q')){
+            $search = $request->q;
+            $data = School::query()->select("id","name")
+                ->where('name','LIKE',"%$search%")
+                ->orderBy('name')
+                ->get();
+        }
+        return response()->json($data);
     }
 }

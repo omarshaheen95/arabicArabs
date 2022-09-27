@@ -228,7 +228,7 @@ class UserController extends Controller
             $school = School::query()->findOrFail($request->get('school_id'));
             $file_name = $school->name . " Students Information.xlsx";
         }
-        return (new StudentInformation())
+        return (new StudentInformation($request, $request->get('school_id', false)))
             ->download($file_name);
     }
 

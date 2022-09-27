@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use App\Models\Lesson;
 use App\Models\Question;
+use App\Models\School;
 use App\Models\Story;
 use App\Models\StoryAssignment;
 use App\Models\StoryQuestion;
@@ -223,5 +224,7 @@ class HomeController extends Controller
 
         return view('user.story_assignments', compact('student_assignments', 'title'));
     }
+
+
 
 }
