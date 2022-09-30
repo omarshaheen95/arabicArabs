@@ -55,4 +55,12 @@ class Supervisor extends Authenticatable
     {
         return $this->approved ? 'فعال':'غير فعال';
     }
+
+    public function getSchoolActionButtonsAttribute()
+    {
+        $button = '';
+        $button .= '<a href="' . route('school.supervisor.edit', $this->id) . '" class="btn btn-icon btn-danger "><i class="la la-pencil"></i></a> ';
+        $button .= '<button type="button" data-id="' . $this->id . '" data-toggle="modal" data-target="#deleteModel" class="deleteRecord btn btn-icon btn-danger"><i class="la la-trash"></i></button>';
+        return $button;
+    }
 }

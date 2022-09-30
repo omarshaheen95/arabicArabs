@@ -334,7 +334,7 @@
 
                                 <!--begin: Head -->
                                 <div class="kt-head kt-head--skin-dark kt-head--fit-x kt-head--fit-b"
-                                     style="background: linear-gradient(to right,#5762e7,#3B47CB);">
+                                     style="background: linear-gradient(to right,#39B448,#31ab3f);">
                                     <h3 class="kt-head__title">
                                         الإشعارات
                                     </h3>
@@ -389,7 +389,7 @@
 
                             <!--begin: Head -->
                             <div class="kt-user-card kt-user-card--skin-dark kt-notification-item-padding-x"
-                                 style="background: linear-gradient(to right,#5762e7,#3B47CB);">
+                                 style="background: linear-gradient(to right,#39B448,#31ab3f);">
                                 <div class="kt-user-card__avatar">
 
                                     <span class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success">{{ substr(Auth::user()->name,0,1) }}</span>

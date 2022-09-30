@@ -3,7 +3,7 @@
     WhatsApp +972592554320
     --}}
     <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{app()->getlocale()}}" dir="{{direction()}}">
 
 <!-- begin::Head -->
 <head>
@@ -39,9 +39,9 @@
           rel="stylesheet" type="text/css"/>
 
     <!--end:: Global Mandatory Vendors -->
-@yield('b_style')
+    @yield('b_style')
 
-<!--begin:: Global Optional Vendors -->
+    <!--begin:: Global Optional Vendors -->
     <link href="{{ asset('assets/vendors/general/tether/dist/css/tether.rtl.css') }}" rel="stylesheet"
           type="text/css"/>
     <link href="{{ asset('assets/vendors/general/animate.css/animate.rtl.css') }}" rel="stylesheet"
@@ -64,22 +64,22 @@
     <link href="{{asset('assets/css/demo1/skins/brand/light.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/demo1/skins/aside/light.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/bootstrap-select.css')}}" rel="stylesheet" />
-        <style>
-            .bootstrap-select .dropdown-toggle .filter-option {
-                text-align: right;
-            }
+    <style>
+        .bootstrap-select .dropdown-toggle .filter-option {
+            text-align: right;
+        }
 
-            .bootstrap-select .dropdown-toggle .filter-option-inner {
-                padding-right: unset;
-                padding-left: inherit;
-            }
+        .bootstrap-select .dropdown-toggle .filter-option-inner {
+            padding-right: unset;
+            padding-left: inherit;
+        }
 
-            .bootstrap-select > .dropdown-toggle.btn-light, .bootstrap-select > .dropdown-toggle.btn-secondary {
-                text-align: left;
-            }
-        </style>
-@yield('style')
-<!--end::Layout Skins -->
+        .bootstrap-select > .dropdown-toggle.btn-light, .bootstrap-select > .dropdown-toggle.btn-secondary {
+            text-align: left;
+        }
+    </style>
+    @yield('style')
+    <!--end::Layout Skins -->
 
 </head>
 
@@ -93,8 +93,8 @@
 <!-- begin:: Header Mobile -->
 <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
     <div class="kt-header-mobile__logo">
-        <a href="{{ url("/manager/home") }}">
-                <img alt="Logo" src="{{ asset('logo.png') }}" style="width: 6%"/>
+        <a href="{{ url("/school/home") }}">
+            <img alt="Logo" src="{{ asset('logo.png') }}" style="width: 6%"/>
         </a>
     </div>
     <div class="kt-header-mobile__toolbar">
@@ -115,8 +115,8 @@
             <!-- begin:: Aside -->
             <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
                 <div class="kt-aside__brand-logo w-100">
-                    <a href="{{ url("/manager/home") }}" class="w-100 text-center">
-                            <img src="{{ asset('logo.png') }}" width="100%"/>
+                    <a href="{{ url("/school/home") }}" class="w-100 text-center">
+                        <img src="{{ asset('logo.png') }}" width="100%"/>
                     </a>
                 </div>
                 <div class="kt-aside__brand-tools">
@@ -149,69 +149,58 @@
             <div class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_aside_menu_wrapper">
                 <div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1" data-ktmenu-dropdown-timeout="500">
                     <ul class="kt-menu__nav ">
-                        <li class="kt-menu__item  @if(Request::is('manager/home*') ) kt-menu__item--active @endif"
+                        <li class="kt-menu__item  @if(Request::is('school/home*') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="{{ route('manager.home') }}" class="kt-menu__link ">
+                            <a href="{{ route('school.home') }}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-protection"></i>
                                 <span class="kt-menu__link-text">الرئيسة</span>
                             </a>
                         </li>
-                        <li class="kt-menu__item  @if(Request::is('manager/school*') ) kt-menu__item--active @endif"
+                        <li class="kt-menu__item  @if(Route::is('school.supervisor.index') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="{{route('manager.school.index')}}" class="kt-menu__link ">
-                                <i class="kt-menu__link-icon flaticon2-architecture-and-city"></i>
-                                <span class="kt-menu__link-text">المدارس</span>
-                            </a>
-                        </li>
-                        <li class="kt-menu__item  @if(Request::is('manager/supervisor*') ) kt-menu__item--active @endif"
-                            aria-haspopup="true">
-                            <a href="{{route('manager.supervisor.index')}}" class="kt-menu__link ">
+                            <a href="{{ route('school.supervisor.index') }}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-user-outline-symbol"></i>
-                                <span class="kt-menu__link-text">المشرفون</span>
+                                <span class="kt-menu__link-text">المشرفين</span>
                             </a>
                         </li>
-                        <li class="kt-menu__item  @if(Request::is('manager/teacher*') ) kt-menu__item--active @endif"
+                        <li class="kt-menu__item  @if(Route::is('school.teacher.index') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="{{route('manager.teacher.index')}}" class="kt-menu__link ">
+                            <a href="{{ route('school.teacher.index') }}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-user-outline-symbol"></i>
-                                <span class="kt-menu__link-text">المعلمون</span>
+                                <span class="kt-menu__link-text">المعلمين</span>
                             </a>
                         </li>
-                        <li class="kt-menu__item  @if(Request::is('manager/user*') ) kt-menu__item--active @endif"
+                        <li class="kt-menu__item  @if(Route::is('school.teacher.statistics') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="{{route('manager.user.index')}}" class="kt-menu__link ">
+                            <a href="{{ route('school.teacher.statistics') }}" class="kt-menu__link ">
+                                <i class="kt-menu__link-icon flaticon2-user-outline-symbol"></i>
+                                <span class="kt-menu__link-text">إحصائيات المعلمين</span>
+                            </a>
+                        </li>
+                        <li class="kt-menu__item  @if(Route::is('school.student.index') ) kt-menu__item--active @endif"
+                            aria-haspopup="true">
+                            <a href="{{ route('school.student.index') }}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-group"></i>
                                 <span class="kt-menu__link-text">الطلاب</span>
                             </a>
                         </li>
-                        <li class="kt-menu__item  @if(Request::is('manager/students_works*') ) kt-menu__item--active @endif"
+
+                        <li class="kt-menu__item  @if(Route::is('school.students_works.index') ) kt-menu__item--active @endif"
                             aria-haspopup="true">
-                            <a href="" class="kt-menu__link ">
+                            <a href="{{ route('school.students_works.index') }}" class="kt-menu__link ">
                                 <i class="kt-menu__link-icon flaticon2-group"></i>
                                 <span class="kt-menu__link-text">أعمال الطلاب</span>
                             </a>
                         </li>
-                        <li class="kt-menu__item  @if(Request::is('manager/lesson*') || Request::is('manager/assessment*')) kt-menu__item--active @endif"
-                            aria-haspopup="true">
-                            <a href="{{route('manager.lesson.index')}}" class="kt-menu__link ">
-                                <i class="kt-menu__link-icon flaticon2-open-text-book"></i>
-                                <span class="kt-menu__link-text">الدروس</span>
-                            </a>
-                        </li>
-                        <li class="kt-menu__item  @if(Request::is('manager/story*') || Request::is('manager/story*')) kt-menu__item--active @endif"
-                            aria-haspopup="true">
-                            <a href="{{route('manager.story.index')}}" class="kt-menu__link ">
-                                <i class="kt-menu__link-icon flaticon2-open-text-book"></i>
-                                <span class="kt-menu__link-text">القصص</span>
-                            </a>
-                        </li>
-                        <li class="kt-menu__item  @if(Request::is('manager/package*')) kt-menu__item--active @endif"
-                            aria-haspopup="true">
-                            <a href="{{route('manager.package.index')}}" class="kt-menu__link ">
-                                <i class="kt-menu__link-icon flaticon2-layers-1"></i>
-                                <span class="kt-menu__link-text">الباقات</span>
-                            </a>
-                        </li>
+
+{{--                        <li class="kt-menu__item  @if(Route::is('school.lesson.index') ) kt-menu__item--active @endif"--}}
+{{--                            aria-haspopup="true">--}}
+{{--                            <a href="{{ route('school.lesson.index') }}" class="kt-menu__link ">--}}
+{{--                                <i class="kt-menu__link-icon flaticon2-settings"></i>--}}
+{{--                                <span class="kt-menu__link-text">{{ t('Control Lessons') }}</span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+
                     </ul>
                 </div>
             </div>
@@ -230,59 +219,6 @@
                 <div class="kt-header-menu-wrapper" id="kt_header_menu_wrapper">
                     <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout-default ">
                         <ul class="kt-menu__nav ">
-{{--                            <li class="kt-menu__item"--}}
-{{--                                aria-haspopup="true">--}}
-{{--                                <a href="/" class="kt-menu__link ">--}}
-{{--                                    <i class="kt-menu__link-icon flaticon2-protection"></i>--}}
-{{--                                    <span class="kt-menu__link-text">معاينة</span>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-
-                            <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel @if(Request::is('manager/settings*') || Request::is('manager/city*') || Request::is('manager/language*') || Request::is('manager/country*') || Request::is('manager/brand*') || Request::is('manager/manager*')) kt-menu__item--active @endif @if(Request::is('manager/roles*') ) kt-menu__item--active @endif @if(Request::is('manager/page*') ) kt-menu__item--active @endif"
-                                data-ktmenu-submenu-toggle="click" aria-haspopup="true">
-                                <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-                                    <span class="kt-menu__link-text">الإعدادات</span>
-                                    <i class="kt-menu__hor-arrow la la-angle-down"></i>
-                                    <i class="kt-menu__ver-arrow la la-angle-right"></i>
-                                </a>
-                                <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
-                                    <ul class="kt-menu__subnav">
-                                        <li class="kt-menu__item" aria-haspopup="true">
-                                            <a href="" class="kt-menu__link">
-                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                                    <span></span>
-                                                </i>
-                                                <span class="kt-menu__link-text">الإعدادات العامة</span>
-                                            </a>
-                                        </li>
-{{--                                        <li class="kt-menu__item" aria-haspopup="true">--}}
-{{--                                            <a href="{{route('manager.manager.index')}}" class="kt-menu__link">--}}
-{{--                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">--}}
-{{--                                                    <span></span>--}}
-{{--                                                </i>--}}
-{{--                                                <span class="kt-menu__link-text">المداراء</span>--}}
-{{--                                            </a>--}}
-{{--                                        </li>--}}
-{{--                                        <li class="kt-menu__item" aria-haspopup="true">--}}
-{{--                                            <a href="{{route('manager.roles.index')}}" class="kt-menu__link">--}}
-{{--                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">--}}
-{{--                                                    <span></span>--}}
-{{--                                                </i>--}}
-{{--                                                <span class="kt-menu__link-text">الأدوار</span>--}}
-{{--                                            </a>--}}
-{{--                                        </li>--}}
-                                        <li class="kt-menu__item" aria-haspopup="true">
-                                            <a href="" class="kt-menu__link">
-                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
-                                                    <span></span>
-                                                </i>
-                                                <span class="kt-menu__link-text">الصفحات</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-
 
                         </ul>
 
@@ -297,7 +233,7 @@
                     @php
                         $notifications = \App\Models\Notification::query()->where(function ($query){
                                 $query->where('notifiable_id', auth()->user()->id)->orWhere('notifiable_id', 0);
-                            })->where('notifiable_type', \App\Models\Manager::class)
+                            })->where('notifiable_type', \App\Models\School::class)
                                 ->latest()->whereNull('read_at')->latest()->get();
                     @endphp
                     @isset($notifications)
@@ -318,23 +254,22 @@
                                     <h3 class="kt-head__title">
                                         الإشعارات
                                     </h3>
-
                                     <div class="w-100 text-right text-white p-3">
-                                        @if(isset($notifications) && count($notifications))
-{{--                                            {{ route('manager.notification.read_all') }}--}}
-                                        <a class="text-white" href="">تعليم الكل كمقروء</a>
-                                        @endif
+                                    @if(isset($notifications) && count($notifications))
+                                        <a class="text-white" href="{{ route('school.notification.read_all') }}">تعليم كمقروء</a>
+                                    @endif
                                     </div>
-
                                 </div>
 
                                 <!--end: Head -->
+                                <div class="tab-content">
+                                    <div class="tab-pane active show" id="topbar_notifications_notifications"
+                                         role="tabpanel">
                                         <div class="kt-notification kt-margin-t-10 kt-margin-b-10 kt-scroll" id="notification_list"
                                              data-scroll="true" data-height="300" data-mobile-height="200">
                                             @isset($notifications)
                                             @foreach($notifications as $notification)
-{{--                                                    {{ route('manager.notification.show', $notification->id) }}--}}
-                                                <a href=""
+                                                <a href="{{ route('school.notification.show', $notification->id) }}"
                                                    class="kt-notification__item">
                                                     <div class="kt-notification__item-icon">
                                                         <i class="flaticon2-notification kt-font-success"></i>
@@ -351,6 +286,8 @@
                                             @endforeach
                                             @endisset
                                         </div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -382,40 +319,37 @@
                             <!--end: Head -->
                             <!--begin: Navigation -->
                             <div class="kt-notification">
-{{--                                {{route('manager.profile.update')}}--}}
-{{--                                {{route('manager.password.update')}}--}}
-                                <a href="" class="kt-notification__item">
+                                <a href="{{route('school.profile.show')}}" class="kt-notification__item">
                                     <div class="kt-notification__item-icon">
                                         <i class="flaticon2-calendar-3 kt-font-success"></i>
                                     </div>
                                     <div class="kt-notification__item-details">
                                         <div class="kt-notification__item-title kt-font-bold">
-                                            الملف الشخصي
+                                           الملف الشخصي
                                         </div>
                                         <div class="kt-notification__item-time">
-                                            إعدادات الملف الشخصي
+                                            إعدادات  الملف الشخصي
                                         </div>
                                     </div>
                                 </a>
-                                <a href="" class="kt-notification__item">
+                                <a href="{{route('school.password.show')}}" class="kt-notification__item">
                                     <div class="kt-notification__item-icon">
                                         <i class="flaticon2-calendar-3 kt-font-success"></i>
                                     </div>
                                     <div class="kt-notification__item-details">
                                         <div class="kt-notification__item-title kt-font-bold">
-                                            كلمة المرور
+                                           كلمة المرور
                                         </div>
                                         <div class="kt-notification__item-time">
                                             تغيير كلمة المرور
                                         </div>
                                     </div>
-                                </a>
-                                <div class="kt-notification__custom kt-space-between">
-                                    <form id="logout-form" action="{{ url("/manager/logout") }}" method="POST"
+                                </a>                                <div class="kt-notification__custom kt-space-between">
+                                    <form id="logout-form" action="{{ url("/school/logout") }}" method="POST"
                                           style="display: none;">
                                         {{ csrf_field() }}
                                     </form>
-                                    <a href="{{ url("/manager/logout") }}" onclick="event.preventDefault();
+                                    <a href="{{ url("/school/logout") }}" onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();"
                                        class="btn btn-label btn-label-brand btn-sm btn-bold">تسجيل الخروج</a>
                                 </div>
@@ -437,11 +371,11 @@
 
                 <!-- begin:: Content -->
                 <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
-                    @if(!Request::is('manager/home') && Route::currentRouteName() != 'manager.user.review')
+                    @if(!Request::is('school/home'))
                         <div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ url('/manager/home') }}">الرئيسة</a>
+                                    <a href="{{ url('/school/home') }}">الرئيسة</a>
                                 </li>
                                 @stack('breadcrumb')
                             </ul>
@@ -466,7 +400,7 @@
             <!-- begin:: Footer -->
             <div class="kt-footer kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop" id="kt_footer">
                 <div class="kt-footer__copyright">
-                    {{ date('Y') }}&nbsp;&copy;&nbsp;<a href="https://www.abt-assessments.com/" target="_blank" class="kt-link"> A.B.T Assessments</a>
+                    {{ date('Y') }}&nbsp;&copy;&nbsp;<a href="http://arabic-uae.com/" target="_blank" class="kt-link"> A.B.T</a>
                 </div>
             </div>
 
@@ -526,14 +460,12 @@
 <script src="{{ asset("assets/vendors/general/toastr/build/toastr.min.js") }}" type="text/javascript"></script>
 
 <!--end:: Global Optional Vendors -->
-<script src="{{asset('assets/vendors/general/bootstrap-select/dist/js/bootstrap-select.js')}}"></script>
+<script src="{{asset('assets/js/bootstrap-select.min.js')}}"></script>
 
 <!--begin::Global Theme Bundle(used by all pages) -->
 <script src="{{ asset("assets/js/demo1/scripts.bundle.js") }}" type="text/javascript"></script>
 <script src="{{ asset("js/push.min.js") }}" type="text/javascript"></script>
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-
-
 <!--end::Global Theme Bundle -->
 
 <!--begin::Page Vendors(used by this page) -->
@@ -565,7 +497,6 @@
     @if(Session::has('message'))
     toastr.{{Session::get('m-class') ? Session::get('m-class'):'success'}}("{{Session::get('message')}}");
     @endif
-
     Push.Permission.get();
 
     function notifyMe(notify) {
@@ -578,6 +509,45 @@
                 this.close();
             }
         });
+
+
+        // // Let's check if the browser supports notifications
+        // if (!("Notification" in window)) {
+        //     alert("This browser does not support desktop notification");
+        // }
+        //
+        // // Let's check if the user is okay to get some notification
+        // else if (Notification.permission === "granted") {
+        //     // If it's okay let's create a notification
+        //     var notification = new Notification(notify.title,{
+        //         body: notify.body, // content for the alert
+        //         icon: "https://www.non-arabs.com/website/images/icons/icon.png" // optional image url
+        //     });
+        // }
+        //
+        //     // Otherwise, we need to ask the user for permission
+        //     // Note, Chrome does not implement the permission static property
+        // // So we have to check for NOT 'denied' instead of 'default'
+        // else if (Notification.permission !== 'denied') {
+        //     Notification.requestPermission(function (permission) {
+        //
+        //         // Whatever the user answers, we make sure we store the information
+        //         if(!('permission' in Notification)) {
+        //             Notification.permission = permission;
+        //         }
+        //
+        //         // If the user is okay, let's create a notification
+        //         if (permission === "granted") {
+        //             var notification = new Notification(notify.title,{
+        //                 body: notify.body, // content for the alert
+        //                 icon: "" // optional image url
+        //             });
+        //         }
+        //     });
+        // } else {
+        //     //alert(`Permission is ${Notification.permission}`);
+        //     toastr.success(notify.title);
+        // }
         $('#notification_list').prepend(" <a href=\"/manager/notification/"+ notify.id +"\"\n" +
             "                                                   class=\"kt-notification__item\">\n" +
             "                                                    <div class=\"kt-notification__item-icon\">\n" +
@@ -588,7 +558,7 @@
             "                                                            "+notify.title+"\n" +
             "                                                        </div>\n" +
             "                                                        <div class=\"kt-notification__item-time\">\n" +
-            "                                                            الأن" +
+            "                                                            "+"{{t('now')}}"+"\n" +
             "                                                        </div>\n" +
             "                                                    </div>\n" +
             "                                                </a>");
@@ -613,30 +583,13 @@
         console.log(message);
     };
     //Also remember to change channel and event name if your's are different.
-    var channel = pusher.subscribe('managers');
-    channel.bind('manager-notification', call_back);
+    var channel = pusher.subscribe('schools');
+    channel.bind('school-notification', call_back);
 
     var user_channel = pusher.subscribe('user_{{auth()->user()->id}}');
-    user_channel.bind('manager-notification', call_back);
+    user_channel.bind('school-notification', call_back);
 
-
-
-
-    // $(function() {
-    //     if (window.history && window.history.pushState) {
-    //         window.history.pushState('', null, './');
-    //         $(window).on('popstate', function() {
-    //             // alert('Back button was pressed.');
-    //             document.location.href = '#';
-    //         });
-    //     }
-    // });
-    $(window).bind('beforeunload', function(){
-        myfun();
-        return 'Are you sure you want to leave?';
-    });
-
-    $('.select2L').selectpicker({
+    $('select').selectpicker({
         liveSearch: true,
     });
 </script>

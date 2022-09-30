@@ -1,15 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Teacher;
+namespace App\Http\Controllers\School;
 
 use App\Exports\StudentInformation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\School\UserRequest;
 use App\Models\Lesson;
+use App\Models\MatchResult;
+use App\Models\OptionResult;
+use App\Models\Payment;
 use App\Models\School;
-use App\Models\StudentTest;
+use App\Models\SortResult;
+use App\Models\UserTest;
 use App\Models\Teacher;
 use App\Models\TeacherUser;
+use App\Models\TrueFalseResult;
 use App\Models\User;
 use App\Models\UserLesson;
 use App\Models\UserTracker;
@@ -23,58 +28,24 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $teacher = Auth::guard('teacher')->user();
+        $school = Auth::guard('school')->user();
         if (request()->ajax())
         {
             $name = $request->get('name', false);
             $grade = $request->get('grade', false);
+            $teacher = $request->get('teacher', false);
             $section = $request->get('section', false);
             $rows = User::query()->when($name, function (Builder $query) use ($name){
                 $query->where('name', 'like', '%'.$name.'%');
             })->when($grade, function (Builder $query) use ($grade){
-                $query->where('grade_id', $grade);
+                $query->where('grade', $grade);
+            })->when($teacher, function (Builder $query) use ($teacher){
+                $query->whereHas('teacher_student', function (Builder $query) use($teacher){
+                    $query->where('teacher_id', $teacher);
+                });
             })->when($section, function (Builder $query) use ($section){
                 $query->where('section', $section);
-            })->where('school_id', $teacher->school_id)->whereDoesntHave('teacherUser')->latest();
-
-            return DataTables::make($rows)
-                ->escapeColumns([])
-                ->addColumn('created_at', function ($row){
-                    return Carbon::parse($row->created_at)->toDateString();
-                })
-
-                ->addColumn('active_to', function ($row) {
-                    return is_null($row->active_to) ? 'غير مدفوع':optional($row->active_to)->format('Y-m-d');
-                })
-                ->addColumn('grade', function ($row) {
-                    return $row->grade_id ;
-                })
-                ->addColumn('check', function ($row) {
-                    return $row->check;
-                })
-                ->make();
-        }
-        $title = "عرض الطلاب";
-        return view('teacher.user.index', compact('title'));
-    }
-
-    public function myStudents(Request $request)
-    {
-        $teacher = Auth::guard('teacher')->user();
-        if (request()->ajax())
-        {
-            $name = $request->get('name', false);
-            $grade = $request->get('grade', false);
-            $section = $request->get('section', false);
-            $rows = User::query()->when($name, function (Builder $query) use ($name){
-                $query->where('name', 'like', '%'.$name.'%');
-            })->when($grade, function (Builder $query) use ($grade){
-                $query->where('grade_id', $grade);
-            })->when($section, function (Builder $query) use ($section){
-                $query->where('section', $section);
-            })->where('school_id', $teacher->school_id)->whereHas('teacherUser', function (Builder $query) use($teacher){
-                $query->where('teacher_id', $teacher->id);
-            })->latest();
+            })->where('school_id', $school->id)->latest();
 
             return DataTables::make($rows)
                 ->escapeColumns([])
@@ -84,41 +55,38 @@ class StudentController extends Controller
                 ->addColumn('last_login', function ($row){
                     return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString():'';
                 })
+                ->addColumn('teacher', function ($row) {
+                    return optional(optional($row->teacher_student)->teacher)->name ?? t('Unsigned');
+                })
                 ->addColumn('active_to', function ($row) {
-                    return is_null($row->active_to) ? 'غير مدفوع':optional($row->active_to)->format('Y-m-d');
+                    return is_null($row->active_to) ? 'unpaid':optional($row->active_to)->format('Y-m-d');
                 })
                 ->addColumn('grade', function ($row) {
-                    return $row->grade_id;
+                    return $row->grade ? t("Grade") ." $row->grade":'';
                 })
                 ->addColumn('actions', function ($row) {
-                    return $row->teacher_action_buttons;
+                    return $row->school_action_buttons;
                 })
-                ->addColumn('check', function ($row) {
-                    return $row->check;
-                })
-
                 ->make();
         }
-        $title = "طلابي";
-        return view('teacher.user.my_students', compact('title'));
+        $title = t('Show Users');
+        $teachers = Teacher::query()->where('school_id', $school->id)->get();
+        return view('school.user.index', compact('title', 'teachers'));
     }
 
     public function edit($id)
     {
         $title = t('Edit User');
-        $teacher = Auth::guard('teacher')->user();
-        $user = User::query()->whereHas('teacherUser', function (Builder $query) use($teacher){
-            $query->where('teacher_id', $teacher->id);
-        })->findOrFail($id);
-        return view('teacher.user.edit', compact('user', 'title'));
+        $school = Auth::guard('school')->user();
+        $user = User::query()->where('school_id', $school->id)->findOrFail($id);
+        $teachers = Teacher::query()->where('school_id', $school->id)->get();
+        return view('school.user.edit', compact('user', 'teachers', 'title'));
     }
 
     public function update(UserRequest $request, $id)
     {
-        $teacher = Auth::guard('teacher')->user();
-        $user = User::query()->whereHas('teacherUser', function (Builder $query) use($teacher){
-            $query->where('teacher_id', $teacher->id);
-        })->findOrFail($id);
+        $school = Auth::guard('school')->user();
+        $user = User::query()->where('school_id', $school->id)->findOrFail($id);
         $data = $request->validated();
         if ($request->hasFile('image'))
         {
@@ -126,71 +94,51 @@ class StudentController extends Controller
         }
         $data['password'] = $request->get('password', false) ? bcrypt($request->get('password', 123456)):$user->password;
         $user->update($data);
-        return $this->redirectWith(false, 'teacher.student.my_students', 'Successfully Updated');
+        $teacher_id = $request->get('teacher_id', false);
+        if ($teacher_id)
+        {
+            $user->teacher_student()->updateOrCreate([
+                'teacher_id' => $teacher_id,
+            ],[
+                'teacher_id' => $teacher_id,
+            ]);
+        }else{
+            $user->teacher_student()->delete();
+        }
+        return $this->redirectWith(false, 'school.student.index', 'Successfully Updated');
     }
+
+    public function destroy($id)
+    {
+        $school = Auth::guard('school')->user();
+        $user = User::query()->where('school_id', $school->id)->findOrFail($id);
+        TrueFalseResult::query()->where('user_id', $user->id)->forceDelete();
+        SortResult::query()->where('user_id', $user->id)->forceDelete();
+        MatchResult::query()->where('user_id', $user->id)->forceDelete();
+        OptionResult::query()->where('user_id', $user->id)->forceDelete();
+        Payment::query()->where('user_id', $user->id)->forceDelete();
+        $user->forceDelete();
+
+        return $this->redirectWith(true, null, 'Successfully Deleted');
+    }
+
 
     public function exportStudentsExcel(Request $request)
     {
-        $teacher = Auth::guard('teacher')->user();
-        $file_name = $teacher->school->name . " Students Information.xlsx";
-        return (new StudentInformation($request, $teacher->school_id))
+        $school = Auth::guard('school')->user();
+        $file_name = "$school->name Students Information.xlsx";
+        return (new StudentInformation($school->id))
             ->download($file_name);
-    }
-
-    public function studentAssign(Request $request)
-    {
-        $id = $request->get('user_id', false);
-        $teacher = Auth::guard('teacher')->user();
-        if($id)
-        {
-            if (is_array($id))
-            {
-                foreach ($id as $student)
-                {
-                    TeacherUser::query()->updateOrCreate(['user_id' => $student], [
-                        'teacher_id' => $teacher->id,
-                    ]);
-                }
-                return $this->sendResponse(null, "تم الإسناد بنجاح");
-            }else{
-                TeacherUser::query()->updateOrCreate(['user_id' => $id], [
-                    'teacher_id' => $teacher->id,
-                ]);
-            }
-        }
-
-        return redirect()->route('teacher.student.index')->with('message', "تم الإسناد بنجاح");
-    }
-
-    public function deleteStudentAssign(Request $request)
-    {
-        $id = $request->get('user_id', false);
-        $teacher = Auth::guard('teacher')->user();
-        if($id)
-        {
-            if (is_array($id))
-            {
-                TeacherUser::query()->where('teacher_id', $teacher->id)->whereIn('user_id', $id)->delete();
-                return $this->sendResponse(null, t('Successfully deleted'));
-            }else{
-                TeacherUser::query()->where('teacher_id', $teacher->id)->where('user_id', $id)->delete();
-            }
-        }
-
-        return redirect()->route('teacher.student.index')->with('message', "تم الإلغاء بنجاح");
     }
 
     public function review(Request $request,$id)
     {
         $title = t('Student review');
-        $teacher = Auth::guard('teacher')->user();
-        $user = User::query()->whereHas('teacherUser', function (Builder $query) use($teacher){
-            $query->where('teacher_id', $teacher->id);
-        })->findOrFail($id);
-
-        if ($user->teacherUser && $user->teacherUser->teacher)
+        $school = Auth::guard('school')->user();
+        $user = User::query()->where('school_id', $school->id)->findOrFail($id);
+        if ($user->teacher_student && $user->teacher_student->teacher)
         {
-            $teacher = $user->teacherUser->teacher;
+            $teacher = $user->teacher_student->teacher;
         }else{
             $teacher = false;
         }
@@ -206,8 +154,8 @@ class StudentController extends Controller
         $start_date = $request->get('start_date', Carbon::now()->startOfMonth()->toDateString());
         $end_date = $request->get('end_date', Carbon::now()->endOfMonth()->toDateString());
         $grade = $request->get('grade',$user->grade);
-        $tests = StudentTest::query()->where('user_id', $id)->count();
-        $passed_tests = StudentTest::query()->where('user_id', $id)->where('total', '>=', 40)->count();
+        $tests = UserTest::query()->where('user_id', $id)->count();
+        $passed_tests = UserTest::query()->where('user_id', $id)->where('total', '>=', 40)->count();
         if ($user->user_grades()->count())
         {
             $grades = $user->user_grades()->pluck('grade')->unique()->values()->all();
@@ -216,7 +164,7 @@ class StudentController extends Controller
         }
         $tracks = UserTracker::query()->where('user_id', $user->id)->whereHas('lesson', function (Builder $query) use ($grade){
             $query->whereHas('level', function (Builder $query) use($grade){
-                $query->where('grade_id', $grade);
+                $query->where('grade', $grade);
             });
         })->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->latest()->get();
 
@@ -244,7 +192,7 @@ class StudentController extends Controller
 
 
 
-        return view('teacher.user.review', compact('user', 'teacher',
+        return view('school.user.review', compact('user', 'teacher',
             'tests', 'passed_tests', 'grades', 'start_date', 'end_date', 'tracks', 'title', 'data'));
 
     }
@@ -252,13 +200,11 @@ class StudentController extends Controller
     public function report(Request $request,$id)
     {
         $title = t('Student report');
-        $teacher = Auth::guard('teacher')->user();
-        $student = User::query()->whereHas('teacherUser', function (Builder $query) use($teacher){
-            $query->where('teacher_id', $teacher->id);
-        })->findOrFail($id);
-        if ($student->teacherUser && $student->teacherUser->teacher)
+        $school = Auth::guard('school')->user();
+        $student = User::query()->where('school_id', $school->id)->findOrFail($id);
+        if ($student->teacher_student && $student->teacher_student->teacher)
         {
-            $teacher = $student->teacherUser->teacher;
+            $teacher = $student->teacher_student->teacher;
         }else{
             $teacher = false;
         }
@@ -305,7 +251,7 @@ class StudentController extends Controller
                 $lesson_info['tracker'] = 0;
             }
 
-            $user_test = StudentTest::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->latest('total')->first();
+            $user_test = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->latest('total')->first();
             $lesson_info['user_test'] = $user_test;
             if (isset($user_test) && !is_null($user_test->start_at) && !is_null($user_test->end_at))
             {
@@ -328,7 +274,7 @@ class StudentController extends Controller
         }
 
         $lessons_info = array_chunk($lessons_info, 2);
-        return view('teacher.user.report', compact('student', 'teacher', 'lessons_info'));
+        return view('school.user.report', compact('student', 'teacher', 'lessons_info'));
 
     }
 
@@ -336,24 +282,28 @@ class StudentController extends Controller
     {
         $name = $request->get('name', false);
         $grade = $request->get('grade', false);
+        $teacher_id = $request->get('teacher_id', false);
         $section = $request->get('section', false);
-        $teacher = Auth::guard('teacher')->user();
+        $school_id = Auth::guard('school')->user()->id;
         $students = User::query()->when($name, function (Builder $query) use ($name){
             $query->where('name', 'like', '%'.$name.'%');
         })->when($grade, function (Builder $query) use ($grade){
-            $query->where('grade_id', $grade);
+            $query->where('grade', $grade);
+        })->when($school_id, function (Builder $query) use ($school_id){
+            $query->where('school_id', $school_id);
+        })->when($teacher_id, function (Builder $query) use ($teacher_id){
+            $query->whereHas('teacher_student', function (Builder $query) use ($teacher_id){
+                $query->where('teacher_id', $teacher_id);
+            });
         })->when($section, function (Builder $query) use ($section){
             $query->where('section', $section);
-        })->where('school_id', $teacher->school_id)->whereHas('teacherUser', function (Builder $query) use($teacher){
-            $query->where('teacher_id', $teacher->id);
-        })->latest()->get();
-
-
+        })->orderBy('grade')->get();
 
         $students = $students->chunk(6);
-        $school = $teacher->school;
+        $school = School::query()->find($school_id);
         return view('general.user.cards', compact('students', 'school'));
     }
+
 
 
 }
