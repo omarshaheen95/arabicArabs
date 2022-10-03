@@ -168,12 +168,6 @@ class TeacherController extends Controller
 
         foreach ($students_grades as $students_grade) {
             $grade_info = [];
-            $user_games = UserTracker::query()->where('type', 'play')->whereIn('user_id', $teacher_students)
-                ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade', $students_grade);
-                    });
-                })->count();
             $user_tests = UserTracker::query()->where('type', 'test')->whereIn('user_id', $teacher_students)
                 ->whereHas('lesson', function (Builder $query) use ($students_grade) {
                     $query->whereHas('level', function (Builder $query) use ($students_grade) {
@@ -201,16 +195,7 @@ class TeacherController extends Controller
                 })
                 ->count();
 
-            $user_lessons = UserLesson::query()->whereHas('user', function (Builder $query) use ($teacher) {
-                    $query->whereHas('teacher_student', function (Builder $query) use ($teacher) {
-                        $query->where('teacher_id', $teacher->id);
-                    });
-                })
-                ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade', $students_grade);
-                    });
-                })->get();
+           
 
             $students_tests = UserTest::query()->whereHas('user', function (Builder $query) use ($teacher) {
                     $query->whereHas('teacher_student', function (Builder $query) use ($teacher) {
@@ -223,29 +208,20 @@ class TeacherController extends Controller
                     });
                 })->get();
 
-            $pending_tasks = $user_lessons->where('status', 'pending')->count();
-            $completed_tasks = $user_lessons->where('status', 'corrected')->count();
-            $returned_tasks = $user_lessons->where('status', 'returned')->count();
 
             $passed_tests = $students_tests->where('status', 'Pass')->count();
             $failed_tests = $students_tests->where('status', 'Fail')->count();
 
-            $grade_info['pending_tasks'] = $pending_tasks;
-            $grade_info['completed_tasks'] = $completed_tasks;
-            $grade_info['returned_tasks'] = $returned_tasks;
-            $grade_info['total_tasks'] = $user_lessons->count();
             $grade_info['passed_tests'] = $passed_tests;
             $grade_info['failed_tests'] = $failed_tests;
             $grade_info['total_tests'] = $students_tests->count();
             if ($user_tracker) {
-                $grade_info['games'] = round(($user_games / $user_tracker) * 100, 1);
                 $grade_info['tests'] = round(($user_tests / $user_tracker) * 100, 1);
                 $grade_info['trainings'] = round(($user_training / $user_tracker) * 100, 1);
                 $grade_info['learnings'] = round(($user_learning / $user_tracker) * 100, 1);
                 $grade_info['tracker'] = $user_tracker;
 
             } else {
-                $grade_info['games'] = 0;
                 $grade_info['tests'] = 0;
                 $grade_info['trainings'] = 0;
                 $grade_info['learnings'] = 0;

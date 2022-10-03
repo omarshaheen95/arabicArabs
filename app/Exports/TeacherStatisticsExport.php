@@ -35,13 +35,12 @@ class TeacherStatisticsExport implements WithMapping, Responsable, WithHeadings,
     public function headings(): array
     {
         return [
-            'Teacher Name',
-            'Passed tests',
-            'Failed tests',
-            'Pending teaks',
-            'Completed tasks',
-            'Returned tasks',
-            'Last login',
+            'اسم المعلم',
+            'اختبارات دروس منجزة',
+            'اختبارات دروس فاشلة',
+            'اختبارات قصص منجزة',
+            'اختبارات قصص فاشلة',
+            'آخر دخول',
         ];
     }
 
@@ -51,9 +50,8 @@ class TeacherStatisticsExport implements WithMapping, Responsable, WithHeadings,
             $teacher->name,
             "$teacher->passed_tests",
             "$teacher->failed_tests",
-            "$teacher->pending_tasks",
-            "$teacher->corrected_tasks",
-            "$teacher->returned_tasks",
+            "$teacher->passed_tests_lessons",
+            "$teacher->failed_tests_lessons",
             $teacher->last_login ? Carbon::parse($teacher->last_login)->toDateTimeString():'',
         ];
     }
@@ -90,10 +88,10 @@ class TeacherStatisticsExport implements WithMapping, Responsable, WithHeadings,
         });
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $cellRange = 'A1:G1';
+                $cellRange = 'A1:F1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold('bold')->setSize(12);
                 $event->sheet->styleCells(
-                    "A1:G$this->length",
+                    "A1:F$this->length",
                     [
                         'alignment' => [
                             'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,

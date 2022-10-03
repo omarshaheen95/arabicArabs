@@ -14,7 +14,7 @@ class Teacher extends Authenticatable
     use Notifiable, SoftDeletes;
     protected $fillable = [
         'name', 'email', 'password', 'school_id', 'mobile', 'pending_tasks', 'corrected_tasks', 'returned_tasks',
-        'passed_tests', 'failed_tests', 'approved', 'active', 'last_login'
+        'passed_tests', 'failed_tests', 'approved', 'active', 'last_login', 'passed_tests_lessons', 'failed_tests_lessons'
     ];
 
     protected $hidden = [
@@ -34,6 +34,11 @@ class Teacher extends Authenticatable
     public function school()
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(TeacherUser::class);
     }
 
     public function scopeSearch(Builder $query, Request $request)

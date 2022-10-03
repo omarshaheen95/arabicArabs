@@ -185,13 +185,13 @@
                             </a>
                         </li>
 
-                        <li class="kt-menu__item  @if(Route::is('school.students_works.index') ) kt-menu__item--active @endif"
-                            aria-haspopup="true">
-                            <a href="{{ route('school.students_works.index') }}" class="kt-menu__link ">
-                                <i class="kt-menu__link-icon flaticon2-group"></i>
-                                <span class="kt-menu__link-text">أعمال الطلاب</span>
-                            </a>
-                        </li>
+{{--                        <li class="kt-menu__item  @if(Route::is('school.students_works.index') ) kt-menu__item--active @endif"--}}
+{{--                            aria-haspopup="true">--}}
+{{--                            <a href="{{ route('school.students_works.index') }}" class="kt-menu__link ">--}}
+{{--                                <i class="kt-menu__link-icon flaticon2-group"></i>--}}
+{{--                                <span class="kt-menu__link-text">أعمال الطلاب</span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
 
 {{--                        <li class="kt-menu__item  @if(Route::is('school.lesson.index') ) kt-menu__item--active @endif"--}}
 {{--                            aria-haspopup="true">--}}

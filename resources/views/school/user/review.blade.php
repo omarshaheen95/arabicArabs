@@ -25,7 +25,7 @@
                             <div class="kt-widget__content">
                                 <div class="kt-widget__head">
                                     <label href="#" class="kt-widget__username">
-                                        {{t('Student')}} : {{ $user->name }}
+                                        الطالب : {{ $user->name }}
 
                                     </label>
 
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="kt-widget__subhead">
                                     <a href="#"> <i
-                                            class="flaticon2-calendar-7"></i> {{ t('member since : ') .' '. $user->created_at->format('d-m-Y') }}
+                                            class="flaticon2-calendar-7"></i> {{ 'مسجل منذ :  '. $user->created_at->format('d-m-Y') }}
                                     </a>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                 <div class="kt-widget__content">
                                     <div class="kt-widget__head">
                                         <label href="#" class="kt-widget__username">
-                                            {{t('Teacher')}} : {{ $teacher->name }}
+                                            المعلم : {{ $teacher->name }}
                                             @if($teacher->active)
                                                 <i class="flaticon2-correct"></i>
                                             @endif
@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="kt-widget__subhead">
                                         <a href="#"> <i
-                                                class="flaticon2-calendar-7"></i> {{ t('member since : ') .' '. $teacher->created_at->format('d-m-Y') }}
+                                                class="flaticon2-calendar-7"></i> {{ 'مسجل منذ : '. $teacher->created_at->format('d-m-Y') }}
                                         </a>
                                     </div>
                                 </div>
@@ -83,8 +83,8 @@
                                     <i class="flaticon-interface-6"></i>
                                 </div>
                                 <div class="kt-widget__details">
-                                    <span class="kt-widget__title">{{ t('Grade') }}</span>
-                                    <span class="kt-widget__value">Grade {{$user->grade}}</span>
+                                    <span class="kt-widget__title">الصف</span>
+                                    <span class="kt-widget__value">Grade {{$user->grade_id}}</span>
                                 </div>
                             </div>
 
@@ -93,9 +93,9 @@
                                     <i class="flaticon-layers"></i>
                                 </div>
                                 <div class="kt-widget__details">
-                                    <span class="kt-widget__title">{{ t('Package') }}</span>
+                                    <span class="kt-widget__title">الباقة</span>
                                     <span
-                                        class="kt-widget__value">{{optional($user->pakage)->name ?? t('not subscribed')}}</span>
+                                        class="kt-widget__value">{{optional($user->pakage)->name ?? "غير مشترك"}}</span>
                                 </div>
                             </div>
 
@@ -104,7 +104,7 @@
                                     <i class="flaticon-calendar-2"></i>
                                 </div>
                                 <div class="kt-widget__details">
-                                    <span class="kt-widget__title">{{ t('Active to') }}</span>
+                                    <span class="kt-widget__title">فعال حتى</span>
                                     <span
                                         class="kt-widget__value">{{optional($user->active_to)->format('Y-m-d')}}</span>
                                 </div>
@@ -115,8 +115,8 @@
                                     <i class="flaticon-signs-2"></i>
                                 </div>
                                 <div class="kt-widget__details">
-                                    <span class="kt-widget__title">{{ t('Tests') }}</span>
-                                    <span class="kt-widget__value">{{$tests}} {{t('tests')}}</span>
+                                    <span class="kt-widget__title">اختبارات الدروس</span>
+                                    <span class="kt-widget__value">{{$tests}} اختبار </span>
                                 </div>
                             </div>
 
@@ -125,8 +125,8 @@
                                     <i class="flaticon-list-3"></i>
                                 </div>
                                 <div class="kt-widget__details">
-                                    <span class="kt-widget__title">{{ t('Passed test') }}</span>
-                                    <span class="kt-widget__value">{{$passed_tests}} {{t('tests')}}</span>
+                                    <span class="kt-widget__title">اختبارات الدروس المنجزة</span>
+                                    <span class="kt-widget__value">{{$passed_tests}} اختبار </span>
                                 </div>
                             </div>
 
@@ -135,7 +135,7 @@
                                     <i class="flaticon-logout"></i>
                                 </div>
                                 <div class="kt-widget__details">
-                                    <span class="kt-widget__title">{{ t('Last login') }}</span>
+                                    <span class="kt-widget__title">آخر دخول</span>
                                     <span class="kt-widget__value">{{optional($user->last_login)->format('Y-m-d H:i')}} - {{optional($user->last_login)->diffForHumans()}}</span>
                                 </div>
                             </div>
@@ -157,40 +157,35 @@
                             <form action="">
                                 <div class="form-group row">
                                     <div class="col-lg-4">
-                                        <label>{{t('Select date')}}:</label>
+                                        <label>اختر تاريخ :</label>
                                         <div class="input-daterange input-group" id="kt_datepicker_5">
                                             <input type="text" class="form-control date" value="{{$start_date}}"
-                                                   name="start_date" placeholder="{{t('Start date')}}"/>
+                                                   name="start_date" placeholder="تاريخ البداية"/>
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="la la-ellipsis-h"></i></span>
                                             </div>
                                             <input type="text" class="form-control date" value="{{$end_date}}"
-                                                   name="end_date" placeholder="{{t('End date')}}"/>
+                                                   name="end_date" placeholder="تاريخ النهاية"/>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <label class="">Grade:</label>
                                         <select name="grade" class="form-control">
                                             @foreach($grades as $grade)
-                                                @if($grades == 15)
-                                                    <option
-                                                        value="{{$grade}}" {{request()->get('grade', false) == $grade ? 'selected':''}}>
-                                                        KG 2</option>
-                                                    @else
+
                                                 <option
-                                                    value="{{$grade}}" {{request()->get('grade', false) == $grade ? 'selected':''}}>
-                                                    Grade {{$grade}}</option>
-                                                @endif
+                                                    value="{{$grade->id}}" {{request()->get('grade', false) == $grade ? 'selected':''}}>
+                                                    الصف {{$grade->id}}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="col-lg-4">
-                                        <label class="">{{t('Actions')}}:</label>
+                                        <label class="">الإجراءات:</label>
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-danger"><i
-                                                    class="la la-search"></i> {{t('Show result')}}</button>
+                                                    class="la la-search"></i> عرض النتائج</button>
                                             <a href="{{route('school.user.report',[$user->id])}}" class="btn btn-danger"><i
-                                                    class="la la-bar-chart"></i> {{t('Report')}}</a>
+                                                    class="la la-bar-chart"></i> التقرير</a>
                                         </div>
                                     </div>
                                     <hr/>
@@ -263,7 +258,7 @@
                     type: 'pie'
                 },
                 title: {
-                    text: '{{t("The percentage of student progress during to ", ['startDate' => $start_date, 'endDate' => $end_date])}}'
+                    text: 'نسبة تقدم الطالب في الدروس التعليمية خلال فترة {{$start_date}} وحتى فترة {{ $end_date }}'
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -294,10 +289,9 @@
                     name: 'Share',
                     innerSize: '30%',
                     data: [
-                        { name: '{{t('learn')}}', y: {{$data['learn_avg']}}, color: "#ffb822" },
-                        { name: '{{t('practise')}}', y: {{$data['practise_avg']}}, color: "#000000" },
-                        { name: '{{t('test')}}', y: {{$data['test_avg']}}, color: "#3B47CB" },
-                        { name: '{{t('play')}}', y: {{$data['play_avg']}}, color: "#0abb87" },
+                        { name: 'التعلم', y: {{$data['learn_avg']}}, color: "#ffb822" },
+                        { name: 'التدريب', y: {{$data['practise_avg']}}, color: "#000000" },
+                        { name: 'الاختبار', y: {{$data['test_avg']}}, color: "#3B47CB" },
                     ]
                 }]
             });

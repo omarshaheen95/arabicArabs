@@ -80,7 +80,11 @@ class StudentInformation implements WithMapping, Responsable, WithHeadings, From
     {
 
 
-        $students = User::query()->latest()->search($this->request);
+        $students = User::query()
+            ->with(['teacherUser.teacher', 'teacherUser'])
+            ->latest()->when($this->school_id, function (Builder $query) {
+            $query->where('school_id', $this->school_id);
+        })->search($this->request);
 
 
         if ($students->count() >= 1) {

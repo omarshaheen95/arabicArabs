@@ -1,8 +1,4 @@
-{{--
-Dev Omar Shaheen
-Devomar095@gmail.com
-WhatsApp +972592554320
---}}
+
 @extends('school.layout.container')
 @section('style')
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -41,7 +37,7 @@ WhatsApp +972592554320
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title">
-                            {{ t('Teachers statistics') }}
+                            {{$title}}
                         </h3>
                     </div>
                     <div class="kt-portlet__head-toolbar">
@@ -49,7 +45,7 @@ WhatsApp +972592554320
                             <div class="kt-portlet__head-actions">
                                 <a href="{{route('school.teacher.statistics_export')}}" class="btn btn-danger btn-elevate btn-icon-sm">
                                     <i class="la la-paper-plane"></i>
-                                    {{ t('Export') }}
+                                    استخراج
                                 </a>
                             </div>
                         </div>
@@ -58,14 +54,14 @@ WhatsApp +972592554320
                 <div class="kt-portlet__body">
                     <table class="table text-center" id="users-table">
                         <thead>
-                        <th>{{ t('Name') }}</th>
-                        <th>{{ t('Passed tests') }}</th>
-                        <th>{{ t('Failed tests') }}</th>
-                        <th>{{ t('Pending teaks') }}</th>
-                        <th>{{ t('Completed tasks') }}</th>
-                        <th>{{ t('Returned tasks') }}</th>
-                        <th>{{ t('Last login') }}</th>
-                        <th>{{ t('Actions') }}</th>
+                        <th>الاسم</th>
+                        <th>اختبارات دروس منجزة</th>
+                        <th>اختبارات دروس فاشلة</th>
+
+                        <th>اختبارات قصص منجزة</th>
+                        <th>اختبارات قصص فاشلة</th>
+                        <th>آخر دخول</th>
+                        <th>الإجراءات</th>
                         </thead>
                     </table>
                 </div>
@@ -104,9 +100,8 @@ WhatsApp +972592554320
                         {data: 'name', name: 'name'},
                         {data: 'passed_tests', name: 'passed_tests'},
                         {data: 'failed_tests', name: 'failed_tests'},
-                        {data: 'pending_tasks', name: 'pending_tasks'},
-                        {data: 'corrected_tasks', name: 'corrected_tasks'},
-                        {data: 'returned_tasks', name: 'returned_tasks'},
+                        {data: 'passed_tests_lessons', name: 'passed_tests_lessons'},
+                        {data: 'failed_tests_lessons', name: 'failed_tests_lessons'},
                         {data: 'last_login', name: 'last_login'},
                         {data: 'actions', name: 'actions'}
                     ],

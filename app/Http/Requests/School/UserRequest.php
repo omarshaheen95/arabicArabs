@@ -29,7 +29,6 @@ class UserRequest extends FormRequest
             'email' => "required|email:rfc,dns|unique:users,email,$id,id,deleted_at,NULL",
             'password' => 'nullable|min:6',
             'image' => 'nullable|image',
-            'year_learning' => 'nullable|integer',
             'country_code' => 'required',
             'section' => 'nullable',
             'short_country' => 'required',

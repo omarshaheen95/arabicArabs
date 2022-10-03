@@ -95,12 +95,17 @@ class User extends Authenticatable
             })
             ->when($created_at = $request->get('created_at', false), function (Builder $query) use ($created_at) {
                 $query->whereDate('created_at', '>=', $created_at);
+            })
+            ->when($teacher_id = $request->get('teacher_id', false), function (Builder $query) use ($teacher_id) {
+                $query->whereHas('teacherUser', function (Builder $query) use ($teacher_id) {
+                    $query->where('teacher_id', $teacher_id);
+                });
             });
     }
 
     public function getImageAttribute($value)
     {
-        return is_null($value) ? asset('assets/media/icons/student.png'):asset($value);
+        return is_null($value) ? asset('assets/media/icons/student.png') : asset($value);
     }
 
     public function user_tracker()
@@ -132,8 +137,7 @@ class User extends Authenticatable
 
     public function getGradeNameAttribute()
     {
-        switch($this->grade_id)
-        {
+        switch ($this->grade_id) {
             case 1:
                 return "الأول";
             case 2:
@@ -161,6 +165,11 @@ class User extends Authenticatable
             default:
                 return '';
         }
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = trim(strtolower($value));
     }
 
 

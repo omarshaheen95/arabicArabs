@@ -143,18 +143,24 @@
     <title>{{ $teacher->name }}</title>
 
 </head>
-<body>
+<body dir="rtl">
 
 
 <div class="page">
     <div class="subpage-w" style="padding-bottom: 0">
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
         <div class="row" style="margin-top:20px;">
             <div class="col-xs-12">
-                <h1 class="text-center text-red" style="font-weight: bold; font-size: 40px">Teacher Report</h1>
+                <h1 class="text-center text-red" style="font-weight: bold; font-size: 40px">تقرير مدرس</h1>
             </div>
             <div class="col-xs-8 col-xs-offset-2">
                 <div class="text-center">
-                    <img width="80%" src="{{ asset('website/images/non-arab-logo.png') }}"/>
+                    <img width="80%" src="{{ asset('logo.png') }}"/>
                 </div>
 
                 {{--                <div class="logo-name">--}}
@@ -163,6 +169,9 @@
                 {{--                </div>--}}
             </div>
         </div>
+
+        <br/>
+        <br/>
         <br/>
         <br/>
         <div class="row">
@@ -170,41 +179,48 @@
                 <table class="table table-bordered text-center">
                     <tbody>
                     <tr>
-                        <td width="40%">Teacher Name</td>
+                        <td width="40%">الاسم</td>
                         <td>{{$teacher->name}}</td>
                     </tr>
                     <tr>
-                        <td width="40%">Email</td>
+                        <td width="40%">البريد الإلكتروني</td>
                         <td>{{$teacher->email}}</td>
                     </tr>
                     <tr>
-                        <td width="40%">Mobile</td>
+                        <td width="40%">الموبايل</td>
                         <td>{{$teacher->mobile}}</td>
                     </tr>
                     <tr>
-                        <td width="40%">School</td>
+                        <td width="40%">المدرةس</td>
                         <td>{{$teacher->school->name}}</td>
                     </tr>
                     <tr>
-                        <td width="40%">Total students</td>
-                        <td>{{$teacher->teacher_students()->count()}}</td>
+                        <td width="40%">إجمالي الطلاب</td>
+                        <td>{{$teacher->students()->count()}}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         <br/>
-        <div class="row text-center">
-            <img src="{{asset('website/images/features.bmp')}}" width="80%">
-        </div>
+
+
         <br/>
         <br/>
-        <div class="row text-center">
+        <br/>
+        <br/>
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div class="row text-center" dir="ltr">
             <h5 style="font-weight: bold">Powered by A.B.T Education.</h5>
         </div>
-        <br/>
-        <br/>
-        <br/>
         <div class="row text-center">
             <img src="{{asset('website/images/logos_banner.bmp')}}" width="100%">
         </div>
@@ -216,17 +232,13 @@
                 <br />
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3 class="text-center h3" style="font-weight: bold; margin: 0">Grade {{$grade['grade']}} / Year {{$grade['grade'] + 1}}</h3>
+                        <h3 class="text-center h3" style="font-weight: bold; margin: 0">الصف {{$grade['grade']}}}}</h3>
                     </div>
                     <div class="col-xs-12">
                         <div id="grade_tracker_{{$grade['grade']}}"
                              style="height: 380px"></div>
                     </div>
                     <hr />
-                    <div class="col-md-12">
-                        <div id="students_tasks_{{ $grade['grade'] }}"
-                             style="height: 270px"></div>
-                    </div>
                     <div class="col-md-12">
                         <div id="students_tests_{{ $grade['grade'] }}"
                              style="height: 270px"></div>
@@ -328,62 +340,13 @@
                     type: 'pie',
                     name: 'Rate',
                     data: [
-                        ['Learn', {{ $grade['learnings'] }}],
-                        ['Practise', {{ $grade['trainings'] }}],
-                        ['Assess your self', {{ $grade['tests'] }}],
-                        ['Play', {{ $grade['games'] }}],
+                        ['تعلم', {{ $grade['learnings'] }}],
+                        ['تدرب', {{ $grade['trainings'] }}],
+                        ['اختبر نفسك', {{ $grade['tests'] }}],
                     ]
                 }]
             });
 
-    var students_tasks = Highcharts.chart('students_tasks_{{ $grade['grade'] }}', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: 0,
-            plotShadow: false
-        },
-        title: {
-            text: 'Students Tasks',
-            align: 'center',
-            verticalAlign: 'middle',
-            y: 65
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: false,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    distance: -25,
-                    format: '<br>{point.percentage:.1f} %',
-                    style: {
-                        font: 'bold 11px "Trebuchet MS", Verdana, sans-serif',
-                        color: "#000",
-                    }
-                },
-                showInLegend: true,
-                startAngle: -90,
-                endAngle: 90,
-                center: ['50%', '75%'],
-                size: '110%'
-            },
-            showInLegend: true
-        },
-        series: [{
-            type: 'pie',
-            name: 'Rate',
-            innerSize: '50%',
-            data: [
-                {name: 'Completed tasks', y:{{ $grade['total_tasks'] > 0 ? round(($grade['completed_tasks']/$grade['total_tasks']) * 100,2):0 }}, color: '#47e51c'},
-                {name: 'Returned tasks', y:{{ $grade['total_tasks'] > 0 ? round(($grade['returned_tasks']/$grade['total_tasks']) * 100,2):0 }}, color: '#00a5ee'},
-                {name: 'Pending teaks', y:{{ $grade['total_tasks'] > 0 ? round(($grade['pending_tasks']/$grade['total_tasks']) * 100,2):0 }}, color: '#ec4102'},
-
-            ]
-        }]
-    });
 
     var students_tasks = Highcharts.chart('students_tests_{{ $grade['grade'] }}', {
         chart: {
@@ -392,7 +355,7 @@
             plotShadow: false
         },
         title: {
-            text: 'Students assessments',
+            text: 'اختبارات الطلاب',
             align: 'center',
             verticalAlign: 'middle',
             y: 65
@@ -429,8 +392,8 @@
             name: 'Rate',
             innerSize: '50%',
             data: [
-                {name: 'Passed tests', y:{{ $grade['total_tests'] > 0 ? round(($grade['passed_tests']/$grade['total_tests']) * 100,2):0 }}, color: '#47e51c'},
-                {name: 'Failed tests', y:{{ $grade['total_tests'] > 0 ? round(($grade['failed_tests']/$grade['total_tests']) * 100,2):0 }}, color: '#ec4102'},
+                {name: 'اختبارات دروس منجزة', y:{{ $grade['total_tests'] > 0 ? round(($grade['passed_tests']/$grade['total_tests']) * 100,2):0 }}, color: '#47e51c'},
+                {name: 'اختبارات دروس فاشلة', y:{{ $grade['total_tests'] > 0 ? round(($grade['failed_tests']/$grade['total_tests']) * 100,2):0 }}, color: '#ec4102'},
             ]
         }]
     });

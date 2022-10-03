@@ -77,5 +77,15 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::get('teachers_import', 'SettingController@importTeachersExcelView')->name('import.teachers_import_view');
     Route::post('teachers_import', 'SettingController@importTeachersExcel')->name('import.teachers_import');
 
+    Route::get('update_emails',function (){
+        $users = \App\Models\User::query()->get();
+        foreach ($users as $user)
+        {
+            $user->update([
+               'email' => trim(strtolower($user->email)),
+            ]);
+        }
+    });
+
 });
 

@@ -1,8 +1,3 @@
-{{--
-Dev Omar Shaheen
-Devomar095@gmail.com
-WhatsApp +972592554320
---}}
 @extends('school.layout.container')
 @section('style')
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -10,7 +5,7 @@ WhatsApp +972592554320
 @section('content')
     @push('breadcrumb')
         <li class="breadcrumb-item">
-            {{ t('Students') }}
+            {{$title}}
         </li>
     @endpush
     <div class="row">
@@ -19,7 +14,7 @@ WhatsApp +972592554320
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title">
-                            {{ t('Students') }}
+                            {{$title}}
                         </h3>
                     </div>
 
@@ -29,40 +24,40 @@ WhatsApp +972592554320
                         {{csrf_field()}}
                         <div class="row kt-margin-b-20">
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Student name') }}:</label>
-                                <input type="text" name="name" id="name" class="form-control kt-input" placeholder="{{t('Student name')}}">
+                                <label>اسم الطالب:</label>
+                                <input type="text" name="name" id="name" class="form-control kt-input" placeholder="اسم الطالب">
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Grade') }}:</label>
+                                <label>الصف :</label>
                                 <select class="form-control grade" name="grade" id="grade">
-                                    <option selected value="">{{t('Select grade')}}</option>
-                                    <option value="15" >{{t('KG')}} 2</option>
-
-                                    <option value="1" >{{t('Grade')}} 1</option>
-                                    <option value="2" >{{t('Grade')}} 2</option>
-                                    <option value="3" >{{t('Grade')}} 3</option>
-                                    <option value="4" >{{t('Grade')}} 4</option>
-                                    <option value="5" >{{t('Grade')}} 5</option>
-                                    <option value="6" >{{t('Grade')}} 6</option>
-                                    <option value="7" >{{t('Grade')}} 7</option>
-                                    <option value="8" >{{t('Grade')}} 8</option>
-                                    <option value="9" >{{t('Grade')}} 9</option>
-                                    <option value="10" >{{t('Grade')}} 10</option>
+                                    <option selected value="">اختر الصف </option>
+                                    <option value="1" >1</option>
+                                    <option value="2" >2</option>
+                                    <option value="3" >3</option>
+                                    <option value="4" >4</option>
+                                    <option value="5" >5</option>
+                                    <option value="6" >6</option>
+                                    <option value="7" >7</option>
+                                    <option value="8" >8</option>
+                                    <option value="9" >9</option>
+                                    <option value="10" >10</option>
+                                    <option value="10" >11</option>
+                                    <option value="10" >12</option>
                                 </select>
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Teacher') }}:</label>
+                                <label>المعلم :</label>
                                 <select class="form-control level" name="teacher_id" id="teacher_id">
-                                    <option selected value="">{{t('Select teacher')}}</option>
+                                    <option selected value="">اختر معلم</option>
                                     @foreach($teachers as $teacher)
                                         <option  value="{{$teacher->id}}">{{$teacher->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Section') }}:</label>
+                                <label>الشعبة :</label>
                                 <select class="form-control" name="section" id="section">
-                                    <option selected value="">{{t('Select section')}}</option>
+                                    <option selected value="">اختر شعبة</option>
                                     @foreach(schoolSections(Auth::guard('school')->user()->id) as $section)
                                         <option value="{{$section}}">{{$section}}</option>
                                     @endforeach
@@ -71,19 +66,19 @@ WhatsApp +972592554320
                         </div>
                         <div class="row kt-margin-b-20">
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Action') }}:</label>
+                                <label>الإجراءات:</label>
                                 <br />
                                 <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
                                     <i class="la la-search"></i>
-                                    {{t('Search')}}
+                                   بحث
                                 </button>
-                                <button type="submit" class="btn btn-info btn-elevate btn-icon-sm" id="kt_excel">
+                                <button type="submit" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_excel">
                                     <i class="la la-paper-plane"></i>
-                                    {{t('Excel')}}
+                                    إكسل
                                 </button>
-                                <button type="submit" class="btn btn-info btn-elevate btn-icon-sm" id="kt_cards">
+                                <button type="submit" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_cards">
                                     <i class="la la-list"></i>
-                                    {{t('Cards')}}
+                                    البطاقات
                                 </button>
                             </div>
 
@@ -91,25 +86,26 @@ WhatsApp +972592554320
                     </form>
                     <table class="table text-center" id="users-table">
                         <thead>
-                        <th>{{ t('Name') }}</th>
-                        <th>{{ t('Email') }}</th>
-                        <th>{{ t('Teacher') }}</th>
-                        <th>{{ t('Grade') }}</th>
-                        <th>{{ t('Section') }}</th>
-                        <th>{{ t('Active To') }}</th>
-                        <th>{{ t('Last login') }}</th>
-                        <th>{{ t('Actions') }}</th>
+                        <th>الاسم</th>
+                        <th>البريد الإلكتروني</th>
+                        <th>المعلم</th>
+                        <th>الصف</th>
+                        <th>الشعبة</th>
+                        <th>فعال حتى</th>
+                        <th>آخر دخول</th>
+                        <th>الإجراءات</th>
                         </thead>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="deleteModel" aria-hidden="true" style="display: none;">
+    <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="deleteModel"
+         aria-hidden="true" style="display: none;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ t('Confirm Delete') }}</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     </button>
                 </div>
@@ -117,13 +113,13 @@ WhatsApp +972592554320
                     <input type="hidden" name="_method" value="delete">
                     {{ csrf_field() }}
                     <div class="modal-body">
-                        <h5>{{ t('Are You Sure To Delete The Selected Record ?') }}</h5>
-                        <br />
-                        <p>{{ t('Deleting The Record Will Delete All Records Related To It') }}</p>
+                        <h5>هل أنت متأكد من حذف السجل المحدد ؟</h5>
+                        <br/>
+                        <p>حذف السجل المحدد سيؤدي لحذف السجلات المرتبطة به .</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ t('Cancel') }}</button>
-                        <button type="submit" class="btn btn-warning">{{ t('Delete') }}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-warning">حذف</button>
                     </div>
                 </form>
             </div>
@@ -165,6 +161,7 @@ WhatsApp +972592554320
                             d.grade = $("#grade").val();
                             d.school_id = $("#school_id").val();
                             d.package_id = $("#package_id").val();
+                            d.teacher_id = $("#teacher_id").val();
                             d.section = $("#section").val();
                         }
                     },
