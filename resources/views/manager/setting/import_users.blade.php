@@ -50,6 +50,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-3 col-form-label">{{t('Back Grade')}}</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <select class="form-control" name="back_grade">
+                                            <option value="0" selected>0</option>
+                                            <option value="1">Back 1</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Active To') }}</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control date" name="active_to" type="text"

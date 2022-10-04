@@ -89,8 +89,8 @@
                         </div>
                     </li>
 
-                    <li class="nav-item {{Request::is('/teacher/curriculum') || Request()->is('curriculum') ? 'active':''}}">
-                        <a class="nav-link" href="{{route('teacher.curriculum.home', $grade)}}">الرئيسة</a>
+                    <li class="nav-item {{Request::is('/teacher/home') || Request()->is('curriculum') ? 'active':''}}">
+                        <a class="nav-link" href="{{route('teacher.home', $grade)}}">الرئيسة</a>
                     </li>
                     <li class="nav-item {{Request::is('/teacher/curriculum') || Request()->is('home') ? 'active':''}}">
                         <a class="nav-link" href="{{route('teacher.levels', $grade)}}">المهارات والدروس</a>

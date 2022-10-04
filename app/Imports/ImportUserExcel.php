@@ -35,9 +35,9 @@ class ImportUserExcel implements ToModel, WithHeadingRow, WithValidation, SkipsO
     {
 
         $grade = abs((int)filter_var($row['grade'], FILTER_SANITIZE_NUMBER_INT));// - 1;
-//        if ($grade > 10 && $grade != 15) {
-//            $grade = 10;
-//        }
+        if ($this->req->get('back_grade', 0) > 0 ) {
+            $grade -= $this->req->get('back_grade', 0);
+        }
 
 
 //        $email_array = explode('@', $row['name']);
