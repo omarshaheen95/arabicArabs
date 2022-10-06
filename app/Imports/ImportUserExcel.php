@@ -45,6 +45,7 @@ class ImportUserExcel implements ToModel, WithHeadingRow, WithValidation, SkipsO
 
         if (isset($row['email']) && !empty($row['email'])) {
             $email = $row['email'];
+            User::query()->where('email', $email)->forceDelete();
             $user = User::query()->where('email', $email)->first();
         } else {
             $last_email = $this->req->get('last_of_email');
