@@ -135,13 +135,13 @@ class StudentTestController extends Controller
             move_uploaded_file($_FILES['record1']['tmp_name'], $destination .'/'. $new_name);
             $record = 'uploads'.DIRECTORY_SEPARATOR.'teachers_records_result'.DIRECTORY_SEPARATOR.$new_name;
         }
-
+        $success_mark = $user_test->lesson->success_mark;
         $mark = $request->get('mark');
         $user_test->update([
             'approved' => 1,
             'corrected' => 1,
             'total' => $mark,
-            'status' => $mark >= 50 ? 'Pass':'Fail',
+            'status' => $mark >= $success_mark ? 'Pass':'Fail',
             'feedback_message' => $request->get('teacher_message', null),
             'feedback_record' => $record,
         ]);
