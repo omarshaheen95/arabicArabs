@@ -33,6 +33,9 @@ Route::group(['namespace' => 'Teacher'], function() {
     Route::post('student_assignments', 'StudentAssignmentController@store')->name('student_assignments.store');
     Route::get('student_story_assignments', 'StudentAssignmentController@indexStory')->name('student_story_assignments.index');
     Route::post('student_story_assignments', 'StudentAssignmentController@storeStory')->name('student_story_assignments.store');
+
+    Route::delete('student_assignment/{id}', 'StudentAssignmentController@deleteLessonAssignment')->name('deleteLessonAssignment');
+
 //Student tests
     Route::get('students_tests', 'StudentTestController@index')->name('students_tests.index');
     Route::get('students_tests/{id}', 'StudentTestController@show')->name('students_tests.show');
@@ -58,5 +61,7 @@ Route::group(['namespace' => 'Teacher'], function() {
 
     Route::get('lessons/{id}/{type}', 'CurriculumController@lessons')->name('lessons');
     Route::get('lesson/{id}/{key}', 'CurriculumController@lesson')->name('lesson');
+
+
 
 });

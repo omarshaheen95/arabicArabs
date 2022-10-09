@@ -44,6 +44,11 @@ WhatsApp +972592554320
                                     <i class="la la-plus"></i>
                                     إضافة واجب
                                 </button>
+
+                                <button id="users_delete_assginments" class="btn btn-danger btn-elevate btn-icon-sm">
+                                    <i class="la la-times"></i>
+                                    حذف
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -113,12 +118,14 @@ WhatsApp +972592554320
 {{--                    </form>--}}
                     <table class="table text-center" id="users-table">
                         <thead>
+                        <th><input type="checkbox" class='checkall' id='checkall'></th>
                         <th>الطالب</th>
                         <th>الدرس</th>
                         <th>الصف</th>
                         <th>إسناد واجب ( اختبار )	</th>
                         <th>الحالة</th>
                         <th>قدم في</th>
+                        <th>الإجراءات</th>
                         </thead>
                     </table>
                 </div>
@@ -212,6 +219,31 @@ WhatsApp +972592554320
             </div>
         </div>
     </div>
+    <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="deleteModel"
+         aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form method="post" action="" id="delete_form">
+                    <input type="hidden" name="_method" value="delete">
+                    {{ csrf_field() }}
+                    <div class="modal-body">
+                        <h5>هل أنت متأكد من حذف السجل المحدد ؟</h5>
+                        <br/>
+                        <p>حذف السجل المحدد سيؤدي لحذف السجلات المرتبطة به .</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-warning">حذف</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 @endsection
 @section('script')
@@ -224,6 +256,13 @@ WhatsApp +972592554320
     <!-- Bootstrap JavaScript -->
     <script>
         $(document).ready(function(){
+            $(document).on('click','.deleteRecord',(function(){
+                var id = $(this).data("id");
+                var url = '{{ route("teacher.deleteLessonAssignment", ":id") }}';
+                url = url.replace(':id', id );
+                $('#delete_form').attr('action',url);
+            }));
+
             $('.date').datepicker({
                 autoclose: true,
                 rtl: true,
@@ -259,6 +298,7 @@ WhatsApp +972592554320
                         }
                     },
                     columns: [
+                        {data: 'check', name: 'check'},
                         {data: 'user', name: 'user'},
                         {data: 'lesson', name: 'lesson'},
                         {data: 'grade', name: 'grade'},
@@ -266,8 +306,17 @@ WhatsApp +972592554320
                         {data: 'done_test_assignment', name: 'done_test_assignment'},
                         {data: 'completed', name: 'completed'},
                         {data: 'created_at', name: 'created_at'},
+                        {data: 'actions', name: 'actions'},
                     ],
                 });
+            });
+            // Check all
+            $('#checkall').click(function () {
+                if ($(this).is(':checked')) {
+                    $('.user_assignment_id').prop('checked', true);
+                } else {
+                    $('.user_assignment_id').prop('checked', false);
+                }
             });
             $('#kt_search').click(function(e){
                 e.preventDefault();
@@ -377,6 +426,38 @@ WhatsApp +972592554320
                 }
 
                 $('select[name="assignment_students[]"]').selectpicker('refresh');
+            });
+
+            $(document).on('click', '#users_delete_assginments',function(){
+                let csrf = $('meta[name="csrf-token"]').attr('content');
+                var user_assignment_id = [];
+                // Read all checked checkboxes
+                $("input:checkbox[class=user_assignment_id]:checked").each(function () {
+                    user_assignment_id.push($(this).val());
+                });
+
+                // Check checkbox checked or not
+                if(user_assignment_id.length > 0){
+
+                    // Confirm alert
+                    var confirmdelete = confirm("هل أنت متأكد من حذف السجلات المحددة ؟");
+                    if (confirmdelete == true) {
+                        $.ajax({
+                            url: "{{route('teacher.deleteLessonAssignment', ':id')}}",
+                            type: 'post',
+                            data: {
+                                '_token': csrf,
+                                '_method': 'DELETE',
+                                rows_id: user_assignment_id,
+                            },
+                            success: function(response){
+                                $('#users-table').DataTable().draw(true);
+                                toastr.success(response.message);
+                                $('#checkall').prop('checked', false);
+                            }
+                        });
+                    }
+                }
             });
         });
     </script>

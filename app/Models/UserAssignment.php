@@ -22,4 +22,17 @@ class UserAssignment extends Model
     {
         return $this->belongsTo(Lesson::class);
     }
+
+    public function getCheckAttribute()
+    {
+        $button = '';
+        $button .= " <input type='checkbox' class='user_assignment_id' id='user_assignment_id[$this->id]' value='$this->id'>";
+        return $button;
+    }
+
+    public function getTeacherActionButtonsAttribute()
+    {
+        $button = ' <button type="button" data-id="'.$this->id.'" data-toggle="modal" data-target="#deleteModel" class="deleteRecord btn btn-icon btn-warning"><i class="la la-trash"></i></button> ';
+        return $button;
+    }
 }

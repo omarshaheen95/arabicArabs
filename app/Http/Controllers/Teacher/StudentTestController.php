@@ -93,9 +93,9 @@ class StudentTestController extends Controller
         $title = "عرض اختبار طالب";
         $teacher = Auth::guard('teacher')->user();
         $user_test = UserTest::query()->with(['lesson', 'user'])->whereHas('user', function (Builder $query) use ($teacher) {
-//            $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
-//                $query->where('teacher_id', $teacher->id);
-//            });
+            $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
+                $query->where('teacher_id', $teacher->id);
+            });
         })->findOrFail($id);
 
         return view('teacher.student_test.show',compact('title', 'user_test'));

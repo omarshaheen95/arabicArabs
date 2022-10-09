@@ -77,20 +77,22 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::get('teachers_import', 'SettingController@importTeachersExcelView')->name('import.teachers_import_view');
     Route::post('teachers_import', 'SettingController@importTeachersExcel')->name('import.teachers_import');
 
-    Route::get('update_grades',function (){
-        $users = \App\Models\User::query()
-            ->where('school_id', 2)
-            ->with(['user_grades'])
-            ->where('grade_id', '>', 1)
+    Route::get('update_assignments',function (){
+        $users = \App\Models\UserAssignment::query()
+            ->whereRelation('user', 'school_id', 2)
+            ->where('created_at', '<=','2022-10-08')
+//            ->with(['user_grades'])
+//            ->where('grade_id', '>', 1)
             ->get();
+        dd($users->count());
         foreach ($users as $user)
         {
-//            $user->user_grades()->delete();
+            $user->delete();
 //            $user->update([
 //               'grade_id' => $user->grade_id - 1,
 //            ]);
         }
-        dd($users->count());
+
         return "تم تحديث بيانات الطلاب بنجاح";
     });
 

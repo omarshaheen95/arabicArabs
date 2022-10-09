@@ -84,6 +84,12 @@ class StudentAssignmentController extends Controller
                 ->addColumn('completed', function ($row) {
                     return $row->completed ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>';
                 })
+                ->addColumn('actions', function ($row) {
+                    return $row->teacher_action_buttons;
+                })
+                ->addColumn('check', function ($row) {
+                    return $row->check;
+                })
                 ->make();
         }
         $title = "متابعة واجبات الدروس";
@@ -270,5 +276,17 @@ class StudentAssignmentController extends Controller
         }
 
         return $this->redirectWith(true, null, 'Successfully Added');
+    }
+
+    public function deleteLessonAssignment(Request $request, $id = null)
+    {
+        if ($request->has('rows_id')) {
+            $rows = $request->get('rows_id', []);
+            UserAssignment::query()->whereIn('id', $rows)->delete();
+            return $this->sendResponse(null, "تم الحذف بنجاح");
+        }else{
+            UserAssignment::query()->findOrFail($id)->delete();
+            return redirect()->back()->with('message', "تم الحذف بنجاح");
+        }
     }
 }
