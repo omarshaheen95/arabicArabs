@@ -1,5 +1,4 @@
-
-@extends('user.layout.container_v2')
+@extends('teacher.user_curriculum.layout.container_v2')
 @section('content')
     <section class="login-home user-home lessons-section">
         <div class="container">
@@ -33,7 +32,6 @@
                         </div>
                     </div>
                     @endif
-
                     <div class="table-card">
                         <div class="table-header">
                             <div class="title">إجابات الأسئلة</div>
@@ -79,7 +77,7 @@
                                     @foreach($questions as $key => $question)
                                         <tr class="text-center">
                                             @php
-                                                $data = $question->studentAnswer($student_test->id);
+                                                $data = $question->studentAnswer($student_test->id, $student_test->user_id);
                                             @endphp
                                             <td>{{$key + 1}}</td>
                                             <td>{{$question->content}}</td>

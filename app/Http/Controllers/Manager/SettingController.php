@@ -47,12 +47,12 @@ class SettingController extends Controller
                 DB::raw('COUNT(*) as counts')
             ));
         $tests_date = [];
-        //UserTest::query()->groupBy('date')->orderBy('date', 'DESC')->whereMonth('created_at', now())
-//            ->whereYear('created_at', now())
-//            ->get(array(
-//                DB::raw('Date(created_at) as date'),
-//                DB::raw('COUNT(*) as counts')
-//            ));
+        $tests_date = UserTest::query()->groupBy('date')->orderBy('date', 'DESC')->whereMonth('created_at', now())
+            ->whereYear('created_at', now())
+            ->get(array(
+                DB::raw('Date(created_at) as date'),
+                DB::raw('COUNT(*) as counts')
+            ));
 
 
 

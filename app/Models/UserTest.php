@@ -10,7 +10,7 @@ class UserTest extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'user_id', 'lesson_id', 'corrected', 'total', 'notes', 'max_time', 'approved', 'start_at', 'end_at', 'status'
+        'user_id', 'lesson_id', 'corrected', 'total', 'notes', 'max_time', 'approved', 'start_at', 'end_at', 'status', 'feedback_message', 'feedback_record'
     ];
 
     public function user()
@@ -33,10 +33,12 @@ class UserTest extends Model
     public function getTeacherActionButtonsAttribute()
     {
         $button = "";
-        if(!$this->corrected)
+        if(in_array($this->lesson->lesson_type, ['writing', 'speaking']))
         {
-            $button .= '<a target="_blank" href="'.route('teacher.students_tests.show', $this->id).'" class="btn btn-success">تصحيح </a>';
+            $button .= ' <a target="_blank" href="'.route('teacher.students_tests.show', $this->id).'" class="btn btn-success">تصحيح </a>';
         }
+        $button .= ' <a target="_blank" href="'.route('teacher.students_tests.preview', $this->id).'" class="btn btn-success">معاينة </a>';
+
         return $button;
     }
 

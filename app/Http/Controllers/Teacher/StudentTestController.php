@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Exports\StudentTestExport;
 use App\Http\Controllers\Controller;
+use App\Models\Question;
 use App\Models\UserAssignment;
 use App\Models\UserTest;
 use App\Models\User;
@@ -92,14 +93,27 @@ class StudentTestController extends Controller
         $title = "عرض اختبار طالب";
         $teacher = Auth::guard('teacher')->user();
         $user_test = UserTest::query()->with(['lesson', 'user'])->whereHas('user', function (Builder $query) use ($teacher) {
-            $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
-                $query->where('teacher_id', $teacher->id);
-            });
+//            $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
+//                $query->where('teacher_id', $teacher->id);
+//            });
         })->findOrFail($id);
 
         return view('teacher.student_test.show',compact('title', 'user_test'));
     }
 
+    public function preview($id)
+    {
+        $teacher = Auth::guard('teacher')->user();
+        $student_test = UserTest::query()->with(['lesson', 'user'])->whereHas('user', function (Builder $query) use ($teacher) {
+            $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
+                $query->where('teacher_id', $teacher->id);
+            });
+        })->findOrFail($id);
+        $grade = $student_test->lesson->grade_id;
+        $questions = Question::query()->where('lesson_id', $student_test->lesson_id)->get();
+
+        return view('teacher.student_test.student_test_result', compact('student_test', 'grade', 'questions'));
+    }
     public function correct(Request $request, $id)
     {
         $request->validate([
@@ -110,7 +124,17 @@ class StudentTestController extends Controller
             $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
                 $query->where('teacher_id', $teacher->id);
             });
+        })->whereHas('lesson', function (Builder $query) {
+            $query->whereIn('lesson_type', ['writing', 'speaking']);
         })->findOrFail($id);
+
+        $record = null;
+        if(isset($_FILES['record1']) && $_FILES['record1']['type'] != 'text/plain' && $_FILES['record1']['error'] <= 0){
+            $new_name = uniqid().'.'.'wav';
+            $destination = public_path('uploads/teachers_records_result');
+            move_uploaded_file($_FILES['record1']['tmp_name'], $destination .'/'. $new_name);
+            $record = 'uploads'.DIRECTORY_SEPARATOR.'teachers_records_result'.DIRECTORY_SEPARATOR.$new_name;
+        }
 
         $mark = $request->get('mark');
         $user_test->update([
@@ -118,6 +142,8 @@ class StudentTestController extends Controller
             'corrected' => 1,
             'total' => $mark,
             'status' => $mark >= 50 ? 'Pass':'Fail',
+            'feedback_message' => $request->get('teacher_message', null),
+            'feedback_record' => $record,
         ]);
 
         $student_tests = UserTest::query()

@@ -36,6 +36,7 @@ Route::group(['namespace' => 'Teacher'], function() {
 //Student tests
     Route::get('students_tests', 'StudentTestController@index')->name('students_tests.index');
     Route::get('students_tests/{id}', 'StudentTestController@show')->name('students_tests.show');
+    Route::get('students_tests/{id}/preview', 'StudentTestController@preview')->name('students_tests.preview');
     Route::post('students_tests/{id}', 'StudentTestController@correct')->name('students_tests.correct');
     Route::post('export_students_tests_excel', 'StudentTestController@exportStudentsTestsExcel')->name('students_tests.export_excel');
 

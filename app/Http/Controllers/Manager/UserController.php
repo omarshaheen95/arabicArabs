@@ -283,17 +283,17 @@ class UserController extends Controller
         }
         $start_date = $request->get('start_date', Carbon::now()->startOfMonth()->toDateString());
         $end_date = $request->get('end_date', Carbon::now()->endOfMonth()->toDateString());
-        $grade = $request->get('grade', $user->grade);
+        $grade = $request->get('grade', $user->grade_id);
         $tests = UserTest::query()->where('user_id', $id)->count();
         $passed_tests = UserTest::query()->where('user_id', $id)->where('total', '>=', 40)->count();
         if ($user->user_grades()->count()) {
-            $grades = $user->user_grades()->pluck('grade')->unique()->values()->all();
+            $grades = $user->user_grades()->pluck('grade_id')->unique()->values()->all();
         } else {
             $grades[] = $user->grade;
         }
         $tracks = UserTracker::query()->where('user_id', $user->id)->whereHas('lesson', function (Builder $query) use ($grade) {
             $query->whereHas('level', function (Builder $query) use ($grade) {
-                $query->where('grade', $grade);
+                $query->where('grade_id', $grade);
             });
         })->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->latest()->get();
 

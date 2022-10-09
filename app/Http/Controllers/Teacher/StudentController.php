@@ -210,7 +210,7 @@ class StudentController extends Controller
         $passed_tests = StudentTest::query()->where('user_id', $id)->where('total', '>=', 40)->count();
         if ($user->user_grades()->count())
         {
-            $grades = $user->user_grades()->pluck('grade')->unique()->values()->all();
+            $grades = $user->user_grades()->pluck('grade_id')->unique()->values()->all();
         }else{
             $grades[] = $user->grade;
         }
