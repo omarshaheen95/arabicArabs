@@ -177,6 +177,7 @@ class UserController extends Controller
         $teacher_id = $request->get('teacher_id', false);
 //        dd($teacher_id);
         if ($teacher_id) {
+            $user->teacherUser()->forceDelete();
             $user->teacherUser()->updateOrCreate([
                 'teacher_id' => $teacher_id,
             ], [

@@ -91,6 +91,7 @@ class StudentController extends Controller
         $teacher_id = $request->get('teacher_id', false);
         if ($teacher_id)
         {
+            $user->teacherUser()->forceDelete();
             $user->teacherUser()->updateOrCreate([
                 'teacher_id' => $teacher_id,
             ],[
@@ -106,11 +107,11 @@ class StudentController extends Controller
     {
         $school = Auth::guard('school')->user();
         $user = User::query()->where('school_id', $school->id)->findOrFail($id);
-        TrueFalseResult::query()->where('user_id', $user->id)->forceDelete();
-        SortResult::query()->where('user_id', $user->id)->forceDelete();
-        MatchResult::query()->where('user_id', $user->id)->forceDelete();
-        OptionResult::query()->where('user_id', $user->id)->forceDelete();
-        Payment::query()->where('user_id', $user->id)->forceDelete();
+//        TrueFalseResult::query()->where('user_id', $user->id)->forceDelete();
+//        SortResult::query()->where('user_id', $user->id)->forceDelete();
+//        MatchResult::query()->where('user_id', $user->id)->forceDelete();
+//        OptionResult::query()->where('user_id', $user->id)->forceDelete();
+//        Payment::query()->where('user_id', $user->id)->forceDelete();
         $user->forceDelete();
 
         return $this->redirectWith(true, null, "تم الحذف بنجاح");
