@@ -50,7 +50,13 @@ class LessonController extends Controller
 
     public function store(LessonRequest $request)
     {
+        if (in_array($request->get('lesson_type'), ['reading', 'listening']) && $request->get('grade_id') != 13) {
+            $request->validate([
+                'section_type' => 'required_if:lesson_type,reading,listening',
+            ]);
+        }
         $data = $request->validated();
+
         $data['active'] = $request->get('active', false);
         $lesson = Lesson::query()->create($data);
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -72,6 +78,11 @@ class LessonController extends Controller
 
     public function update(LessonRequest $request, $id)
     {
+        if (in_array($request->get('lesson_type'), ['reading', 'listening']) && $request->get('grade_id') != 13) {
+            $request->validate([
+                'section_type' => 'required_if:lesson_type,reading,listening',
+            ]);
+        }
         $lesson = Lesson::query()->findOrFail($id);
         $data = $request->validated();
         $data['active'] = $request->get('active', false);
@@ -137,8 +148,7 @@ class LessonController extends Controller
     {
         $lesson = Lesson::query()->findOrFail($id);
         $user = User::query()->first();
-        if (!$user)
-        {
+        if (!$user) {
             return redirect()->route('manager.home')->with('m-class', 'error')->with('message', 'لا يوجد أي حساب مستخدم للمتابعة');
         }
         Auth::guard('web')->loginUsingId($id);

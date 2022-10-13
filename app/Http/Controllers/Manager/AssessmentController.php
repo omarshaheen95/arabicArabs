@@ -94,12 +94,14 @@ class AssessmentController extends Controller
         $m_questions = $request->get('m_question', []);
         $m_question_options = $request->get('m_q_option', []);
         $m_q_answer = $request->get('m_q_answer', []);
+        $marks = $request->get("mark", []);
+
         foreach ($m_questions as $key => $m_question) {
             $question = Question::query()->create([
                 'content' => $m_question ? $m_question : 'no question',
                 'type' => 3,
                 'lesson_id' => $lesson->id,
-                'mark' => 8
+                'mark' => $marks[$key] ?? 8,
             ]);
             if ($request->hasFile("m_q_attachment.$key")) {
                 $question->addMediaFromRequest("m_q_attachment.$key")
@@ -126,11 +128,14 @@ class AssessmentController extends Controller
         $m_questions = $request->get('old_m_question', []);
         $m_question_options = $request->get('old_m_q_option', []);
         $m_q_answer = $request->get('old_m_q_answer', []);
+        $marks = $request->get("mark", []);
+
         foreach ($m_questions as $key => $m_question) {
             $question = Question::query()->find($key);
             if ($question) {
                 $question->update([
                     'content' => $m_question ? $m_question : 'no question',
+                    'mark' => $marks[$key] ?? 8,
                 ]);
                 if ($request->hasFile("old_m_q_attachment.$key")) {
                     $question->addMediaFromRequest("old_m_q_attachment.$key")
