@@ -138,6 +138,8 @@ class User extends Authenticatable
     public function getGradeNameAttribute()
     {
         switch ($this->grade_id) {
+            case 13:
+                return "المرحلة التمهيدية";
             case 1:
                 return "الأول";
             case 2:
