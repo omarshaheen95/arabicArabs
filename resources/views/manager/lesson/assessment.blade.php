@@ -1,8 +1,4 @@
-{{--
-Dev Omar Shaheen
-Devomar095@gmail.com
-WhatsApp +972592554320
- --}}
+
 @extends('manager.layout.container')
 @section('style')
     <style>
@@ -335,11 +331,15 @@ WhatsApp +972592554320
                                                                            name="c_q_a[{{$i}}]"> 3
                                                                     <span></span>
                                                                 </label>
+                                                                @if($lesson->grade->grade_number != 0)
+
                                                                 <label class="kt-radio">
                                                                     <input required type="radio" value="4"
                                                                            name="c_q_a[{{$i}}]"> 4
                                                                     <span></span>
                                                                 </label>
+                                                                    @endif
+
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-3">
@@ -364,11 +364,13 @@ WhatsApp +972592554320
                                                             <input required type="text" class="form-control"
                                                                    name="c_q_option[{{$i}}][]">
                                                         </div>
+                                                        @if($lesson->grade->grade_number != 0)
                                                         <div class="col-lg-3">
                                                             <label>4 :</label>
                                                             <input required type="text" class="form-control"
                                                                    name="c_q_option[{{$i}}][]">
                                                         </div>
+                                                        @endif
                                                     </div>
                                                 @endfor
                                             @endif

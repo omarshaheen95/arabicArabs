@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title text-center">
-                        <h2 class="title"> الأسعار </h2>
+                        <h2 class="title"> الاسعار </h2>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                                         @if($package->days < 10)
                                             أيام
                                         @else
-                                            يوم
+                                            يوماً
                                         @endif
 
 
