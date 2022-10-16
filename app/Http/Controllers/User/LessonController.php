@@ -38,7 +38,7 @@ class LessonController extends Controller
 //        }
 
 
-        $questions = Question::query()->where('lesson_id', $id)->get();
+        $questions = Question::query()->with(['lesson'])->where('lesson_id', $id)->get();
 
         $test = UserTest::query()->create([
             'user_id' => $student->id,
@@ -150,9 +150,10 @@ class LessonController extends Controller
             {
                 $match_results = MatchResult::query()->where('user_test_id', $test->id)->where('question_id', $question->id)
                     ->get();
+                $main_mark = $question->mark / $question->matches()->count();
                 foreach ($match_results as $match_result)
                 {
-                    $match_mark += $match_result->match_id == $match_result->result_id ? 2:0;
+                    $match_mark += $match_result->match_id == $match_result->result_id ? $main_mark:0;
                 }
                 $total += $match_mark;
                 $m_total += $match_mark;

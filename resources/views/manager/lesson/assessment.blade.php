@@ -80,7 +80,7 @@
                                                         }elseif ($lesson->grade->grade_number >= 4){
                                                             $mark = 6;
                                                         }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 10;
+                                                            $mark = 9;
                                                         }else{
                                                             $mark = 6;
                                                         }
@@ -145,7 +145,7 @@
                                                         }elseif ($lesson->grade->grade_number >= 4){
                                                             $mark = 6;
                                                         }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 10;
+                                                            $mark = 9;
                                                         }else{
                                                             $mark = 6;
                                                         }
@@ -210,7 +210,7 @@
                                                         }elseif ($lesson->grade->grade_number >= 4){
                                                             $mark = 6;
                                                         }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 8;
+                                                            $mark = 10;
                                                         }else{
                                                             $mark = 7;
                                                         }
@@ -294,7 +294,7 @@
                                                         }elseif ($lesson->grade->grade_number >= 4){
                                                             $mark = 6;
                                                         }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 8;
+                                                            $mark = 10;
                                                         }else{
                                                             $mark = 7;
                                                         }
@@ -398,7 +398,7 @@
                                                     }elseif ($lesson->grade->grade_number >= 4){
                                                         $mark = 8;
                                                     }elseif ($lesson->grade->grade_number == 0){
-                                                        $mark = 6;
+                                                        $mark = 12;
                                                     }else{
                                                         $mark = 8;
                                                     }
@@ -487,7 +487,7 @@
                                                         }elseif ($lesson->grade->grade_number >= 4){
                                                             $mark = 8;
                                                         }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 6;
+                                                            $mark = 12;
                                                         }else{
                                                             $mark = 8;
                                                         }
