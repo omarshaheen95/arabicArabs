@@ -55,6 +55,7 @@
                                         <select class="form-control" name="back_grade">
                                             <option value="0" selected>0</option>
                                             <option value="1">Back 1</option>
+                                            <option value="2">Back 2</option>
 
                                         </select>
                                     </div>
