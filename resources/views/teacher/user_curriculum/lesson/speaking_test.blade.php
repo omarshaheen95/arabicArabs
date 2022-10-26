@@ -1,9 +1,12 @@
-{{--Dev Omar Shaheen
-    Devomar095@gmail.com
-    WhatsApp +972592554320
-    --}}
-@extends('teacher.user_curriculum.layout.container_v2')
 
+@extends('teacher.user_curriculum.layout.container_v2')
+@section('style')
+    <style>
+        .green-audio-player{
+            width: 100%;
+        }
+    </style>
+@endsection
 @section('content')
     <section class="login-home user-home lessons-section">
         <div class="container">
@@ -53,6 +56,13 @@
                                                         {{$question->content}}
                                                     </div>
                                                 </div>
+                                                @if(!is_null($lesson->content))
+                                                    <div class="exercise-question-data border-0">
+                                                        <div class="info">
+                                                            {!! $lesson->content !!}
+                                                        </div>
+                                                    </div>
+                                                @endif
                                                 <div class="exercise-question-answer text-center my-4">
 
                                                     @if($question->getFirstMediaUrl('imageQuestion'))

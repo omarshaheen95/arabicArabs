@@ -1,11 +1,11 @@
-{{--Dev Omar Shaheen
-    Devomar095@gmail.com
-    WhatsApp +972592554320
-    --}}
 @extends('user.layout.container_v2')
 @section('style')
     <link rel="stylesheet" type="text/css" href="https://www.arabic-keyboard.org/keyboard/keyboard.css">
     <style>
+        .green-audio-player{
+            width: 100%;
+        }
+
         .leftDirection {
             direction: ltr !important;
         }
@@ -127,6 +127,13 @@
                                                         {{$question->content}}
                                                     </div>
                                                 </div>
+                                                @if(!is_null($lesson->content))
+                                                    <div class="exercise-question-data border-0">
+                                                        <div class="info">
+                                                            {!! $lesson->content !!}
+                                                        </div>
+                                                    </div>
+                                                @endif
                                                 <div class="exercise-question-answer text-center my-4">
 
                                                     @if($question->getFirstMediaUrl('imageQuestion'))
