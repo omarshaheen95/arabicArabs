@@ -4,8 +4,6 @@
     --}}
 @extends('user.layout.container_v2')
 @section('style')
-    <link rel="stylesheet" type="text/css"
-          href="https://cdn.jsdelivr.net/gh/greghub/green-audio-player/dist/css/green-audio-player.min.css">
     <link rel="stylesheet" type="text/css" href="https://www.arabic-keyboard.org/keyboard/keyboard.css">
 
 
@@ -124,24 +122,31 @@
                             @if($lesson->getFirstMediaUrl('audioLessons'))
                                 <tr>
                                     <td>
-                                        <a href="#!" class="play-and-listen" data-recorde-id="{{$lesson->id}}"
-                                           data-recorde-url="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"
-                                                 viewBox="0 0 39 39">
-                                                <g id="play" transform="translate(7.618 6.252)">
-                                                    <rect id="bg" width="39" height="39" rx="19.5"
-                                                          transform="translate(-7.618 -6.252)"
-                                                          fill="rgba(217,227,253)" opacity="0.1"/>
-                                                    <path id="Vector"
-                                                          d="M16.535,6.358.157,16.178A4.449,4.449,0,0,1,0,15.008V4.5A4.5,4.5,0,0,1,6.749.61l4.544,2.621,4.555,2.632A3.81,3.81,0,0,1,16.535,6.358Z"
-                                                          transform="translate(4.499 3.742)" fill="#223f99"/>
-                                                    <path id="Vector-2" data-name="Vector"
-                                                          d="M15.039,6.085,10.483,8.717,5.939,11.338A4.485,4.485,0,0,1,0,10.022l.472-.281L16.715,0A4.5,4.5,0,0,1,15.039,6.085Z"
-                                                          transform="translate(5.309 11.304)" fill="#223f99"
-                                                          opacity="0.4"/>
-                                                </g>
-                                            </svg>
-                                        </a>
+                                        <div class="audio-player">
+                                            <audio crossorigin>
+                                                <source
+                                                    src="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}"
+                                                    type="audio/mpeg" />
+                                            </audio>
+                                        </div>
+{{--                                        <a href="#!" class="play-and-listen" data-recorde-id="{{$lesson->id}}"--}}
+{{--                                           data-recorde-url="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}">--}}
+{{--                                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"--}}
+{{--                                                 viewBox="0 0 39 39">--}}
+{{--                                                <g id="play" transform="translate(7.618 6.252)">--}}
+{{--                                                    <rect id="bg" width="39" height="39" rx="19.5"--}}
+{{--                                                          transform="translate(-7.618 -6.252)"--}}
+{{--                                                          fill="rgba(217,227,253)" opacity="0.1"/>--}}
+{{--                                                    <path id="Vector"--}}
+{{--                                                          d="M16.535,6.358.157,16.178A4.449,4.449,0,0,1,0,15.008V4.5A4.5,4.5,0,0,1,6.749.61l4.544,2.621,4.555,2.632A3.81,3.81,0,0,1,16.535,6.358Z"--}}
+{{--                                                          transform="translate(4.499 3.742)" fill="#223f99"/>--}}
+{{--                                                    <path id="Vector-2" data-name="Vector"--}}
+{{--                                                          d="M15.039,6.085,10.483,8.717,5.939,11.338A4.485,4.485,0,0,1,0,10.022l.472-.281L16.715,0A4.5,4.5,0,0,1,15.039,6.085Z"--}}
+{{--                                                          transform="translate(5.309 11.304)" fill="#223f99"--}}
+{{--                                                          opacity="0.4"/>--}}
+{{--                                                </g>--}}
+{{--                                            </svg>--}}
+{{--                                        </a>--}}
                                     </td>
                                 </tr>
                             @endif

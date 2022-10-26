@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title mb-4">
-                        <h3 class="title"> الصف : {{$grade}} </h3>
+                        <h3 class="title"> الصف : {{getGradeName($grade)}} </h3>
                         <nav class="breadcrumb">
                             <a class="breadcrumb-item" href="{{route('teacher.levels', $grade)}}"> المهارات والدروس </a>
                             <span class="breadcrumb-item active" aria-current="page">الدروس </span>

@@ -4,8 +4,6 @@
     --}}
 @extends('user.layout.container_v2')
 @section('style')
-    <link rel="stylesheet" type="text/css"
-          href="https://cdn.jsdelivr.net/gh/greghub/green-audio-player/dist/css/green-audio-player.min.css">
     <link rel="stylesheet" type="text/css" href="https://www.arabic-keyboard.org/keyboard/keyboard.css">
     <style>
         .leftDirection {

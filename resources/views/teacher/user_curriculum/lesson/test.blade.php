@@ -290,13 +290,13 @@
                                                                                             @endphp
                                                                                             @foreach($question->matches as $match)
                                                                                                 <li class="ui-state-default mb-2">
-                                                                                                    @if(!is_null($match->image))
+                                                                                                    @if($match->getFirstMediaUrl('t_match'))
                                                                                                         <div
                                                                                                             class="row justify-content-center ">
                                                                                                             <div
                                                                                                                 class="col-md-12 text-center">
                                                                                                                 <img
-                                                                                                                    src="{{asset($match->image)}}"
+                                                                                                                    src="{{asset($match->getFirstMediaUrl('t_match'))}}"
                                                                                                                     style="width:100%; max-width: 100px"/>
                                                                                                             </div>
                                                                                                         </div>
@@ -317,7 +317,7 @@
                                                                                         <div class="position-relative">
                                                                                             <ul class="m-0 p-0 list-unstyled add-ansar position-absolute w-100">
                                                                                                 @foreach($question->matches as $match)
-                                                                                                    @if(is_null($match->image))
+                                                                                                    @if(!$match->getFirstMediaUrl('t_match'))
                                                                                                         @php
                                                                                                             $styleClass = "textOnly";
                                                                                                         @endphp

@@ -286,13 +286,13 @@
                                                                                     @endphp
                                                                                     @foreach($m_question->matches as $match)
                                                                                         <li class="ui-state-default mb-2">
-                                                                                            @if(!is_null($match->image))
+                                                                                            @if($match->getFirstMediaUrl('t_match'))
                                                                                                 <div
                                                                                                     class="row justify-content-center ">
                                                                                                     <div
                                                                                                         class="col-md-12 text-center">
                                                                                                         <img
-                                                                                                            src="{{asset($match->image)}}"
+                                                                                                            src="{{asset($match->getFirstMediaUrl('t_match'))}}"
                                                                                                             style="width:100%; max-width: 100px"/>
                                                                                                     </div>
                                                                                                 </div>
@@ -313,7 +313,7 @@
                                                                                 <div class="position-relative">
                                                                                     <ul class="m-0 p-0 list-unstyled add-ansar position-absolute w-100">
                                                                                         @foreach($m_question->matches as $match)
-                                                                                            @if(is_null($match->image))
+                                                                                            @if(!$match->getFirstMediaUrl('t_match'))
                                                                                                 @php
                                                                                                     $styleClass = "textOnly";
                                                                                                 @endphp
@@ -346,7 +346,6 @@
                                                                             </div>
                                                                         </div>
 
-
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -357,7 +356,7 @@
                                                                 class="checkAnswer  btn btn-danger mx-4"
                                                                 style="font-weight: bold;background-color: #dc3545;">
                                                     <span class="txt"
-                                                          style="font-size: 18px">  Check your answer </span>
+                                                          style="font-size: 18px">  تحقق من إجابتك </span>
                                                         </button>
                                                     </div>
 
@@ -455,7 +454,7 @@
                                                                 class="checkSort btn btn-danger mx-4"
                                                                 style="font-weight: bold;background-color: #dc3545;">
                                                         <span class="txt"
-                                                              style="font-size: 18px">  Check your answer </span>
+                                                              style="font-size: 18px">  تحقق من إجابتك </span>
                                                         </button>
                                                     </div>
                                                 </div>

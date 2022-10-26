@@ -10,7 +10,7 @@
     <section class="login-home pt-5 user-home ">
         <div class="container">
                 <h2>
-                    <span style="font-weight: bold; color: red">الصف {{$grade_steps->grade_name}}:</span>
+                    <span style="font-weight: bold; color: red">الصف : {{$grade_steps->grade_name}}</span>
                 </h2>
                 <div class="row justify-content-center">
                     @if(isset($grade_steps) && $grade_steps->reading)

@@ -879,7 +879,7 @@ header ul li i {
 
 .sortable2 {
   background: transparent;
-  height: auto;
+    height: 200px;
   position: relative;
   color: #666;
   font-size: 18px;

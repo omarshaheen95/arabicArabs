@@ -164,6 +164,8 @@ class User extends Authenticatable
                 return "الحادي عشر";
             case 12:
                 return "الثاني عشر";
+            case 13:
+                return "الصف التمهيدي";
             default:
                 return '';
         }

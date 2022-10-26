@@ -210,6 +210,11 @@
                                 <ul class="kt-menu__subnav">
                                     <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">المناهج والصفوف</span></span></li>
 
+                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 13)}}" class="kt-menu__link ">
+                                            <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
+                                            </i><span class="kt-menu__link-text">الصف التمهيدي</span>
+                                        </a>
+                                    </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 1)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
                                             </i><span class="kt-menu__link-text">الصف الأول</span>
