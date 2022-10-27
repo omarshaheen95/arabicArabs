@@ -136,7 +136,7 @@
                                                                 @if(\Illuminate\Support\Str::contains($question->getFirstMediaUrl('imageQuestion'), '.mp3'))
                                                                     <div class="recorder-player" id="voice_audio_2">
                                                                         <div class="audio-player">
-                                                                            <audio crossorigin>
+                                                                            <audio >
                                                                                 <source
                                                                                     src="{{asset($question->getFirstMediaUrl('imageQuestion'))}}"
                                                                                     type="audio/mpeg">

@@ -49,7 +49,7 @@
                                                                     @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
                                                                         <div class="recorder-player" id="voice_audio_2">
                                                                             <div class="audio-player">
-                                                                                <audio crossorigin>
+                                                                                <audio >
                                                                                     <source
                                                                                         src="{{asset($question->attachment)}}"
                                                                                         type="audio/mpeg">
@@ -149,7 +149,7 @@
                                                                     @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
                                                                         <div class="recorder-player" id="voice_audio_2">
                                                                             <div class="audio-player">
-                                                                                <audio crossorigin>
+                                                                                <audio >
                                                                                     <source
                                                                                         src="{{asset($question->attachment)}}"
                                                                                         type="audio/mpeg">
@@ -210,7 +210,7 @@
                                                                         @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
                                                                             <div class="recorder-player" id="voice_audio_2">
                                                                                 <div class="audio-player">
-                                                                                    <audio crossorigin>
+                                                                                    <audio >
                                                                                         <source
                                                                                             src="{{asset($question->attachment)}}"
                                                                                             type="audio/mpeg">
@@ -352,7 +352,7 @@
                                                                         @if(\Illuminate\Support\Str::contains($question->attachment, '.mp3'))
                                                                             <div class="recorder-player" id="voice_audio_2">
                                                                                 <div class="audio-player">
-                                                                                    <audio crossorigin>
+                                                                                    <audio >
                                                                                         <source
                                                                                             src="{{asset($question->attachment)}}"
                                                                                             type="audio/mpeg">

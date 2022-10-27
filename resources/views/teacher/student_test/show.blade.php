@@ -57,7 +57,7 @@
                                                                 @if(\Illuminate\Support\Str::contains($writingResult->question->getFirstMediaUrl('imageQuestion'), '.mp3'))
                                                                     <div class="recorder-player" id="voice_audio_2">
                                                                         <div class="audio-player">
-                                                                            <audio crossorigin>
+                                                                            <audio >
                                                                                 <source
                                                                                     src="{{asset($writingResult->question->getFirstMediaUrl('imageQuestion'))}}"
                                                                                     type="audio/mpeg">
@@ -95,7 +95,7 @@
                                                                 @if(\Illuminate\Support\Str::contains($speakingResult->question->getFirstMediaUrl('imageQuestion'), '.mp3'))
                                                                     <div class="recorder-player" id="voice_audio_2">
                                                                         <div class="audio-player">
-                                                                            <audio crossorigin>
+                                                                            <audio >
                                                                                 <source
                                                                                     src="{{asset($speakingResult->question->getFirstMediaUrl('imageQuestion'))}}"
                                                                                     type="audio/mpeg">

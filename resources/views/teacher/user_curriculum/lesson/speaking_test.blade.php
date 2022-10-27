@@ -62,7 +62,7 @@
                                                                 @if(\Illuminate\Support\Str::contains($question->getFirstMediaUrl('imageQuestion'), '.mp3'))
                                                                     <div class="recorder-player" id="voice_audio_2">
                                                                         <div class="audio-player">
-                                                                            <audio crossorigin>
+                                                                            <audio >
                                                                                 <source
                                                                                     src="{{asset($question->getFirstMediaUrl('imageQuestion'))}}"
                                                                                     type="audio/mpeg">
@@ -151,7 +151,7 @@
                                                                     <div class="recorder-player d-none" id="voice_audio_{{$question->id}}">
                                                                         <!-- crossorigin -->
                                                                         <div class="audio-player">
-                                                                            <audio crossorigin>
+                                                                            <audio >
                                                                                 <source
                                                                                     src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/355309/Swing_Jazz_Drum.mp3"
                                                                                     type="audio/mpeg">

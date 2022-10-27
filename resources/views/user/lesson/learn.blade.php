@@ -123,7 +123,7 @@
                                 <tr>
                                     <td>
                                         <div class="audio-player">
-                                            <audio crossorigin>
+                                            <audio >
                                                 <source
                                                     src="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}"
                                                     type="audio/mpeg" />

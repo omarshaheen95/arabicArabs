@@ -200,7 +200,7 @@
                                             <div class="recorder-player d-none" id="voice_audio_1">
                                                 <!-- crossorigin -->
                                                 <div class="audio-player">
-                                                    <audio crossorigin>
+                                                    <audio >
                                                         <source
                                                             src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/355309/Swing_Jazz_Drum.mp3"
                                                             type="audio/mpeg">

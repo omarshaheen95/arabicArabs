@@ -101,7 +101,7 @@
                                                 <audio style="display:none" id="audio{{$word->id}}"
                                                        data-id="{{$word->id}}" src="{{asset($word->file)}}"></audio>
                                                 {{--                                            <div class="player" style="width: 100%; direction: ltr">--}}
-                                                {{--                                               <audio crossorigin>--}}
+                                                {{--                                               <audio >--}}
                                                 {{--                                                   <source src="{{asset($word->file)}}">--}}
                                                 {{--                                               </audio>--}}
                                                 {{--                                            </div>--}}

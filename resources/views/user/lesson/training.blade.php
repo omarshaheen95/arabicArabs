@@ -58,23 +58,23 @@
                                             </div>
                                             <div class="exercise-question-answer text-center my-4">
 
-                                                @if(!is_null($tf_question->attachment))
+                                                @if(!is_null($tf_question->getFirstMediaUrl('t_imageQuestion')))
 
                                                     <div class="row justify-content-center py-3">
                                                         <div class="col-lg-6 col-md-8">
-                                                            @if(\Illuminate\Support\Str::contains($tf_question->attachment, '.mp3'))
+                                                            @if(\Illuminate\Support\Str::contains($tf_question->getFirstMediaUrl('t_imageQuestion'), '.mp3'))
                                                                 <div class="recorder-player" id="voice_audio_2">
                                                                     <div class="audio-player">
-                                                                        <audio crossorigin>
+                                                                        <audio >
                                                                             <source
-                                                                                src="{{asset($tf_question->attachment)}}"
+                                                                                src="{{asset($tf_question->getFirstMediaUrl('t_imageQuestion'))}}"
                                                                                 type="audio/mpeg">
                                                                         </audio>
                                                                     </div>
                                                                 </div>
                                                             @else
                                                                 <div class="w-100 text-center">
-                                                                    <img src="{{asset($tf_question->attachment)}}"
+                                                                    <img src="{{asset($tf_question->getFirstMediaUrl('t_imageQuestion'))}}"
                                                                          width="300px">
                                                                 </div>
                                                             @endif
@@ -164,23 +164,23 @@
                                             </div>
                                             <div class="exercise-question-answer text-center my-4">
 
-                                                @if(!is_null($c_question->attachment))
+                                                @if(!is_null($c_question->getFirstMediaUrl('t_imageQuestion')))
 
                                                     <div class="row justify-content-center py-3">
                                                         <div class="col-lg-6 col-md-8">
-                                                            @if(\Illuminate\Support\Str::contains($c_question->attachment, '.mp3'))
+                                                            @if(\Illuminate\Support\Str::contains($c_question->getFirstMediaUrl('t_imageQuestion'), '.mp3'))
                                                                 <div class="recorder-player" id="voice_audio_2">
                                                                     <div class="audio-player">
-                                                                        <audio crossorigin>
+                                                                        <audio >
                                                                             <source
-                                                                                src="{{asset($c_question->attachment)}}"
+                                                                                src="{{asset($c_question->getFirstMediaUrl('t_imageQuestion'))}}"
                                                                                 type="audio/mpeg">
                                                                         </audio>
                                                                     </div>
                                                                 </div>
                                                             @else
                                                                 <div class="w-100 text-center">
-                                                                    <img src="{{asset($c_question->attachment)}}"
+                                                                    <img src="{{asset($c_question->getFirstMediaUrl('t_imageQuestion'))}}"
                                                                          width="300px">
                                                                 </div>
                                                             @endif
@@ -231,23 +231,23 @@
                                                     {{$m_question->content}}
                                                 </div>
                                                 <div class="exercise-question-answer text-center my-4">
-                                                    @if(!is_null($m_question->attachment))
+                                                    @if(!is_null($m_question->getFirstMediaUrl('t_imageQuestion')))
 
                                                         <div class="row justify-content-center py-3">
                                                             <div class="col-lg-6 col-md-8">
-                                                                @if(\Illuminate\Support\Str::contains($m_question->attachment, '.mp3'))
+                                                                @if(\Illuminate\Support\Str::contains($m_question->getFirstMediaUrl('t_imageQuestion'), '.mp3'))
                                                                     <div class="recorder-player" id="voice_audio_2">
                                                                         <div class="audio-player">
-                                                                            <audio crossorigin>
+                                                                            <audio >
                                                                                 <source
-                                                                                    src="{{asset($m_question->attachment)}}"
+                                                                                    src="{{asset($m_question->getFirstMediaUrl('t_imageQuestion'))}}"
                                                                                     type="audio/mpeg">
                                                                             </audio>
                                                                         </div>
                                                                     </div>
                                                                 @else
                                                                     <div class="w-100 text-center">
-                                                                        <img src="{{asset($m_question->attachment)}}"
+                                                                        <img src="{{asset($m_question->getFirstMediaUrl('t_imageQuestion'))}}"
                                                                              width="300px">
                                                                     </div>
                                                                 @endif
@@ -385,23 +385,23 @@
                                                     {{$s_question->content}}
                                                 </div>
                                                 <div class="exercise-question-answer text-center my-4">
-                                                    @if(!is_null($s_question->attachment))
+                                                    @if(!is_null($s_question->getFirstMediaUrl('t_imageQuestion')))
 
                                                         <div class="row justify-content-center py-3">
                                                             <div class="col-lg-6 col-md-8">
-                                                                @if(\Illuminate\Support\Str::contains($s_question->attachment, '.mp3'))
+                                                                @if(\Illuminate\Support\Str::contains($s_question->getFirstMediaUrl('t_imageQuestion'), '.mp3'))
                                                                     <div class="recorder-player" id="voice_audio_2">
                                                                         <div class="audio-player">
-                                                                            <audio crossorigin>
+                                                                            <audio >
                                                                                 <source
-                                                                                    src="{{asset($s_question->attachment)}}"
+                                                                                    src="{{asset($s_question->getFirstMediaUrl('t_imageQuestion'))}}"
                                                                                     type="audio/mpeg">
                                                                             </audio>
                                                                         </div>
                                                                     </div>
                                                                 @else
                                                                     <div class="w-100 text-center">
-                                                                        <img src="{{asset($s_question->attachment)}}"
+                                                                        <img src="{{asset($s_question->getFirstMediaUrl('t_imageQuestion'))}}"
                                                                              width="300px">
                                                                     </div>
                                                                 @endif

@@ -48,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
+            Route::middleware(['web', 'cors'])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
@@ -69,7 +69,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapManagerRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'manager', 'auth:manager'],
+            'middleware' => ['web', 'manager', 'auth:manager', 'cors'],
             'prefix' => 'manager',
             'as' => 'manager.',
             'namespace' => $this->namespace,
@@ -81,7 +81,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapSchoolRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'school', 'auth:school'],
+            'middleware' => ['web', 'school', 'auth:school', 'cors'],
             'prefix' => 'school',
             'as' => 'school.',
             'namespace' => $this->namespace,
@@ -93,7 +93,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapSupervisorRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'supervisor', 'auth:supervisor'],
+            'middleware' => ['web', 'supervisor', 'auth:supervisor', 'cors'],
             'prefix' => 'supervisor',
             'as' => 'supervisor.',
             'namespace' => $this->namespace,
@@ -105,7 +105,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapTeacherRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'teacher', 'auth:teacher'],
+            'middleware' => ['web', 'teacher', 'auth:teacher', 'cors', 'cors'],
             'prefix' => 'teacher',
             'as' => 'teacher.',
             'namespace' => $this->namespace,
