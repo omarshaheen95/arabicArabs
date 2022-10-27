@@ -1,9 +1,11 @@
-{{--Dev Omar Shaheen
-    Devomar095@gmail.com
-    WhatsApp +972592554320
-    --}}
 @extends('user.layout.container_v2')
-
+@section('style')
+    <style>
+        .green-audio-player{
+            width: 100%;
+        }
+    </style>
+@endsection
 @section('content')
     <section class="login-home user-home lessons-section">
         <div class="container">
@@ -25,7 +27,7 @@
             <div class="row">
                 <div class="exam-card box-shado-question" dir="rtl">
                     <div class="exam-body question-list">
-                        <form action="{{route('lesson_writing_test', $lesson->id)}}" enctype="multipart/form-data" id="term_form" method="post">
+                        <form action="{{route('lesson_speaking_test', $lesson->id)}}" enctype="multipart/form-data" id="term_form" method="post">
                             {{csrf_field()}}
                             <input type="hidden" name="start_at" value="{{\Carbon\Carbon::now()}}">
                             <div class="justify-content-between align-items-center mb-4">
@@ -53,6 +55,13 @@
                                                         {{$question->content}}
                                                     </div>
                                                 </div>
+                                                @if(!is_null($lesson->content))
+                                                    <div class="exercise-question-data border-0">
+                                                        <div class="info">
+                                                            {!! $lesson->content !!}
+                                                        </div>
+                                                    </div>
+                                                @endif
                                                 <div class="exercise-question-answer text-center my-4">
 
                                                     @if($question->getFirstMediaUrl('imageQuestion'))
