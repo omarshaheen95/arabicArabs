@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="exercise-question-answer text-center my-4">
 
-                                                @if(!is_null($tf_question->getFirstMediaUrl('t_imageQuestion')))
+                                                @if($tf_question->getFirstMediaUrl('t_imageQuestion'))
 
                                                     <div class="row justify-content-center py-3">
                                                         <div class="col-lg-6 col-md-8">
@@ -164,7 +164,7 @@
                                             </div>
                                             <div class="exercise-question-answer text-center my-4">
 
-                                                @if(!is_null($c_question->getFirstMediaUrl('t_imageQuestion')))
+                                                @if(!$c_question->getFirstMediaUrl('t_imageQuestion'))
 
                                                     <div class="row justify-content-center py-3">
                                                         <div class="col-lg-6 col-md-8">
@@ -231,7 +231,7 @@
                                                     {{$m_question->content}}
                                                 </div>
                                                 <div class="exercise-question-answer text-center my-4">
-                                                    @if(!is_null($m_question->getFirstMediaUrl('t_imageQuestion')))
+                                                    @if($m_question->getFirstMediaUrl('t_imageQuestion'))
 
                                                         <div class="row justify-content-center py-3">
                                                             <div class="col-lg-6 col-md-8">
@@ -385,7 +385,7 @@
                                                     {{$s_question->content}}
                                                 </div>
                                                 <div class="exercise-question-answer text-center my-4">
-                                                    @if(!is_null($s_question->getFirstMediaUrl('t_imageQuestion')))
+                                                    @if($s_question->getFirstMediaUrl('t_imageQuestion'))
 
                                                         <div class="row justify-content-center py-3">
                                                             <div class="col-lg-6 col-md-8">
