@@ -357,7 +357,7 @@ class LessonController extends Controller
             $new_name = uniqid() . '.' . 'wav';
             $destination = public_path('uploads/record_results');
             move_uploaded_file($_FILES['record']['tmp_name'], $destination . '/' . $new_name);
-            $record = 'uploads' . DIRECTORY_SEPARATOR . 'speaking_result' . DIRECTORY_SEPARATOR . $new_name;
+            $record = 'uploads' . DIRECTORY_SEPARATOR . 'record_results' . DIRECTORY_SEPARATOR . $new_name;
             SpeakingResult::query()->create([
                 'question_id' => $request->get('question_id'),
                 'user_test_id' => $test->id,
