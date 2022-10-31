@@ -184,7 +184,7 @@ class HomeController extends Controller
                     $new_name = uniqid() . '.' . 'wav';
                     $destination = public_path('uploads/record_result');
                     move_uploaded_file($_FILES['record']['tmp_name'], $destination . '/' . $new_name);
-                    $record = 'uploads' . DIRECTORY_SEPARATOR . 'record_story' . DIRECTORY_SEPARATOR . $new_name;
+                    $record = 'uploads' . DIRECTORY_SEPARATOR . 'record_result' . DIRECTORY_SEPARATOR . $new_name;
                     $user_record->update([
                         'record' => $record,
                         'status' => 'pending',
@@ -202,7 +202,7 @@ class HomeController extends Controller
                 $new_name = uniqid() . '.' . 'wav';
 
                 move_uploaded_file($_FILES['record']['tmp_name'], $destination . '/' . $new_name);
-                $record = 'uploads' . DIRECTORY_SEPARATOR . 'record_story' . DIRECTORY_SEPARATOR . $new_name;
+                $record = 'uploads' . DIRECTORY_SEPARATOR . 'record_result' . DIRECTORY_SEPARATOR . $new_name;
                 StoryUserRecord::query()->create([
                     'user_id' => $user->id,
                     'story_id' => $id,

@@ -136,4 +136,15 @@ Route::group(['namespace' => 'User', 'middleware' => ['auth']], function (){
     Route::get('update_password', 'UserController@updatePasswordView')->name('update_password_view');
     Route::post('update_password', 'UserController@updatePassword')->name('update_password');
 
+
+
+});
+Route::get('update_speaking', function (){
+    $speakings = \App\Models\SpeakingResult::query()->get();
+    foreach ($speakings as $speaking)
+    {
+        $speaking->update([
+            'attachment' => str_replace('speaking_result', 'record_results', $speaking->getOriginal('attachment'))
+        ]);
+    }
 });
