@@ -152,31 +152,31 @@ class Lesson extends Model implements HasMedia
         switch($this->grade_id)
         {
             case 1:
-                return "الأول";
+                return "الأول = Year 2";
             case 2:
-                return "الثاني";
+                return "الثاني = Year 3";
             case 3:
-                return "الثالث";
+                return "الثالث = Year 4";
             case 4:
-                return "الرابع";
+                return "الرابع = Year 5";
             case 5:
-                return "الخامس";
+                return "الخامس = Year 6";
             case 6:
-                return "السادس";
+                return "السادس = Year 7";
             case 7:
-                return "السابع";
+                return "السابع = Year 8";
             case 8:
-                return "الثامن";
+                return "الثامن = Year 9";
             case 9:
-                return "التاسع";
+                return "التاسع = Year 10";
             case 10:
-                return "العاشر";
+                return "العاشر = Year 11";
             case 11:
-                return "الحادي عشر";
+                return "الحادي عشر = Year 12";
             case 12:
-                return "الثاني عشر";
+                return "الثاني عشر = Year 13";
             case 13:
-                return "الصف التمهيدي";
+                return "الصف التمهيدي = Year 1";
             default:
                 return '';
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Exports\StudentTestExport;
 use App\Http\Controllers\Controller;
+use App\Models\Grade;
 use App\Models\Question;
 use App\Models\UserAssignment;
 use App\Models\UserTest;
@@ -78,7 +79,8 @@ class StudentTestController extends Controller
                 ->make();
         }
         $title = "اختبارات الطلاب";
-        return view('teacher.student_test.index', compact('title'));
+        $grades = Grade::query()->get();
+        return view('teacher.student_test.index', compact('title', 'grades'));
     }
 
     public function exportStudentsTestsExcel(Request $request)

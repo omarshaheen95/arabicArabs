@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Models\Grade;
 use App\Models\StoryUserRecord;
 use App\Models\UserRecord;
 use Carbon\Carbon;
@@ -69,8 +70,8 @@ class StoryController extends Controller
                 ->make();
         }
         $title = "تسجيلات القصص للطلاب";
-
-        return view('teacher.student_story.index', compact('title'));
+        $grades = Grade::query()->get();
+        return view('teacher.student_story.index', compact('title', 'grades'));
     }
     public function showStudentsRecords($id)
     {

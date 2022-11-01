@@ -212,67 +212,67 @@
 
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 13)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف التمهيدي</span>
+                                            </i><span class="kt-menu__link-text">الصف التمهيدي = Year 1</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 1)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف الأول</span>
+                                            </i><span class="kt-menu__link-text">الصف الأول = Year 2</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 2)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف الثاني</span>
+                                            </i><span class="kt-menu__link-text">الصف الثاني = Year 3</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 3)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف الثالث</span>
+                                            </i><span class="kt-menu__link-text">الصف الثالث = Year 4</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 4)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف الرابع</span>
+                                            </i><span class="kt-menu__link-text">الصف الرابع = Year 5</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 5)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف الخامس</span>
+                                            </i><span class="kt-menu__link-text">الصف الخامس = Year 6</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 6)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف السادس</span>
+                                            </i><span class="kt-menu__link-text">الصف السادس = Year 7</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 7)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف السابع</span>
+                                            </i><span class="kt-menu__link-text">الصف السابع = Year 8</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 8)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف الثامن</span>
+                                            </i><span class="kt-menu__link-text">الصف الثامن = Year 9</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 9)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف التاسع</span>
+                                            </i><span class="kt-menu__link-text">الصف التاسع = Year 10</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 10)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف العاشر</span>
+                                            </i><span class="kt-menu__link-text">الصف العاشر = Year 11</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 11)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف الحادي عشر</span>
+                                            </i><span class="kt-menu__link-text">الصف الحادي عشر = Year 12</span>
                                         </a>
                                     </li>
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('teacher.curriculum.home', 12)}}" class="kt-menu__link ">
                                             <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span>
-                                            </i><span class="kt-menu__link-text">الصف الثاني عشر</span>
+                                            </i><span class="kt-menu__link-text">الصف الثاني عشر = Year 13</span>
                                         </a>
                                     </li>
 

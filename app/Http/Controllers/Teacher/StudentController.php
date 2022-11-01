@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Exports\StudentInformation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\School\UserRequest;
+use App\Models\Grade;
 use App\Models\Lesson;
 use App\Models\School;
 use App\Models\StudentTest;
@@ -29,7 +30,7 @@ class StudentController extends Controller
             $name = $request->get('name', false);
             $grade = $request->get('grade', false);
             $section = $request->get('section', false);
-            $rows = User::query()->when($name, function (Builder $query) use ($name){
+            $rows = User::query()->with(['grade'])->when($name, function (Builder $query) use ($name){
                 $query->where('name', 'like', '%'.$name.'%');
             })->when($grade, function (Builder $query) use ($grade){
                 $query->where('grade_id', $grade);
@@ -47,7 +48,7 @@ class StudentController extends Controller
                     return is_null($row->active_to) ? 'غير مدفوع':optional($row->active_to)->format('Y-m-d');
                 })
                 ->addColumn('grade', function ($row) {
-                    return $row->grade_id ;
+                    return $row->grade->name;
                 })
                 ->addColumn('check', function ($row) {
                     return $row->check;
@@ -55,7 +56,8 @@ class StudentController extends Controller
                 ->make();
         }
         $title = "عرض الطلاب";
-        return view('teacher.user.index', compact('title'));
+        $grades = Grade::query()->get();
+        return view('teacher.user.index', compact('title', 'grades'));
     }
 
     public function myStudents(Request $request)
@@ -66,7 +68,7 @@ class StudentController extends Controller
             $name = $request->get('name', false);
             $grade = $request->get('grade', false);
             $section = $request->get('section', false);
-            $rows = User::query()->when($name, function (Builder $query) use ($name){
+            $rows = User::query()->with(['grade'])->when($name, function (Builder $query) use ($name){
                 $query->where('name', 'like', '%'.$name.'%');
             })->when($grade, function (Builder $query) use ($grade){
                 $query->where('grade_id', $grade);
@@ -88,7 +90,7 @@ class StudentController extends Controller
                     return is_null($row->active_to) ? 'غير مدفوع':optional($row->active_to)->format('Y-m-d');
                 })
                 ->addColumn('grade', function ($row) {
-                    return $row->grade_id;
+                    return $row->grade->name;
                 })
                 ->addColumn('actions', function ($row) {
                     return $row->teacher_action_buttons;
@@ -100,7 +102,8 @@ class StudentController extends Controller
                 ->make();
         }
         $title = "طلابي";
-        return view('teacher.user.my_students', compact('title'));
+        $grades = Grade::query()->get();
+        return view('teacher.user.my_students', compact('title', 'grades'));
     }
 
     public function edit($id)

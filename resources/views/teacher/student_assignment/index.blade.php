@@ -1,8 +1,4 @@
-{{--
-Dev Omar Shaheen
-Devomar095@gmail.com
-WhatsApp +972592554320
---}}
+
 @extends('teacher.layout.container')
 @section('style')
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -64,19 +60,10 @@ WhatsApp +972592554320
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
                                 <label>الصف:</label>
                                 <select class="form-control grade" name="grade" id="grade">
-                                    <option selected value="">الصف</option>
-                                    <option value="1" >الصف 1</option>
-                                    <option value="2" >الصف 2</option>
-                                    <option value="3" >الصف 3</option>
-                                    <option value="4" >الصف 4</option>
-                                    <option value="5" >الصف 5</option>
-                                    <option value="6" >الصف 6</option>
-                                    <option value="7" >الصف 7</option>
-                                    <option value="8" >الصف 8</option>
-                                    <option value="9" >الصف 9</option>
-                                    <option value="10" >الصف 10</option>
-                                    <option value="11" >الصف 11</option>
-                                    <option value="12" >الصف 12</option>
+                                    <option selected value="">اختر صف</option>
+                                    @foreach($grades as $grade)
+                                        <option value="{{$grade->id}}">{{$grade->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
@@ -147,18 +134,10 @@ WhatsApp +972592554320
                             <label class="col-xl-3 col-lg-3 col-form-label">الصف</label>
                             <div class="col-lg-9 col-xl-9">
                                 <select class="form-control assignment_grade" name="assignment_grade" id="assignment_grade">
-                                    <option selected value="">الصف</option>
-                                    <option value="1" >الصف 1</option>
-                                    <option value="2" >الصف 2</option>
-                                    <option value="3" >الصف 3</option>
-                                    <option value="4" >الصف 4</option>
-                                    <option value="5" >الصف 5</option>
-                                    <option value="6" >الصف 6</option>
-                                    <option value="7" >الصف 7</option>
-                                    <option value="8" >الصف 8</option>
-                                    <option value="9" >الصف 9</option>
-                                    <option value="10" >الصف 10</option>
-                                    <option value="11" >الصف 11</option>
+                                    <option selected value="">اختر صف</option>
+                                    @foreach($grades as $grade)
+                                        <option value="{{$grade->id}}">{{$grade->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

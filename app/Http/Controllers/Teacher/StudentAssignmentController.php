@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Teacher\UserAssignmentRequest;
 use App\Http\Requests\Teacher\UserStoryAssignmentRequest;
+use App\Models\Grade;
 use App\Models\StoryAssignment;
 use App\Models\User;
 use App\Models\UserAssignment;
@@ -93,7 +94,8 @@ class StudentAssignmentController extends Controller
                 ->make();
         }
         $title = "متابعة واجبات الدروس";
-        return view('teacher.student_assignment.index', compact('title'));
+        $grades = Grade::query()->get();
+        return view('teacher.student_assignment.index', compact('title', 'grades'));
     }
 
     public function store(UserAssignmentRequest $request)
@@ -217,7 +219,8 @@ class StudentAssignmentController extends Controller
                 ->make();
         }
         $title = "متابعة واجبات القصص";
-        return view('teacher.student_story_assignment.index', compact('title'));
+        $grades = Grade::query()->get();
+        return view('teacher.student_story_assignment.index', compact('title', 'grades'));
     }
 
     public function storeStory(UserStoryAssignmentRequest $request)

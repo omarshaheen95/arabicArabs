@@ -35,7 +35,7 @@ class StudentController extends Controller
             $grade = $request->get('grade', false);
             $teacher = $request->get('teacher_id', false);
             $section = $request->get('section', false);
-            $rows = User::query()->with(['teacherUser.teacher', 'teacherUser'])
+            $rows = User::query()->with(['teacherUser.teacher', 'teacherUser', 'grade'])
                 ->where('school_id', $school->id)
                ->latest()->search($request);
 
@@ -54,7 +54,7 @@ class StudentController extends Controller
                     return is_null($row->active_to) ? 'unpaid':optional($row->active_to)->format('Y-m-d');
                 })
                 ->addColumn('grade', function ($row) {
-                    return $row->grade_id;
+                    return $row->grade->name;
                 })
                 ->addColumn('actions', function ($row) {
                     $edit_url = route('school.student.edit', $row->id);

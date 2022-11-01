@@ -30,15 +30,12 @@
     <link rel="canonical" href="" />
     <link rel="shortcut icon" href="{{asset('web_assets/img/logo.svg')}}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-
     <!-- Bootstrap CSS v5.0.2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css">
     @yield('pre_style')
     <link rel="stylesheet" href="{{asset('web_assets/css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('web_assets/css/resposive.css')}}">
-    <link href="{{ asset('assets/vendors/general/toastr/build/toastr.css') }}" rel="stylesheet"
-
+    <link href="{{ asset('assets/vendors/general/toastr/build/toastr.css') }}" rel="stylesheet" />
     @yield('style')
 
 </head>
