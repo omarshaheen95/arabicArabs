@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use App\Models\StoryUserRecord;
-use App\Models\UserRecord;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -95,7 +94,7 @@ class StoryController extends Controller
             'mark' => 'required',
         ]);
         $teacher = Auth::guard('teacher')->user();
-        $user_record = UserRecord::query()
+        $user_record = StoryUserRecord::query()
             ->whereHas('user', function (Builder $query) use ($teacher){
                 $query->where('school_id', $teacher->school_id)
                     ->whereHas('teacherUser', function (Builder $query) use($teacher){
@@ -110,7 +109,7 @@ class StoryController extends Controller
     public function deleteStudentsRecords($id)
     {
         $teacher = Auth::guard('teacher')->user();
-        $user_record = UserRecord::query()
+        $user_record = StoryUserRecord::query()
             ->whereHas('user', function (Builder $query) use ($teacher){
                 $query->where('school_id', $teacher->school_id)
                     ->whereHas('teacherUser', function (Builder $query) use($teacher){

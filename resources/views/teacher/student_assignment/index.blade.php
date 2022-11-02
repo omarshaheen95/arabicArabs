@@ -111,7 +111,7 @@
                         <th>الصف</th>
                         <th>إسناد واجب ( اختبار )	</th>
                         <th>الحالة</th>
-                        <th>قدم في</th>
+                        <th>أسند في</th>
                         <th>الإجراءات</th>
                         </thead>
                     </table>
@@ -168,6 +168,12 @@
                                 </select>
                             </div>
                         </div>
+{{--                        <div class="form-group row">--}}
+{{--                            <label class="col-xl-3 col-lg-3 col-form-label">تاريخ التسليم</label>--}}
+{{--                            <div class="col-lg-9 col-xl-9">--}}
+{{--                                <input type="text" name="deadline" class="form-control date">--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <div class="form-group row">
 {{--                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Tasks assignment') }}</label>--}}
@@ -281,7 +287,6 @@
                         {data: 'user', name: 'user'},
                         {data: 'lesson', name: 'lesson'},
                         {data: 'grade', name: 'grade'},
-                        // {data: 'done_tasks_assignment', name: 'done_tasks_assignment'},
                         {data: 'done_test_assignment', name: 'done_test_assignment'},
                         {data: 'completed', name: 'completed'},
                         {data: 'created_at', name: 'created_at'},

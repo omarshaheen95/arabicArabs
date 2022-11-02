@@ -660,7 +660,7 @@
         return 'Are you sure you want to leave?';
     });
 
-    $('.select2L').selectpicker({
+    $('select').selectpicker({
         liveSearch: true,
     });
 </script>
