@@ -27,13 +27,19 @@
                                 <tr>
                                     <td style="font-weight: bold">القصة</td>
                                     <td style="font-weight: bold">المستوى</td>
-                                    <td style="font-weight: bold">تعيين الاختبار</td>
+                                    <td style="font-weight: bold">قراءة القصة</td>
+                                    <td style="font-weight: bold"> اختبر نفسك</td>
                                     <td style="font-weight: bold">الحالة</td>
                                 </tr>
                                 @foreach($student_assignments as $student_assignment)
                                     <tr>
                                         <td>{{$student_assignment->story->name}}</td>
                                         <td>{{$student_assignment->story->grade}}</td>
+                                        <td>
+                                            <a href="{{route('stories.show', [$student_assignment->story_id, 'watch'])}}">
+                                                قراءة القصة
+                                            </a>
+                                        </td>
                                         <td>@if($student_assignment->done_test_assignment)
                                                 Completed
                                             @elseif($student_assignment->test_assignment != 0)
