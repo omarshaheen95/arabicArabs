@@ -88,7 +88,10 @@ class User extends Authenticatable
                 $query->where('active_to', '>=', now());
             })
             ->when($status = $request->get('status', false) == 'expire', function (Builder $query) {
-                $query->where('active_to', '<', now());
+                $query->where(function ($q) {
+                    $q->where('active_to', '<', now())
+                        ->orWhereNull('active_to');
+                });
             })
             ->when($section = $request->get('section', false), function (Builder $query) use ($section) {
                 $query->where('section', $section);

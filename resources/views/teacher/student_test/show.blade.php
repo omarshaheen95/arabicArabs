@@ -165,7 +165,7 @@
                                     <label class="col-xl-3 col-lg-3 col-form-label">الدرجة النهائية من (100)</label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control" name="mark" type="number" max="100" min="0"
-                                               value="{{ $user_test->mark }}">
+                                               value="{{ $user_test->total }}">
                                     </div>
 
                                 </div>

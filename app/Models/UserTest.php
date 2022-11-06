@@ -33,9 +33,13 @@ class UserTest extends Model
     public function getTeacherActionButtonsAttribute()
     {
         $button = "";
-        if(in_array($this->lesson->lesson_type, ['writing', 'speaking']))
-        {
-            $button .= ' <a target="_blank" href="'.route('teacher.students_tests.show', $this->id).'" class="btn btn-success">تصحيح </a>';
+        if(in_array($this->lesson->lesson_type, ['writing', 'speaking'])) {
+            if ($this->corrected)
+            {
+                $button .= ' <a target="_blank" href="'.route('teacher.students_tests.show', $this->id).'" class="btn btn-info">تم التصحيح </a>';
+            }else{
+                $button .= ' <a target="_blank" href="'.route('teacher.students_tests.show', $this->id).'" class="btn btn-success">تصحيح </a>';
+            }
         }
         $button .= ' <a target="_blank" href="'.route('teacher.students_tests.preview', $this->id).'" class="btn btn-success">معاينة </a>';
 

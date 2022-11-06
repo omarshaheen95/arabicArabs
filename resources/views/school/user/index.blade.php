@@ -66,6 +66,14 @@
                         </div>
                         <div class="row kt-margin-b-20">
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+                                <label>الحالة:</label>
+                                <select class="form-control status" name="status" id="status">
+                                    <option selected value="">اختر حالة</option>
+                                    <option  value="active">فعال</option>
+                                    <option  value="expire">منتهي</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
                                 <label>الإجراءات:</label>
                                 <br />
                                 <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
@@ -157,12 +165,10 @@
                     ajax: {
                         url : '{{ route('school.student.index') }}',
                         data: function (d) {
-                            d.name = $("#name").val();
-                            d.grade = $("#grade").val();
-                            d.school_id = $("#school_id").val();
-                            d.package_id = $("#package_id").val();
-                            d.teacher_id = $("#teacher_id").val();
-                            d.section = $("#section").val();
+                            var frm_data = $('#filter').serializeArray();
+                            $.each(frm_data, function (key, val) {
+                                d[val.name] = val.value;
+                            });
                         }
                     },
                     columns: [

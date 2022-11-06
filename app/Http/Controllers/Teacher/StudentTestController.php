@@ -99,6 +99,7 @@ class StudentTestController extends Controller
                 $query->where('teacher_id', $teacher->id);
             });
         })->findOrFail($id);
+//        dd($user_test);
 
         return view('teacher.student_test.show',compact('title', 'user_test'));
     }
