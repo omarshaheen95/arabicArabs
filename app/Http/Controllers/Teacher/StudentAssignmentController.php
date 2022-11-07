@@ -128,10 +128,15 @@ class StudentAssignmentController extends Controller
             {
                 if ($student != '')
                 {
-                    UserAssignment::query()->firstOrCreate([
-                        'user_id' => $student->id,
-                        'lesson_id' => $lesson,
-                    ],[
+//                    UserAssignment::query()->firstOrCreate([
+//                        'user_id' => $student->id,
+//                        'lesson_id' => $lesson,
+//                    ],[
+//                        'user_id' => $student->id,
+//                        'lesson_id' => $lesson,
+//                        'test_assignment' => $test_assignment,
+//                    ]);
+                    UserAssignment::query()->create([
                         'user_id' => $student->id,
                         'lesson_id' => $lesson,
                         'test_assignment' => $test_assignment,
@@ -143,10 +148,15 @@ class StudentAssignmentController extends Controller
             {
                 if ($student != '')
                 {
-                    UserAssignment::query()->firstOrCreate([
-                        'user_id' => $student,
-                        'lesson_id' => $lesson,
-                    ],[
+//                    UserAssignment::query()->firstOrCreate([
+//                        'user_id' => $student,
+//                        'lesson_id' => $lesson,
+//                    ],[
+//                        'user_id' => $student,
+//                        'lesson_id' => $lesson,
+//                        'test_assignment' => $test_assignment,
+//                    ]);
+                    UserAssignment::query()->create([
                         'user_id' => $student,
                         'lesson_id' => $lesson,
                         'test_assignment' => $test_assignment,
@@ -251,14 +261,20 @@ class StudentAssignmentController extends Controller
             {
                 if ($student != '')
                 {
-                    StoryAssignment::query()->firstOrCreate([
-                        'user_id' => $student->id,
-                        'story_id' => $story,
-                    ],[
+//                    StoryAssignment::query()->firstOrCreate([
+//                        'user_id' => $student->id,
+//                        'story_id' => $story,
+//                    ],[
+//                        'user_id' => $student->id,
+//                        'story_id' => $story,
+//                        'test_assignment' => $test_assignment,
+//                    ]);
+                    StoryAssignment::query()->create([
                         'user_id' => $student->id,
                         'story_id' => $story,
                         'test_assignment' => $test_assignment,
                     ]);
+
                 }
             }
         }else{
@@ -266,10 +282,15 @@ class StudentAssignmentController extends Controller
             {
                 if ($student != '')
                 {
-                    StoryAssignment::query()->firstOrCreate([
-                        'user_id' => $student,
-                        'story_id' => $story,
-                    ],[
+//                    StoryAssignment::query()->firstOrCreate([
+//                        'user_id' => $student,
+//                        'story_id' => $story,
+//                    ],[
+//                        'user_id' => $student,
+//                        'story_id' => $story,
+//                        'test_assignment' => $test_assignment,
+//                    ]);
+                    StoryAssignment::query()->create([
                         'user_id' => $student,
                         'story_id' => $story,
                         'test_assignment' => $test_assignment,

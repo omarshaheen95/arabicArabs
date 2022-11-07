@@ -61,7 +61,8 @@ class UserController extends Controller
                 ->addColumn('actions', function ($row) {
                     $edit_url = route('manager.user.edit', $row->id);
                     $show_url = route('manager.user.show', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url', 'show_url'));
+                    $login_url = route('manager.user.login', $row->id);
+                    return view('manager.setting.btn_actions', compact('row', 'edit_url', 'show_url', 'login_url'));
                 })
                 ->make();
         }
@@ -532,5 +533,12 @@ class UserController extends Controller
 
         return true;
 
+    }
+
+    public function userLogin($id)
+    {
+        $user = User::query()->findOrFail($id);
+        Auth::guard('web')->loginUsingId($id);
+        return redirect()->route('home');
     }
 }

@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Proengsoft\JsValidation\Facades\JsValidatorFacade as JsValidator;
 use Yajra\DataTables\DataTables;
 
@@ -32,7 +33,8 @@ class SchoolController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     $edit_url = route('manager.school.edit', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url'));
+                    $login_url = route('manager.school.login', $row->id);
+                    return view('manager.setting.btn_actions', compact('row', 'edit_url', 'login_url'));
                 })
                 ->make();
         }
@@ -87,5 +89,12 @@ class SchoolController extends Controller
         User::query()->where('school_id', $id)->update(['school_id' => null]);
         $school->forceDelete();
         return redirect()->route('manager.school.index')->with('message', "تم الحذف بنجاح");
+    }
+
+    public function schoolLogin($id)
+    {
+        $user = School::query()->findOrFail($id);
+        Auth::guard('school')->loginUsingId($id);
+        return redirect()->route('school.home');
     }
 }

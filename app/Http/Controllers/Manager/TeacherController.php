@@ -10,6 +10,7 @@ use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class TeacherController extends Controller
@@ -39,7 +40,8 @@ class TeacherController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     $edit_url = route('manager.teacher.edit', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url'));
+                    $login_url = route('manager.teacher.login', $row->id);
+                    return view('manager.setting.btn_actions', compact('row', 'edit_url', 'login_url'));
                 })
                 ->addColumn('check', function ($row) {
                     return $row->check;
@@ -160,5 +162,12 @@ class TeacherController extends Controller
             $html .= '<option value="' . $row->id . '">' . $row->name . '</option>';
         }
         return response()->json(['html' => $html]);
+    }
+
+    public function teacherLogin($id)
+    {
+        $user = Teacher::query()->findOrFail($id);
+        Auth::guard('teacher')->loginUsingId($id);
+        return redirect()->route('teacher.home');
     }
 }

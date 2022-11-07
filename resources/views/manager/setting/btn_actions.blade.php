@@ -1,7 +1,4 @@
-{{--Dev Omar Shaheen
-    Devomar095@gmail.com
-    WhatsApp +972592554320
-    --}}
+
 @isset($edit_url)
     <a href="{{$edit_url}}" class="btn btn-icon btn-danger "><i class="la la-pencil"></i></a>
 @endisset
@@ -18,4 +15,7 @@
     <button type="button" data-id="{{$row->id}}" data-toggle="modal" data-target="#statusModel" class="statusRecord btn btn-icon btn-danger">
         <i class="la la-refresh"></i>
     </button>
+@endisset
+@isset($login_url)
+    <a href="{{$login_url}}" class="btn btn-icon btn-danger " target="_blank"><i class="la la-arrow-left"></i></a>
 @endisset

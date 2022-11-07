@@ -130,18 +130,29 @@
                             <div class="col-lg-9 col-xl-9">
                                 <select class="form-control assignment_grade" name="assignment_grade" id="assignment_grade">
                                     <option selected value="">الصف</option>
-                                    <option value="1" >الصف 1</option>
-                                    <option value="2" >الصف 2</option>
-                                    <option value="3" >الصف 3</option>
-                                    <option value="4" >الصف 4</option>
-                                    <option value="5" >الصف 5</option>
-                                    <option value="6" >الصف 6</option>
-                                    <option value="7" >الصف 7</option>
-                                    <option value="8" >الصف 8</option>
-                                    <option value="9" >الصف 9</option>
-                                    <option value="10" >الصف 10</option>
-                                    <option value="11" >الصف 11</option>
-                                    <option value="12" >الصف 12</option>
+                                    @foreach($grades as $grade)
+                                        <option value="{{$grade->id}}">{{$grade->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-xl-3 col-lg-3 col-form-label">المستوى</label>
+                            <div class="col-lg-9 col-xl-9">
+                                <select class="form-control assignment_level" name="assignment_level" id="assignment_level">
+                                    <option selected value="">المستوى</option>
+                                    <option value="1" >المستوى 1</option>
+                                    <option value="2" >المستوى 2</option>
+                                    <option value="3" >المستوى 3</option>
+                                    <option value="4" >المستوى 4</option>
+                                    <option value="5" >المستوى 5</option>
+                                    <option value="6" >المستوى 6</option>
+                                    <option value="7" >المستوى 7</option>
+                                    <option value="8" >المستوى 8</option>
+                                    <option value="9" >المستوى 9</option>
+                                    <option value="10" >المستوى 10</option>
+                                    <option value="11" >المستوى 11</option>
+                                    <option value="12" >المستوى 12</option>
                                 </select>
                             </div>
                         </div>
@@ -276,12 +287,10 @@
                 });
             });
 
-            $('select[name="assignment_grade"]').change(function () {
+            $('select[name="assignment_level"]').change(function () {
                 var id = $(this).val();
                 var url = '{{ route("teacher.getStoriesByGrade", ":id") }}';
-                url = url.replace(':id', id );
-                var students_url = '{{ route("teacher.getStudentsByGrade", ":id") }}';
-                students_url = students_url.replace(':id', id );
+                url = url.replace(':id', id);
                 $.ajax({
                     type: "get",
                     url: url,
@@ -289,6 +298,11 @@
                     $('select[name="assignment_story"]').html(data.html);
                     $('select[name="assignment_story"]').selectpicker('refresh');
                 });
+            });
+            $('select[name="assignment_grade"]').change(function () {
+                var id = $(this).val();
+                var students_url = '{{ route("teacher.getStudentsByGrade", ":id") }}';
+                students_url = students_url.replace(':id', id );
                 $.ajax({
                     type: "get",
                     url: students_url,

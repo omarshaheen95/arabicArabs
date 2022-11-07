@@ -24,6 +24,7 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::post('approve_teacher', 'TeacherController@approveTeacher')->name('teacher.approveTeacher');
     Route::post('activate_teacher', 'TeacherController@activeTeacher')->name('teacher.activateTeacher');
     Route::post('export_teachers_excel', 'TeacherController@exportTeachersExcel')->name('teacher.export_teachers_excel');
+    Route::get('teacher-login/{id}', 'TeacherController@teacherLogin')->name('teacher.login');
     //Story
     Route::resource('story', 'StoryController');
     Route::get('story_assessment/{id}', 'StoryController@storyAssessment')->name('story.assessment');
@@ -37,6 +38,7 @@ Route::group(['namespace' => 'Manager'], function(){
 
 
     Route::get('getTeacherBySchool/{lid}', 'TeacherController@getTeacherBySchool')->name('getTeacherBySchool');
+    Route::get('school-login/{id}', 'SchoolController@schoolLogin')->name('school.login');
 
     Route::get('lesson/{id}/learn', [LessonController::class,'lessonLearn'])->name('lesson.learn');
     Route::get('lesson/{id}/review/{step}', [LessonController::class,'lessonReview'])->name('lesson.review');
@@ -59,6 +61,7 @@ Route::group(['namespace' => 'Manager'], function(){
 
 
     //User
+    Route::get('user-login/{id}', 'UserController@userLogin')->name('user.login');
     Route::get('duplicate_user', 'UserController@duplicateIndex')->name('user.duplicate_user');
     Route::delete('duplicate_user/{id}', 'UserController@destroyDuplicate')->name('user.delete_duplicate_user');
     Route::post('export_students_excel', 'UserController@exportStudentsExcel')->name('user.export_students_excel');
