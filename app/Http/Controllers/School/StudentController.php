@@ -295,6 +295,25 @@ class StudentController extends Controller
         $school = School::query()->find($school_id);
         return view('general.user.cards', compact('students', 'school'));
     }
+    public function cardsQR(Request $request)
+    {
+        $name = $request->get('name', false);
+        $grade = $request->get('grade', false);
+        $teacher_id = $request->get('teacher_id', false);
+        $section = $request->get('section', false);
+        $school_id = Auth::guard('school')->user()->id;
+        $students = User::query()
+
+            ->with(['teacherUser.teacher', 'teacherUser'])
+           ->when($school_id, function (Builder $query) use ($school_id){
+            $query->where('school_id', $school_id);
+        })->search($request)
+            ->orderBy('grade_id')->get();
+
+        $students = $students->chunk(8);
+        $school = School::query()->find($school_id);
+        return view('general.user.cards_qr', compact('students', 'school'));
+    }
 
 
 

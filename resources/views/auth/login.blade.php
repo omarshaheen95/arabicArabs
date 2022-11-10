@@ -27,7 +27,7 @@
                                         <div class="icon">
                                             <img src="{{asset('web_assets/img/mail.svg')}}" alt="">
                                         </div>
-                                        <input type="email" name="email" id="email" class="form-control" placeholder=" ex: example@domain.com"
+                                        <input type="email" name="email" id="email" value="{{request()->get('username', null)}}" class="form-control" placeholder=" ex: example@domain.com"
                                                required autocomplete="off" autofocus pattern="[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                                          @if ($errors->has('email'))
                                                     <span class="help-block">

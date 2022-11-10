@@ -20,7 +20,7 @@
             border: 0;
         }
         .student_card{
-            height: 90mm;
+            height: 68mm;
             border: 2px solid #000;
         }
         .student_card ul{
@@ -132,13 +132,16 @@
                             </div>
                             <div class="bar_mid"></div>
                             <div class="row">
-                                <div class="col-xs-12 studnet_info">
-                                    <p class="info">المدرسة :
-                                        <span class="bolder red-font" style="font-size: 12px;">
-                                            {{$std->school->name}}
-                                        </span>
-                                    </p>
-                                    <p class="info">اسم الطالب :
+                                <div class="col-xs-5">
+                                    {!! QrCode::size(123)->color(64,161,100)->generate("https://www.arabic-arabs.com/login?username=$std->email"); !!}
+                                </div>
+                                <div class="col-xs-7 studnet_info">
+{{--                                    <p class="info">المدرسة :--}}
+{{--                                        <span class="bolder red-font" style="font-size: 12px;">--}}
+{{--                                            {{$std->school->name}}--}}
+{{--                                        </span>--}}
+{{--                                    </p>--}}
+                                    <p class="info"> الطالب :
                                         <span class="bolder red-font" style="font-size: 12px;">
                                             {{ $std->name }}
                                         </span>
@@ -153,14 +156,15 @@
                                             {{ optional(optional($std->teacherUser)->teacher)->name }}
                                         </span>
                                     </p>
-                                    <ul>
-                                        <li>الخطوة 1: www.Arabic-Arabs.com</li>
-                                        <li>الخطوة 2: دخول الطالب</li>
-                                        <li>الخطوة 3: البريد الإلكتروني : <span class="bolder red-font" style="font-size: 12px; white-space: nowrap;">{{$std->email}}</span></li>
-                                        <li>الخطوة 4: كلمة المرور: <span class="bolder red-font">123456</span></li>
-                                        <li>الخطوة 5: تسجيل الدخول</li>
-                                    </ul>
+{{--                                    <ul>--}}
+{{--                                        <li>الخطوة 1: www.Arabic-Arabs.com</li>--}}
+{{--                                        <li>الخطوة 2: دخول الطالب</li>--}}
+{{--                                        <li>الخطوة 3: البريد الإلكتروني : <span class="bolder red-font" style="font-size: 12px; white-space: nowrap;">{{$std->email}}</span></li>--}}
+{{--                                        <li>الخطوة 4: كلمة المرور: <span class="bolder red-font">123456</span></li>--}}
+{{--                                        <li>الخطوة 5: تسجيل الدخول</li>--}}
+{{--                                    </ul>--}}
                                 </div>
+
                             </div>
 
                         </div>

@@ -429,6 +429,21 @@ class UserController extends Controller
         $school = School::query()->find($request->get('school_id'));
         return view('general.user.cards', compact('students', 'school'));
     }
+    public function cardsQR(Request $request)
+    {
+        $request->validate([
+            'school_id' => 'required|exists:schools,id',
+        ]);
+
+
+
+        $students = User::query()->with(['school', 'teacherUser'])->search($request)
+            ->orderBy('grade_id')->get();
+
+        $students = $students->chunk(8);
+        $school = School::query()->find($request->get('school_id'));
+        return view('general.user.cards_qr', compact('students', 'school'));
+    }
 
     public function updateStudentSchoolExpireDate()
     {

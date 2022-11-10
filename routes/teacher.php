@@ -28,6 +28,7 @@ Route::group(['namespace' => 'Teacher'], function() {
     Route::get('student/{id}/review', 'StudentController@review')->name('student.review');
     Route::get('student/{id}/report', 'StudentController@report')->name('user.report');
     Route::get('student/print/cards', 'StudentController@cards')->name('user.cards');
+    Route::get('student/print/cards_qr', 'StudentController@cardsQR')->name('user.cardsQR');
 //Student Assignment
     Route::get('student_assignments', 'StudentAssignmentController@index')->name('student_assignments.index');
     Route::post('student_assignments', 'StudentAssignmentController@store')->name('student_assignments.store');

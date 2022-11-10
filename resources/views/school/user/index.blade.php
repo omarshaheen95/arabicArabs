@@ -73,7 +73,7 @@
                                     <option  value="expire">منتهي</option>
                                 </select>
                             </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+                            <div class="col-lg-4 kt-margin-b-10-tablet-and-mobile">
                                 <label>الإجراءات:</label>
                                 <br />
                                 <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
@@ -87,6 +87,10 @@
                                 <button type="submit" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_cards">
                                     <i class="la la-list"></i>
                                     البطاقات
+                                </button>
+                                <button type="submit" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_cards_qr">
+                                    <i class="la la-qrcode"></i>
+                                    QR Codes
                                 </button>
                             </div>
 
@@ -209,6 +213,15 @@
                 e.preventDefault();
                 $("#filter").attr("method",'get');
                 $("#filter").attr("action",'{{route('school.user.cards')}}')
+                $('#filter').submit();
+
+                $("#filter").attr("method",'');
+                $("#filter").attr("action",'');
+            });
+            $('#kt_cards_qr').click(function(e){
+                e.preventDefault();
+                $("#filter").attr("method",'get');
+                $("#filter").attr("action",'{{route('school.user.cardsQR')}}')
                 $('#filter').submit();
 
                 $("#filter").attr("method",'');

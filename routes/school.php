@@ -29,6 +29,7 @@ Route::group(['namespace' => 'School'], function() {
     Route::get('student/{id}/review', 'StudentController@review')->name('student.review');
     Route::get('student/{id}/report', 'StudentController@report')->name('user.report');
     Route::get('student/print/cards', 'StudentController@cards')->name('user.cards');
+    Route::get('student/print/cards_qr', 'StudentController@cardsQR')->name('user.cardsQR');
 
 //Students Works
     Route::get('students_works', 'StudentWorksController@index')->name('students_works.index');

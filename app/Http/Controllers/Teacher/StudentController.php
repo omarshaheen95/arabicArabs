@@ -357,6 +357,28 @@ class StudentController extends Controller
         $school = $teacher->school;
         return view('general.user.cards', compact('students', 'school'));
     }
+    public function cardsQR(Request $request)
+    {
+        $name = $request->get('name', false);
+        $grade = $request->get('grade', false);
+        $section = $request->get('section', false);
+        $teacher = Auth::guard('teacher')->user();
+        $students = User::query()->when($name, function (Builder $query) use ($name){
+            $query->where('name', 'like', '%'.$name.'%');
+        })->when($grade, function (Builder $query) use ($grade){
+            $query->where('grade_id', $grade);
+        })->when($section, function (Builder $query) use ($section){
+            $query->where('section', $section);
+        })->where('school_id', $teacher->school_id)->whereHas('teacherUser', function (Builder $query) use($teacher){
+            $query->where('teacher_id', $teacher->id);
+        })->latest()->get();
+
+
+
+        $students = $students->chunk(8);
+        $school = $teacher->school;
+        return view('general.user.cards_qr', compact('students', 'school'));
+    }
 
 
 }

@@ -62,9 +62,17 @@
                                 </select>
                             </div>
 
+
                         </div>
                         <div class="row">
-
+                            <div class="col-lg-2 kt-margin-b-10-tablet-and-mobile">
+                                <label>حالة التصحيح:</label>
+                                <select class="form-control" name="corrected" id="corrected">
+                                    <option selected value="">الحالة</option>
+                                    <option value="1">مصحح</option>
+                                    <option value="2">غير مصحح</option>
+                                </select>
+                            </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
                                 <label>الإجراءات:</label>
                                 <br />
@@ -137,6 +145,7 @@
                             d.start_at = $("#start_at").val();
                             d.end_at = $("#end_at").val();
                             d.status = $("#status").val();
+                            d.corrected = $("#corrected").val();
                         }
                     },
                     columns: [

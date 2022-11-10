@@ -73,6 +73,10 @@
                                     <i class="la la-list"></i>
                                     البطاقات
                                 </button>
+                                <button type="submit" class="btn btn-info btn-elevate btn-icon-sm" id="kt_cards_qr">
+                                    <i class="la la-qrcode"></i>
+                                    QR Codes
+                                </button>
                             </div>
 
                         </div>
@@ -202,6 +206,14 @@
                 e.preventDefault();
                 $("#filter").attr("method", 'get');
                 $("#filter").attr("action", '{{route('teacher.user.cards')}}');
+                $('#filter').submit();
+                $("#filter").attr("method", '');
+                $("#filter").attr("action", '');
+            });
+            $('#kt_cards_qr').click(function (e) {
+                e.preventDefault();
+                $("#filter").attr("method", 'get');
+                $("#filter").attr("action", '{{route('teacher.user.cardsQR')}}');
                 $('#filter').submit();
                 $("#filter").attr("method", '');
                 $("#filter").attr("action", '');

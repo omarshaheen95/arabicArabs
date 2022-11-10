@@ -28,8 +28,16 @@ class StudentTestController extends Controller
             $start_at = $request->get('start_at', false);
             $end_at = $request->get('end_at', false);
             $status = $request->get('status', false);
+            $corrected = $request->get('corrected', false);
 
-            $rows = UserTest::query()->with(['lesson', 'user'])->whereHas('user', function (Builder $query) use ($teacher, $username){
+            $rows = UserTest::query()->with(['lesson', 'user'])
+                ->when($corrected == 1, function (Builder $query){
+                    $query->where('corrected', 1);
+                })
+                ->when($corrected == 2, function (Builder $query){
+                    $query->where('corrected', 0);
+                })
+                ->whereHas('user', function (Builder $query) use ($teacher, $username){
                 $query->whereHas('teacherUser', function (Builder $query) use($teacher){
                     $query->where('teacher_id', $teacher->id);
                 });

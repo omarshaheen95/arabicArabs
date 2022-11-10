@@ -109,6 +109,10 @@ WhatsApp +972592554320
                                     <i class="la la-list"></i>
                                     بطاقات
                                 </button>
+                                <button type="submit" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_cards_qr">
+                                    <i class="la la-qrcode"></i>
+                                    QR Codes
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -238,6 +242,15 @@ WhatsApp +972592554320
                 e.preventDefault();
                 $("#filter").attr("method",'get');
                 $("#filter").attr("action",'{{route('manager.user.cards')}}')
+                $('#filter').submit();
+
+                $("#filter").attr("method",'');
+                $("#filter").attr("action",'');
+            });
+            $('#kt_cards_qr').click(function(e){
+                e.preventDefault();
+                $("#filter").attr("method",'get');
+                $("#filter").attr("action",'{{route('manager.user.cardsQR')}}')
                 $('#filter').submit();
 
                 $("#filter").attr("method",'');
