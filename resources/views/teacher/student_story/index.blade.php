@@ -53,9 +53,9 @@
                                     <option value="7" >المستوى 7</option>
                                     <option value="8" >المستوى 8</option>
                                     <option value="9" >المستوى 9</option>
-                                    <option value="10" >المستوى 10</option>
-                                    <option value="11" >المستوى 11</option>
-                                    <option value="12" >المستوى 12</option>
+{{--                                    <option value="10" >المستوى 10</option>--}}
+{{--                                    <option value="11" >المستوى 11</option>--}}
+{{--                                    <option value="12" >المستوى 12</option>--}}
                                 </select>
                             </div>
                             <input type="hidden" name="teacher_id" value="{{Auth::user()->id}}">

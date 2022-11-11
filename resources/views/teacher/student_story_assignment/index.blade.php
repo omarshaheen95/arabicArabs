@@ -53,12 +53,19 @@
                                 <input type="text" name="username" id="username" class="form-control kt-input" placeholder="الاسم">
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>الصف:</label>
+                                <label>المستوى:</label>
                                 <select class="form-control grade" name="grade" id="grade">
-                                    <option selected value="">اختر صف</option>
-                                    @foreach($grades as $grade)
-                                        <option value="{{$grade->id}}">{{$grade->name}}</option>
-                                    @endforeach
+
+                                    <option selected value="">المستوى</option>
+                                    <option value="1" >المستوى 1</option>
+                                    <option value="2" >المستوى 2</option>
+                                    <option value="3" >المستوى 3</option>
+                                    <option value="4" >المستوى 4</option>
+                                    <option value="5" >المستوى 5</option>
+                                    <option value="6" >المستوى 6</option>
+                                    <option value="7" >المستوى 7</option>
+                                    <option value="8" >المستوى 8</option>
+                                    <option value="9" >المستوى 9</option>
                                 </select>
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
