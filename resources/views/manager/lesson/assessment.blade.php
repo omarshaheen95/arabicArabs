@@ -222,7 +222,7 @@
                                                                    name="old_c_question[{{$c_question->id}}]"
                                                                    type="text"
                                                                    value="{{$c_question->content}}">
-                                                            @if($i == 3 && $lesson->grade->grade_number <= 3)
+                                                            @if($i == 3 && $lesson->grade->grade_number <= 3 && $lesson->grade->grade_number != 0)
                                                                 <input type="hidden" name="mark[{{$c_question->id}}]"
                                                                        value="8"/>
                                                             @else
@@ -305,7 +305,7 @@
                                                             <input required class="form-control"
                                                                    name="c_question[{{$i}}]"
                                                                    type="text">
-                                                            @if($i == 3 && $lesson->grade->grade_number <= 3)
+                                                            @if($i == 3 && $lesson->grade->grade_number <= 3 && $lesson->grade->grade_number != 0)
                                                                 <input type="hidden" name="mark[{{$i}}]" value="8"/>
                                                             @else
                                                                 <input type="hidden" name="mark[{{$i}}]"
