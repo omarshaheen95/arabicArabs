@@ -120,12 +120,13 @@ class LessonController extends Controller
         {
             if ($question->type == 1)
             {
-                $student_result = TrueFalseResult::query()->where('question_id', $question->id)->where('user_test_id', $student->id)
+                $student_result = TrueFalseResult::query()->where('question_id', $question->id)->where('user_test_id', $test->id)
                     ->first();
                 $main_result = TrueFalse::query()->where('question_id', $question->id)->first();
                 if(isset($student_result) && isset($main_result) && optional($student_result)->result == optional($main_result)->result){
                     $total += $question->mark;
                     $tf_total += $question->mark;
+//                    Log::warning('TF-QM : '.$question->mark);
                 }
             }
 
@@ -141,6 +142,7 @@ class LessonController extends Controller
                 if(isset($student_result) && isset($main_result) && optional($main_result)->result == 1){
                     $total += $question->mark;
                     $o_total += $question->mark;
+//                    Log::warning('C-QM : '.$question->mark);
                 }
 
             }
@@ -157,6 +159,7 @@ class LessonController extends Controller
                 }
                 $total += $match_mark;
                 $m_total += $match_mark;
+//                Log::warning('M-QM : '.$question->mark);
             }
 
             if ($question->type == 4)
@@ -171,6 +174,7 @@ class LessonController extends Controller
                     {
                         $total += $question->mark;
                         $s_total += $question->mark;
+//                        Log::warning('S-QM : '.$question->mark);
                     }
 
                 }
@@ -430,4 +434,6 @@ class LessonController extends Controller
 
         return view('user.lesson.lesson_test_result',compact('student_test', 'title', 'level', 'lesson'));
     }
+
+
 }

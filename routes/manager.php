@@ -102,6 +102,8 @@ Route::group(['namespace' => 'Manager'], function(){
 
 //
 
+    Route::get('correct_tests', 'LessonController@reCorlessonTest');
+
 
 });
 
