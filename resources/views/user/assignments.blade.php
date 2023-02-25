@@ -27,7 +27,7 @@
                                 <tr>
                                     <td style="font-weight: bold">الدرس</td>
                                     <td style="font-weight: bold">المستوى</td>
-                                    <td style="font-weight: bold">تعيين مهمة</td>
+                                    <td style="font-weight: bold">-</td>
                                     <td style="font-weight: bold">تعيين اختبار</td>
                                     <td style="font-weight: bold">الحالة</td>
                                 </tr>
@@ -35,13 +35,12 @@
                                     <tr>
                                         <td>{{$student_assignment->lesson->name}}</td>
                                         <td>الصف {{$student_assignment->lesson->grade_name}}</td>
-                                        <td>@if($student_assignment->done_tasks_assignment)
-                                                مكتمل
-                                            @elseif($student_assignment->tasks_assignment != 0)
+                                        <td>
+                                            @if($student_assignment->lesson->lesson_type == 'reading' || $student_assignment->lesson->lesson_type == 'listening')
                                                 <a href="{{route('lesson', [$student_assignment->lesson_id, 'learn'])}}#tasks">
-                                                    الذهاب للمهمة</a>
+                                                    الذهاب للدرس</a>
                                             @else
-                                                -
+                                            -
                                             @endif
                                         </td>
                                         <td>@if($student_assignment->done_test_assignment)

@@ -148,3 +148,15 @@ Route::get('update_speaking', function (){
         ]);
     }
 });
+
+Route::get('update_users', function () {
+    $users = \App\Models\User::query()->where('created_at', '>=', '2023-01-26')->where('school_id', 611)->get();
+    foreach ($users as $key => $user) {
+        $user->update([
+            'grade_id' => $user->grade_id - 1,
+        ]);
+    }
+    dd($users->count());
+
+
+});

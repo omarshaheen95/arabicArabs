@@ -277,8 +277,8 @@
 <script src="{{asset('web_assets/js/custom.js')}}"></script>
 
 <script src="{{asset('s_website/js/script.js')}}"></script>
-<script src="{{ asset("js/push.min.js") }}" type="text/javascript"></script>
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+{{--<script src="{{ asset("js/push.min.js") }}" type="text/javascript"></script>--}}
+{{--<script src="https://js.pusher.com/7.0/pusher.min.js"></script>--}}
 <script>
     toastr.options = {
         "closeButton": true,
@@ -310,39 +310,39 @@
     });
 
 
-    Push.Permission.get();
+    // Push.Permission.get();
 
-    function notifyMe(notify) {
+    // function notifyMe(notify) {
+    //
+    //     toastr.success(notify.title);
+    //     Push.create(notify.title, {
+    //         icon: 'https://www.non-arabs.com/website/images/icons/icon.png',
+    //         timeout: 4000,
+    //         onClick: function () {
+    //             window.focus();
+    //             this.close();
+    //         }
+    //     });
+    //
+    //     $('#userAssignmentsCount').text(notify.unread_notifications);
+    // }
 
-        toastr.success(notify.title);
-        Push.create(notify.title, {
-            icon: 'https://www.non-arabs.com/website/images/icons/icon.png',
-            timeout: 4000,
-            onClick: function () {
-                window.focus();
-                this.close();
-            }
-        });
-
-        $('#userAssignmentsCount').text(notify.unread_notifications);
-    }
 
 
+    {{--var pusher = new Pusher('dca3e1c68a7801d90df2', {--}}
+    {{--    cluster: 'mt1'--}}
+    {{--});--}}
 
-    var pusher = new Pusher('dca3e1c68a7801d90df2', {
-        cluster: 'mt1'
-    });
+    {{--call_back = function (message) {--}}
+    {{--    notifyMe(message)--}}
+    {{--    console.log(message);--}}
+    {{--};--}}
+    {{--//Also remember to change channel and event name if your's are different.--}}
+    {{--var channel = pusher.subscribe('users');--}}
+    {{--channel.bind('user-notification', call_back);--}}
 
-    call_back = function (message) {
-        notifyMe(message)
-        console.log(message);
-    };
-    //Also remember to change channel and event name if your's are different.
-    var channel = pusher.subscribe('users');
-    channel.bind('user-notification', call_back);
-
-    var user_channel = pusher.subscribe('user_{{auth()->user()->id}}');
-    user_channel.bind('user-notification', call_back);
+    {{--var user_channel = pusher.subscribe('user_{{auth()->user()->id}}');--}}
+    {{--user_channel.bind('user-notification', call_back);--}}
 
 </script>
 

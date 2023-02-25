@@ -1,4 +1,6 @@
 <?php
+
+use App\Models\Lesson;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manager\LessonController;
 use App\Http\Controllers\Manager\TrainingController;
@@ -98,6 +100,12 @@ Route::group(['namespace' => 'Manager'], function(){
         }
 
         return "تم تحديث بيانات الطلاب بنجاح";
+    });
+
+    Route::get('get_marks', function(){
+        $lesson_assessment = Lesson::query()->withSum('questions', 'mark')->has('questions')->get()->where('questions_sum_mark', '>', 100)
+            ->pluck('questions_sum_mark', 'id')->toArray();
+        dd($lesson_assessment);
     });
 
 //

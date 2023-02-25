@@ -164,26 +164,34 @@
                                             </div>
                                             <div class="exercise-question-answer text-center my-4">
 
-                                                @if(!$c_question->getFirstMediaUrl('t_imageQuestion'))
+                                                @if($tf_question->getFirstMediaUrl('t_imageQuestion'))
 
                                                     <div class="row justify-content-center py-3">
                                                         <div class="col-lg-6 col-md-8">
-                                                            @if(\Illuminate\Support\Str::contains($c_question->getFirstMediaUrl('t_imageQuestion'), '.mp3'))
-                                                                <div class="recorder-player" id="voice_audio_2">
-                                                                    <div class="audio-player">
-                                                                        <audio >
-                                                                            <source
-                                                                                src="{{asset($c_question->getFirstMediaUrl('t_imageQuestion'))}}"
-                                                                                type="audio/mpeg">
-                                                                        </audio>
+                                                            @if($tf_question->getFirstMediaUrl('t_imageQuestion'))
+
+                                                                <div class="row justify-content-center py-3">
+                                                                    <div class="col-lg-6 col-md-8">
+                                                                        @if(\Illuminate\Support\Str::contains($tf_question->getFirstMediaUrl('t_imageQuestion'), '.mp3'))
+                                                                            <div class="recorder-player" id="voice_audio_2">
+                                                                                <div class="audio-player">
+                                                                                    <audio >
+                                                                                        <source
+                                                                                            src="{{asset($tf_question->getFirstMediaUrl('t_imageQuestion'))}}"
+                                                                                            type="audio/mpeg">
+                                                                                    </audio>
+                                                                                </div>
+                                                                            </div>
+                                                                        @else
+                                                                            <div class="w-100 text-center">
+                                                                                <img src="{{asset($tf_question->getFirstMediaUrl('t_imageQuestion'))}}"
+                                                                                     width="300px">
+                                                                            </div>
+                                                                        @endif
                                                                     </div>
                                                                 </div>
-                                                            @else
-                                                                <div class="w-100 text-center">
-                                                                    <img src="{{asset($c_question->getFirstMediaUrl('t_imageQuestion'))}}"
-                                                                         width="300px">
-                                                                </div>
                                                             @endif
+
                                                         </div>
                                                     </div>
                                                 @endif

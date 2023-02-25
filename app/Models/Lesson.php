@@ -182,5 +182,10 @@ class Lesson extends Model implements HasMedia
         }
     }
 
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
 
 }

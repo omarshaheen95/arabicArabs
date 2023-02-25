@@ -139,7 +139,7 @@
                     <br />
                     في المستوى {{$student_test->story->grade}}
                     <br />
-                    بنسبة  {{$student_test->total}}%
+                    بنسبة  {{$student_test->total_per}}
                     <br />
                     خلال رحلة تعلم اللغة العربية من منصة لغتي الأولى.
                 </div>
