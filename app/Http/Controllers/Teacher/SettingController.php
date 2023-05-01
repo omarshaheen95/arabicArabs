@@ -120,9 +120,12 @@ class SettingController extends Controller
         return response()->json(['html'=>$html]);
     }
 
-    public function getLessonsByGrade($id)
+    public function getLessonsByGrade(Request $request, $id)
     {
-        $lessons = Lesson::query()->where('grade_id', $id)->get();
+        $lesson_type = $request->get('lesson_type', null);
+        $lessons = Lesson::query()->when($lesson_type, function(Builder $query) use($lesson_type){
+            $query->where('lesson_type', $lesson_type);
+        })->where('grade_id', $id)->get();
         $html = '<option selected value="">اختر درس</option>';
         foreach ($lessons as $lesson) {
             $html .= '<option value="'.$lesson->id.'">'.$lesson->name.'</option>';

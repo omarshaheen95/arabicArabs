@@ -145,7 +145,7 @@
                                     </p>
                                     <p class="info">الصف :
                                         <span class="bolder red-font" style="font-size: 12px;">
-                                            {{ $std->grade_id }}
+                                            {{ $std->grade_name }}
                                         </span>
                                     </p>
                                     <p class="info" >المعلم :

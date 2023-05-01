@@ -131,6 +131,18 @@
                     {{ csrf_field() }}
                     <div class="modal-body">
                         <div class="form-group row">
+                            <label class="col-xl-3 col-lg-3 col-form-label">المهارة</label>
+                            <div class="col-lg-9 col-xl-9">
+                                <select class="form-control assignment_type" name="assignment_type" id="assignment_type">
+                                    <option selected value="">الكل</option>
+                                    <option value="reading">قراءة</option>
+                                    <option value="writing">كتابة</option>
+                                    <option value="listening">استماع</option>
+                                    <option value="speaking">تحدث</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-xl-3 col-lg-3 col-form-label">الصف</label>
                             <div class="col-lg-9 col-xl-9">
                                 <select class="form-control assignment_grade" name="assignment_grade" id="assignment_grade">
@@ -141,6 +153,7 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="form-group row">
                             <label class="col-xl-3 col-lg-3 col-form-label">الدرس</label>
                             <div class="col-lg-9 col-xl-9">
@@ -330,6 +343,9 @@
                 $.ajax({
                     type: "get",
                     url: url,
+                    data:{
+                        lesson_type:$('#assignment_type').val(),
+                    }
                 }).done(function (data) {
                     $('select[name="assignment_lesson"]').html(data.html);
                     $('select[name="assignment_lesson"]').selectpicker('refresh');
@@ -344,6 +360,25 @@
                     $('#assignment_students').selectpicker('selectAll');
                     $('#assignment_students').selectpicker('refresh');
                 });
+            });
+            $('select[name="assignment_type"]').change(function () {
+                var id = $('select[name="assignment_grade"]').val();
+                if(id > 0)
+                {
+                    var url = '{{ route("teacher.getLessonsByGrade", ":id") }}';
+                    url = url.replace(':id', id );
+                    $.ajax({
+                        type: "get",
+                        url: url,
+                        data:{
+                            lesson_type:$('#assignment_type').val(),
+                        }
+                    }).done(function (data) {
+                        $('select[name="assignment_lesson"]').html(data.html);
+                        $('select[name="assignment_lesson"]').selectpicker('refresh');
+                    });
+                }
+
             });
             $('select[name="section"]').change(function () {
                 var grade = $('select[name="assignment_grade"]').val();

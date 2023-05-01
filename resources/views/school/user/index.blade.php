@@ -1,6 +1,8 @@
 @extends('school.layout.container')
 @section('style')
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css') }}" rel="stylesheet" type="text/css" />
+
 @endsection
 @section('content')
     @push('breadcrumb')
@@ -73,6 +75,10 @@
                                     <option  value="expire">منتهي</option>
                                 </select>
                             </div>
+                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+                                <label>تاريخ التسجيل:</label>
+                                <input class="form-control date" id="created_at" name="created_at" type="text" placeholder="تاريخ التسجيل">
+                            </div>
                             <div class="col-lg-4 kt-margin-b-10-tablet-and-mobile">
                                 <label>الإجراءات:</label>
                                 <br />
@@ -143,9 +149,17 @@
     <!-- DataTables -->
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('assets/vendors/general/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
     <!-- Bootstrap JavaScript -->
     <script>
         $(document).ready(function(){
+            $('.date').datepicker({
+                autoclose: true,
+                rtl: true,
+                todayHighlight: true,
+                orientation: "bottom left",
+                format: 'yyyy-mm-dd'
+            });
             $(document).on('click','.deleteRecord',(function(){
                 var id = $(this).data("id");
                 var url = '{{ route("school.student.destroy", ":id") }}';

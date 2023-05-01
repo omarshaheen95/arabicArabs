@@ -261,11 +261,11 @@ class LessonController extends Controller
     {
         $student = Auth::user();
 
-        $student_term = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $id)->first();
-        if ($student_term)
-        {
-            return redirect()->route('lessons', [$student_term->lesson->grade->grade_number, $student_term->lesson->lesson_type])->with('message','تم تقديم الاختبار مسبقا')->with('m-class', 'success');
-        }
+//        $student_term = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $id)->first();
+//        if ($student_term)
+//        {
+//            return redirect()->route('lessons', [$student_term->lesson->grade->grade_number, $student_term->lesson->lesson_type])->with('message','تم تقديم الاختبار مسبقا')->with('m-class', 'success');
+//        }
 
 
 
@@ -336,11 +336,11 @@ class LessonController extends Controller
     {
         $student = Auth::user();
 
-        $student_term = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $id)->first();
-        if ($student_term)
-        {
-            return $this->sendError(  'تم تقديم الاختبار مسبقا', 422);
-        }
+//        $student_term = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $id)->first();
+//        if ($student_term)
+//        {
+//            return $this->sendError(  'تم تقديم الاختبار مسبقا', 422);
+//        }
 
 
 
