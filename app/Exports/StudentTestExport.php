@@ -42,7 +42,6 @@ class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromColl
             'Student Grade',
             'Lesson',
             'Level',
-            'Level Grade',
             'Total',
             'Status',
             'Submitted at',
@@ -56,8 +55,7 @@ class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromColl
             $student->user->email,
             $student->user->grade_name,
             $student->lesson->name,
-            $student->lesson->level->name,
-            $student->lesson->level->grade_name,
+            $student->lesson->grade->name,
             $student->total_per,
             $student->status,
             Carbon::parse($student->created_at)->toDateTimeString(),
@@ -77,7 +75,7 @@ class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromColl
         $teacher = $this->teacher_id;
         $school_id = $this->school_id;
 
-        $students = UserTest::query()->whereHas('user', function (Builder $query) use ($teacher, $username, $school_id){
+        $students = UserTest::query()->with(['user', 'lesson', 'lesson.grade'])->has('lesson')->whereHas('user', function (Builder $query) use ($teacher, $username, $school_id){
              $query->when($teacher, function (Builder $query) use ($teacher){
                  $query->whereHas('teacherUser', function (Builder $query) use($teacher){
                      $query->where('teacher_id', $teacher);
@@ -130,10 +128,10 @@ class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromColl
         });
         return [
             AfterSheet::class    => function(AfterSheet $event) {
-                $cellRange = 'A1:I1';
+                $cellRange = 'A1:H1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold('bold')->setSize(12);
                 $event->sheet->styleCells(
-                    "A1:I$this->length",
+                    "A1:H$this->length",
                     [
                         'alignment' => [
                             'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
