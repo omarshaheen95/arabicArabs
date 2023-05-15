@@ -1,7 +1,3 @@
-{{--Dev Omar Shaheen
-    Devomar095@gmail.com
-    WhatsApp +972592554320
-    --}}
 @extends('user.layout.container_v2')
 
 @section('content')
@@ -30,6 +26,7 @@
                                     <td style="font-weight: bold">-</td>
                                     <td style="font-weight: bold">تعيين اختبار</td>
                                     <td style="font-weight: bold">الحالة</td>
+                                    <td style="font-weight: bold">موعد التسليم</td>
                                 </tr>
                                 @foreach($student_assignments as $student_assignment)
                                     <tr>
@@ -57,6 +54,9 @@
                                             @else
                                                 غير مكتمل
                                             @endif
+                                        </td>
+                                        <td>
+                                            {{$student_assignment->deadline}}
                                         </td>
                                     </tr>
                                 @endforeach
