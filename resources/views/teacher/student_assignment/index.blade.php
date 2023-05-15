@@ -112,6 +112,8 @@
                         <th>إسناد واجب ( اختبار )	</th>
                         <th>الحالة</th>
                         <th>أسند في</th>
+                        <th>تاريخ التسليم</th>
+                        <th>حالة التسليم</th>
                         <th>الإجراءات</th>
                         </thead>
                     </table>
@@ -181,12 +183,12 @@
                                 </select>
                             </div>
                         </div>
-{{--                        <div class="form-group row">--}}
-{{--                            <label class="col-xl-3 col-lg-3 col-form-label">تاريخ التسليم</label>--}}
-{{--                            <div class="col-lg-9 col-xl-9">--}}
-{{--                                <input type="text" name="deadline" class="form-control date">--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
+                        <div class="form-group row">
+                            <label class="col-xl-3 col-lg-3 col-form-label">تاريخ التسليم</label>
+                            <div class="col-lg-9 col-xl-9">
+                                <input type="text" name="deadline" class="form-control date">
+                            </div>
+                        </div>
 
                         <div class="form-group row">
 {{--                            <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Tasks assignment') }}</label>--}}
@@ -303,6 +305,8 @@
                         {data: 'done_test_assignment', name: 'done_test_assignment'},
                         {data: 'completed', name: 'completed'},
                         {data: 'created_at', name: 'created_at'},
+                        {data: 'deadline', name: 'deadline'},
+                        {data: 'submit_status', name: 'submit_status'},
                         {data: 'actions', name: 'actions'},
                     ],
                 });

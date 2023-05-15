@@ -27,6 +27,7 @@ class UserStoryAssignmentRequest extends FormRequest
             'assignment_grade' => 'required',
             'assignment_story' => 'required',
             'section' => 'nullable',
+            'deadline' => 'nullable',
             'assignment_students' => 'required_if:section,nullable',
         ];
     }

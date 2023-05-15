@@ -85,6 +85,9 @@ class StudentAssignmentController extends Controller
                 ->addColumn('completed', function ($row) {
                     return $row->completed ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>';
                 })
+                ->addColumn('submit_status', function ($row) {
+                    return $row->submit_status;
+                })
                 ->addColumn('actions', function ($row) {
                     return $row->teacher_action_buttons;
                 })
@@ -140,6 +143,7 @@ class StudentAssignmentController extends Controller
                         'user_id' => $student->id,
                         'lesson_id' => $lesson,
                         'test_assignment' => $test_assignment,
+                        'deadline' => $request->get('deadline', null),
                     ]);
                 }
             }
@@ -160,6 +164,7 @@ class StudentAssignmentController extends Controller
                         'user_id' => $student,
                         'lesson_id' => $lesson,
                         'test_assignment' => $test_assignment,
+                        'deadline' => $request->get('deadline', null),
                     ]);
                 }
             }
@@ -226,6 +231,9 @@ class StudentAssignmentController extends Controller
                 ->addColumn('completed', function ($row) {
                     return $row->completed ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>';
                 })
+                ->addColumn('submit_status', function ($row) {
+                    return $row->submit_status;
+                })
                 ->make();
         }
         $title = "متابعة واجبات القصص";
@@ -273,6 +281,7 @@ class StudentAssignmentController extends Controller
                         'user_id' => $student->id,
                         'story_id' => $story,
                         'test_assignment' => $test_assignment,
+                        'deadline' => $request->get('deadline', null),
                     ]);
 
                 }
@@ -294,6 +303,7 @@ class StudentAssignmentController extends Controller
                         'user_id' => $student,
                         'story_id' => $story,
                         'test_assignment' => $test_assignment,
+                        'deadline' => $request->get('deadline', null),
                     ]);
                 }
             }
