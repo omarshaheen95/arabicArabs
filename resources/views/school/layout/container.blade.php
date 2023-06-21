@@ -184,7 +184,13 @@
                                 <span class="kt-menu__link-text">الطلاب</span>
                             </a>
                         </li>
-
+                        <li class="kt-menu__item  @if(Route::is('school.report.pre_usage_report') ) kt-menu__item--active @endif"
+                            aria-haspopup="true">
+                            <a href="{{ route('school.report.pre_usage_report') }}" class="kt-menu__link ">
+                                <i class="kt-menu__link-icon flaticon2-chart"></i>
+                                <span class="kt-menu__link-text">تقرير الاستخدام</span>
+                            </a>
+                        </li>
 {{--                        <li class="kt-menu__item  @if(Route::is('school.students_works.index') ) kt-menu__item--active @endif"--}}
 {{--                            aria-haspopup="true">--}}
 {{--                            <a href="{{ route('school.students_works.index') }}" class="kt-menu__link ">--}}

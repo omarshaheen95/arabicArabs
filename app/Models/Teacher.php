@@ -72,4 +72,9 @@ class Teacher extends Authenticatable
     {
         return is_null($value) ? asset('assets/media/icons/teacher.png'):asset($value);
     }
+
+    public function teacher_users()
+    {
+        return $this->hasMany(TeacherUser::class);
+    }
 }
