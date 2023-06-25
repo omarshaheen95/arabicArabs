@@ -31,9 +31,9 @@
     <link rel="shortcut icon" href="{{asset('web_assets/img/logo.svg')}}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap CSS v5.0.2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="{{asset('cdn_files/bootstrap.rtl.min.css')}}">
     @yield('pre_style')
-    <link rel="stylesheet" href="{{asset('web_assets/css/custom.css')}}">
+    <link rel="stylesheet" href="{{asset('web_assets/css/custom.css')}}?v1">
     <link rel="stylesheet" href="{{asset('web_assets/css/resposive.css')}}">
     <link href="{{ asset('assets/vendors/general/toastr/build/toastr.css') }}" rel="stylesheet" />
     @yield('style')
@@ -262,11 +262,11 @@
 
 <!-- Bootstrap JavaScript Libraries -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+<script src="{{asset('cdn_files/jquery.min.js')}}"></script>
+<script src="{{asset('cdn_files/popper.min.js')}}"></script>
+<script src="{{asset('cdn_files/bootstrap_5_0.min.js')}}"></script>
+<script src="{{asset('cdn_files/toastify-js.net_npm_toastify-js')}}"></script>
+<script src="{{asset('cdn_files/fancybox.umd.js')}}"></script>
 <script src="{{ asset("assets/vendors/general/toastr/build/toastr.min.js") }}" type="text/javascript"></script>
 
 <script src="{{asset('web_assets/intlTelInput/intlTelInput.min.js')}}"></script>

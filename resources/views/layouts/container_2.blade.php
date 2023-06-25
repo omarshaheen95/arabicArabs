@@ -33,8 +33,8 @@
 
     <!-- Bootstrap CSS v5.0.2 -->
     @yield('p_style')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css">
-    <link rel="stylesheet" href="{{asset('web_assets/css/custom.css')}}">
+    <link rel="stylesheet" href="{{asset('cdn_files/bootstrap.rtl.min.css')}}">
+    <link rel="stylesheet" href="{{asset('web_assets/css/custom.css')}}?v1">
     <link rel="stylesheet" href="{{asset('web_assets/css/resposive.css')}}">
     @yield('style')
 
@@ -248,11 +248,12 @@
 <!-- End Footer -->
 
 <!-- Bootstrap JavaScript Libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+<script src="{{asset('cdn_files/jquery.min.js')}}"></script>
+<script src="{{asset('cdn_files/popper.min.js')}}"></script>
+<script src="{{asset('cdn_files/bootstrap_5_0.min.js')}}"></script>
+<script src="{{asset('cdn_files/toastify-js.net_npm_toastify-js')}}"></script>
+<script src="{{asset('cdn_files/fancybox.umd.js')}}"></script>
+<script src="{{ asset("assets/vendors/general/toastr/build/toastr.min.js") }}" type="text/javascript"></script>
 <script src="{{asset('web_assets/intlTelInput/intlTelInput.min.js')}}"></script>
 <script src="{{asset('web_assets/js/jquery.countdown.min.js')}}"></script>
 <script src="{{asset('web_assets/js/green-audio-player.min.js')}}"></script>
