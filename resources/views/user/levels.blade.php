@@ -78,6 +78,55 @@
                             </div>
                         </div>
                     @endif
+                    @if(isset($grade) && $grade->grammar && auth()->user()->id == 1)
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="lesson-box">
+                                <div class="pic">
+                                    <img src="{{asset('steps/grammar.png')}}" alt="">
+                                </div>
+                                <div class="content">
+                                    <div class="title">  القواعد النحوية</div>
+                                    <a href="{{route('lessons', [$grade->id, 'grammar'])}}"
+                                       class="btn   btn-theme w-75 mb-4">
+                                        دخول
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    @if(isset($grade) && $grade->dictation && auth()->user()->id == 1)
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="lesson-box">
+                                <div class="pic">
+                                    <img src="{{asset('steps/dictation.png')}}" alt="">
+                                </div>
+                                <div class="content">
+                                    <div class="title">  الإملاء</div>
+                                    <a href="{{route('lessons', [$grade->id, 'dictation'])}}"
+                                       class="btn   btn-theme w-75 mb-4">
+                                        دخول
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    @if(isset($grade) && $grade->dictation && auth()->user()->id == 1)
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="lesson-box">
+                                <div class="pic">
+                                    <img src="{{asset('steps/rhetoric.png')}}" alt="">
+                                </div>
+                                <div class="content">
+                                    <div class="title">  البلاغة</div>
+                                    <a href="{{route('lessons', [$grade->id, 'rhetoric'])}}"
+                                       class="btn   btn-theme w-75 mb-4">
+                                        دخول
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
             @endif
             @if(isset($alternate_grade) && !is_null($alternate_grade))
@@ -149,6 +198,54 @@
                             </div>
                         </div>
                     @endif
+                        @if(isset($alternate_grade) && $alternate_grade->grammar && auth()->user()->id == 1)
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="lesson-box">
+                                    <div class="pic">
+                                        <img src="{{asset('steps/grammar.png')}}" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="title">  القواعد النحوية</div>
+                                        <a href="{{route('lessons', [$alternate_grade->id, 'grammar'])}}"
+                                           class="btn   btn-theme w-75 mb-4">
+                                            دخول
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if(isset($alternate_grade) && $alternate_grade->dictation && auth()->user()->id == 1)
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="lesson-box">
+                                    <div class="pic">
+                                        <img src="{{asset('steps/dictation.png')}}" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="title">  الإملاء</div>
+                                        <a href="{{route('lessons', [$alternate_grade->id, 'dictation'])}}"
+                                           class="btn   btn-theme w-75 mb-4">
+                                            دخول
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if(isset($alternate_grade) && $alternate_grade->dictation && auth()->user()->id == 1)
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="lesson-box">
+                                    <div class="pic">
+                                        <img src="{{asset('steps/rhetoric.png')}}" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="title">  البلاغة</div>
+                                        <a href="{{route('lessons', [$alternate_grade->id, 'rhetoric'])}}"
+                                           class="btn   btn-theme w-75 mb-4">
+                                            دخول
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                 </div>
             @endif
         </div>

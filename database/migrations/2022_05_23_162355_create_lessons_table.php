@@ -18,7 +18,7 @@ class CreateLessonsTable extends Migration
             $table->string('name');
             $table->longText('content')->nullable();
             $table->unsignedBigInteger('grade_id');
-            $table->enum('lesson_type', ['reading', 'writing', 'listening', 'speaking', 'grammar']);
+            $table->enum('lesson_type', ['reading', 'writing', 'listening', 'speaking', 'grammar', 'dictation', 'rhetoric']);
             $table->enum('section_type', ['informative', 'literary'])->nullable();
             $table->string('color')->nullable();
             $table->integer('ordered')->default(1);

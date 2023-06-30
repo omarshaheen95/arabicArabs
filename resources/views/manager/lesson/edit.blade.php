@@ -66,6 +66,9 @@
                                             <option {{isset($lesson) && $lesson->lesson_type == 'writing' ? 'selected':''}} value="writing">كتابة</option>
                                             <option {{isset($lesson) && $lesson->lesson_type == 'listening' ? 'selected':''}} value="listening">استماع</option>
                                             <option {{isset($lesson) && $lesson->lesson_type == 'speaking' ? 'selected':''}} value="speaking">تحدث</option>
+                                            <option {{isset($lesson) && $lesson->lesson_type == 'grammar' ? 'selected':''}} value="grammar">القواعد النحوية</option>
+                                            <option {{isset($lesson) && $lesson->lesson_type == 'dictation' ? 'selected':''}} value="dictation">الإملاء</option>
+                                            <option {{isset($lesson) && $lesson->lesson_type == 'rhetoric' ? 'selected':''}} value="rhetoric">البلاغة</option>
                                         </select>
                                     </div>
                                 </div>

@@ -66,6 +66,15 @@
                                     <option value="speaking">
                                         تحدث
                                     </option>
+                                    <option value="grammar">
+                                        القواعد النحوية
+                                    </option>
+                                    <option value="dictation">
+                                        الإملاء
+                                    </option>
+                                    <option value="rhetoric">
+                                        البلاغة
+                                    </option>
                                 </select>
                             </div>
                             <div class="col-lg-2 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">

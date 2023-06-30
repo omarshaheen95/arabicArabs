@@ -16,7 +16,7 @@ class Lesson extends Model implements HasMedia
 {
     use SoftDeletes, HasMediaTrait;
 
-    //lesson type : 'reading', 'writing', 'listening', 'speaking', 'grammar'
+    //lesson type : 'reading', 'writing', 'listening', 'speaking', 'grammar', 'dictation', 'rhetoric'
     //section type : 'informative', 'literary'
     protected $fillable = [
         'name', 'content', 'grade_id', 'lesson_type', 'section_type', 'ordered', ' success_mark', 'active', 'color'
@@ -38,7 +38,11 @@ class Lesson extends Model implements HasMedia
             case 'speaking':
                 return 'التحدث';
             case 'grammar':
-                return 'القواعد';
+                return 'القواعد النحوية';
+            case 'dictation':
+                return 'الإملاء';
+            case 'rhetoric':
+                return 'البلاغة';
             default:
                 return 'غير مسجل';
         }
@@ -101,9 +105,10 @@ class Lesson extends Model implements HasMedia
 
     public function getContentBtnAttribute()
     {
+        $training_practices = ['reading','listening','grammar','dictation','rhetoric'];
         $btn = '<a href="'.route('manager.lesson.learn', $this->id).'" class="btn btn-danger ">التعلم</a> ';
 
-        if ($this->lesson_type == 'reading' || $this->lesson_type == 'listening')
+        if (in_array($this->lesson_type, $training_practices))
         {
             $btn .= '<a href="'.route('manager.lesson.training', $this->id).'" class="btn btn-danger ">التدريب</a> ';
         }
