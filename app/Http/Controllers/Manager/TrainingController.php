@@ -16,11 +16,37 @@ class TrainingController extends Controller
     public function lessonTraining($id)
     {
         $title = 'التدريب';
-        $lesson = Lesson::query()->findOrFail($id);
+        $lesson = Lesson::query()->with('grade')->findOrFail($id);
+//        dd(TQuestion::query()->where('lesson_id', $lesson->id)->sum('mark'));
+        if (in_array($lesson->lesson_type, [ 'grammar', 'dictation', 'rhetoric']))
+        {
+            if ($lesson->grade->grade_number <= 3)
+            {
+                $c_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();
+                $t_f_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();
+                $m_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();
+                $data_count = [
+                    'choose' =>   6,
+                    'match' => 4,
+                    'true_false' => 5
+                ];
+                return view('manager.lesson.new_skills_training', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 'data_count'));
+            }else{
+                $t_f_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();
+                $c_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();
+                $data_count = [
+                    'choose' =>   8,
+                    'true_false' => 7
+                ];
+                return view('manager.lesson.new_skills_training', compact('title', 'lesson', 't_f_questions', 'c_questions', 'data_count'));
+            }
+        }
         $t_f_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();
         $c_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();
         $m_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();
         $s_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 4)->with(['sortWords', 'media'])->get();
+
+        dd(TQuestion::query()->where('lesson_id', $lesson->id)->sum('mark'));
 
         return view('manager.lesson.training', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 's_questions'));
     }
@@ -73,12 +99,13 @@ class TrainingController extends Controller
         $m_questions = $request->get('m_question', []);
         $m_question_options = $request->get('m_q_option', []);
         $m_q_answer = $request->get('m_q_answer', []);
+        $marks = $request->get("mark", []);
         foreach ($m_questions as $key => $m_question) {
             $question = TQuestion::query()->create([
                 'content' => $m_question ? $m_question : 'no question',
                 'type' => 3,
                 'lesson_id' => $lesson->id,
-                'mark' => 8
+                'mark' => $marks[$key] ?? 8
             ]);
             if ($request->hasFile("m_q_attachment.$key")) {
                 $question->addMediaFromRequest("m_q_attachment.$key")
@@ -110,6 +137,7 @@ class TrainingController extends Controller
             if ($question) {
                 $question->update([
                     'content' => $m_question ? $m_question : 'no question',
+                    'mark' => $marks[$key] ?? 8
                 ]);
                 if ($request->hasFile("old_m_q_attachment.$key")) {
                     $question->addMediaFromRequest("old_m_q_attachment.$key")

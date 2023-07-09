@@ -11,7 +11,7 @@ class Grade extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'name', 'grade_number', 'reading', 'writing', 'listening', 'speaking', 'grammar', 'active', 'ordered',
+        'name', 'grade_number', 'reading', 'writing', 'listening', 'speaking', 'grammar', 'dictation', 'rhetoric', 'active', 'ordered',
     ];
 
     protected static function boot()
@@ -60,6 +60,21 @@ class Grade extends Model
                 return "الثاني عشر = Year 13";
             default:
                 return '';
+        }
+    }
+
+    public function question_count($skill, $type)
+    {
+        if (in_array($skill, ['reading', 'writing', 'listening', 'speaking']))
+        {
+            return $this->{$type};
+        }else{
+            if ($this->grade <= 3 )
+            {
+
+            }else{
+
+            }
         }
     }
 }
