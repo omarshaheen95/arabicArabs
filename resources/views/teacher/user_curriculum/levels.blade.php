@@ -77,6 +77,54 @@
                             </div>
                         </div>
                     @endif
+                        @if(isset($grade_steps) && $grade_steps->grammar && auth()->user()->id == 72)
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="lesson-box">
+                                    <div class="pic">
+                                        <img src="{{asset('steps/grammar.png')}}" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="title">  القواعد النحوية</div>
+                                        <a href="{{route('teacher.lessons', [$grade_steps->id, 'grammar'])}}"
+                                           class="btn   btn-theme w-75 mb-4">
+                                            دخول
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if(isset($grade_steps) && $grade_steps->dictation && auth()->user()->id == 72)
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="lesson-box">
+                                    <div class="pic">
+                                        <img src="{{asset('steps/dictation.png')}}" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="title">  الإملاء</div>
+                                        <a href="{{route('teacher.lessons', [$grade_steps->id, 'dictation'])}}"
+                                           class="btn   btn-theme w-75 mb-4">
+                                            دخول
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if(isset($grade_steps) && $grade_steps->dictation && auth()->user()->id == 72)
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="lesson-box">
+                                    <div class="pic">
+                                        <img src="{{asset('steps/rhetoric.png')}}" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="title">  البلاغة</div>
+                                        <a href="{{route('teacher.lessons', [$grade_steps->id, 'rhetoric'])}}"
+                                           class="btn   btn-theme w-75 mb-4">
+                                            دخول
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                 </div>
         </div>
     </section>

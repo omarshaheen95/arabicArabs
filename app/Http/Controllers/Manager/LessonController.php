@@ -168,7 +168,13 @@ class LessonController extends Controller
     public function reCorlessonTest(Request $request)
     {
 
-        $tests = UserTest::query()->get();
+        $tests = UserTest::query()
+            ->whereRelation('lesson', 'grade_id', 13)
+            ->whereHas('lesson', function (\Illuminate\Database\Eloquent\Builder $query){
+                $query->whereIn('lesson_type', ['reading','listening']);
+            })
+            ->get();
+//        dd($tests->count());
         foreach ($tests as $test) {
 
             $questions = Question::query()->with(['lesson'])->where('lesson_id', $test->lesson_id)->get();
@@ -187,7 +193,7 @@ class LessonController extends Controller
                     if (isset($student_result) && isset($main_result) && optional($student_result)->result == optional($main_result)->result) {
                         $total += $question->mark;
                         $tf_total += $question->mark;
-//                    Log::warning('TF-QM : '.$question->mark);
+                    \Log::warning('TF-QM : '.$question->mark);
                     }
                 }
 
@@ -201,7 +207,7 @@ class LessonController extends Controller
                     if (isset($student_result) && isset($main_result) && optional($main_result)->result == 1) {
                         $total += $question->mark;
                         $o_total += $question->mark;
-//                    Log::warning('C-QM : '.$question->mark);
+                    \Log::warning('C-QM : '.$question->mark);
                     }
 
                 }
@@ -216,7 +222,7 @@ class LessonController extends Controller
                     }
                     $total += $match_mark;
                     $m_total += $match_mark;
-//                Log::warning('M-QM : '.$question->mark);
+                \Log::warning('M-QM : '.$question->mark);
                 }
 
                 if ($question->type == 4) {

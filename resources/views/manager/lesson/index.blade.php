@@ -77,6 +77,7 @@
                                     </option>
                                 </select>
                             </div>
+
                             <div class="col-lg-2 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
                                 <label>التصنيف :</label>
                                 <select class="form-control select2L" name="section_type">

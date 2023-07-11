@@ -17,8 +17,10 @@ class AssessmentController extends Controller
     {
         $title = 'الاختبار';
         $lesson = Lesson::query()->with(['media'])->findOrFail($id);
+//        Question::query()->where('lesson_id', $id)->delete();
+//        dd(Question::query()->where('lesson_id', $id)->sum('mark'));
 
-        if (!in_array($lesson->lesson_type, ['reading', 'listening'])) {
+        if (!in_array($lesson->lesson_type, ['reading', 'listening', 'grammar', 'dictation', 'rhetoric'])) {
             if ($lesson->lesson_type == 'writing')
             {
                 $questions = Question::query()->where('type', 5)->where('lesson_id', $lesson->id)->with(['media'])->get();
@@ -30,6 +32,29 @@ class AssessmentController extends Controller
                 return view('manager.lesson.assessment_listening_speaking', compact('title', 'lesson', 'questions'));
             }
             return $this->redirectWith(false, 'manager.lesson.index', 'لا يمكن اضافة اختبار لهذا الدرس', 'error');
+        }
+        if (in_array($lesson->lesson_type, [ 'grammar', 'dictation', 'rhetoric']))
+        {
+            if ($lesson->grade->grade_number <= 3)
+            {
+                $t_f_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();//->sum('mark');
+                $c_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();//->sum('mark');
+                $m_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();//->sum('mark');
+                $data_count = [
+                    'choose' =>   6,
+                    'match' => 4,
+                    'true_false' => 5
+                ];
+                return view('manager.lesson.new_skills_assessment', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 'data_count'));
+            }else{
+                $t_f_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();//->sum('mark');
+                $c_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();//->sum('mark');
+                $data_count = [
+                    'choose' =>   8,
+                    'true_false' => 7
+                ];
+                return view('manager.lesson.new_skills_assessment', compact('title', 'lesson', 't_f_questions', 'c_questions', 'data_count'));
+            }
         }
         $t_f_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();//->sum('mark');
         $c_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();//->sum('mark');

@@ -36,32 +36,26 @@
                     <div class="kt-section kt-section--first">
                         <div class="kt-section__body">
                             <ul class="nav nav-tabs nav-fill" role="tablist">
-                                @if($lesson->grade->true_false)
+                                @if(isset($data_count['true_false']) && $data_count['true_false'] > 0)
                                     <li class="nav-item">
                                         <a class="nav-link active" data-toggle="tab"
                                            href="#kt_tabs_1_1">صح و خطأ</a>
                                     </li>
                                 @endif
-                                @if($lesson->grade->choose)
+                                    @if(isset($data_count['choose']) && $data_count['choose'] > 0)
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab"
                                            href="#kt_tabs_1_2">اختر الإجابة</a>
                                     </li>
                                 @endif
-                                @if($lesson->grade->match)
+                                    @if(isset($data_count['match']) && $data_count['match'] > 0)
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#kt_tabs_1_3">التوصيل</a>
                                     </li>
                                 @endif
-                                @if($lesson->grade->sort)
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab"
-                                           href="#kt_tabs_1_4">ترتيب الكلمات</a>
-                                    </li>
-                                @endif
                             </ul>
                             <div class="tab-content">
-                                @if($lesson->grade->true_false)
+                                @if(isset($data_count['true_false']) && $data_count['true_false'] > 0)
                                     <div class="tab-pane active" id="kt_tabs_1_1" role="tabpanel">
                                         <form enctype="multipart/form-data" id="form_information"
                                               class="kt-form kt-form--label-right"
@@ -74,15 +68,21 @@
                                                 @endphp
                                                 @foreach($t_f_questions as $t_f_question)
                                                     @php
-                                                        if ($lesson->grade->grade_number >= 7)
+                                                        if ($lesson->grade->grade_number <= 3)
                                                         {
-                                                            $mark = 6;
-                                                        }elseif ($lesson->grade->grade_number >= 4){
-                                                            $mark = 6;
-                                                        }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 9;
+                                                            if ($i <= 3)
+                                                            {
+                                                                $mark = 6;
+                                                            }else{
+                                                                $mark = 5;
+                                                            }
                                                         }else{
-                                                            $mark = 6;
+                                                            if ($i <= 1)
+                                                            {
+                                                                $mark = 6;
+                                                            }else{
+                                                                $mark = 5;
+                                                            }
                                                         }
                                                     @endphp
                                                     <div class="form-group row">
@@ -137,17 +137,23 @@
                                                     @endphp
                                                 @endforeach
                                             @else
-                                                @for($i = 1; $i<=$lesson->grade->true_false;$i++)
+                                                @for($i = 1; $i<=$data_count['true_false'];$i++)
                                                     @php
-                                                        if ($lesson->grade->grade_number >= 7)
+                                                        if ($lesson->grade->grade_number <= 3)
                                                         {
-                                                            $mark = 6;
-                                                        }elseif ($lesson->grade->grade_number >= 4){
-                                                            $mark = 6;
-                                                        }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 9;
+                                                            if ($i <= 3)
+                                                            {
+                                                                $mark = 6;
+                                                            }else{
+                                                                $mark = 5;
+                                                            }
                                                         }else{
-                                                            $mark = 6;
+                                                            if ($i <= 1)
+                                                            {
+                                                                $mark = 6;
+                                                            }else{
+                                                                $mark = 5;
+                                                            }
                                                         }
                                                     @endphp
                                                     <div class="form-group row">
@@ -191,7 +197,7 @@
                                         </form>
                                     </div>
                                 @endif
-                                @if($lesson->grade->choose)
+                                    @if(isset($data_count['choose']) && $data_count['choose'] > 0)
                                     <div class="tab-pane" id="kt_tabs_1_2" role="tabpanel">
                                         <form enctype="multipart/form-data" id="form_information"
                                               class="kt-form kt-form--label-right"
@@ -204,15 +210,11 @@
                                                 @endphp
                                                 @foreach($c_questions as $c_question)
                                                     @php
-                                                        if ($lesson->grade->grade_number >= 7)
+                                                        if ($lesson->grade->grade_number <= 3)
                                                         {
-                                                            $mark = 7;
-                                                        }elseif ($lesson->grade->grade_number >= 4){
-                                                            $mark = 6;
-                                                        }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 10;
+                                                                $mark = 6;
                                                         }else{
-                                                            $mark = 7;
+                                                                $mark = 8;
                                                         }
                                                     @endphp
                                                     <div class="form-group row">
@@ -222,13 +224,8 @@
                                                                    name="old_c_question[{{$c_question->id}}]"
                                                                    type="text"
                                                                    value="{{$c_question->content}}">
-                                                            @if($i == 3 && $lesson->grade->grade_number <= 3 && $lesson->grade->grade_number != 0)
-                                                                <input type="hidden" name="mark[{{$c_question->id}}]"
+                                                            <input type="hidden" name="mark[{{$c_question->id}}]"
                                                                        value="{{$mark}}"/>
-                                                            @else
-                                                                <input type="hidden" name="mark[{{$c_question->id}}]"
-                                                                       value="{{$mark}}"/>
-                                                            @endif
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <label>الإجابة الصحيحة:</label>
@@ -286,17 +283,13 @@
                                                     @endphp
                                                 @endforeach
                                             @else
-                                                @for($i = 1; $i<=$lesson->grade->choose;$i++)
+                                                @for($i = 1; $i<=$data_count['choose'];$i++)
                                                     @php
-                                                        if ($lesson->grade->grade_number >= 7)
+                                                        if ($lesson->grade->grade_number <= 3)
                                                         {
-                                                            $mark = 7;
-                                                        }elseif ($lesson->grade->grade_number >= 4){
-                                                            $mark = 6;
-                                                        }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 10;
+                                                                $mark = 6;
                                                         }else{
-                                                            $mark = 7;
+                                                                $mark = 8;
                                                         }
                                                     @endphp
                                                     <div class="form-group row">
@@ -305,13 +298,8 @@
                                                             <input required class="form-control"
                                                                    name="c_question[{{$i}}]"
                                                                    type="text">
-                                                            @if($i == 3 && $lesson->grade->grade_number <= 3 && $lesson->grade->grade_number != 0)
-                                                                <input type="hidden" name="mark[{{$i}}]" value="8"/>
-                                                            @else
                                                                 <input type="hidden" name="mark[{{$i}}]"
                                                                        value="{{$mark}}"/>
-                                                            @endif
-
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <label>الإجابة الصحيحة:</label>
@@ -333,12 +321,12 @@
                                                                 </label>
                                                                 @if($lesson->grade->grade_number != 0)
 
-                                                                <label class="kt-radio">
-                                                                    <input required type="radio" value="4"
-                                                                           name="c_q_a[{{$i}}]"> 4
-                                                                    <span></span>
-                                                                </label>
-                                                                    @endif
+                                                                    <label class="kt-radio">
+                                                                        <input required type="radio" value="4"
+                                                                               name="c_q_a[{{$i}}]"> 4
+                                                                        <span></span>
+                                                                    </label>
+                                                                @endif
 
                                                             </div>
                                                         </div>
@@ -364,13 +352,6 @@
                                                             <input required type="text" class="form-control"
                                                                    name="c_q_option[{{$i}}][]">
                                                         </div>
-                                                        @if($lesson->grade->grade_number != 0)
-                                                        <div class="col-lg-3">
-                                                            <label>4 :</label>
-                                                            <input required type="text" class="form-control"
-                                                                   name="c_q_option[{{$i}}][]">
-                                                        </div>
-                                                        @endif
                                                     </div>
                                                 @endfor
                                             @endif
@@ -383,7 +364,7 @@
                                         </form>
                                     </div>
                                 @endif
-                                @if($lesson->grade->match)
+                                    @if(isset($data_count['match']) && $data_count['match'] > 0)
                                     <div class="tab-pane" id="kt_tabs_1_3" role="tabpanel">
                                         <form enctype="multipart/form-data" id="form_information"
                                               class="kt-form kt-form--label-right"
@@ -391,18 +372,6 @@
                                               method="post">
                                             {{ csrf_field() }}
                                             @if(isset($m_questions) && count($m_questions))
-                                                @php
-                                                    if ($lesson->grade->grade_number >= 7)
-                                                    {
-                                                        $mark = 0;
-                                                    }elseif ($lesson->grade->grade_number >= 4){
-                                                        $mark = 8;
-                                                    }elseif ($lesson->grade->grade_number == 0){
-                                                        $mark = 12;
-                                                    }else{
-                                                        $mark = 8;
-                                                    }
-                                                @endphp
                                                 @php
                                                     $i = 1;
                                                 @endphp
@@ -415,7 +384,7 @@
                                                                    type="text"
                                                                    value="{{$m_question->content}}">
                                                             <input type="hidden" name="mark[{{$m_question->id}}]"
-                                                                   value="{{$mark}}">
+                                                                   value="9">
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <label>مرفق
@@ -479,26 +448,14 @@
                                                     @endforeach
                                                 @endforeach
                                             @else
-                                                @for($i=0; $i<$lesson->grade->match; $i++)
-                                                    @php
-                                                        if ($lesson->grade->grade_number >= 7)
-                                                        {
-                                                            $mark = 0;
-                                                        }elseif ($lesson->grade->grade_number >= 4){
-                                                            $mark = 8;
-                                                        }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 12;
-                                                        }else{
-                                                            $mark = 8;
-                                                        }
-                                                    @endphp
+                                                @for($i=0; $i<$data_count['match']; $i++)
                                                     <div class="form-group row">
                                                         <div class="col-lg-9">
                                                             <label class="text-info">س {{$i + 1}}:</label>
                                                             <input required class="form-control"
                                                                    name="m_question[{{$i}}]"
                                                                    type="text">
-                                                            <input type="hidden" name="mark[{{$i}}]" value="{{$mark}}">
+                                                            <input type="hidden" name="mark[{{$i}}]" value="9">
 
                                                         </div>
                                                         <div class="col-lg-3">
@@ -562,166 +519,6 @@
                                                             <label>صورة:</label>
                                                             <input class="form-control" name="m_q_image[{{$i}}][]"
                                                                    type="file">
-                                                        </div>
-                                                    </div>
-                                                    @if($lesson->grade->grade_number != 0)
-                                                        <div class="form-group row">
-                                                            <div class="col-lg-8">
-                                                                <label>خيار 4:</label>
-                                                                <input required class="form-control"
-                                                                       name="m_q_option[{{$i}}][]"
-                                                                       type="text">
-                                                            </div>
-                                                            <div class="col-lg-2">
-                                                                <label>الإجابة:</label>
-                                                                <input required class="form-control"
-                                                                       name="m_q_answer[{{$i}}][]"
-                                                                       type="text">
-                                                            </div>
-                                                            <div class="col-lg-2">
-                                                                <label>صورة:</label>
-                                                                <input class="form-control" name="m_q_image[{{$i}}][]"
-                                                                       type="file">
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                @endfor
-                                            @endif
-                                            <hr/>
-                                            <div class="row">
-                                                <div class="col-lg-12 text-right">
-                                                    <button type="submit" class="btn btn-danger">حفظ</button>&nbsp;
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                @endif
-                                @if($lesson->grade->sort)
-                                    <div class="tab-pane" id="kt_tabs_1_4" role="tabpanel">
-                                        <form enctype="multipart/form-data" id="form_information"
-                                              class="kt-form kt-form--label-right"
-                                              action="{{ route('manager.lesson.update_assessment', [$lesson->id, 4]) }}"
-                                              method="post">
-                                            {{ csrf_field() }}
-                                            @if(isset($s_questions) && count($s_questions))
-                                                @php
-                                                    if ($lesson->grade->grade_number >= 7)
-                                                    {
-                                                        $mark = 0;
-                                                    }elseif ($lesson->grade->grade_number >= 4){
-                                                        $mark = 8;
-                                                    }else{
-                                                        $mark = 6;
-                                                    }
-                                                @endphp
-                                                @php
-                                                    $i = 1;
-                                                @endphp
-                                                @foreach($s_questions as $s_question)
-                                                    <div class="form-group row">
-                                                        <div class="col-lg-8">
-                                                            <label class="text-info">س {{$i}}:</label>
-                                                            <input required class="form-control"
-                                                                   name="old_s_question[{{$s_question->id}}]"
-                                                                   type="text"
-                                                                   value="{{$s_question->content}}">
-                                                            <input type="hidden" name="mark[{{$s_question->id}}]"
-                                                                   value="{{$mark}}">
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <label>مرفق
-                                                                : @if($s_question->getFirstMediaUrl('imageQuestion')) <a
-                                                                    href="{{$s_question->getFirstMediaUrl('imageQuestion')}}"
-                                                                    class="kt-font-warning"
-                                                                    target="_blank">استعراض</a>  |
-                                                                <a href="#deleteModel" data-id="{{$s_question->id}}"
-                                                                   data-toggle="modal" data-target="#deleteModel"
-                                                                   class="text-warning deleteRecord">(حذف)
-                                                                </a>  @endif</label>
-                                                            <input type="file"
-                                                                   name="old_s_q_attachment[{{$s_question->id}}]"
-                                                                   class="form-control">
-                                                        </div>
-                                                        <div class="col-lg-1 text-center">
-                                                            <label>خيار جديد :</label>
-                                                            <br/>
-                                                            <button type="button" data-id="{{$s_question->id}}"
-                                                                    id="add_label_{{$s_question->id}}"
-                                                                    class="btn btn-danger btn-icon btn-block add_button">
-                                                                <i
-                                                                    class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row" id="row-{{$s_question->id}}">
-                                                        @php
-                                                            $o_counter = 1;
-                                                        @endphp
-                                                        @foreach($s_question->sortWords as $sort_word)
-                                                            <div class="col-lg-4 mt-3">
-                                                                <label>خيار {{$o_counter}} : <a href="#"
-                                                                                                data-id="{{$sort_word->id}}"
-                                                                                                data-toggle="modal"
-                                                                                                data-target="#deleteSortWord"
-                                                                                                class="kt-font-warning delete_old_input">حذف</a></label>
-                                                                <input required class="form-control"
-                                                                       name="old_s_q_option[{{$s_question->id}}][{{$sort_word->id}}]"
-                                                                       value="{{$sort_word->content}}" type="text">
-                                                            </div>
-                                                            @php
-                                                                $o_counter ++;
-                                                            @endphp
-                                                        @endforeach
-
-                                                    </div>
-                                                    @php
-                                                        $i ++;
-                                                    @endphp
-                                                @endforeach
-                                            @else
-
-                                                @for($i=1;$i<=$lesson->grade->sort;$i++)
-                                                    <div class="form-group row">
-                                                        <div class="col-lg-8">
-                                                            <label class="text-info">س {{$i}}:</label>
-                                                            <input required class="form-control"
-                                                                   name="s_question[{{$i}}]"
-                                                                   type="text">
-                                                            <input type="hidden" name="mark[{{$i}}]" value="{{$mark}}">
-
-
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <label>مرفق :</label>
-                                                            <input type="file" name="s_q_attachment[{{$i}}]"
-                                                                   class="form-control">
-                                                        </div>
-                                                        <div class="col-lg-1 text-center">
-                                                            <label>خيار جديد :</label>
-                                                            <button type="button" data-id="{{$i}}" id="add_label_{{$i}}"
-                                                                    class="btn btn-danger btn-block add_button"><i
-                                                                    class="fa fa-plus"></i> إضافة
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row" id="row-{{$i}}">
-                                                        <div class="col-lg-4 mt-3">
-                                                            <label>خيار 1:</label>
-                                                            <input required class="form-control"
-                                                                   name="s_q_option[{{$i}}][]"
-                                                                   type="text">
-                                                        </div>
-                                                        <div class="col-lg-4 mt-3">
-                                                            <label>خيار 2:</label>
-                                                            <input required class="form-control"
-                                                                   name="s_q_option[{{$i}}][]"
-                                                                   type="text">
-                                                        </div>
-                                                        <div class="col-lg-4 mt-3">
-                                                            <label>خيار 3:</label>
-                                                            <input required class="form-control"
-                                                                   name="s_q_option[{{$i}}][]"
-                                                                   type="text">
                                                         </div>
                                                     </div>
                                                 @endfor
