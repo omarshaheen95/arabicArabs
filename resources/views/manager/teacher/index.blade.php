@@ -81,7 +81,14 @@ WhatsApp +972592554320
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-lg-6 kt-margin-b-10-tablet-and-mobile">
+                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+                                <label>الحالة :</label>
+                                <select class="form-control approved select2L" title="اختر حالة" name="approved" id="approved">
+                                        <option  value="1">فعال</option>
+                                        <option  value="2">غير فعال</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
                                 <label>الإجراءات:</label>
                                 <br />
                                 <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
@@ -103,6 +110,7 @@ WhatsApp +972592554320
                         <th>البريد الإلكتروني</th>
                         <th>الموبايل</th>
                         <th>المدرسة</th>
+                        <th>عدد الطلاب</th>
                         <th>حالة القبول</th>
                         <th>التفعيل</th>
                         <th>آخر دخول</th>
@@ -209,6 +217,7 @@ WhatsApp +972592554320
                         {data: 'email', name: 'email'},
                         {data: 'mobile', name: 'mobile'},
                         {data: 'school', name: 'school'},
+                        {data: 'users_count', name: 'users_count'},
                         {data: 'status', name: 'status'},
                         {data: 'active', name: 'active'},
                         {data: 'last_login', name: 'last_login'},

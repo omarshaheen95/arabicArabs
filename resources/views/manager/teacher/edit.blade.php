@@ -88,7 +88,7 @@ WhatsApp +972592554320
                                         </span>
                                     </div>
                                 </div>
-                                @if(isset($teacher) && $teacher->approved == 0)
+{{--                                @if(isset($teacher) && $teacher->approved == 0)--}}
                                     <div class="form-group row">
                                         <label class="col-3 col-form-label font-weight-bold">القبول</label>
                                         <div class="col-3">
@@ -100,7 +100,7 @@ WhatsApp +972592554320
                                         </span>
                                         </div>
                                     </div>
-                                @endif
+{{--                                @endif--}}
                             </div>
                         </div>
                     </div>

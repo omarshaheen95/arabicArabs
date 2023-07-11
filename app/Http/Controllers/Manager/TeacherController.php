@@ -19,7 +19,7 @@ class TeacherController extends Controller
     {
         if (request()->ajax()) {
 
-            $rows = Teacher::query()->with(['school'])->search($request)
+            $rows = Teacher::query()->with(['school'])->withCount('users')->search($request)
                 ->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])

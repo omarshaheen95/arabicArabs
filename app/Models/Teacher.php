@@ -41,6 +41,11 @@ class Teacher extends Authenticatable
         return $this->hasMany(TeacherUser::class);
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'teacher_users', 'teacher_id', 'user_id')->whereNull('teacher_users.deleted_at');
+    }
+
     public function scopeSearch(Builder $query, Request $request)
     {
         return $query->when($name = $request->get('name', false), function (Builder $query) use ($name) {
@@ -48,6 +53,10 @@ class Teacher extends Authenticatable
                 ->orWhere('email', 'like', '%' . $name . '%');
         })->when($school = $request->get('school_id', false), function (Builder $query) use ($school) {
             $query->where('school_id', $school);
+        })->when($request->get('approved', 1) == 1, function (Builder $query) use ($school) {
+            $query->where('approved', 1);
+        })->when($request->get('approved', 1) == 2, function (Builder $query) use ($school) {
+            $query->where('approved', 0);
         });
     }
 
