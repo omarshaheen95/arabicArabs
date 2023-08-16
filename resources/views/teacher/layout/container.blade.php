@@ -480,6 +480,17 @@
                             </ul>
                         </div>
                     @endif
+                        @if(Session::has('account-message') || Auth::user()->approved == 0)
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="alert alert-warning">
+                                        <ul style="width: 100%;">
+                                            <li>{{  t('You Account Is Deactivated') }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     @yield("content")
 
                 </div>
