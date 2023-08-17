@@ -40,6 +40,7 @@
                                         <img id="blah" @if(!isset($lesson)) style="display:none" @endif src="{{ isset($lesson) ? $lesson->getFirstMediaUrl('imageLessons'):'' }}" width="150" alt="No file chosen" />
                                     </div>
                                 </div>
+
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 col-form-label">اسم الدرس</label>
                                     <div class="col-lg-9 col-xl-6">

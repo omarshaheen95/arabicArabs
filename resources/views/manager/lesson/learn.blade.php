@@ -57,20 +57,47 @@
                                     <label class="col-xl-3 col-lg-3 col-form-label">محتوى صوتي
 
                                         @if($lesson->getFirstMediaUrl('audioLessons'))
-                                            <a href="{{$lesson->getFirstMediaUrl('audioLessons')}}" class="kt-font-warning" target="_blank">استعراض</a>
+                                            <a href="{{$lesson->getFirstMediaUrl('audioLessons')}}"
+                                               class="kt-font-warning" target="_blank">استعراض</a>
                                             |
-                                            <a href="#deleteLessonAudioModel" data-id="{{$lesson->id}}" data-toggle="modal" data-target="#deleteLessonAudioModel"  class="kt-font-warning deleteLessonAudioRecord" target="_blank">حذف</a>
+                                            <a href="#deleteLessonAudioModel" data-id="{{$lesson->id}}"
+                                               data-toggle="modal" data-target="#deleteLessonAudioModel"
+                                               class="kt-font-warning deleteLessonAudioRecord" target="_blank">حذف</a>
 
                                         @endif
                                     </label>
-                                    <div class="col-lg-9 col-xl-6 col-form-labe">
+                                    <div class="col-lg-9 col-xl-6 col-form-label">
                                         <input class="form-control" name="audio" type="file">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">محتوى الفيديوهات
+                                    </label>
+                                    @foreach($lesson->getMedia('videoLessons') as $video)
+                                        <div class="col-lg-3 col-xl-3 col-form-label">
+                                            <a href="{{$video->getUrl()}}" class="kt-font-warning" target="_blank">استعراض</a>
+                                            |
+                                            <a href="{{$video->getUrl()}}" data-id="{{$video->id}}" data-toggle="modal"
+                                               data-target="#deleteModel" class="kt-font-warning deleteRecord"
+                                               target="_blank">حذف</a>
+                                        </div>
+                                    @endforeach
+                                    <div class="col-lg-9 col-xl-6 col-form-label">
+                                        <button type="button" id="add_label_new_video"
+                                                class="btn btn-danger btn-icon btn-block add_button">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <div id="videos_area" class="row">
+
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-12">
                                         <label>المحتوى </label>
-                                        <textarea class="form-control summernote edit" id='edit' style="margin-top: 30px;" name="content">{{ isset($lesson) ? $lesson->content : old("content") }}</textarea>
+                                        <textarea class="form-control summernote edit" id='edit'
+                                                  style="margin-top: 30px;"
+                                                  name="content">{{ isset($lesson) ? $lesson->content : old("content") }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +108,8 @@
                             <div class="row">
                                 <div class="col-lg-12 text-right">
                                     <button type="submit"
-                                            class="btn btn-danger">حفظ</button>&nbsp;
+                                            class="btn btn-danger">حفظ
+                                    </button>&nbsp;
                                 </div>
                             </div>
                         </div>
@@ -91,7 +119,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deleteLessonAudioModel" tabindex="-1" role="dialog" aria-labelledby="deleteLessonAudioModel" aria-hidden="true" style="display: none;">
+    <div class="modal fade" id="deleteLessonAudioModel" tabindex="-1" role="dialog"
+         aria-labelledby="deleteLessonAudioModel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -103,7 +132,31 @@
                     {{ csrf_field() }}
                     <div class="modal-body">
                         <h5>هل أنت متأكد من حذف السجل المحدد ؟</h5>
-                        <br />
+                        <br/>
+                        <p>حذف السجل الحالي يؤدي لحذف السجلات المرتبطة به .</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-warning">حذف</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="deleteModel"
+         aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form method="post" action="" id="remove_video_attachment">
+                    {{ csrf_field() }}
+                    <div class="modal-body">
+                        <h5>هل أنت متأكد من حذف السجل المحدد ؟</h5>
+                        <br/>
                         <p>حذف السجل الحالي يؤدي لحذف السجلات المرتبطة به .</p>
                     </div>
                     <div class="modal-footer">
@@ -119,7 +172,7 @@
 
 @section('script')
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-{{--    {!! JsValidator::formRequest(\App\Http\Requests\Manager\LessonRequest::class, '#form_information') !!}--}}
+    {{--    {!! JsValidator::formRequest(\App\Http\Requests\Manager\LessonRequest::class, '#form_information') !!}--}}
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
     <script type="text/javascript"
@@ -158,7 +211,7 @@
                         'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting']
                     },
                     'moreParagraph': {
-                        'buttons': ['alignLeft', 'alignCenter', 'paragraphStyle',  'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat',  'formatOLSimple','lineHeight', 'outdent', 'indent', 'quote']
+                        'buttons': ['alignLeft', 'alignCenter', 'paragraphStyle', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'formatOLSimple', 'lineHeight', 'outdent', 'indent', 'quote']
                     },
                     'moreRich': {
                         'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR']
@@ -271,11 +324,47 @@
         })()
     </script>
     <script>
-        $(document).on('click','.deleteLessonAudioRecord',(function(){
+        $(document).on('click', '.deleteLessonAudioRecord', (function () {
             var id = $(this).data("id");
             var url = '{{ route("manager.lesson.remove_lesson_audio", ":id") }}';
-            url = url.replace(':id', id );
-            $('#remove_lesson_audio_form').attr('action',url);
+            url = url.replace(':id', id);
+            $('#remove_lesson_audio_form').attr('action', url);
         }));
+        $(document).on('click', '.deleteRecord', (function () {
+            var id = $(this).data("id");
+            var url = '{{route('manager.lesson.remove_video_attachment', ':id')}}';
+            url = url.replace(':id', id);
+            $('#remove_video_attachment').attr('action', url);
+        }));
+        $(document).ready(function () {
+            var x = 1; //Initial field counter is 1
+            var y = 1; //Initial field counter is 1
+
+            var maxField = 10 //Input fields increment limitation
+            var addButton = $('.add_button'); //Add button selector
+            //Once add button is clicked
+            $(addButton).click(function () {
+                var row_id = "videos_area";
+                var wrapper_row = $('#videos_area'); //Input field wrapper
+                x = wrapper_row.children().length;
+                y = wrapper_row.children().length;
+                //Check maximum number of input fields
+                if (x < maxField) {
+                    x++; //Increment field counter
+                    y++; //Increment field counter.
+                    $(wrapper_row).append(
+                        "<div class=\"col-lg-4 mt-3\">\n" +
+                        "<label>فيديو  " + y + " : <a href='#' class='kt-font-warning delete_input'>حذف</a></label>\n" +
+                        "<input required class=\"form-control\" name=\"videos[]\" type=\"file\">\n"
+                    ); //Add field html
+                }
+            });
+            //Once remove button is clicked
+            $(document).on('click', '.delete_input', function (e) {
+                e.preventDefault();
+                $(this).parent().parent('div').remove(); //Remove field html
+                // x--;
+            });
+        })
     </script>
 @endsection

@@ -46,6 +46,7 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::get('lesson/{id}/review/{step}', [LessonController::class,'lessonReview'])->name('lesson.review');
     Route::post('lesson/{id}/learn', [LessonController::class,'updateLessonLearn'])->name('lesson.update_learn');
     Route::post('lesson/{id}/remove_lesson_audio', [LessonController::class,'deleteLessonAudio'])->name('lesson.remove_lesson_audio');
+    Route::post('lesson/{video_id}/remove_video_attachment', [LessonController::class,'deleteLessonVideo'])->name('lesson.remove_video_attachment');
 
     Route::get('lesson/{id}/training', [TrainingController::class,'lessonTraining'])->name('lesson.training');
     Route::post('lesson/{id}/training/{type}', [TrainingController::class,'updateLessonTraining'])->name('lesson.update_training');

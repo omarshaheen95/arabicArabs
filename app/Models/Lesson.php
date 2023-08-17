@@ -93,6 +93,8 @@ class Lesson extends Model implements HasMedia
         $this
             ->addMediaCollection('audioLessons')
             ->singleFile();
+        $this
+            ->addMediaCollection('videoLessons');
     }
 
     public function registerMediaConversions(Media $media = null): void

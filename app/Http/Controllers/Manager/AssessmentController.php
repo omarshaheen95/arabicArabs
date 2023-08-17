@@ -19,7 +19,6 @@ class AssessmentController extends Controller
         $lesson = Lesson::query()->with(['media'])->findOrFail($id);
 //        Question::query()->where('lesson_id', $id)->delete();
 //        dd(Question::query()->where('lesson_id', $id)->sum('mark'));
-
         if (!in_array($lesson->lesson_type, ['reading', 'listening', 'grammar', 'dictation', 'rhetoric'])) {
             if ($lesson->lesson_type == 'writing')
             {

@@ -25,6 +25,7 @@ use App\Models\UserAssignment;
 use App\Models\UserTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\MediaLibrary\Models\Media;
 use Yajra\DataTables\DataTables;
 
 class LessonController extends Controller
@@ -133,6 +134,18 @@ class LessonController extends Controller
                 ->addMediaFromRequest('audio')
                 ->toMediaCollection('audioLessons');
         }
+        //upload array of videos
+        if ($request->hasFile('videos') && $request->file('videos')) {
+            foreach ($request->file('videos') as $video) {
+                $lesson
+                    ->addMedia($video)
+                    ->toMediaCollection('videoLessons');
+            }
+        }
+
+        //get all videos
+
+
 
         return redirect()->route('manager.lesson.learn', $lesson->id)->with('message', 'تم الإضافة بنجاح');
     }
@@ -142,6 +155,12 @@ class LessonController extends Controller
         $lesson = Lesson::query()->findOrFail($id);
         $lesson->clearMediaCollection('audioLessons');
         return redirect()->route('manager.lesson.learn', $lesson->id)->with('message', 'تم الحذف بنجاح');
+    }
+    public function deleteLessonVideo($video_id)
+    {
+        $video = Media::query()->findOrFail($video_id);
+        $video->delete();
+        return redirect()->route('manager.lesson.learn', $video->model_id)->with('message', 'تم الحذف بنجاح');
     }
 
     public function uploadImageLesson(Request $request)
