@@ -75,7 +75,7 @@ class CurriculumController extends Controller
 
     public function lesson($id, $key)
     {
-        $lesson = Lesson::query()->with(['grade'])->findOrFail($id);
+        $lesson = Lesson::query()->with(['grade', 'media'])->findOrFail($id);
         $grade = $lesson->grade_id;
         switch ($key) {
             case 'learn':

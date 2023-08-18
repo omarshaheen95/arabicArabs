@@ -60,13 +60,16 @@
         #recordingslist {
             list-style: none;
         }
-        #keyboardInputLayout{
+
+        #keyboardInputLayout {
             direction: ltr !important;
         }
-        #keyboardInputMaster tbody tr td div#keyboardInputLayout table tbody tr td{
-            font: normal 30px 'Lucida Console',monospace;
+
+        #keyboardInputMaster tbody tr td div#keyboardInputLayout table tbody tr td {
+            font: normal 30px 'Lucida Console', monospace;
         }
-        .keyboardInputInitiator{
+
+        .keyboardInputInitiator {
             width: 50px
         }
     </style>
@@ -85,7 +88,8 @@
                     <div class="section-title mb-4">
                         <h3 class="title"> الصف : {{$lesson->grade_name}} </h3>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="{{route('lessons', [$lesson->grade_id, $lesson->lesson_type])}}">
+                            <a class="breadcrumb-item"
+                               href="{{route('lessons', [$lesson->grade_id, $lesson->lesson_type])}}">
                                 {{$lesson->type_name}} </a>
                             <span class="breadcrumb-item active" aria-current="page">الدروس </span>
                         </nav>
@@ -94,7 +98,8 @@
             </div>
             <div class="exercise-box" id="exercise-1">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <a href="{{route('lessons', [$lesson->grade_id, $lesson->lesson_type])}}" class=" btn btn-theme px-5">
+                    <a href="{{route('lessons', [$lesson->grade_id, $lesson->lesson_type])}}"
+                       class=" btn btn-theme px-5">
                         <i class="fa-solid fa-arrow-right"></i>
                         الدروس
                     </a>
@@ -108,14 +113,17 @@
                         <i class="fa-solid fa-arrow-left"></i>
                     </a>
                 </div>
-                <div class="exercise-box-header text-center">
-                    @if($lesson->lesson_type == 'reading')
-                    <span class="title">اقرأ النَّص التالي للفَهم والاستيعابٍ</span>
-                    @endif
-                    @if($lesson->lesson_type == 'listening')
-                    <span class="title">استمع للنص التاليٍ</span>
-                    @endif
-                </div>
+
+                @if($lesson->lesson_type == 'reading')
+                    <div class="exercise-box-header text-center">
+                        <span class="title">اقرأ النَّص التالي للفَهم والاستيعابٍ</span>
+                    </div>
+                @elseif($lesson->lesson_type == 'listening')
+                    <div class="exercise-box-header text-center">
+                        <span class="title">استمع للنص التاليٍ</span>
+                    </div>
+                @endif
+
                 <div class="exercise-box-body">
                     <div class="table-responsove">
                         <table class="table">
@@ -123,38 +131,48 @@
                                 <tr>
                                     <td>
                                         <div class="audio-player">
-                                            <audio >
+                                            <audio>
                                                 <source
                                                     src="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}"
-                                                    type="audio/mpeg" />
+                                                    type="audio/mpeg"/>
                                             </audio>
                                         </div>
-{{--                                        <a href="#!" class="play-and-listen" data-recorde-id="{{$lesson->id}}"--}}
-{{--                                           data-recorde-url="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}">--}}
-{{--                                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"--}}
-{{--                                                 viewBox="0 0 39 39">--}}
-{{--                                                <g id="play" transform="translate(7.618 6.252)">--}}
-{{--                                                    <rect id="bg" width="39" height="39" rx="19.5"--}}
-{{--                                                          transform="translate(-7.618 -6.252)"--}}
-{{--                                                          fill="rgba(217,227,253)" opacity="0.1"/>--}}
-{{--                                                    <path id="Vector"--}}
-{{--                                                          d="M16.535,6.358.157,16.178A4.449,4.449,0,0,1,0,15.008V4.5A4.5,4.5,0,0,1,6.749.61l4.544,2.621,4.555,2.632A3.81,3.81,0,0,1,16.535,6.358Z"--}}
-{{--                                                          transform="translate(4.499 3.742)" fill="#223f99"/>--}}
-{{--                                                    <path id="Vector-2" data-name="Vector"--}}
-{{--                                                          d="M15.039,6.085,10.483,8.717,5.939,11.338A4.485,4.485,0,0,1,0,10.022l.472-.281L16.715,0A4.5,4.5,0,0,1,15.039,6.085Z"--}}
-{{--                                                          transform="translate(5.309 11.304)" fill="#223f99"--}}
-{{--                                                          opacity="0.4"/>--}}
-{{--                                                </g>--}}
-{{--                                            </svg>--}}
-{{--                                        </a>--}}
+                                        {{--                                        <a href="#!" class="play-and-listen" data-recorde-id="{{$lesson->id}}"--}}
+                                        {{--                                           data-recorde-url="{{asset($lesson->getFirstMediaUrl('audioLessons'))}}">--}}
+                                        {{--                                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"--}}
+                                        {{--                                                 viewBox="0 0 39 39">--}}
+                                        {{--                                                <g id="play" transform="translate(7.618 6.252)">--}}
+                                        {{--                                                    <rect id="bg" width="39" height="39" rx="19.5"--}}
+                                        {{--                                                          transform="translate(-7.618 -6.252)"--}}
+                                        {{--                                                          fill="rgba(217,227,253)" opacity="0.1"/>--}}
+                                        {{--                                                    <path id="Vector"--}}
+                                        {{--                                                          d="M16.535,6.358.157,16.178A4.449,4.449,0,0,1,0,15.008V4.5A4.5,4.5,0,0,1,6.749.61l4.544,2.621,4.555,2.632A3.81,3.81,0,0,1,16.535,6.358Z"--}}
+                                        {{--                                                          transform="translate(4.499 3.742)" fill="#223f99"/>--}}
+                                        {{--                                                    <path id="Vector-2" data-name="Vector"--}}
+                                        {{--                                                          d="M15.039,6.085,10.483,8.717,5.939,11.338A4.485,4.485,0,0,1,0,10.022l.472-.281L16.715,0A4.5,4.5,0,0,1,15.039,6.085Z"--}}
+                                        {{--                                                          transform="translate(5.309 11.304)" fill="#223f99"--}}
+                                        {{--                                                          opacity="0.4"/>--}}
+                                        {{--                                                </g>--}}
+                                        {{--                                            </svg>--}}
+                                        {{--                                        </a>--}}
                                     </td>
                                 </tr>
                             @endif
                         </table>
                     </div>
                     <div class="exercise-question">
+                        <div class="row justify-content-center my-5">
+                            @foreach($lesson->getMedia('videoLessons') as $video)
+                                <div class="col-6">
+                                    <div id="vid_player_{{$video->id}}" class="mb-4"></div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="exercise-question">
                         {!! $lesson->content !!}
                     </div>
+
                 </div>
             </div>
         </div>
@@ -163,6 +181,16 @@
 
 @endsection
 @section('script')
+    <script src="{{asset('s_website/js/playerjs.js')}}"></script>
+
+    <script>
+        @foreach($lesson->getMedia('videoLessons') as $video)
+        var player_{{$video->id}} = new Playerjs({
+            id: "vid_player_{{$video->id}}",
+            file: '{{asset($video->getUrl())}}',
+        });
+        @endforeach
+    </script>
     <script>
 
 

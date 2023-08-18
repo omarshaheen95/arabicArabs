@@ -65,6 +65,8 @@
                                                class="btn btn-soft-success">
                                                 @if($lesson->lesson_type == 'reading')
                                                     اقرأ
+                                                @elseif(in_array($lesson->lesson_type, ['grammar','dictation','rhetoric']))
+                                                    تعلم
                                                 @else
                                                     استمع
                                                 @endif

@@ -17,7 +17,7 @@
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="lesson-box">
                                 <div class="pic">
-                                    <img src="{{asset('steps/reading.png')}}" alt="">
+                                    <img src="{{asset('steps/reading.svg')}}" alt="">
                                 </div>
                                 <div class="content">
                                     <div class="title"> مهارة القراءة</div>
@@ -33,7 +33,7 @@
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="lesson-box">
                                 <div class="pic">
-                                    <img src="{{asset('steps/writing.png')}}" alt="">
+                                    <img src="{{asset('steps/writing.svg')}}" alt="">
                                 </div>
                                 <div class="content">
                                     <div class="title"> مهارة الكتابة</div>
@@ -49,7 +49,7 @@
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="lesson-box">
                                 <div class="pic">
-                                    <img src="{{asset('steps/listening.png')}}" alt="">
+                                    <img src="{{asset('steps/listening.svg')}}" alt="">
                                 </div>
                                 <div class="content">
                                     <div class="title"> مهارة الاستماع</div>
@@ -65,7 +65,7 @@
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="lesson-box">
                                 <div class="pic">
-                                    <img src="{{asset('steps/speaking.png')}}" alt="">
+                                    <img src="{{asset('steps/speaking.svg')}}" alt="">
                                 </div>
                                 <div class="content">
                                     <div class="title"> مهارة التحدث</div>
@@ -81,7 +81,7 @@
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="lesson-box">
                                     <div class="pic">
-                                        <img src="{{asset('steps/grammar.png')}}" alt="">
+                                        <img src="{{asset('steps/grammar.svg')}}" alt="">
                                     </div>
                                     <div class="content">
                                         <div class="title">  القواعد النحوية</div>
@@ -97,7 +97,7 @@
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="lesson-box">
                                     <div class="pic">
-                                        <img src="{{asset('steps/dictation.png')}}" alt="">
+                                        <img src="{{asset('steps/dictation.svg')}}" alt="">
                                     </div>
                                     <div class="content">
                                         <div class="title">  الإملاء</div>
@@ -113,7 +113,7 @@
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="lesson-box">
                                     <div class="pic">
-                                        <img src="{{asset('steps/rhetoric.png')}}" alt="">
+                                        <img src="{{asset('steps/rhetoric.svg')}}" alt="">
                                     </div>
                                     <div class="content">
                                         <div class="title">  البلاغة</div>

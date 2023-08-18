@@ -147,6 +147,15 @@
                         </table>
                     </div>
                     <div class="exercise-question">
+                        <div class="row justify-content-center my-5">
+                            @foreach($lesson->getMedia('videoLessons') as $video)
+                                <div class="col-6">
+                                    <div id="vid_player_{{$video->id}}" class="mb-4"></div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="exercise-question">
                         {!! $lesson->content !!}
                     </div>
                 </div>
@@ -157,6 +166,16 @@
 
 @endsection
 @section('script')
+    <script src="{{asset('s_website/js/playerjs.js')}}"></script>
+
+    <script>
+        @foreach($lesson->getMedia('videoLessons') as $video)
+        var player_{{$video->id}} = new Playerjs({
+            id: "vid_player_{{$video->id}}",
+            file: '{{asset($video->getUrl())}}',
+        });
+        @endforeach
+    </script>
     <script>
 
 
