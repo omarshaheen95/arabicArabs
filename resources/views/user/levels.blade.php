@@ -78,7 +78,7 @@
                             </div>
                         </div>
                     @endif
-                    @if(isset($grade) && $grade->grammar && auth()->user()->id == 1)
+                    @if(isset($grade) && $grade->grammar)
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="lesson-box">
                                 <div class="pic">
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                     @endif
-                    @if(isset($grade) && $grade->dictation && auth()->user()->id == 1)
+                    @if(isset($grade) && $grade->dictation)
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="lesson-box">
                                 <div class="pic">
@@ -110,7 +110,7 @@
                             </div>
                         </div>
                     @endif
-                    @if(isset($grade) && $grade->dictation && auth()->user()->id == 1)
+                    @if(isset($grade) && $grade->rhetoric)
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="lesson-box">
                                 <div class="pic">
@@ -198,7 +198,7 @@
                             </div>
                         </div>
                     @endif
-                        @if(isset($alternate_grade) && $alternate_grade->grammar && auth()->user()->id == 1)
+                        @if(isset($alternate_grade) && $alternate_grade->grammar)
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="lesson-box">
                                     <div class="pic">
@@ -214,7 +214,7 @@
                                 </div>
                             </div>
                         @endif
-                        @if(isset($alternate_grade) && $alternate_grade->dictation && auth()->user()->id == 1)
+                        @if(isset($alternate_grade) && $alternate_grade->dictation)
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="lesson-box">
                                     <div class="pic">
@@ -230,7 +230,7 @@
                                 </div>
                             </div>
                         @endif
-                        @if(isset($alternate_grade) && $alternate_grade->dictation && auth()->user()->id == 1)
+                        @if(isset($alternate_grade) && $alternate_grade->rhetoric)
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="lesson-box">
                                     <div class="pic">

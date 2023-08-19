@@ -51,6 +51,8 @@
                                 <div class="pic">
                                     @if($lesson->lesson_type == 'writing' || $lesson->lesson_type == 'speaking')
                                         <img src="{{asset('web_assets/img/'.$lesson->lesson_type . '.jpg')}}" alt="">
+                                        @elseif(in_array($lesson->lesson_type, ['grammar','dictation','rhetoric']))
+                                        <img src="{{asset('steps/'.$lesson->lesson_type.'.svg')}}" alt="">
                                         @else
                                     <img src="{{isset($lesson) ? $lesson->getFirstMediaUrl('imageLessons'):''}}" alt="">
                                         @endif

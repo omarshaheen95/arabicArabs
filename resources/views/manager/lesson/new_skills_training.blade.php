@@ -328,6 +328,13 @@
                                                                            name="c_q_a[{{$i}}]"> 3
                                                                     <span></span>
                                                                 </label>
+                                                                @if($lesson->grade->grade_number >= 3)
+                                                                <label class="kt-radio">
+                                                                    <input required type="radio" value="4"
+                                                                           name="c_q_a[{{$i}}]"> 4
+                                                                    <span></span>
+                                                                </label>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-3">
@@ -352,6 +359,13 @@
                                                             <input required type="text" class="form-control"
                                                                    name="c_q_option[{{$i}}][]">
                                                         </div>
+                                                        @if($lesson->grade->grade_number >= 3)
+                                                        <div class="col-lg-3">
+                                                            <label>4 :</label>
+                                                            <input required type="text" class="form-control"
+                                                                   name="c_q_option[{{$i}}][]">
+                                                        </div>
+                                                        @endif
 
                                                     </div>
                                                 @endfor

@@ -149,7 +149,7 @@
                     <div class="exercise-question">
                         <div class="row justify-content-center my-5">
                             @foreach($lesson->getMedia('videoLessons') as $video)
-                                <div class="col-6">
+                                <div class="col-8">
                                     <div id="vid_player_{{$video->id}}" class="mb-4"></div>
                                 </div>
                             @endforeach

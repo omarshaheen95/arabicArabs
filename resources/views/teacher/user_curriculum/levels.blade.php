@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     @endif
-                        @if(isset($grade_steps) && $grade_steps->grammar && auth()->user()->id == 72)
+                        @if(isset($grade_steps) && $grade_steps->grammar == 1)
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="lesson-box">
                                     <div class="pic">
@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                         @endif
-                        @if(isset($grade_steps) && $grade_steps->dictation && auth()->user()->id == 72)
+                        @if(isset($grade_steps) && $grade_steps->dictation == 1)
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="lesson-box">
                                     <div class="pic">
@@ -109,7 +109,7 @@
                                 </div>
                             </div>
                         @endif
-                        @if(isset($grade_steps) && $grade_steps->dictation && auth()->user()->id == 72)
+                        @if(isset($grade_steps) && $grade_steps->rhetoric == 1)
                             <div class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="lesson-box">
                                     <div class="pic">
