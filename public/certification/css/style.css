@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #FAFAFA;
+    font-family: 'Almarai', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.page {
+    width: 297mm;
+    min-height: 209mm;
+    padding: 20mm;
+    margin: 10mm auto;
+    border-radius: 5px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /*border: 1px #D3D3D3 solid;*/
+    /*background: white;*/
+    /*box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);*/
+    /*background-image: url(../certification/img/border.svg);*/
+}
+
+.subpage {
+    padding: 2cm;
+    width: 257mm;
+    height: 189mm;
+    /*border: 5px #cecece solid;*/
+    /*outline: 1.5cm #20B2AA solid;*/
+}
+
+@page {
+    size: A4 landscape;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    page-break-inside: avoid;
+}
+
+@media print {
+    html, body {
+        text-align: center;
+        margin: 0 auto;
+        page-break-inside: avoid;
+        font-family: 'Almarai', sans-serif;
+    }
+.page {
+    text-align: center;
+    margin: 0 auto;
+    padding: 0 20mm;
+    width: 100%;
+    height: 100%;
+    /*background-image: url(../certification/img/border.svg);*/
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    page-break-inside: avoid;
+    border: none;
+}
+.no-page-break {
+    page-break-inside: avoid;
+}
+.subpage {
+    page-break-inside: avoid;
+}
+}
+
+.p-text{
+    color: #000;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.p-s-text{
+    color: #FFCB58;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+}
+.s-text{
+    color: #000;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.s-s-text{
+    color: #FFCB58;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}

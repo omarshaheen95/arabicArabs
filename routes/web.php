@@ -118,6 +118,7 @@ Route::group(['namespace' => 'User', 'middleware' => ['auth']], function (){
 
         Route::get('certificates', 'HomeController@certificates')->name('certificates');
         Route::get('certificate/{id}', 'HomeController@certificate')->name('certificate');
+        Route::get('new_certificate/{id}', 'HomeController@newCertificate')->name('newCertificate');
         Route::get('certificate/{id}/answers', 'HomeController@certificateAnswers')->name('certificate.answers');
 
         Route::get('story_certificates', 'StoryController@certificates')->name('story.certificates');

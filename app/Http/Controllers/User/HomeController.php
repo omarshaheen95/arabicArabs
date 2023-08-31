@@ -104,7 +104,18 @@ class HomeController extends Controller
         $student_test = UserTest::query()->where('user_id', $student->id)->find($id);
         if (!$student_test)
             return redirect()->route('home')->with('message', 'test not found')->with('m-class', 'error');
-        return view('user.certificate', compact('student_test', 'title'));
+        return view('user.new_certificate', compact('student_test', 'title'));
+    }
+
+
+    public function newCertificate($id)
+    {
+        $title = 'Student test result';
+        $student = Auth::user();
+        $student_test = UserTest::query()->where('user_id', $student->id)->find($id);
+        if (!$student_test)
+            return redirect()->route('home')->with('message', 'test not found')->with('m-class', 'error');
+        return view('user.new_certificate', compact('student_test', 'title'));
     }
 
     public function certificateAnswers($id)
