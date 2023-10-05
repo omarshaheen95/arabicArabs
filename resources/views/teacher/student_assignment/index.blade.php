@@ -141,6 +141,15 @@
                                     <option value="writing">كتابة</option>
                                     <option value="listening">استماع</option>
                                     <option value="speaking">تحدث</option>
+                                    <option value="grammar">
+                                        القواعد النحوية
+                                    </option>
+                                    <option value="dictation">
+                                        الإملاء
+                                    </option>
+                                    <option value="rhetoric">
+                                        البلاغة
+                                    </option>
                                 </select>
                             </div>
                         </div>
