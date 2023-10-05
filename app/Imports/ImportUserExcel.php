@@ -33,6 +33,23 @@ class ImportUserExcel implements ToModel, WithHeadingRow, WithValidation, SkipsO
 
     public function model(array $row)
     {
+        $full_name = str_replace(',', '', str_replace('  ', ' ', $row['name']));
+        if (strlen($full_name) > 25) {
+            $array_name = explode(' ', $full_name);
+            if (count($array_name) >= 4) {
+                $name = $array_name[0] . ' ' . $array_name[1] . ' ' . $array_name[count($array_name) - 2] . ' ' . $array_name[count($array_name) - 1];
+            }
+            elseif (count($array_name) == 3) {
+                $name = $array_name[0] . ' ' . $array_name[1] . ' ' . $array_name[count($array_name) - 1];
+            } else {
+                $name = $array_name[0] . ' ' . $array_name[1];
+                if (strlen($full_name) > 25) {
+                    $name = $array_name[0];
+                }
+            }
+        } else {
+            $name = $full_name;
+        }
 
         $grade = abs((int)filter_var($row['grade'], FILTER_SANITIZE_NUMBER_INT));// - 1;
         if ($this->req->get('back_grade', 0) > 0 ) {
@@ -145,7 +162,7 @@ class ImportUserExcel implements ToModel, WithHeadingRow, WithValidation, SkipsO
                         if ($user) {
                             $this->duplicateEmails[] = $email;
                             $user->update([
-                                'name' => $row['name'],
+                                'name' => $name,
                                 'email' => $email,
                                 'password' => bcrypt('123456'),
                                 'school_id' => $this->req->get('school_id'),
@@ -186,7 +203,7 @@ class ImportUserExcel implements ToModel, WithHeadingRow, WithValidation, SkipsO
 
         if (!$user) {
             $user = User::query()->create([
-                'name' => $row['name'],
+                'name' => $name,
                 'email' => $email,
                 'password' => bcrypt('123456'),
                 'school_id' => $this->req->get('school_id'),

@@ -133,7 +133,7 @@
                             <div class="bar_mid"></div>
                             <div class="row">
                                 <div class="col-xs-5">
-                                    {!! QrCode::size(123)->color(64,161,100)->generate("https://www.arabic-arabs.com/login?username=$std->email"); !!}
+                                    {!! QrCode::size(123)->color(64,161,100)->generate("https://www.arabic-arabs.com/login?username=$std->email"."&password=123456"); !!}
                                 </div>
                                 <div class="col-xs-7 studnet_info">
 {{--                                    <p class="info">المدرسة :--}}

@@ -46,7 +46,7 @@
                                         <div class="icon">
                                             <img src="{{asset('web_assets/img/password.svg')}}" alt="">
                                         </div>
-                                        <input type="password" name="password" id="password" class="form-control" placeholder=" **********" required>
+                                        <input type="password" name="password" value="{{request()->get('password', null)}}"  id="password" class="form-control" placeholder=" **********" required>
                                         @if ($errors->has('password'))
                                                     <span class="help-block">
                                                         <strong>{{ $errors->first('password') }}</strong>

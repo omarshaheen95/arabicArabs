@@ -259,11 +259,16 @@ class UserController extends Controller
 
     public function userGrades()
     {
-        $users = User::query()->whereDoesntHave('user_grades')->get();
+        return 'done';
+        //->whereDoesntHave('user_grades')
+        $users = User::query()->where('school_id', 1971)->get();
         foreach ($users as $user) {
-            $user->user_grades()->create(['grade' => $user->grade]);
+//            $user->user_grades()->create(['grade' => $user->grade]);
+            $user->update([
+                'grade_id' => $user->grade_id - 1,
+            ]);
         }
-        return true;
+        return 'done';
     }
 
     public function review(Request $request, $id)

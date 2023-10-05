@@ -73,7 +73,7 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::get('user/print/cards', 'UserController@cards')->name('user.cards');
     Route::get('user/print/cards_qr', 'UserController@cardsQR')->name('user.cardsQR');
     Route::get('correctTest', 'UserController@correctTest')->name('correctTest');
-//    Route::get('userGrades', 'UserController@userGrades')->name('userGrades');
+    Route::get('userGrades', 'UserController@userGrades')->name('userGrades');
 //    Route::get('updateUsers', 'UserController@updateUsers')->name('updateUsers');
 
     //import Users
