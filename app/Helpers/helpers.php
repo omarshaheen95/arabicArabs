@@ -19,7 +19,15 @@ function schoolSections($school = false)
         ->get()->pluck('section')->unique()->values();
     return $sections;
 }
-
+function uploadFile($file, $path ,bool $new_name=true)
+{
+    $file_original_name = $file->getClientOriginalName();
+    $file_new_name = Str::random(27) . '.' . $file->getClientOriginalExtension();
+    $path = $path.'/'.date("Y").'/'.date("m").'/'.date("d");
+    $destination = public_path($path);
+    $file->move($destination , $file_new_name);
+    return ['name'=>$new_name?$file_new_name:$file_original_name,'path'=>$path . DIRECTORY_SEPARATOR . $file_new_name];
+}
 function getGradeName($grade)
 {
     switch($grade)
