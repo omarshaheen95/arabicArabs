@@ -28,7 +28,7 @@
                                     <div class="exercise-title"> سجل بصوتك</div>
                                 </a>
                             </li>
-                            @if(count($users_story))
+                            @if(count($users_stories))
                             <li class="nav-item">
                                 <a href="#exercise-3" class="nav-link">
                                     <div class="exercise-title">تسجيلات معتمدة</div>
@@ -218,7 +218,7 @@
                             </div>
                         </div>
                     </div>
-                    @if(count($users_story))
+                    @if(count($users_stories))
                     <div class="exercise-box" id="exercise-3">
                         <div class="exercise-box-header">
                                     <span class="icon">
@@ -246,12 +246,12 @@
                                 </span>
                         </div>
                         <div class="exercise-box-body">
-                            @foreach($users_story as $users_story)
+                            @foreach($users_stories as $users_story)
                             <div class="exercise-question-answer text-center mb-4">
-                                    <h4 class="text-success">{{$user_story->user->name}} </h4>
-                                    <h4 class="text-success"> @if($user_story->status == 'corrected') <span
-                                            class="text-warning">  {{$user_story->mark}} / 10</span> @endif</h4>
-                                    <audio src="{{asset($user_story->record)}}" controls></audio>
+                                    <h4 class="text-success">{{$users_story->user->name}} </h4>
+                                    <h4 class="text-success"> @if($users_story->status == 'corrected') <span
+                                            class="text-warning">  {{$users_story->mark}} / 10</span> @endif</h4>
+                                    <audio src="{{asset($users_story->record)}}" controls></audio>
                             </div>
                             @endforeach
                         </div>

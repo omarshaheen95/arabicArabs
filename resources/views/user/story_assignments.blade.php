@@ -30,8 +30,8 @@
                                 </tr>
                                 @foreach($student_assignments as $student_assignment)
                                     <tr>
-                                        <td>{{$student_assignment->story->name}}</td>
-                                        <td>{{$student_assignment->story->grade}}</td>
+                                        <td>{{optional($student_assignment->story)->name}}</td>
+                                        <td>{{optional($student_assignment->story)->grade}}</td>
                                         <td>
                                             <a href="{{route('stories.show', [$student_assignment->story_id, 'watch'])}}">
                                                 قراءة القصة

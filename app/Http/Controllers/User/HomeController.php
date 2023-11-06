@@ -168,14 +168,15 @@ class HomeController extends Controller
                 return view('user.story.learn', compact('story'));
             case 'read':
                 $user_story = StoryUserRecord::query()->where('user_id', $user->id)->where('story_id', $story->id)->first();
-                $users_story = StoryUserRecord::query()
+                $users_stories = StoryUserRecord::query()
+                    ->has('user')
                     ->where('user_id','<>', $user->id)
                     ->where('story_id', $story->id)->latest()
                     ->where('status', 'corrected')
                     ->where('approved', 1)
                     ->limit(10)
                     ->get();
-                return view('user.story.training', compact('story', 'user_story', 'users_story'));
+                return view('user.story.training', compact('story', 'user_story', 'users_stories'));
             case 'test':
                 $questions = StoryQuestion::query()->where('story_id', $id)->get();
                 return view('user.story.test', compact('questions', 'story'));
@@ -230,6 +231,7 @@ class HomeController extends Controller
     {
         $title = 'تعيينات القصص المسندة';
         $student_assignments = StoryAssignment::query()
+            ->has('story')
             ->where('user_id', Auth::user()->id)
             ->latest()->paginate(10);
 
