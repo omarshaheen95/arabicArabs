@@ -14,7 +14,7 @@
                             </div>
                             <div class="content">
                                 <div class="title">
-                                    المستوى {{$level}}
+                                    المستوى {{$level != 15 ? $level : 'التمهيدي'}}
 
                                 </div>
                             </div>

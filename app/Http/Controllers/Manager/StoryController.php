@@ -36,7 +36,7 @@ class StoryController extends Controller
                     return Carbon::parse($row->created_at)->toDateString();
                 })
                 ->addColumn('grade', function ($row) {
-                    return 'Grade ' . $row->grade;
+                    return 'Grade '  . ($row->grade == 15 ? 'KG' : $row->grade);
                 })
                 ->addColumn('actions', function ($row) {
                     return $row->action_buttons;
@@ -62,7 +62,10 @@ class StoryController extends Controller
         if ($request->hasFile('video')) {
             $data['video'] = $this->uploadImage($request->file('video'), 'stories_video');
         }
-        $data['active'] = $request->get('active', 1);
+        if ($request->hasFile('alternative_video')) {
+            $data['alternative_video'] = $this->uploadImage($request->file('alternative_video'), 'stories_video');
+        }
+        $data['active'] = $request->get('active', 0);
         Story::query()->create($data);
         return redirect()->route('manager.story.index')->with('message', t('Successfully Added'));
     }
@@ -109,7 +112,7 @@ class StoryController extends Controller
         $m_questions = StoryQuestion::query()->where('story_id', $id)->where('type', 3)->get();
         $s_questions = StoryQuestion::query()->where('story_id', $id)->where('type', 4)->get();
         $questions = StoryQuestion::query()->where('story_id', $id)->get();
-        if ($story->grade >= 1 && $story->grade <= 2)
+        if (($story->grade >= 1 && $story->grade <= 2) || $story->grade == 15)
         {
             $true_false_count = 4;
             $true_false_mark = 2.5;
@@ -166,7 +169,7 @@ class StoryController extends Controller
 //            return redirect()->back()->with('message', 'Question added previously')->with('m-class', 'error');
 //        }
 
-        if ($story->grade >= 1 && $story->grade <= 2)
+        if (($story->grade >= 1 && $story->grade <= 2) || $story->grade == 15)
         {
             $true_false_mark = 2.5;
             $chose_mark = 4;

@@ -41,6 +41,7 @@
                                 <label>الصف :</label>
                                 <select class="form-control select2L" name="grade">
                                     <option selected value="">الكل</option>
+                                    <option value="15" {{isset($story) && $story->grade == 1 ? 'selected':''}}>Grade KG</option>
                                     <option value="1" {{isset($story) && $story->grade == 1 ? 'selected':''}}>Grade 1</option>
                                     <option value="2" {{isset($story) && $story->grade == 2 ? 'selected':''}}>Grade 2</option>
                                     <option value="3" {{isset($story) && $story->grade == 3 ? 'selected':''}}>Grade 3</option>

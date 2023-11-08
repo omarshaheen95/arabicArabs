@@ -13,11 +13,11 @@ class Story extends Model
 {
     use SoftDeletes,CascadeSoftDeletes, Pathable;
     protected $fillable = [
-        'name', 'image', 'video', 'content', 'grade', 'active', 'ordered',
+        'name', 'image', 'video', 'alternative_video', 'content', 'grade', 'active', 'ordered',
     ];
 
     public $pathAttribute = [
-        'image', 'video'
+        'image', 'video', 'alternative_video'
     ];
 
     public function questions()

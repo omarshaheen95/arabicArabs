@@ -39,6 +39,11 @@
                 <div class="card-body pb-0">
                     <div id="video{{$story->id}}" class="mb-4"></div>
                 </div>
+                @if(!is_null($story->alternative_video))
+                <div class="card-body pb-0 pt-4">
+                    <div id="alternative_video{{$story->id}}" class="mb-4"></div>
+                </div>
+                @endif
             </div>
         </div>
     </section>
@@ -51,6 +56,11 @@
             id: "video{{$story->id}}",
             file: '{{asset($story->video)}}',
         });
-
+        @if(!is_null($story->alternative_video))
+        var player_alternative_video_{{$story->id}} = new Playerjs({
+            id: "alternative_video{{$story->id}}",
+            file: '{{asset($story->alternative_video)}}',
+        });
+        @endif
     </script>
 @endsection

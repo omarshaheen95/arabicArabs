@@ -145,7 +145,7 @@ class HomeController extends Controller
     {
         $title = "مستويات القصص";
         $levels = [
-            1, 2, 3, 4, 5, 6, 7, 8, 9
+            15, 1, 2, 3, 4, 5, 6, 7, 8, 9
         ];
 
         return view('user.stories_levels', compact('title', 'levels', 'levels'));

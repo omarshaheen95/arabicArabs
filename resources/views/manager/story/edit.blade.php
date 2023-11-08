@@ -71,6 +71,7 @@
                                         <label class="col-xl-3 col-lg-3 col-form-label">الصف</label>
                                         <div class="col-lg-9 col-xl-6">
                                             <select class="form-control" name="grade">
+                                                <option value="15" {{isset($story) && $story->grade == 15 ? 'selected':''}}>Grade KG</option>
                                                 <option value="1" {{isset($story) && $story->grade == 1 ? 'selected':''}}>Grade 1</option>
                                                 <option value="2" {{isset($story) && $story->grade == 2 ? 'selected':''}}>Grade 2</option>
                                                 <option value="3" {{isset($story) && $story->grade == 3 ? 'selected':''}}>Grade 3</option>
@@ -95,6 +96,17 @@
                                     </label>
                                     <div class="col-lg-9 col-xl-6">
                                         <input class="form-control" name="video" type="file">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">فيديوآخر
+                                        @if(isset($story) && $story->alternative_video)
+                                            <br />
+                                        <a href="{{$story->alternative_video}}" class="text-warning">معاينة</a>
+                                        @endif
+                                    </label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <input class="form-control" name="alternative_video" type="file">
                                     </div>
                                 </div>
                                 <div class="form-group row">
