@@ -10,11 +10,11 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <a href="{{route('stories.list', $level)}}" class="level-box">
                             <div class="pic">
-                                <img src="{{asset("web_assets/img/levels/$level.svg")}}" alt="">
+                                <img src="{{asset("web_assets/img/levels/$level.svg")}}?v=2" alt="">
                             </div>
                             <div class="content">
                                 <div class="title">
-                                    المستوى {{$level != 15 ? $level : 'التمهيدي'}}
+                                    المستوى {{$level != 15 ? $level : 'التأسيسي'}}
 
                                 </div>
                             </div>
