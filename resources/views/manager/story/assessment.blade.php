@@ -299,10 +299,13 @@ WhatsApp +972592554320
                                         {{ csrf_field() }}
                                         <h4>Match Answer</h4>
                                         @if(count($m_questions))
+                                            @php
+                                                $keyCount = 1;
+                                            @endphp
                                         @foreach($m_questions as $m_question)
                                             <div class="form-group row">
                                                 <div class="col-lg-9">
-                                                    <label class="text-info">Q 1:</label>
+                                                    <label class="text-info">Q {{$keyCount}}:</label>
                                                     <input required class="form-control"
                                                            name="m_question[{{$m_question->id}}]" type="text"
                                                            value="{{$m_question->content}}">
@@ -351,6 +354,9 @@ WhatsApp +972592554320
                                                     $o_counter ++;
                                                 @endphp
                                             @endforeach
+                                                @php
+                                                    $keyCount ++;
+                                                @endphp
                                             @endforeach
                                         @else
                                             @for($i=1;$i<=$match_count;$i++)
