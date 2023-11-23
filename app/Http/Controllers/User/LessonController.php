@@ -367,7 +367,7 @@ class LessonController extends Controller
                 'user_test_id' => $test->id,
                 'attachment' => $record,
             ]);
-            return $this->sendResponse($record, "تم حفظ الإجابات بنجاح لدى المدرس ليتم تصحيحها");
+//            return $this->sendResponse($record, "تم حفظ الإجابات بنجاح لدى المدرس ليتم تصحيحها");
         }
 
 //        foreach ($request->get('writing_answer', []) as $key => $value)
@@ -406,6 +406,7 @@ class LessonController extends Controller
             ->where('test_assignment', 1)
             ->where('done_test_assignment', 0)
             ->first();
+//        dd($user_assignment, $id, $student);
 
         if ($user_assignment)
         {
@@ -420,8 +421,9 @@ class LessonController extends Controller
             }
         }
 //        dd($total);
+        return $this->sendResponse($user_assignment, "تم حفظ الإجابات بنجاح لدى المدرس ليتم تصحيحها");
 
-        return redirect()->route('lessons', [$test->lesson->grade->grade_number, $test->lesson->lesson_type])->with('message', "تم حفظ الإجابات بنجاح لدى المدرس ليتم تصحيحها")->with('m-class', 'success');
+//        return redirect()->route('lessons', [$test->lesson->grade->grade_number, $test->lesson->lesson_type])->with('message', "تم حفظ الإجابات بنجاح لدى المدرس ليتم تصحيحها")->with('m-class', 'success');
     }
 
     public function lessonTestResult($id)
