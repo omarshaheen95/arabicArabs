@@ -23,7 +23,7 @@
                             @if($student_test->total >= $student_test->lesson->success_mark)
                                 <img src="{{asset('s_website/img/good_icon.png')}}" width="15%">
                                 <p class="text-center my-3 mb-4" style="font-weight: bold">
-                                    تهانينا ، نتيجتك في هذا التقييم هي  {{$student_test->total}}%  وأنت مؤهل للحصول على الشهادة ولعب اللعبة.
+                                    تهانينا ، نتيجتك في هذا التقييم هي  {{$student_test->total}}%  وأنت مؤهل للحصول على الشهادة .
                                 </p>
                                 <div class="text-center">
                                     <a href="{{route('certificate', $student_test->id)}}" target="_blank" class="theme-btn btn-style-one mx-4 my-4" >
@@ -40,7 +40,7 @@
                             @else
                                     <img src="{{asset('s_website/img/sad.png')}}" width="10%">
                                     <p class="text-center my-3 mb-4" style="font-weight: bold">
-    نتيجتك في هذا التقييم هي {{$student_test->total}}% ولست مؤهلاً للحصول على الشهادة أو لعب اللعبة - يرجى إعادة تعلم هذا الدرس مرة أخرى للوصول إلى
+    نتيجتك في هذا التقييم هي {{$student_test->total}}% ولست مؤهلاً للحصول على الشهادة - يرجى إعادة تعلم هذا الدرس مرة أخرى للوصول إلى
                                         <span class="text-danger">{{$student_test->lesson->success_mark}}٪</span> أو أعلى.                                    </p>
                                     <div class="text-center">
 
