@@ -49,10 +49,10 @@ class StudentAssignmentController extends Controller
                 $query->where('lesson_id', $lesson_id);
             })
                 ->when($start_at, function (Builder $query) use ($start_at){
-                $query->where('created_at', '<=', $start_at);
+                $query->whereDate('created_at', '>=', $start_at);
             })
                 ->when($end_at, function (Builder $query) use ($end_at){
-                $query->where('created_at', '>=', $end_at);
+                $query->whereDate('created_at', '<=', $end_at);
             })
                 ->when($status == 1, function (Builder $query) {
                 $query->where('completed', 1);

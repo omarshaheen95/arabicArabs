@@ -19,14 +19,16 @@ use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromCollection,WithEvents,ShouldAutoSize
+class StudentTestExport implements WithMapping, Responsable, WithHeadings, FromCollection, WithEvents, ShouldAutoSize
 {
     use Exportable;
+
     public $school_id;
     public $teacher_id;
     public $name;
     public $grade;
     public $length;
+
     public function __construct($school_id = 0, $teacher_id = 0)
     {
         $this->school_id = $school_id;
@@ -75,44 +77,45 @@ class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromColl
         $teacher = $this->teacher_id;
         $school_id = $this->school_id;
 
-        $students = UserTest::query()->with(['user', 'lesson', 'lesson.grade'])->has('lesson')->whereHas('user', function (Builder $query) use ($teacher, $username, $school_id){
-             $query->when($teacher, function (Builder $query) use ($teacher){
-                 $query->whereHas('teacherUser', function (Builder $query) use($teacher){
-                     $query->where('teacher_id', $teacher);
-                 });
-             });
-            $query->when($username, function (Builder $query) use ($username){
-                $query->where('name', 'like', '%'.$username.'%');
+        $students = UserTest::query()->with(['user', 'lesson', 'lesson.grade'])->has('lesson')->whereHas('user', function (Builder $query) use ($teacher, $username, $school_id) {
+            $query->when($teacher, function (Builder $query) use ($teacher) {
+                $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
+                    $query->where('teacher_id', $teacher);
+                });
+            });
+            $query->when($username, function (Builder $query) use ($username) {
+                $query->where('name', 'like', '%' . $username . '%');
             });
 //            $query->when($school_id, function (Builder $query) use ($school_id){
 //                $query->where('school_id', $school_id);
 //            });
-        })->when($grade, function (Builder $query) use ($grade){
-            $query->whereHas('lesson', function (Builder $query) use ($grade){
-                $query->whereHas('level', function (Builder $query) use ($grade){
+        })->when($grade, function (Builder $query) use ($grade) {
+            $query->whereHas('lesson', function (Builder $query) use ($grade) {
+                $query->whereHas('level', function (Builder $query) use ($grade) {
                     $query->where('grade', $grade);
                 });
             });
-        })->when($level_id, function (Builder $query) use ($level_id){
-            $query->whereHas('lesson', function (Builder $query) use ($level_id){
+        })->when($level_id, function (Builder $query) use ($level_id) {
+            $query->whereHas('lesson', function (Builder $query) use ($level_id) {
                 $query->where('level_id', $level_id);
             });
-        })->when($lesson_id, function (Builder $query) use ($lesson_id){
+        })->when($lesson_id, function (Builder $query) use ($lesson_id) {
             $query->where('lesson_id', $lesson_id);
-        })->when($start_at, function (Builder $query) use ($start_at){
-            $query->where('created_at', '<=', $start_at);
-        })->when($end_at, function (Builder $query) use ($end_at){
-            $query->where('created_at', '>=', $end_at);
-        })->when($status && $status == 1, function (Builder $query) {
-            $query->where('total', '>=', 40);
-        })->when($status && $status == 2, function (Builder $query) {
-            $query->where('total', '<', 40);
-        })->latest();
+        })->when($start_at, function (Builder $query) use ($start_at) {
+            $query->whereDate('created_at', '>=', $start_at);
+        })
+            ->when($end_at, function (Builder $query) use ($end_at) {
+                $query->whereDate('created_at', '<=', $end_at);
+            })->when($status && $status == 1, function (Builder $query) {
+                $query->where('total', '>=', 40);
+            })->when($status && $status == 2, function (Builder $query) {
+                $query->where('total', '<', 40);
+            })->latest();
 
-        if($students->count() >= 1){
-            $this->length = $students->count()+1;
+        if ($students->count() >= 1) {
+            $this->length = $students->count() + 1;
         }
-        $this->length = $students->count() +1;
+        $this->length = $students->count() + 1;
         return $students->orderBy('user_id')->get();
     }
 
@@ -127,7 +130,7 @@ class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromColl
             $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
         });
         return [
-            AfterSheet::class    => function(AfterSheet $event) {
+            AfterSheet::class => function (AfterSheet $event) {
                 $cellRange = 'A1:H1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold('bold')->setSize(12);
                 $event->sheet->styleCells(
