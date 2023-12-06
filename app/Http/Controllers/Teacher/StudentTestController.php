@@ -46,9 +46,7 @@ class StudentTestController extends Controller
                 });
             })->when($grade, function (Builder $query) use ($grade){
                 $query->whereHas('lesson', function (Builder $query) use ($grade){
-                    $query->whereHas('level', function (Builder $query) use ($grade){
-                        $query->where('grade', $grade);
-                    });
+                        $query->where('grade_id', $grade);
                 });
             })->when($lesson_id, function (Builder $query) use ($lesson_id){
                 $query->where('lesson_id', $lesson_id);

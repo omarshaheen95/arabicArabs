@@ -109,7 +109,7 @@
                                 </span>
                         </div>
                         <div class="exercise-box-body">
-                            @foreach($users_story as $users_story)
+                            @foreach($users_story as $user_story)
                             <div class="exercise-question-answer text-center mb-4">
                                     <h4 class="text-success">{{$user_story->user->name}} </h4>
                                     <h4 class="text-success"> @if($user_story->status == 'corrected') <span
