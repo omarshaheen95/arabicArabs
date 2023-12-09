@@ -19,7 +19,7 @@ class Lesson extends Model implements HasMedia
     //lesson type : 'reading', 'writing', 'listening', 'speaking', 'grammar', 'dictation', 'rhetoric'
     //section type : 'informative', 'literary'
     protected $fillable = [
-        'name', 'content', 'grade_id', 'lesson_type', 'section_type', 'ordered', ' success_mark', 'active', 'color'
+        'name', 'content', 'grade_id', 'lesson_type', 'section_type', 'ordered', ' success_mark', 'active', 'color', 'level'
     ];
 
     protected $appends = [
@@ -192,6 +192,10 @@ class Lesson extends Model implements HasMedia
     public function questions()
     {
         return $this->hasMany(Question::class);
+    }
+    public function t_questions()
+    {
+        return $this->hasMany(TQuestion::class);
     }
 
 

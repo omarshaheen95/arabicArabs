@@ -98,6 +98,7 @@ Route::group(['namespace' => 'User', 'middleware' => ['auth']], function (){
 
     Route::get('/home', 'HomeController@home')->name('home');
     Route::get('levels', 'HomeController@levels')->name('levels');
+    Route::get('lessons_levels/{grade}/{type}', 'HomeController@subLevels')->name('lessons_levels');
     Route::get('stories', 'HomeController@storiesLevels')->name('levels.stories');
 
     Route::group(['middleware' => 'activeAccount'], function (){
@@ -109,6 +110,7 @@ Route::group(['namespace' => 'User', 'middleware' => ['auth']], function (){
         Route::get('story_test/{id}/result', 'StoryController@storyTestResult')->name('story_test_result');
 
         Route::get('lessons/{id}/{type}', 'HomeController@lessons')->name('lessons');
+        Route::get('sub_lessons/{id}/{type}/{level}', 'HomeController@subLessons')->name('sub_lessons');
         Route::get('lesson/{id}/{key}', 'HomeController@lesson')->name('lesson');
 
         Route::post('lesson_test/{id}', 'LessonController@lessonTest')->name('lesson_test');

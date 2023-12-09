@@ -114,6 +114,8 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::get('correct_tests', 'LessonController@reCorlessonTest');
     Route::resource('import_users_files', ImportController::class);
 
+    Route::get('copy_lessons', 'LessonController@copyLessons');
+
 
 });
 

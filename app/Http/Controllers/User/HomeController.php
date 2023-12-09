@@ -16,6 +16,7 @@ use App\Models\UserAssignment;
 use App\Models\UserRecord;
 use App\Models\UserTest;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -41,14 +42,40 @@ class HomeController extends Controller
         return view('user.levels', compact('title', 'grade', 'alternate_grade'));
     }
 
-    public function lessons($id, $type)
+    public function subLevels($grade, $type)
+    {
+//        Log::critical(date('Y-m-d'));
+//        Log::critical(Carbon::createFromFormat('Y-m-d', '2021-07-01'));
+        $title = 'مستويات الدروس';
+        $grade = Grade::query()->where('id', Auth::user()->grade_id)->first();
+        return view('user.sub_levels', compact('title', 'type', 'grade'));
+    }
+
+
+
+    public function subLessons($id, $type, $level = null)
     {
         $user = Auth::guard('web')->user();
         $grade = Grade::query()->findOrFail($id);
         if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id  && $user->id != 1) {
             return redirect()->route('home')->with('message', 'الدروس غير متاحة')->with('m-class', 'error');
         }
-        $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->get();
+        $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use($level){
+            $query->where('level', $level);
+        })->get();
+        return view('user.lessons', compact('grade', 'lessons'));
+    }
+
+    public function lessons($id, $type, $level = null)
+    {
+        $user = Auth::guard('web')->user();
+        $grade = Grade::query()->findOrFail($id);
+        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id  && $user->id != 1) {
+            return redirect()->route('home')->with('message', 'الدروس غير متاحة')->with('m-class', 'error');
+        }
+        $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use($level){
+//            $query->where('level', $level);
+        })->get();
         return view('user.lessons', compact('grade', 'lessons'));
     }
 

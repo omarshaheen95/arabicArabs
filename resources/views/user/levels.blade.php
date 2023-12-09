@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="content">
                                     <div class="title">  القواعد النحوية</div>
-                                    <a href="{{route('lessons', [$grade->id, 'grammar'])}}"
+                                    <a href="{{route('lessons_levels', [$grade->id, 'grammar'])}}"
                                        class="btn   btn-theme w-75 mb-4">
                                         دخول
                                     </a>
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="content">
                                     <div class="title">  الإملاء</div>
-                                    <a href="{{route('lessons', [$grade->id, 'dictation'])}}"
+                                    <a href="{{route('lessons_levels', [$grade->id, 'dictation'])}}"
                                        class="btn   btn-theme w-75 mb-4">
                                         دخول
                                     </a>
@@ -118,7 +118,7 @@
                                 </div>
                                 <div class="content">
                                     <div class="title">  البلاغة</div>
-                                    <a href="{{route('lessons', [$grade->id, 'rhetoric'])}}"
+                                    <a href="{{route('lessons_levels', [$grade->id, 'rhetoric'])}}"
                                        class="btn   btn-theme w-75 mb-4">
                                         دخول
                                     </a>
@@ -206,7 +206,7 @@
                                     </div>
                                     <div class="content">
                                         <div class="title">  القواعد النحوية</div>
-                                        <a href="{{route('lessons', [$alternate_grade->id, 'grammar'])}}"
+                                        <a href="{{route('lessons_levels', [$alternate_grade->id, 'grammar'])}}"
                                            class="btn   btn-theme w-75 mb-4">
                                             دخول
                                         </a>
@@ -222,7 +222,7 @@
                                     </div>
                                     <div class="content">
                                         <div class="title">  الإملاء</div>
-                                        <a href="{{route('lessons', [$alternate_grade->id, 'dictation'])}}"
+                                        <a href="{{route('lessons_levels', [$alternate_grade->id, 'dictation'])}}"
                                            class="btn   btn-theme w-75 mb-4">
                                             دخول
                                         </a>
@@ -238,7 +238,7 @@
                                     </div>
                                     <div class="content">
                                         <div class="title">  البلاغة</div>
-                                        <a href="{{route('lessons', [$alternate_grade->id, 'rhetoric'])}}"
+                                        <a href="{{route('lessons_levels', [$alternate_grade->id, 'rhetoric'])}}"
                                            class="btn   btn-theme w-75 mb-4">
                                             دخول
                                         </a>

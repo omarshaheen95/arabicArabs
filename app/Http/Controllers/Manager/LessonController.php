@@ -146,7 +146,6 @@ class LessonController extends Controller
         //get all videos
 
 
-
         return redirect()->route('manager.lesson.learn', $lesson->id)->with('message', 'تم الإضافة بنجاح');
     }
 
@@ -156,6 +155,7 @@ class LessonController extends Controller
         $lesson->clearMediaCollection('audioLessons');
         return redirect()->route('manager.lesson.learn', $lesson->id)->with('message', 'تم الحذف بنجاح');
     }
+
     public function deleteLessonVideo($video_id)
     {
         $video = Media::query()->findOrFail($video_id);
@@ -189,8 +189,8 @@ class LessonController extends Controller
 
         $tests = UserTest::query()
             ->whereRelation('lesson', 'grade_id', 13)
-            ->whereHas('lesson', function (\Illuminate\Database\Eloquent\Builder $query){
-                $query->whereIn('lesson_type', ['reading','listening']);
+            ->whereHas('lesson', function (\Illuminate\Database\Eloquent\Builder $query) {
+                $query->whereIn('lesson_type', ['reading', 'listening']);
             })
             ->get();
 //        dd($tests->count());
@@ -212,7 +212,7 @@ class LessonController extends Controller
                     if (isset($student_result) && isset($main_result) && optional($student_result)->result == optional($main_result)->result) {
                         $total += $question->mark;
                         $tf_total += $question->mark;
-                    \Log::warning('TF-QM : '.$question->mark);
+                        \Log::warning('TF-QM : ' . $question->mark);
                     }
                 }
 
@@ -226,7 +226,7 @@ class LessonController extends Controller
                     if (isset($student_result) && isset($main_result) && optional($main_result)->result == 1) {
                         $total += $question->mark;
                         $o_total += $question->mark;
-                    \Log::warning('C-QM : '.$question->mark);
+                        \Log::warning('C-QM : ' . $question->mark);
                     }
 
                 }
@@ -241,7 +241,7 @@ class LessonController extends Controller
                     }
                     $total += $match_mark;
                     $m_total += $match_mark;
-                \Log::warning('M-QM : '.$question->mark);
+                    \Log::warning('M-QM : ' . $question->mark);
                 }
 
                 if ($question->type == 4) {
@@ -279,7 +279,7 @@ class LessonController extends Controller
 
 
             if (optional($student_tests->first())->total >= $mark) {
-                UserTest::query()->where('user_id',$test->user_id)
+                UserTest::query()->where('user_id', $test->user_id)
                     ->where('lesson_id', $test->lesson_id)
                     ->where('id', '<>', $student_tests->first()->id)->update([
                         'approved' => 0,
@@ -298,6 +298,128 @@ class LessonController extends Controller
         return 'test corrected Successfully';
     }
 
+    public function copyLessons()
+    {
+
+        $levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        $sub_levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        foreach ($levels as $level) {
+            $lessons = Lesson::query()
+                ->with(['questions', 'questions.trueFalse', 'questions.matches', 'questions.sortWords', 'questions.options',
+                    't_questions', 't_questions.trueFalse', 't_questions.matches', 't_questions.sortWords', 't_questions.options'])
+                ->where('grade_id', $level)
+                ->whereIn('lesson_type', ['grammar', 'dictation', 'rhetoric'])
+                ->get();
+
+            Lesson::query()
+                ->where('grade_id', $level)
+                ->whereIn('lesson_type', ['grammar', 'dictation', 'rhetoric'])
+                ->update([
+                    'level' => $level,
+                ]);
+
+            foreach ($sub_levels as $sub_level)
+            {
+                if ($sub_level != $level)
+                {
+                    foreach ($lessons as  $lesson)
+                    {
+                        $n_lesson = $lesson->replicate();
+                        $n_lesson->grade_id = $level;
+                        $n_lesson->level = $sub_level;
+                        $n_lesson->save();
+                        foreach ($lesson->questions as $question)
+                        {
+                            $n_question = $question->replicate();
+                            $n_question->lesson_id = $n_lesson->id;
+                            $n_question->save();
+                            if ($question->type == 1)
+                            {
+                                //T & F
+                                $n_t_f = $question->trueFalse->replicate();
+                                $n_t_f->question_id = $n_question->id;
+                                $n_t_f->save();
+                            }
+
+                            if ($question->type == 2)
+                            {
+                                foreach ($question->options as $option)
+                                {
+                                    $n_option = $option->replicate();
+                                    $n_option->question_id = $n_question->id;
+                                    $n_option->save();
+                                }
+                            }
+
+                            if ($question->type == 3)
+                            {
+                                foreach ($question->matches as $option)
+                                {
+                                    $n_option = $option->replicate();
+                                    $n_option->question_id = $n_question->id;
+                                    $n_option->save();
+                                }
+                            }
+
+                            if ($question->type == 4)
+                            {
+                                foreach ($question->sortWords as $option)
+                                {
+                                    $n_option = $option->replicate();
+                                    $n_option->question_id = $n_question->id;
+                                    $n_option->save();
+                                }
+                            }
+                        }
+                        foreach ($lesson->t_questions as $question)
+                        {
+                            $n_question = $question->replicate();
+                            $n_question->lesson_id = $n_lesson->id;
+                            $n_question->save();
+                            if ($question->type == 1 && $question->trueFalse)
+                            {
+                                //T & F
+                                $n_t_f = $question->trueFalse->replicate();
+                                $n_t_f->t_question_id = $n_question->id;
+                                $n_t_f->save();
+                            }
+
+                            if ($question->type == 2)
+                            {
+                                foreach ($question->options as $option)
+                                {
+                                    $n_option = $option->replicate();
+                                    $n_option->t_question_id = $n_question->id;
+                                    $n_option->save();
+                                }
+                            }
+
+                            if ($question->type == 3)
+                            {
+                                foreach ($question->matches as $option)
+                                {
+                                    $n_option = $option->replicate();
+                                    $n_option->t_question_id = $n_question->id;
+                                    $n_option->save();
+                                }
+                            }
+
+                            if ($question->type == 4)
+                            {
+                                foreach ($question->sortWords as $option)
+                                {
+                                    $n_option = $option->replicate();
+                                    $n_option->t_question_id = $n_question->id;
+                                    $n_option->save();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return 'lesson copied successfully';
+    }
 
 
 }
