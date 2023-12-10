@@ -304,9 +304,10 @@ class LessonController extends Controller
         set_time_limit(600);
         $grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         $levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        dd($levels);
+//        dd($levels);
         $lessons = Lesson::query()
             ->with([
+                'media',
                 'questions', 'questions.trueFalse', 'questions.matches', 'questions.sortWords', 'questions.options',
                 't_questions', 't_questions.trueFalse', 't_questions.matches', 't_questions.sortWords', 't_questions.options'
             ])
@@ -327,6 +328,19 @@ class LessonController extends Controller
                         $n_lesson->grade_id = $level;
                         $n_lesson->level = $lesson->grade_id;
                         $n_lesson->save();
+
+                        $mediaItems = $lesson->getMedia('imageLessons');
+                        foreach ($mediaItems as $media) {
+                            $media->copy($n_lesson, 'imageLessons');
+                        }
+                        $mediaItems = $lesson->getMedia('audioLessons');
+                        foreach ($mediaItems as $media) {
+                            $media->copy($n_lesson, 'audioLessons');
+                        }
+                        $mediaItems = $lesson->getMedia('videoLessons');
+                        foreach ($mediaItems as $media) {
+                            $media->copy($n_lesson, 'videoLessons');
+                        }
                         $lesson->update([
                             'level' => $lesson->grade_id,
                         ]);
