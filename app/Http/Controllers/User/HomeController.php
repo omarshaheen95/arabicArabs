@@ -44,23 +44,39 @@ class HomeController extends Controller
 
     public function subLevels($grade, $type)
     {
-//        Log::critical(date('Y-m-d'));
-//        Log::critical(Carbon::createFromFormat('Y-m-d', '2021-07-01'));
-        $title = 'مستويات الدروس';
+        if ($type == 'grammar')
+        {
+            $type_name = 'القواعد النحوية';
+        }elseif ($type == 'dictation')
+        {
+            $type_name = 'الإملاء';
+        }else{
+            $type_name = 'البلاغة';
+        }
+        $title = 'مستويات الدروس -  ' . $type_name;
         $grade = Grade::query()->where('id', Auth::user()->grade_id)->first();
-        return view('user.sub_levels', compact('title', 'type', 'grade'));
-    }
+        $levels = Lesson::query()
+            ->whereNotNull('level')
+            ->where('lesson_type', $type)
+            ->where('grade_id', Auth::user()->grade_id)
+            ->select('level', 'grade_id', \DB::raw('COUNT(*) as c'))
+            ->groupBy('level', 'grade_id')
+            ->havingRaw('c > 0')
+            ->get()->values()->toArray();
 
+
+        return view('user.sub_levels', compact('title', 'type', 'grade', 'levels'));
+    }
 
 
     public function subLessons($id, $type, $level = null)
     {
         $user = Auth::guard('web')->user();
         $grade = Grade::query()->findOrFail($id);
-        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id  && $user->id != 1) {
+        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1) {
             return redirect()->route('home')->with('message', 'الدروس غير متاحة')->with('m-class', 'error');
         }
-        $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use($level){
+        $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use ($level) {
             $query->where('level', $level);
         })->get();
         return view('user.lessons', compact('grade', 'lessons'));
@@ -70,10 +86,10 @@ class HomeController extends Controller
     {
         $user = Auth::guard('web')->user();
         $grade = Grade::query()->findOrFail($id);
-        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id  && $user->id != 1) {
+        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1) {
             return redirect()->route('home')->with('message', 'الدروس غير متاحة')->with('m-class', 'error');
         }
-        $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use($level){
+        $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use ($level) {
 //            $query->where('level', $level);
         })->get();
         return view('user.lessons', compact('grade', 'lessons'));
@@ -97,13 +113,11 @@ class HomeController extends Controller
                 return view('user.lesson.training', compact('lesson', 'tf_questions', 'c_questions', 'm_questions', 's_questions'));
             case 'test':
                 $questions = Question::query()->where('lesson_id', $id)->get();
-                if ($lesson->lesson_type == 'writing')
-                {
+                if ($lesson->lesson_type == 'writing') {
                     return view('user.lesson.writing_test', compact('questions', 'lesson'));
 
                 }
-                if ($lesson->lesson_type == 'speaking')
-                {
+                if ($lesson->lesson_type == 'speaking') {
                     return view('user.lesson.speaking_test', compact('questions', 'lesson'));
 
                 }
@@ -197,7 +211,7 @@ class HomeController extends Controller
                 $user_story = StoryUserRecord::query()->where('user_id', $user->id)->where('story_id', $story->id)->first();
                 $users_stories = StoryUserRecord::query()
                     ->has('user')
-                    ->where('user_id','<>', $user->id)
+                    ->where('user_id', '<>', $user->id)
                     ->where('story_id', $story->id)->latest()
                     ->where('status', 'corrected')
                     ->where('approved', 1)
@@ -230,7 +244,7 @@ class HomeController extends Controller
                     ]);
                     return $this->sendResponse($record, 'Record Saved Successfully');
                 }
-            }else{
+            } else {
                 return $this->sendResponse(null, 'Your record cannot accept new updates');
             }
         } else {
@@ -264,7 +278,6 @@ class HomeController extends Controller
 
         return view('user.story_assignments', compact('student_assignments', 'title'));
     }
-
 
 
 }

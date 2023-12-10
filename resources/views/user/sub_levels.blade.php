@@ -9,23 +9,34 @@
 @section('content')
     <section class="login-home pt-5 user-home ">
         <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title mb-4">
+                        <nav class="breadcrumb">
+                            <a class="breadcrumb-item" href="{{route('levels')}}"> المهارات والدروس </a>
+                            <span class="breadcrumb-item active" aria-current="page">{{$title}} </span>
+                        </nav>
+                        <h3 class="title">{{$title}}</h3>
+                    </div>
+                </div>
+            </div>
             <div class="row justify-content-center">
-                @for($le = 1; $le <=12; $le++)
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="lesson-box">
-                            <div class="pic">
-                                <img src="{{asset("web_assets/img/sub_levels/$le.svg")}}?v=2" alt="">
-                            </div>
-                            <div class="content">
-                                <div class="title"> الصف {{$le}}</div>
-                                <a href="{{route('sub_lessons', [$grade->id, $type, $le])}}"
-                                   class="btn   btn-theme w-75 mb-4">
-                                    دخول
-                                </a>
+                @foreach($levels as $level)
+                        <div class="col-lg-3 col-md-6 col-sm-6">
+                            <div class="lesson-box">
+                                <div class="pic">
+                                    <img src="{{asset("web_assets/img/sub_levels/".$level["level"].".svg")}}?v=2" alt="">
+                                </div>
+                                <div class="content">
+                                    <div class="title"> الصف {{$level["level"]}}</div>
+                                    <a href="{{route('sub_lessons', [$grade->id, $type, $level["level"]])}}"
+                                       class="btn   btn-theme w-75 mb-4">
+                                        دخول
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endfor
+                @endforeach
 
             </div>
         </div>

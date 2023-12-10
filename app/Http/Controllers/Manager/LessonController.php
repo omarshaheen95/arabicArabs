@@ -33,7 +33,7 @@ class LessonController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $rows = Lesson::query()->with(['grade'])->search($request)->latest();
+            $rows = Lesson::query()->with(['grade'])->search($request)->latest('id');
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('status', function ($row) {
@@ -301,113 +301,98 @@ class LessonController extends Controller
     public function copyLessons()
     {
 
+        set_time_limit(600);
+        $grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         $levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        $sub_levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        foreach ($levels as $level) {
-            $lessons = Lesson::query()
-                ->with(['questions', 'questions.trueFalse', 'questions.matches', 'questions.sortWords', 'questions.options',
-                    't_questions', 't_questions.trueFalse', 't_questions.matches', 't_questions.sortWords', 't_questions.options'])
-                ->where('grade_id', $level)
-                ->whereIn('lesson_type', ['grammar', 'dictation', 'rhetoric'])
-                ->get();
-
-            Lesson::query()
-                ->where('grade_id', $level)
-                ->whereIn('lesson_type', ['grammar', 'dictation', 'rhetoric'])
-                ->update([
-                    'level' => $level,
-                ]);
-
-            foreach ($sub_levels as $sub_level)
-            {
-                if ($sub_level != $level)
-                {
-                    foreach ($lessons as  $lesson)
+        $lessons = Lesson::query()
+            ->with([
+                'questions', 'questions.trueFalse', 'questions.matches', 'questions.sortWords', 'questions.options',
+                't_questions', 't_questions.trueFalse', 't_questions.matches', 't_questions.sortWords', 't_questions.options'
+            ])
+            //'grammar',
+            //'dictation',
+            //, 'rhetoric'
+            ->whereIn('lesson_type', ['grammar'])
+            ->get();
+//        dd($lessons->pluck('grade_id'));
+        foreach ($grades as $grade)
+        {
+            $grade_lessons = $lessons->where('grade_id', $grade);
+            foreach ($grade_lessons as $lesson) {
+                foreach ($levels as $level) {
+                    if ($level != $grade)
                     {
                         $n_lesson = $lesson->replicate();
                         $n_lesson->grade_id = $level;
-                        $n_lesson->level = $sub_level;
+                        $n_lesson->level = $lesson->grade_id;
                         $n_lesson->save();
-                        foreach ($lesson->questions as $question)
-                        {
+                        $lesson->update([
+                            'level' => $lesson->grade_id,
+                        ]);
+                        foreach ($lesson->questions as $question) {
                             $n_question = $question->replicate();
                             $n_question->lesson_id = $n_lesson->id;
                             $n_question->save();
-                            if ($question->type == 1)
-                            {
+                            if ($question->type == 1) {
                                 //T & F
                                 $n_t_f = $question->trueFalse->replicate();
                                 $n_t_f->question_id = $n_question->id;
                                 $n_t_f->save();
                             }
 
-                            if ($question->type == 2)
-                            {
-                                foreach ($question->options as $option)
-                                {
+                            if ($question->type == 2) {
+                                foreach ($question->options as $option) {
                                     $n_option = $option->replicate();
                                     $n_option->question_id = $n_question->id;
                                     $n_option->save();
                                 }
                             }
 
-                            if ($question->type == 3)
-                            {
-                                foreach ($question->matches as $option)
-                                {
+                            if ($question->type == 3) {
+                                foreach ($question->matches as $option) {
                                     $n_option = $option->replicate();
                                     $n_option->question_id = $n_question->id;
                                     $n_option->save();
                                 }
                             }
 
-                            if ($question->type == 4)
-                            {
-                                foreach ($question->sortWords as $option)
-                                {
+                            if ($question->type == 4) {
+                                foreach ($question->sortWords as $option) {
                                     $n_option = $option->replicate();
                                     $n_option->question_id = $n_question->id;
                                     $n_option->save();
                                 }
                             }
                         }
-                        foreach ($lesson->t_questions as $question)
-                        {
+                        foreach ($lesson->t_questions as $question) {
                             $n_question = $question->replicate();
                             $n_question->lesson_id = $n_lesson->id;
                             $n_question->save();
-                            if ($question->type == 1 && $question->trueFalse)
-                            {
+                            if ($question->type == 1 && $question->trueFalse) {
                                 //T & F
                                 $n_t_f = $question->trueFalse->replicate();
                                 $n_t_f->t_question_id = $n_question->id;
                                 $n_t_f->save();
                             }
 
-                            if ($question->type == 2)
-                            {
-                                foreach ($question->options as $option)
-                                {
+                            if ($question->type == 2) {
+                                foreach ($question->options as $option) {
                                     $n_option = $option->replicate();
                                     $n_option->t_question_id = $n_question->id;
                                     $n_option->save();
                                 }
                             }
 
-                            if ($question->type == 3)
-                            {
-                                foreach ($question->matches as $option)
-                                {
+                            if ($question->type == 3) {
+                                foreach ($question->matches as $option) {
                                     $n_option = $option->replicate();
                                     $n_option->t_question_id = $n_question->id;
                                     $n_option->save();
                                 }
                             }
 
-                            if ($question->type == 4)
-                            {
-                                foreach ($question->sortWords as $option)
-                                {
+                            if ($question->type == 4) {
+                                foreach ($question->sortWords as $option) {
                                     $n_option = $option->replicate();
                                     $n_option->t_question_id = $n_question->id;
                                     $n_option->save();
@@ -418,6 +403,7 @@ class LessonController extends Controller
                 }
             }
         }
+
         return 'lesson copied successfully';
     }
 
