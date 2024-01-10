@@ -2,7 +2,7 @@
     Devomar095@gmail.com
     WhatsApp +972592554320
     --}}
-@extends('user.layout.container')
+@extends('user.layout.container_2')
 @push('breadcrumb')
     <li class="breadcrumb-item">
         <a href="{{ route('lessons', [$lesson->grade_id, $lesson->lesson_type]) }}" >الدروس</a>

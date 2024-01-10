@@ -2,7 +2,7 @@
     Devomar095@gmail.com
     WhatsApp +972592554320
     --}}
-@extends('user.layout.container')
+@extends('user.layout.container_2')
 @section('style')
 
 @endsection
