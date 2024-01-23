@@ -232,7 +232,7 @@
                 <br />
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3 class="text-center h3" style="font-weight: bold; margin: 0">الصف {{$grade['grade']}}}}</h3>
+                        <h3 class="text-center h3" style="font-weight: bold; margin: 0">الصف {{$grade['grade']}}</h3>
                     </div>
                     <div class="col-xs-12">
                         <div id="grade_tracker_{{$grade['grade']}}"

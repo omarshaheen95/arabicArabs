@@ -3,7 +3,7 @@
     WhatsApp +972592554320
     --}}
 
-@extends('user.layout.container_2')
+@extends('user.layout.container_v2')
 @push('breadcrumb')
     <li class="breadcrumb-item">
         <a href="{{ route('lessons', $lesson->level_id) }}" @if(isset($level) && !is_null($level->text_color)) style="color: {{$level->text_color}} !important; font-weight: bold" @endif>{{ t('Lessons') }}</a>

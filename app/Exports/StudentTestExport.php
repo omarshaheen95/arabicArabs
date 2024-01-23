@@ -58,7 +58,7 @@ class StudentTestExport implements WithMapping, Responsable, WithHeadings, FromC
             $student->user->grade_name,
             $student->lesson->name,
             $student->lesson->grade->name,
-            $student->total_per,
+            $student->total,
             $student->status,
             Carbon::parse($student->created_at)->toDateTimeString(),
 
@@ -91,9 +91,9 @@ class StudentTestExport implements WithMapping, Responsable, WithHeadings, FromC
 //            });
         })->when($grade, function (Builder $query) use ($grade) {
             $query->whereHas('lesson', function (Builder $query) use ($grade) {
-                $query->whereHas('level', function (Builder $query) use ($grade) {
-                    $query->where('grade', $grade);
-                });
+//                $query->whereHas('level', function (Builder $query) use ($grade) {
+                    $query->where('grade_id', $grade);
+//                });
             });
         })->when($level_id, function (Builder $query) use ($level_id) {
             $query->whereHas('lesson', function (Builder $query) use ($level_id) {

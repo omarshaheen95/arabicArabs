@@ -34,7 +34,7 @@ class StudentWorksController extends Controller
                     })->when($grade, function (Builder $query) use ($grade){
                         $query->where('grade', $grade);
                     })->when($teacher, function (Builder $query) use ($teacher){
-                        $query->whereHas('teacher_student', function (Builder $query) use($teacher){
+                        $query->whereHas('teacherUser', function (Builder $query) use($teacher){
                             $query->where('teacher_id', $teacher);
                         });
                     })->when($school, function (Builder $query) use ($school){

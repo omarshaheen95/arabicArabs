@@ -170,42 +170,42 @@ class TeacherController extends Controller
             $grade_info = [];
             $user_tests = UserTracker::query()->where('type', 'test')->whereIn('user_id', $teacher_students)
                 ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade', $students_grade);
-                    });
+//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
+                        $query->where('grade_id', $students_grade);
+//                    });
                 })->count();
             $user_learning = UserTracker::query()->where('type', 'learn')->whereIn('user_id', $teacher_students)
                 ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade', $students_grade);
-                    });
+//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
+                        $query->where('grade_id', $students_grade);
+//                    });
                 })->count();
             $user_training = UserTracker::query()->where('type', 'practise')->whereIn('user_id', $teacher_students)
                 ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade', $students_grade);
-                    });
+//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
+                        $query->where('grade_id', $students_grade);
+//                    });
                 })->count();
 
             $user_tracker = UserTracker::query()->whereIn('user_id', $teacher_students)
                 ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade', $students_grade);
-                    });
+//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
+                        $query->where('grade_id', $students_grade);
+//                    });
                 })
                 ->count();
 
-           
+
 
             $students_tests = UserTest::query()->whereHas('user', function (Builder $query) use ($teacher) {
-                    $query->whereHas('teacher_student', function (Builder $query) use ($teacher) {
+                    $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
                         $query->where('teacher_id', $teacher->id);
                     });
                 })
                 ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade', $students_grade);
-                    });
+//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
+                        $query->where('grade_id', $students_grade);
+//                    });
                 })->get();
 
 

@@ -27,9 +27,9 @@ class LessonController extends Controller
                 })
                 ->when($grade, function (Builder $query) use ($grade) {
                     $query->whereHas('lesson', function (Builder $query) use ($grade){
-                        $query->whereHas('level', function (Builder $query) use ($grade) {
-                        $query->where('grade', $grade);
-                    });
+//                        $query->whereHas('level', function (Builder $query) use ($grade) {
+                        $query->where('grade_id', $grade);
+//                    });
                     });
                 })
                 ->when($level, function (Builder $query) use ($level) {

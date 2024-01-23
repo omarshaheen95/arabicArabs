@@ -218,9 +218,9 @@ class StudentController extends Controller
             $grades[] = $user->grade;
         }
         $tracks = UserTracker::query()->where('user_id', $user->id)->whereHas('lesson', function (Builder $query) use ($grade){
-            $query->whereHas('level', function (Builder $query) use($grade){
+//            $query->whereHas('level', function (Builder $query) use($grade){
                 $query->where('grade_id', $grade);
-            });
+//            });
         })->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->latest()->get();
 
         $data['total'] = $tracks->count();
