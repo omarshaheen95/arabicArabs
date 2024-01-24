@@ -46,7 +46,7 @@ class TrainingController extends Controller
         $m_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();
         $s_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 4)->with(['sortWords', 'media'])->get();
 
-        dd(TQuestion::query()->where('lesson_id', $lesson->id)->sum('mark'));
+//        dd(TQuestion::query()->where('lesson_id', $lesson->id)->sum('mark'));
 
         return view('manager.lesson.training', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 's_questions'));
     }
