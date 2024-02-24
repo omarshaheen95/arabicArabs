@@ -77,6 +77,9 @@
         .bootstrap-select > .dropdown-toggle.btn-light, .bootstrap-select > .dropdown-toggle.btn-secondary {
             text-align: left;
         }
+        .left_dir{
+            direction: ltr;
+        }
     </style>
     @yield('style')
     <!--end::Layout Skins -->

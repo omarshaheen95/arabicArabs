@@ -156,7 +156,7 @@
                                     <ul>
                                         <li>الخطوة 1: www.Arabic-Arabs.com</li>
                                         <li>الخطوة 2: دخول الطالب</li>
-                                        <li>الخطوة 3: البريد الإلكتروني : <span class="bolder red-font" style="font-size: 12px; white-space: nowrap;">{{$std->email}}</span></li>
+                                        <li>الخطوة 3: البريد الإلكتروني : <p class="bolder red-font" style="font-size: 12px; white-space: nowrap; text-align: center; direction: ltr;">{{$std->email}}</p></li>
                                         <li>الخطوة 4: كلمة المرور: <span class="bolder red-font">123456</span></li>
                                         <li>الخطوة 5: تسجيل الدخول</li>
                                     </ul>

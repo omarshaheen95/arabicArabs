@@ -199,6 +199,9 @@
                         {data: 'last_login', name: 'last_login'},
                         {data: 'actions', name: 'actions'}
                     ],
+                    //add css attribute to email column
+                    columnDefs: [{ className: 'left_dir', targets: [1] }],
+
                 });
             });
             $('#kt_search').click(function(e){
