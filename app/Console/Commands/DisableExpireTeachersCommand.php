@@ -21,16 +21,16 @@ class DisableExpireTeachersCommand extends Command
     public function handle(): void
     {
         //get teacher does not have user active_to <= Carbon::now()->subDays(7)
-        $teachers = Teacher::query()
-            ->where('id', '!=', 1375)
-            ->where(function (Builder $query){
-            $query->whereDoesntHave('users', function ($query) {
-                $query->whereDate('active_to', '>=', now()->subDays(7));
-            })->orWhereDoesntHave('users');
-        })->where('approved', 1)->update([
-                'approved' => 0,
-                'active' => 0,
-        ]);
+//        $teachers = Teacher::query()
+//            ->where('id', '!=', 1375)
+//            ->where(function (Builder $query){
+//            $query->whereDoesntHave('users', function ($query) {
+//                $query->whereDate('active_to', '>=', now()->subDays(7));
+//            })->orWhereDoesntHave('users');
+//        })->where('approved', 1)->update([
+//                'approved' => 0,
+//                'active' => 0,
+//        ]);
 
 //        Log::alert('Expired Teachers : '. $teachers->count());
 

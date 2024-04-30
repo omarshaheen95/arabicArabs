@@ -46,16 +46,17 @@ class ImportUserFileExcel implements ToModel, SkipsOnFailure, SkipsOnError, With
     public function model(array $row)
     {
         $full_name = trim(str_replace('  ', ' ', str_replace(' ', ' ', $row['Name'])));
-        if (strlen($full_name) > 25) {
+        if (strlen($full_name) > 20) {
             $array_name = explode(' ', $full_name);
-            if (count($array_name) >= 4) {
-                $name = $array_name[0] . ' ' . $array_name[1] . ' ' . $array_name[count($array_name) - 2] . ' ' . $array_name[count($array_name) - 1];
+            if (count($array_name) > 3) {
+//                $name = $array_name[0] . ' ' . $array_name[1] . ' ' . $array_name[count($array_name) - 2] . ' ' . $array_name[count($array_name) - 1];
+                $name = $array_name[0] . ' ' . $array_name[1] . ' ' . $array_name[count($array_name) - 1];
             }
             elseif (count($array_name) == 3) {
                 $name = $array_name[0] . ' ' . $array_name[1] . ' ' . $array_name[count($array_name) - 1];
             } else {
                 $name = $array_name[0] . ' ' . $array_name[1];
-                if (strlen($full_name) > 25) {
+                if (strlen($full_name) > 20) {
                     $name = $array_name[0];
                 }
             }
@@ -109,6 +110,7 @@ class ImportUserFileExcel implements ToModel, SkipsOnFailure, SkipsOnError, With
 
         if (!$user) {
             $user = User::query()->create([
+                'id_number' => isset($row['Student Id']) && !empty($row['Student Id']) ? $row['Student Id'] : null,
                 'name' => $name,
                 'email' => $email,
                 'password' => bcrypt('123456'),
@@ -130,6 +132,7 @@ class ImportUserFileExcel implements ToModel, SkipsOnFailure, SkipsOnError, With
             $this->created_rows_count++;
         }else{
             $user->update([
+                'id_number' => isset($row['Student Id']) && !empty($row['Student Id']) ? $row['Student Id'] : $user->id_number,
                 'name' => $name,
                 'email' => $email,
                 'password' => bcrypt('123456'),
@@ -225,6 +228,7 @@ class ImportUserFileExcel implements ToModel, SkipsOnFailure, SkipsOnError, With
     public function rules(): array
     {
         return [
+            'Student Id' => 'required',
             'Name' => 'required',
             'Email' => 'nullable',
             'Mobile' => 'nullable',

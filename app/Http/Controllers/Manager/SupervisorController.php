@@ -39,7 +39,8 @@ class SupervisorController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     $edit_url = route('manager.supervisor.edit', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url'));
+                    $login_url = route('manager.supervisor.login', $row->id);
+                    return view('manager.setting.btn_actions', compact('row', 'edit_url', 'login_url'));
                 })
                 ->make();
         }
@@ -102,5 +103,12 @@ class SupervisorController extends Controller
     {
         return (new SupervisorExport($request))
             ->download('Supervisors Information.xlsx');
+    }
+
+    public function supervisorLogin($id)
+    {
+        $supervisor = Supervisor::query()->findOrFail($id);
+        Auth::guard('supervisor')->login($supervisor);
+        return redirect()->route('supervisor.home');
     }
 }

@@ -21,7 +21,7 @@ Route::group(['namespace' => 'Manager'], function(){
 
     //Supervisor
     Route::post('export_supervisor_excel', 'SupervisorController@exportSupervisorsExcel')->name('supervisor.export_supervisor_excel');
-
+    Route::get('supervisor-login/{id}', 'SupervisorController@supervisorLogin')->name('supervisor.login');
     //Teacher
     Route::post('approve_teacher', 'TeacherController@approveTeacher')->name('teacher.approveTeacher');
     Route::post('activate_teacher', 'TeacherController@activeTeacher')->name('teacher.activateTeacher');

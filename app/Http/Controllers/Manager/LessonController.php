@@ -304,26 +304,56 @@ class LessonController extends Controller
         set_time_limit(600);
         $grades = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         $levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        $lessons_ids = [
+//            1518,
+            1519, 1520, 1521,
+            1525, 1526, 1527, 1528,
+            1532, 1533, 1534, 1535,
+            1554, 1555, 1556, 1557, 1558, 1559, 1560, 1561
+        ];
 //        dd($levels);
         $lessons = Lesson::query()
             ->with([
                 'media',
-                'questions', 'questions.trueFalse', 'questions.matches', 'questions.sortWords', 'questions.options',
-                't_questions', 't_questions.trueFalse', 't_questions.matches', 't_questions.sortWords', 't_questions.options'
+//                'questions', 'questions.trueFalse', 'questions.matches', 'questions.sortWords', 'questions.options',
+//                't_questions', 't_questions.trueFalse', 't_questions.matches', 't_questions.sortWords', 't_questions.options'
             ])
             //'grammar',
             //'dictation',
             //, 'rhetoric'
-            ->whereIn('lesson_type', ['grammar'])
+//            ->whereIn('lesson_type', ['grammar'])
+            ->whereIn('id', $lessons_ids)
             ->get();
 //        dd($lessons->pluck('grade_id'));
-        foreach ($grades as $grade)
+        foreach ($lessons as $lesson)
         {
+            $other_lessons = Lesson::query()
+                ->where('name', $lesson->name)
+                ->where('lesson_type', $lesson->lesson_type)
+                ->where('id', '<>', $lesson->id)
+                ->get();
+
+            foreach ($other_lessons as $other_lesson)
+            {
+                $mediaItems = $lesson->getMedia('audioLessons');
+                foreach ($mediaItems as $media) {
+                    $media->copy($other_lesson, 'audioLessons');
+                }
+                $mediaItems = $lesson->getMedia('videoLessons');
+                foreach ($mediaItems as $media) {
+                    $media->copy($other_lesson, 'videoLessons');
+                }
+            }
+
+        }
+        return 'lesson copied successfully';
+        return 'lesson copied successfully';
+        return 'lesson copied successfully';
+        foreach ($grades as $grade) {
             $grade_lessons = $lessons->where('grade_id', $grade);
             foreach ($grade_lessons as $lesson) {
                 foreach ($levels as $level) {
-                    if ($level != $grade)
-                    {
+                    if ($level != $grade) {
                         $n_lesson = $lesson->replicate();
                         $n_lesson->grade_id = $level;
                         $n_lesson->level = $lesson->grade_id;

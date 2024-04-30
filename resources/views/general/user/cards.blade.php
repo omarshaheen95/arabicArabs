@@ -138,6 +138,11 @@
                                             {{$std->school->name}}
                                         </span>
                                     </p>
+                                    <p class="info">رقم الطالب :
+                                        <span class="bolder red-font" style="font-size: 12px;">
+                                            {{ $std->id_number }}
+                                        </span>
+                                    </p>
                                     <p class="info">اسم الطالب :
                                         <span class="bolder red-font" style="font-size: 12px;">
                                             {{ $std->name }}
