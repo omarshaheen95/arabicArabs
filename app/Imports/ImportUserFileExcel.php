@@ -77,16 +77,21 @@ class ImportUserFileExcel implements ToModel, SkipsOnFailure, SkipsOnError, With
 
 
 
-        if (!empty($row['Email'])) {
+        if (isset($row['Email']) && !empty($row['Email'])) {
             $email = trim(str_replace('  ', ' ', str_replace(' ', ' ', $row['Email'])));
             $user = User::query()->where('email', $email)->first();
         } else {
             $last_email = $this->request->get('last_of_email');
-
-
             $names = explode(' ', $full_name);
+            if (isset($row['Student Id']) && !empty($row['Student Id'])) {
+                $row['Email'] = strtolower($row['Student Id']) . $last_email;
+            } else {
+                $row['Email'] = strtolower($names[0]) . $last_email;
+            }
 
-            $row['Email'] = strtolower($names[0]) . $last_email;
+
+
+
 
             $email = $row['Email'];
 

@@ -70,6 +70,11 @@ class User extends Authenticatable
         return $this->hasOne(TeacherUser::class);
     }
 
+    public function teacher()
+    {
+        return $this->hasOneThrough(Teacher::class, TeacherUser::class, 'user_id', 'id', 'id', 'teacher_id');
+    }
+
     public function scopeSearch(Builder $query, Request $request)
     {
         return $query->when($name = $request->get('name', false), function (Builder $query) use ($name) {
@@ -102,6 +107,12 @@ class User extends Authenticatable
             ->when($teacher_id = $request->get('teacher_id', false), function (Builder $query) use ($teacher_id) {
                 $query->whereHas('teacherUser', function (Builder $query) use ($teacher_id) {
                     $query->where('teacher_id', $teacher_id);
+                });
+            })->when($value = $request->get('supervisor_id', false), function (Builder $query) use ($value) {
+                $query->whereHas('teacher', function (Builder $query) use ($value) {
+                    $query->whereHas('supervisor_teachers', function (Builder $query) use ($value) {
+                        $query->where('supervisor_id', $value);
+                    });
                 });
             });
     }

@@ -75,9 +75,20 @@ WhatsApp +972592554320
                                     <div class="col-lg-9 col-xl-6">
                                         <select multiple name="teachers[]" class="form-control select2L" title="اختر مدرسين">
                                             @foreach($teachers as $teacher)
-                                                <option value="{{$teacher->id}}" {{isset($supervisor) && in_array($teacher->id, $supervisor->teachers) ? 'selected':''}}>{{$teacher->name}}</option>
+                                                <option value="{{$teacher->id}}" {{isset($supervisor) && in_array($teacher->id, $supervisor->supervisor_teachers->pluck('teacher_id')->toArray()) ? 'selected':''}}>{{$teacher->name}}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-3 col-form-label font-weight-bold">القبول</label>
+                                    <div class="col-3">
+                                        <span class="kt-switch">
+                                            <label>
+                                            <input type="checkbox" {{isset($supervisor) && $supervisor->approved ? 'checked':''}} value="1" name="approved">
+                                            <span></span>
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -121,6 +132,9 @@ WhatsApp +972592554320
             $.ajax({
                 type: "get",
                 url: url,
+                data: {
+                    selected: 1
+                }
             }).done(function (data) {
                 $('select[name="teachers[]"]').html(data.html);
                 $('select[name="teachers[]"]').selectpicker('refresh');

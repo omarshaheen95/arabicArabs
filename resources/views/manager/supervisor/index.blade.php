@@ -43,9 +43,8 @@ WhatsApp +972592554320
                                 <input type="text" name="name" id="name" class="form-control kt-input" placeholder="اسم المشرف">
                             </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>المدرسة:</label>
-                                <select class="form-control level" name="school_id" id="school_id">
-                                    <option selected value="">اختر مدرسة</option>
+                                <label>المدرسة :</label>
+                                <select class="form-control level select2L" title="اختر مدرسة" name="school_id" id="school_id">
                                     @foreach($schools as $school)
                                         <option  value="{{$school->id}}">{{$school->name}}</option>
                                     @endforeach

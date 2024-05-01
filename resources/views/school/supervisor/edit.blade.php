@@ -66,7 +66,7 @@ WhatsApp +972592554320
                                     <div class="col-lg-9 col-xl-6">
                                         <select multiple name="teachers[]" class="form-control">
                                             @foreach($teachers as $teacher)
-                                                <option value="{{$teacher->id}}" {{isset($supervisor) && in_array($teacher->id, $supervisor->teachers) ? 'selected':''}}>{{$teacher->name}}</option>
+                                                <option value="{{$teacher->id}}" {{isset($supervisor) && in_array($teacher->id, $supervisor->supervisor_teachers->pluck('teacher_id')->toArray()) ? 'selected':''}}>{{$teacher->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>

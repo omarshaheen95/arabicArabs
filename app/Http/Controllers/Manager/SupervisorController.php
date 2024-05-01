@@ -64,9 +64,12 @@ class SupervisorController extends Controller
             $data['image'] = $this->uploadImage($request->file('image'), 'supervisors');
         }
         $data['active'] = $request->get('active', 0);
+        $data['approved'] = $request->get('approved', 0);
         $data['password'] = bcrypt($request->get('password', 123456));
-        Supervisor::query()->create($data);
-
+        $supervisor = Supervisor::query()->create($data);
+        if ($request->has('teachers') && count($request->get('teachers', [])) > 0){
+            $supervisor->teachers()->sync($request->get('teachers', []));
+        }
         return redirect()->route('manager.supervisor.index')->with('message', self::ADDMESSAGE);
     }
 
@@ -87,8 +90,10 @@ class SupervisorController extends Controller
             $data['image'] = $this->uploadImage($request->file('image'), 'supervisors');
         }
         $data['active'] = $request->get('active', 0);
+        $data['approved'] = $request->get('approved', 0);
         $data['password'] = $request->get('password', false) ? bcrypt($request->get('password', 123456)) : $supervisor->password;
         $supervisor->update($data);
+        $supervisor->teachers()->sync($request->get('teachers', []));
         return redirect()->route('manager.supervisor.index')->with('message', self::EDITMESSAGE);
     }
 

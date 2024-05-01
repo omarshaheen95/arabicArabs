@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\TeacherResetPassword;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 class Teacher extends Authenticatable
 {
     use Notifiable, SoftDeletes;
+
     protected $fillable = [
         'name', 'email', 'password', 'school_id', 'mobile', 'pending_tasks', 'corrected_tasks', 'returned_tasks',
         'passed_tests', 'failed_tests', 'approved', 'active', 'last_login', 'passed_tests_lessons', 'failed_tests_lessons'
@@ -57,17 +59,34 @@ class Teacher extends Authenticatable
             $query->where('approved', 1);
         })->when($request->get('approved', 1) == 2, function (Builder $query) use ($school) {
             $query->where('approved', 0);
-        });
+        })->when($request->get('student_status') == 1, function (Builder $query) {
+            $query->has('students');
+        })->when($request->get('student_status') == 2, function (Builder $query) {
+            $query->doesntHave('students');
+        })->when($request->get('student_status') == 3, function (Builder $query) {
+            $query->whereHas('students', function (Builder $query) {
+                $query->where('active_to', '>=', now());
+            });
+        })->when($request->get('student_status') == 4, function (Builder $query) {
+            $query->whereHas('students', function (Builder $query) {
+                $query->where('active_to', '<', now());
+            });
+        })
+            ->when($value = $request->get('supervisor_id', false), function (Builder $query) use ($value) {
+                $query->whereHas('supervisor_teachers', function (Builder $query) use ($value) {
+                    $query->where('supervisor_id', $value);
+                });
+            });
     }
 
     public function getActiveStatusAttribute()
     {
-        return $this->active ? 'فعال':'غير فعال';
+        return $this->active ? 'فعال' : 'غير فعال';
     }
 
     public function getApprovedStatusAttribute()
     {
-        return $this->approved ? 'فعال':'غير فعال';
+        return $this->approved ? 'فعال' : 'غير فعال';
     }
 
     public function getCheckAttribute()
@@ -79,11 +98,18 @@ class Teacher extends Authenticatable
 
     public function getImageAttribute($value)
     {
-        return is_null($value) ? asset('assets/media/icons/teacher.png'):asset($value);
+        return is_null($value) ? asset('assets/media/icons/teacher.png') : asset($value);
     }
 
     public function teacher_users()
     {
         return $this->hasMany(TeacherUser::class);
     }
+
+    public function supervisor_teachers()
+    {
+        return $this->hasMany(SupervisorTeacher::class);
+    }
+
+
 }

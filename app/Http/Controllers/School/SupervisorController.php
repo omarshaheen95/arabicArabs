@@ -69,7 +69,7 @@ class SupervisorController extends Controller
         $data['active'] = $request->get('active', 0);
         $data['password'] = bcrypt($request->get('password', 123456));
         $supervisor = Supervisor::query()->create($data);
-
+        $supervisor->teachers()->sync($request->get('teachers', []));
         return redirect()->route('school.supervisor.index')->with('message', "تم الإضافة بنجاح");
     }
 
@@ -93,6 +93,7 @@ class SupervisorController extends Controller
         $data['active'] = $request->get('active', 0);
         $data['password'] = $request->get('password', false) ? bcrypt($request->get('password', 123456)) : $supervisor->password;
         $supervisor->update($data);
+        $supervisor->teachers()->sync($request->get('teachers', []));
         return redirect()->route('school.supervisor.index')->with('message', "تم التعديل بنجاح");
     }
 

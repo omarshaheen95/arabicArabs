@@ -35,6 +35,16 @@ class Story extends Model
         }
     }
 
+    public function getGradeArNameAttribute()
+    {
+        switch($this->grade){
+            case 15:
+                return 'المستوى التمهيدي';
+            default:
+                return  'المستوى '.$this->grade;
+        }
+    }
+
     public function getActionButtonsAttribute()
     {
         $button = '';

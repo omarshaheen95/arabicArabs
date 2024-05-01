@@ -85,7 +85,7 @@
                         </div>
                     </div>
                     <div class="kt-login__account">
-                                   <span class="kt-login__account-msg">
+                                    <span class="kt-login__account-msg">
                                         {{ date('Y') }}&nbsp;&copy;&nbsp;<a href="https://www.abt-assessments.com/" target="_blank" class="kt-link kt-font-danger">ABT assessment</a>
                                     </span>&nbsp;&nbsp;
 
@@ -100,7 +100,7 @@
                             {{--                                <img src="{{ asset('assets/media/logos/white_logo.svg') }}" width="40%" alt="logo" class="img-fluid"/>--}}
                         </div>
 
-                        <h3 class="kt-login__title" style="font-size: 2.2rem">الإشراف</h3>
+                        <h3 class="kt-login__title" style="font-size: 2.2rem">التدريس</h3>
                         <h4 class="kt-login__desc " style="font-size: 28px">
                             استعادة كلمة المرور .
                         </h4>

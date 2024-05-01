@@ -31,9 +31,14 @@ class Supervisor extends Authenticatable
         return $this->belongsTo(School::class);
     }
 
+    public function supervisor_teachers()
+    {
+        return $this->hasMany(SupervisorTeacher::class);
+    }
+
     public function teachers()
     {
-        return $this->belongsToMany(SupervisorTeacher::class, Teacher::class);
+        return $this->belongsToMany(Teacher::class, 'supervisor_teachers', 'supervisor_id', 'teacher_id')->whereNull('supervisor_teachers.deleted_at');
     }
 
     public function scopeSearch(Builder $query, Request $request)

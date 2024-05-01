@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Supervisor;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Contracts\Support\Responsable;
@@ -65,6 +66,10 @@ class TeacherExport implements WithMapping, Responsable, WithHeadings, FromColle
                 ->orWhere('mobile', 'like', '%' . $name . '%');
         })->when($school_id, function (Builder $query) use ($school_id) {
             $query->where('school_id', $school_id);
+        })->when(auth()->user() instanceof Supervisor, function (Builder $query) {
+            $query->whereHas('supervisor_teachers', function (Builder $query) {
+                $query->where('supervisor_id', auth()->id());
+            });
         });
 
         if ($teachers->count() >= 1) {
