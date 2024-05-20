@@ -19,6 +19,15 @@ class UserLesson extends Model
         'attach_writing_answer', 'reading_answer', 'teacher_audio_message'
     ];
 
+    //boot with query where has lesson
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('lesson', function ($builder) {
+            $builder->has('lesson');
+        });
+    }
+
     public function lesson()
     {
         return $this->belongsTo(Lesson::class);

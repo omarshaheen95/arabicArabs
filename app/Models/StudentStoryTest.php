@@ -14,6 +14,14 @@ class StudentStoryTest extends Model
     protected $fillable = [
         'user_id', 'story_id', 'corrected', 'total', 'notes', 'max_time', 'approved', 'start_at', 'end_at', 'status'
     ];
+    //boot with query where has story
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('story', function (Builder $builder) {
+            $builder->has('story');
+        });
+    }
 
     public function user()
     {

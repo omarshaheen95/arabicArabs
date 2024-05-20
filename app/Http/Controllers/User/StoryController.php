@@ -232,7 +232,7 @@ class StoryController extends Controller
     {
         $title = 'نتيجة اختبار القصة';
         $student = Auth::user();
-        $student_test = StudentStoryTest::query()->where('user_id', $student->id)->find($id);
+        $student_test = StudentStoryTest::query()->has('story')->where('user_id', $student->id)->find($id);
         if (!$student_test)
             return redirect()->route('home')->with('message', 'test not found')->with('m-class', 'error');
         return view('user.story.new_certificate',compact('student_test', 'title'));

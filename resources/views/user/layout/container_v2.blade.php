@@ -33,7 +33,7 @@
     <!-- Bootstrap CSS v5.0.2 -->
     <link rel="stylesheet" href="{{asset('cdn_files/bootstrap.rtl.min.css')}}">
     @yield('pre_style')
-    <link rel="stylesheet" href="{{asset('web_assets/css/custom.css')}}?v1">
+    <link rel="stylesheet" href="{{asset('web_assets/css/custom.css')}}?v2">
     <link rel="stylesheet" href="{{asset('web_assets/css/resposive.css')}}">
     <link href="{{ asset('assets/vendors/general/toastr/build/toastr.css') }}" rel="stylesheet" />
     @yield('style')

@@ -51,8 +51,10 @@ class Teacher extends Authenticatable
     public function scopeSearch(Builder $query, Request $request)
     {
         return $query->when($name = $request->get('name', false), function (Builder $query) use ($name) {
-            $query->where('name', 'like', '%' . $name . '%')
-                ->orWhere('email', 'like', '%' . $name . '%');
+            $query->where(function (Builder $query) use ($name) {
+                $query->where('name', 'like', '%' . $name . '%')
+                    ->orWhere('email', 'like', '%' . $name . '%');
+            });
         })->when($school = $request->get('school_id', false), function (Builder $query) use ($school) {
             $query->where('school_id', $school);
         })->when($request->get('approved', 1) == 1, function (Builder $query) use ($school) {

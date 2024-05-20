@@ -81,7 +81,7 @@ class StudentController extends Controller
     public function studentLessonTest(Request $request)
     {
         if (request()->ajax()) {
-            $rows = UserTest::query()->with(['lesson.grade', 'user'])->search($request)
+            $rows = UserTest::query()->has('lesson')->with(['lesson.grade', 'user'])->search($request)
                 ->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
@@ -126,7 +126,7 @@ class StudentController extends Controller
 
     public function studentLessonTestShow($id)
     {
-        $student_test = UserTest::query()->with(['lesson', 'user'])->search(request())->findOrFail($id);
+        $student_test = UserTest::query()->has('lesson')->with(['lesson', 'user'])->search(request())->findOrFail($id);
         $grade = $student_test->lesson->grade_id;
         $questions = Question::query()->where('lesson_id', $student_test->lesson_id)->get();
         return view('teacher.student_test.student_test_result', compact('student_test', 'grade', 'questions'));
@@ -135,7 +135,7 @@ class StudentController extends Controller
     public function studentStoryTest(Request $request)
     {
         if (request()->ajax()) {
-            $rows = StudentStoryTest::query()->with(['story', 'user'])->search($request)
+            $rows = StudentStoryTest::query()->has('story')->with(['story', 'user'])->search($request)
                 ->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
@@ -182,7 +182,7 @@ class StudentController extends Controller
 
     public function studentStoryTestShow($id)
     {
-        $student_test = StudentStoryTest::query()->with(['story', 'user'])->search(request())->findOrFail($id);
+        $student_test = StudentStoryTest::query()->has('story')->with(['story', 'user'])->search(request())->findOrFail($id);
         $grade = $student_test->story->grade;
         $questions = StoryQuestion::query()->where('story_id', $student_test->story_id)->get();
         return view('teacher.student_test.student_test_result', compact('student_test', 'grade', 'questions'));

@@ -14,6 +14,14 @@ class StoryAssignment extends Model
     protected $fillable = [
         'user_id', 'story_id', 'test_assignment', 'done_test_assignment', 'completed', 'deadline', 'completed_at', 'deadline', 'completed_at'
     ];
+    //boot with query where has story
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('story', function (Builder $builder) {
+            $builder->has('story');
+        });
+    }
 
     public function user()
     {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Spatie\MediaLibrary\Models\Media;
 
 class Lesson extends Model implements HasMedia
 {
-    use SoftDeletes, HasMediaTrait;
+    use SoftDeletes, HasMediaTrait, CascadeSoftDeletes;
 
     //lesson type : 'reading', 'writing', 'listening', 'speaking', 'grammar', 'dictation', 'rhetoric'
     //section type : 'informative', 'literary'
@@ -25,6 +26,8 @@ class Lesson extends Model implements HasMedia
     protected $appends = [
         'type_name', 'section_name',
     ];
+
+    protected $cascadeDeletes = ['questions', 't_questions', 'userAssignments', 'userTests', 'userLessons', 'userTracks'];
 
     public function getTypeNameAttribute()
     {
@@ -74,6 +77,8 @@ class Lesson extends Model implements HasMedia
                 $query->where('grade_id', $grade);
             })->when($lesson_type = $request->get('lesson_type', false), function ($query) use ($lesson_type) {
                 $query->where('lesson_type', $lesson_type);
+            })->when($id_num = $request->get('id', false), function ($query) use ($id_num) {
+                $query->where('id', $id_num);
             })->when($section_type = $request->get('section_type', false), function ($query) use ($section_type) {
                 if ($section_type != 'general')
                 {
@@ -196,6 +201,26 @@ class Lesson extends Model implements HasMedia
     public function t_questions()
     {
         return $this->hasMany(TQuestion::class);
+    }
+
+    public function userAssignments()
+    {
+        return $this->hasMany(UserAssignment::class);
+    }
+
+    public function userTests()
+    {
+        return $this->hasMany(UserTest::class);
+    }
+
+    public function userLessons()
+    {
+        return $this->hasMany(UserLesson::class);
+    }
+
+    public function userTracks()
+    {
+        return $this->hasMany(UserTracker::class);
     }
 
 

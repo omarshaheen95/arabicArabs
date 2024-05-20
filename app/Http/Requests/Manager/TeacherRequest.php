@@ -29,11 +29,11 @@ class TeacherRequest extends FormRequest
         if (Route::currentRouteName() == 'manager.teacher.edit' || Route::currentRouteName() == 'manager.teacher.update')
         {
             $id = $this->route('teacher');
-            $rules["email"] = ['required', 'email:rfc,dns', "unique:teachers,email,$id,id,deleted_at,NULL"];
+            $rules["email"] = ['required', 'email', "unique:teachers,email,$id,id,deleted_at,NULL"];
             $rules["password"] = 'nullable|min:6';
         }else{
 
-            $rules["email"] = 'required|email:rfc,dns|unique:teachers,email,{$id},id,deleted_at,NULL';
+            $rules["email"] = 'required|email|unique:teachers,email,{$id},id,deleted_at,NULL';
             $rules["password"] = 'required|min:6';
         }
         $rules["mobile"] = 'required';

@@ -39,10 +39,11 @@ class AssessmentController extends Controller
                 $t_f_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();//->sum('mark');
                 $c_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();//->sum('mark');
                 $m_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();//->sum('mark');
+                $total_count = $t_f_questions->count() + $c_questions->count() + $m_questions->count();
                 $data_count = [
-                    'choose' =>   6,
-                    'match' => 4,
-                    'true_false' => 5
+                    'choose' =>   $total_count ? $c_questions->count() :6,
+                    'match' =>  $total_count ? $m_questions->count() :4,
+                    'true_false' =>  $total_count ? $t_f_questions->count() :5
                 ];
                 return view('manager.lesson.new_skills_assessment', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 'data_count'));
             }else{

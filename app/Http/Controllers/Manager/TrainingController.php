@@ -25,10 +25,11 @@ class TrainingController extends Controller
                 $c_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();
                 $t_f_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();
                 $m_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();
+                $total_count = TQuestion::query()->where('lesson_id', $lesson->id)->count();
                 $data_count = [
-                    'choose' =>   6,
-                    'match' => 4,
-                    'true_false' => 5
+                    'choose' =>   $total_count ? $c_questions->count() :6,
+                    'match' =>  $total_count ? $m_questions->count() :4,
+                    'true_false' =>  $total_count ? $t_f_questions->count() :5
                 ];
                 return view('manager.lesson.new_skills_training', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 'data_count'));
             }else{

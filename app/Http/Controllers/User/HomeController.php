@@ -142,7 +142,7 @@ class HomeController extends Controller
     {
         $title = 'Student test result';
         $student = Auth::user();
-        $student_test = UserTest::query()->where('user_id', $student->id)->find($id);
+        $student_test = UserTest::query()->has('lesson')->where('user_id', $student->id)->find($id);
         if (!$student_test)
             return redirect()->route('home')->with('message', 'test not found')->with('m-class', 'error');
         return view('user.new_certificate', compact('student_test', 'title'));
@@ -176,6 +176,7 @@ class HomeController extends Controller
     {
         $title = 'واجبات الدروس المسندة';
         $student_assignments = UserAssignment::query()
+            ->has('lesson')
             ->where('user_id', Auth::user()->id)
             ->latest()->paginate(10);
 

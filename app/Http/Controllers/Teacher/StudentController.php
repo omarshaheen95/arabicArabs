@@ -36,7 +36,9 @@ class StudentController extends Controller
                 $query->where('grade_id', $grade);
             })->when($section, function (Builder $query) use ($section){
                 $query->where('section', $section);
-            })->where('school_id', $teacher->school_id)->whereDoesntHave('teacherUser')->latest();
+            })->where('school_id', $teacher->school_id)
+                ->whereDoesntHave('teacherUser')
+                ->latest();
 
             return DataTables::make($rows)
                 ->escapeColumns([])

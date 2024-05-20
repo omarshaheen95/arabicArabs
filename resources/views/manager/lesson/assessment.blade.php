@@ -36,6 +36,10 @@
                     <div class="kt-section kt-section--first">
                         <div class="kt-section__body">
                             <ul class="nav nav-tabs nav-fill" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab"
+                                       href="#kt_tabs_1_0">الدرس</a>
+                                </li>
                                 @if($lesson->grade->true_false)
                                     <li class="nav-item">
                                         <a class="nav-link active" data-toggle="tab"
@@ -61,6 +65,12 @@
                                 @endif
                             </ul>
                             <div class="tab-content">
+                                <div class="tab-pane" id="kt_tabs_1_0" role="tabpanel">
+                                    <div class="row">
+                                        {!! $lesson->content !!}
+                                    </div>
+
+                                </div>
                                 @if($lesson->grade->true_false)
                                     <div class="tab-pane active" id="kt_tabs_1_1" role="tabpanel">
                                         <form enctype="multipart/form-data" id="form_information"

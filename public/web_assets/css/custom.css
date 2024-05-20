@@ -2160,6 +2160,7 @@ form.disabled {
     gap: 2rem;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .multi-choice-question .answer-box label.option,

@@ -36,6 +36,11 @@
                 <div class="kt-portlet__body">
                     <form class="kt-form kt-form--fit kt-margin-b-15" action="" id="search_form" method="get">
                         <div class="row ">
+                            <div class="col-lg-1 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
+                                <label>ID :</label>
+                                <input type="text" name="id" id="id" class="form-control kt-input"
+                                       placeholder="ID ">
+                            </div>
                             <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
                                 <label>الاسم :</label>
                                 <input type="text" name="name" id="name" class="form-control kt-input"
@@ -93,7 +98,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
+                            <div class="col-lg-2 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
                                 <label>الإجراءات:</label>
                                 <br/>
                                 <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
@@ -106,6 +111,7 @@
                     </form>
                     <table class="table text-center" id="users-table">
                         <thead>
+                        <th>ID</th>
                         <th>الاسم</th>
                         <th>الصف</th>
                         <th>المهارة</th>
@@ -179,6 +185,7 @@
                         }
                     },
                     columns: [
+                        {data: 'id', name: 'id'},
                         {data: 'name', name: 'name'},
                         {data: 'grade.name', name: 'grade.name'},
                         {data: 'type_name', name: 'type_name'},
@@ -189,6 +196,10 @@
                 });
             });
             $('#kt_search').click(function (e) {
+                e.preventDefault();
+                $('#users-table').DataTable().draw(true);
+            });
+            $('#id').keyup(function (e) {
                 e.preventDefault();
                 $('#users-table').DataTable().draw(true);
             });

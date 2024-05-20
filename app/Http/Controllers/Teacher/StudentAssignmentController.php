@@ -31,6 +31,7 @@ class StudentAssignmentController extends Controller
             $status = $request->get('status', false);
 
             $rows = UserAssignment::query()
+                ->has('lesson')
                 ->with(['user', 'lesson'])
                 ->whereHas('user', function (Builder $query) use ($teacher, $username){
                 $query->whereHas('teacherUser', function (Builder $query) use($teacher){
@@ -187,6 +188,7 @@ class StudentAssignmentController extends Controller
             $status = $request->get('status', false);
 
             $rows = StoryAssignment::query()
+                ->has('story')
                 ->with(['user', 'story'])
                 ->whereHas('user', function (Builder $query) use ($teacher, $username){
                 $query->whereHas('teacherUser', function (Builder $query) use($teacher){

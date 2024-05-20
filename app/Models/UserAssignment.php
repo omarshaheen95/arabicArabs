@@ -15,6 +15,15 @@ class UserAssignment extends Model
         'user_id', 'lesson_id', 'tasks_assignment', 'test_assignment', 'done_tasks_assignment', 'done_test_assignment', 'completed', 'deadline', 'completed_at'
     ];
 
+    //boot with query where has lesson
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('lesson', function (Builder $builder) {
+            $builder->has('lesson');
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

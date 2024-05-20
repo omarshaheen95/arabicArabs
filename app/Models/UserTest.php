@@ -16,6 +16,15 @@ class UserTest extends Model
         'user_id', 'lesson_id', 'corrected', 'total', 'notes', 'max_time', 'approved', 'start_at', 'end_at', 'status', 'feedback_message', 'feedback_record'
     ];
 
+    //boot with query where has lesson
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('lesson', function (Builder $builder) {
+            $builder->has('lesson');
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
