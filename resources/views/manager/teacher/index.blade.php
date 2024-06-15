@@ -1,350 +1,289 @@
-{{--
-Dev Omar Shaheen
-Devomar095@gmail.com
-WhatsApp +972592554320
---}}
 @extends('manager.layout.container')
-@section('style')
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+@section('title',$title)
+
+
+@section('actions')
+    <a href="{{route('manager.teacher.create')}}" class="btn btn-primary btn-elevate btn-icon-sm me-2">
+        <i class="la la-plus"></i>
+        {{t('Add Teacher')}}
+    </a>
+    <div class="dropdown with-filter">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{t('Actions')}}
+        </button>
+        <ul class="dropdown-menu">
+            @can('export teachers')
+                <li><a class="dropdown-item" href="#!" onclick="excelExport('{{route('manager.teacher.export')}}')">{{t('Export')}}</a></li>
+            @endcan
+            @can('teachers activation')
+                    <li><a class="dropdown-item text-primary" href="#!" data-bs-toggle="modal" data-bs-target="#teacher_activation_modal">{{t('Activation')}}</a></li>
+            @endcan
+            @can('teacher users unsigned')
+                    <li><a class="dropdown-item text-warning" href="#!" data-bs-toggle="modal" data-bs-target="#delete_students_modal">{{t('Unsigned Students')}}</a></li>
+            @endcan
+
+            @can('delete teachers')
+                    <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
+            @endcan
+{{--            <li><a class="dropdown-item" href="{{route('manager.import.teachers_import_view')}}">{{t('Import')}}</a></li>--}}
+        </ul>
+    </div>
+
 @endsection
-@section('content')
-    @push('breadcrumb')
-        <li class="breadcrumb-item">
-           المعلمون
-        </li>
-    @endpush
+
+@section('filter')
     <div class="row">
-        <div class="col-md-12">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">
-                            المعلمون
-                        </h3>
-                    </div>
-                    <div class="kt-portlet__head-toolbar">
-                        <div class="kt-portlet__head-wrapper">
-                            <div class="kt-portlet__head-actions">
-                                <div class="dropdown dropdown-inline">
-                                    <button type="button" class="btn btn-danger btn-icon-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="la la-se"></i> الإجراءات
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(114px, 38px, 0px);">
-                                        <ul class="kt-nav">
-                                            <li class="kt-nav__section kt-nav__section--first">
-                                                <span class="kt-nav__section-text">اختر إجراء</span>
-                                            </li>
-                                            <li class="kt-nav__item">
-                                                <a href="#" id="activate_teachers" class="kt-nav__link">
-                                                    <i class="kt-nav__link-icon la la-check"></i>
-                                                    <span class="kt-nav__link-text">تفعيل</span>
-                                                </a>
-                                            </li>
-                                            <li class="kt-nav__item">
-                                                <a href="#" id="disable_teachers" class="kt-nav__link">
-                                                    <i class="kt-nav__link-icon la la-times"></i>
-                                                    <span  class="kt-nav__link-text">تعطيل</span>
-                                                </a>
-                                            </li>
+        <div class="col-1 mb-2">
+            <label>{{t('ID')}}:</label>
+            <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
+        </div>
+        <div class="col-3 mb-2">
+            <label>{{t('Name')}}:</label>
+            <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
+        </div>
 
-                                            <li class="kt-nav__item">
-                                                <a href="#" id="approve_teachers" class="kt-nav__link">
-                                                    <i class="kt-nav__link-icon la la-check"></i>
-                                                    <span  class="kt-nav__link-text">قبول</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+        <div class="col-3 mb-2">
+            <label>{{t('Email')}}:</label>
+            <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
+        </div>
 
-                                <a href="{{ route('manager.teacher.create') }}" class="btn btn-danger btn-elevate btn-icon-sm">
-                                    <i class="la la-plus"></i>
-                                    إضافة معلم
-                                </a>
-                            </div>
-                        </div>
+        <div class="col-2 mb-2">
+            <label>{{t('Mobile')}}:</label>
+            <input type="text" name="mobile" class="form-control" placeholder="{{t('Mobile')}}">
+        </div>
+
+
+        <div class="col-lg-3 mb-2">
+            <label>{{t('School')}} :</label>
+            <select name="school_id" class="form-select" data-control="select2" data-placeholder="{{t('Select School')}}" data-allow-clear="true">
+                <option></option>
+                @foreach($schools as $school)
+                    <option value="{{$school->id}}">{{$school->name}}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-lg-2 mb-2">
+            <label>{{t('Students')}} :</label>
+            <select name="student_status" id="student_status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
+                <option></option>
+                <option value="1">{{t('Has students')}}</option>
+                <option value="2">{{t('Has no students')}}</option>
+                <option value="3">{{t('Has active students')}}</option>
+                <option value="4">{{t('Has inactive students')}}</option>
+            </select>
+        </div>
+        <div class="col-lg-2 mb-2">
+            <label>{{t('Approval')}} :</label>
+            <select name="approved" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
+                <option></option>
+                <option value="1">{{t('Approved')}}</option>
+                <option value="2">{{t('Under review')}}</option>
+            </select>
+        </div>
+        <div class="col-lg-2 mb-2">
+            <label>{{t('Activation')}} :</label>
+            <select name="active" id="status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
+                <option></option>
+                <option value="1">{{t('Active')}}</option>
+                <option value="2">{{t('Non-Active')}}</option>
+            </select>
+        </div>
+        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+            <label>{{ t('Activation Date') }}:</label>
+            <input id="active_to" class="form-control " placeholder="{{t('Select Activation Date')}}">
+            <input type="hidden" id="start_active_to" name="start_active_to" value="">
+            <input type="hidden" id="end_active_to" name="end_active_to" value="">
+        </div>
+        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+            <label>{{ t('Login Date') }}:</label>
+            <input id="login_at" class="form-control " placeholder="{{t('Select Login Date')}}">
+            <input type="hidden" id="start_login_at" name="start_login_at" value="">
+            <input type="hidden" id="end_login_at" name="end_login_at" value="">
+        </div>
+
+    </div>
+@endsection
+
+@push('breadcrumb')
+    <li class="breadcrumb-item">
+        {{$title}}
+    </li>
+@endpush
+
+
+@section('content')
+    <div class="row">
+        <table class="table table-row-bordered gy-5" id="datatable">
+            <thead>
+            <tr class="fw-semibold fs-6 text-gray-800">
+                <th class="text-start"></th>
+                <th class="text-start">{{ t('Teacher') }}</th>
+                <th class="text-start">{{ t('School') }}</th>
+                <th class="text-start">{{ t('Approval') }}</th>
+                <th class="text-start">{{ t('Activation') }}</th>
+                <th class="text-start">{{ t('Last login') }}</th>
+                <th class="text-start">{{ t('Active To') }}</th>
+                <th class="text-start">{{ t('Actions') }}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="modal fade" tabindex="-1" id="teacher_activation_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">{{t('Teacher Activation')}}</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
                     </div>
+                    <!--end::Close-->
                 </div>
-                <div class="kt-portlet__body">
-                    <form class="kt-form kt-form--fit kt-margin-b-20" id="filter" action="" >
-                        {{csrf_field()}}
-                        <div class="row form-group">
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>اسم المعلم:</label>
-                                <input type="text" name="name" id="name" class="form-control kt-input" placeholder="اسم المعلم">
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>المدرسة :</label>
-                                <select class="form-control level select2L" title="اختر مدرسة" name="school_id" id="school_id">
-                                    @foreach($schools as $school)
-                                        <option  value="{{$school->id}}">{{$school->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>الحالة :</label>
-                                <select class="form-control approved select2L" title="اختر حالة" name="approved" id="approved">
-                                        <option  value="1">فعال</option>
-                                        <option  value="2">غير فعال</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>الإجراءات:</label>
-                                <br />
-                                <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
-                                    <i class="la la-search"></i>
-                                    بحث
-                                </button>
-                                <button type="submit" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_excel">
-                                    <i class="la la-paper-plane"></i>
-                                    تصدير
-                                </button>
-                            </div>
 
-                        </div>
-                    </form>
-                    <table class="table text-center" id="users-table">
-                        <thead>
-                        <th><input type="checkbox" class='checkall' id='checkall'></th>
-                        <th>الاسم</th>
-                        <th>البريد الإلكتروني</th>
-                        <th>الموبايل</th>
-                        <th>المدرسة</th>
-                        <th>عدد الطلاب</th>
-                        <th>حالة القبول</th>
-                        <th>التفعيل</th>
-                        <th>آخر دخول</th>
-                        <th>الإجراءات</th>
-                        </thead>
-                    </table>
+                <div class="modal-body d-flex flex-column">
+                   <form id="activation_form">
+                       <div class="mb-2">
+                           <label>{{t('Approved Status')}} :</label>
+                           <select name="approved" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
+                               <option></option>
+                               <option value="1">{{t('Approved')}}</option>
+                               <option value="2">{{t('Under review')}}</option>
+                           </select>
+                       </div>
+                       <div class="mb-2">
+                           <label>{{t('Activation Status')}} :</label>
+                           <select name="active" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
+                               <option></option>
+                               <option value="1">{{t('Activate')}}</option>
+                               <option value="2">{{t('Deactivate')}}</option>
+                           </select>
+                       </div>
+
+                       <div class="mb-2">
+                           <label>{{t('Active To')}} :</label>
+                           <input class="form-control form-control-solid" id="active_to_date" name="active_to" value="" placeholder="{{t('Active to')}}"/>
+                       </div>
+                   </form>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{t('Close')}}</button>
+                    <button type="button" class="btn btn-primary" id="btn_teacher_activation">{{t('Save')}}</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="deleteModel"
-         aria-hidden="true" style="display: none;">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" tabindex="-1" id="delete_students_modal">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    </button>
+                    <h3 class="modal-title">{{t('Unsigned Students')}}</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
                 </div>
-                <form method="post" action="" id="delete_form">
-                    <input type="hidden" name="_method" value="delete">
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <h5>هل أنت متأكد من حذف السجل المحدد ؟</h5>
-                        <br/>
-                        <p>حذف السجل المحدد سيؤدي لحذف السجلات المرتبطة به .</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-warning">حذف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="approveModel" tabindex="-1" role="dialog" aria-labelledby="approveModel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">تأكيد القبول</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    </button>
+
+                <div class="modal-body d-flex flex-column">
+                   <form id="delete_students_form">
+                       <div class="mb-2">
+                           <label>{{t('Students Type')}} :</label>
+                           <select name="type" class="form-select" data-control="select2" data-placeholder="{{t('Select Type')}}" data-allow-clear="true">
+                               <option></option>
+                               <option value="1">{{t('All')}}</option>
+                               <option value="2">{{t('Active')}}</option>
+                               <option value="3">{{t('Inactive')}}</option>
+                           </select>
+                       </div>
+                   </form>
+
                 </div>
-                <form method="post" action="" id="approve_form">
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <h5>هل أنت متأكد من قبول المعلمون المحددين</h5>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-warning">قبول</button>
-                    </div>
-                </form>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{t('Close')}}</button>
+                    <button type="button" class="btn btn-primary" id="btn_delete_students">{{t('Save')}}</button>
+                </div>
             </div>
         </div>
     </div>
 @endsection
+
+
 @section('script')
-    <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JavaScript -->
+
     <script>
-        $(document).ready(function(){
-            $(document).on('click','.deleteRecord',(function(){
-                var id = $(this).data("id");
-                var url = '{{ route("manager.teacher.destroy", ":id") }}';
-                url = url.replace(':id', id );
-                $('#delete_form').attr('action',url);
-            }));
-            $(document).on('click','.approveRecord',(function(){
-                var id = $(this).data("id");
-                var url = '{{ route("manager.teacher.approveTeacher", ["teacher_id" => '']) }}'+ ':id';
-                url = url.replace(':id', id );
-                $('#approve_form').attr('action',url);
-                console.log(url);
-            }));
-            $(function() {
-                $('#users-table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ordering:false,
-                    searching: false,
-                    dom: `<'row'<'col-sm-12'tr>>
-      <'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
+        var DELETE_URL = "{{route('manager.teacher.destroy') }}";
+        var TABLE_URL = "{{route('manager.teacher.index') }}";
+        var TABLE_COLUMNS = [
+            {data: 'id', name: 'id'},
+            {data: 'teacher', name: 'teacher'},
+            {data: 'school', name: 'school'},
+            {data: 'approved', name: 'approved'},
+            {data: 'active', name: 'active'},
+            {data: 'last_login', name: 'last_login'},
+            {data: 'active_to', name: 'active_to'},
+            {data: 'actions', name: 'actions'}
+        ];
 
-                    @if(app()->getLocale() == 'ar')
-                    language: {
-                        url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Arabic.json"
-                    },
-                    @endif
-                    ajax: {
-                        url : '{{ route('manager.teacher.index') }}',
-                        data: function (d) {
-                            var frm_data = $('#filter').serializeArray();
-                            $.each(frm_data, function (key, val) {
-                                d[val.name] = val.value;
-                            });
-                        }
-                    },
-                    columns: [
-                        {data: 'check', name: 'check'},
-                        {data: 'name', name: 'name'},
-                        {data: 'email', name: 'email'},
-                        {data: 'mobile', name: 'mobile'},
-                        {data: 'school', name: 'school'},
-                        {data: 'users_count', name: 'users_count'},
-                        {data: 'status', name: 'status'},
-                        {data: 'active', name: 'active'},
-                        {data: 'last_login', name: 'last_login'},
-                        {data: 'actions', name: 'actions'}
-                    ],
-                });
-            });
-            $('#kt_search').click(function(e){
-                e.preventDefault();
-                $('#users-table').DataTable().draw(true);
-            });
+        $('#active_to_date').flatpickr();
+        initializeDateRangePicker('active_to');
+        initializeDateRangePicker('login_at');
 
-            // Check all
-            $('#checkall').click(function(){
-                if($(this).is(':checked')){
-                    $('.teacher_id').prop('checked', true);
-                }else{
-                    $('.teacher_id').prop('checked', false);
+        $(document).on('click', '#btn_teacher_activation',function(){
+            $('#teacher_activation_modal').modal('hide')
+            showLoadingModal()
+            let data = getFilterData();
+            data['activation_data'] = getFormDataAsObject('activation_form')
+            data['_token'] = '{{csrf_token()}}'
+            $('#activation_form').find('input').val('')
+            $('#activation_form').find('select').val('').trigger('change')
+            $.ajax({
+                url: "{{route('manager.teacher.activation')}}",
+                type: 'post',
+                data: data,
+                success: function(response){
+                    hideLoadingModal()
+                    table.DataTable().draw(true);
+                    toastr.success(response.message);
+                },
+                error(error){
+                    hideLoadingModal()
+                    toastr.error(error.responseJSON.message);
                 }
             });
-
-            // Delete record
-            $(document).on('click', '#approve_teachers',function(){
-                let csrf = $('meta[name="csrf-token"]').attr('content');
-                var teacher_id = [];
-                // Read all checked checkboxes
-                $("input:checkbox[class=teacher_id]:checked").each(function () {
-                    teacher_id.push($(this).val());
-                });
-
-                // Check checkbox checked or not
-                if(teacher_id.length > 0){
-
-                    // Confirm alert
-                    var confirmdelete = confirm("هل أنت متأكد من قبول السجلات المحددة");
-                    if (confirmdelete == true) {
-                        $.ajax({
-                            url: "{{route('manager.teacher.approveTeacher')}}",
-                            type: 'post',
-                            data: {
-                                '_token': csrf,
-                                teacher_id: teacher_id
-                            },
-                            success: function(response){
-                                $('#users-table').DataTable().draw(true);
-                                toastr.success(response.message);
-                                $('#checkall').prop('checked', false);
-                            }
-                        });
-                    }
-                }
-            });
-            $(document).on('click', '#activate_teachers',function(){
-                let csrf = $('meta[name="csrf-token"]').attr('content');
-                var teacher_id = [];
-                // Read all checked checkboxes
-                $("input:checkbox[class=teacher_id]:checked").each(function () {
-                    teacher_id.push($(this).val());
-                });
-
-                // Check checkbox checked or not
-                if(teacher_id.length > 0){
-
-                    // Confirm alert
-                    var confirmdelete = confirm("هل أنت متأكد من تفعيل السجلات المحددة");
-                    if (confirmdelete == true) {
-                        $.ajax({
-                            url: "{{route('manager.teacher.activateTeacher')}}",
-                            type: 'post',
-                            data: {
-                                '_token': csrf,
-                                teacher_id: teacher_id,
-                                active: "1",
-                            },
-                            success: function(response){
-                                $('#users-table').DataTable().draw(true);
-                                toastr.success(response.message);
-                                $('#checkall').prop('checked', false);
-                            }
-                        });
-                    }
-                }
-            });
-            $(document).on('click', '#disable_teachers',function(){
-                let csrf = $('meta[name="csrf-token"]').attr('content');
-                var teacher_id = [];
-                // Read all checked checkboxes
-                $("input:checkbox[class=teacher_id]:checked").each(function () {
-                    teacher_id.push($(this).val());
-                });
-
-                // Check checkbox checked or not
-                if(teacher_id.length > 0){
-
-                    // Confirm alert
-                    var confirmdelete = confirm("هل أنت متأكد من تعطيل السجلات المحددة");
-                    if (confirmdelete == true) {
-                        $.ajax({
-                            url: "{{route('manager.teacher.activateTeacher')}}",
-                            type: 'post',
-                            data: {
-                                '_token': csrf,
-                                teacher_id: teacher_id,
-                                active: "0",
-                            },
-                            success: function(response){
-                                $('#users-table').DataTable().draw(true);
-                                toastr.success(response.message);
-                                $('#checkall').prop('checked', false);
-                            }
-                        });
-                    }
-                }
-            });
-
-
-            //Export Excel
-            $('#kt_excel').click(function(e){
-                e.preventDefault();
-                $("#filter").attr("method",'post');
-                $("#filter").attr("action",'{{route('manager.teacher.export_teachers_excel')}}');
-                $('#filter').submit();
-
-                $("#filter").attr("method",'');
-                $("#filter").attr("action",'');
-            });
-
         });
+        $(document).on('click', '#btn_delete_students',function(){
+            $('#delete_students_modal').modal('hide')
+            showLoadingModal()
+            let data = getFilterData();
+            data['delete_students'] = getFormDataAsObject('delete_students_form')
+            data['_token'] = '{{csrf_token()}}'
+            $('#delete_students_form').find('select').val('').trigger('change')
+            $.ajax({
+                url: "{{route('manager.teacher.user-unsigned')}}",
+                type: 'post',
+                data: data,
+                success: function(response){
+                    hideLoadingModal()
+                    table.DataTable().draw(true);
+                    toastr.success(response.message);
+                },
+                error(error){
+                    hideLoadingModal()
+                    toastr.error(error.responseJSON.message);
+                }
+            });
+        });
+
     </script>
+    <script src="{{asset('assets_v1/js/datatable.js')}}?v={{time()}}"></script>
+
 @endsection
+
+

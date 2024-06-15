@@ -1,241 +1,203 @@
-{{--
-Dev Omar Shaheen
-Devomar095@gmail.com
-WhatsApp +972592554320
---}}
 @extends('manager.layout.container')
-@section('style')
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+@section('title',$title)
+
+
+@section('actions')
+
+    <div class="dropdown with-filter">
+
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{t('Actions')}}
+        </button>
+        <ul class="dropdown-menu">
+            @can('delete users')
+                    <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
+            @endcan
+
+        </ul>
+    </div>
+
 @endsection
-@section('content')
-    @push('breadcrumb')
-        <li class="breadcrumb-item">
-            {{ t('Students') }}
-        </li>
-    @endpush
+
+@section('filter')
     <div class="row">
-        <div class="col-md-12">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">
-                            {{ t('Students') }}
-                        </h3>
-                    </div>
-                    <div class="kt-portlet__head-toolbar">
-                        <div class="kt-portlet__head-wrapper">
-                            <div class="kt-portlet__head-actions">
-                                <a href="{{ route('manager.user.create') }}"
-                                   class="btn btn-danger btn-elevate btn-icon-sm">
-                                    <i class="la la-plus"></i>
-                                    {{ t('Add User') }}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="kt-portlet__body">
-                    <form class="kt-form kt-form--fit kt-margin-b-20" id="filter" action="">
-                        {{csrf_field()}}
-                        <div class="row form-group">
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Student name') }}:</label>
-                                <input type="text" name="name" id="name" class="form-control kt-input"
-                                       placeholder="{{t('Student name')}}">
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Grade') }}:</label>
-                                <select class="form-control grade" name="grade" id="grade">
-                                    <option selected value="">{{t('Select grade')}}</option>
-                                    <option value="15" >{{t('KG')}} 2</option>
+        <div class="col-1  mb-2">
+            <label>{{t('ID')}}:</label>
+            <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
+        </div>
+        <div class="col-lg-3  mb-2">
+            <label>{{t('Student Name')}}:</label>
+            <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Student Name')}}">
+        </div>
+        <div class="col-lg-3  mb-2">
+            <label>{{t('Email')}}:</label>
+            <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
+        </div>
+        <div class="col-lg-2 mb-2">
+            <label>{{t('Learning Years')}} :</label>
+            <select name="year_learning" class="form-select" data-control="select2"
+                    data-placeholder="{{t('Select Year')}}" data-allow-clear="true">
+                <option></option>
+                @foreach(range(0,12) as $value)
+                    <option value="{{ $value }}">{{$value == 0 ? '-':$value }}</option>
+                @endforeach
+            </select>
+        </div>
 
-                                    <option value="1">{{t('Grade')}} 1</option>
-                                    <option value="2">{{t('Grade')}} 2</option>
-                                    <option value="3">{{t('Grade')}} 3</option>
-                                    <option value="4">{{t('Grade')}} 4</option>
-                                    <option value="5">{{t('Grade')}} 5</option>
-                                    <option value="6">{{t('Grade')}} 6</option>
-                                    <option value="7">{{t('Grade')}} 7</option>
-                                    <option value="8">{{t('Grade')}} 8</option>
-                                    <option value="9">{{t('Grade')}} 9</option>
-                                    <option value="10">{{t('Grade')}} 10</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('School') }}:</label>
-                                <select class="form-control level" name="school_id" id="school_id">
-                                    <option selected value="">{{t('Select school')}}</option>
-                                    @foreach($schools as $school)
-                                        <option value="{{$school->id}}">{{$school->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Package') }}:</label>
-                                <select class="form-control package" name="package_id" id="package_id">
-                                    <option selected value="">{{t('Select package')}}</option>
-                                    @foreach($packages as $package)
-                                        <option value="{{$package->id}}">{{$package->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Section') }}:</label>
-                                <select class="form-control" name="section" id="section">
-                                    <option selected value="">{{t('Select section')}}</option>
-                                    @foreach(schoolSections() as $section)
-                                        <option value="{{$section}}">{{$section}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Status') }}:</label>
-                                <select class="form-control status" name="status" id="status">
-                                    <option selected value="">{{t('Select status')}}</option>
-                                    <option value="active">{{t('Active')}}</option>
-                                    <option value="expire">{{t('Expire')}}</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-6 kt-margin-b-10-tablet-and-mobile">
-                                <label>{{ t('Action') }}:</label>
-                                <br/>
-                                <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
-                                    <i class="la la-search"></i>
-                                    {{t('Search')}}
-                                </button>
-                                <button type="submit" class="btn btn-info btn-elevate btn-icon-sm" id="kt_excel">
-                                    <i class="la la-paper-plane"></i>
-                                    {{t('Excel')}}
-                                </button>
-                                <button type="submit" class="btn btn-info btn-elevate btn-icon-sm" id="kt_cards">
-                                    <i class="la la-list"></i>
-                                    {{t('Cards')}}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    <table class="table text-center" id="users-table">
-                        <thead>
-                        <th>{{ t('Name') }}</th>
-                        <th>{{ t('Email') }}</th>
-                        <th>{{ t('School') }}</th>
-                        <th>{{ t('Package') }}</th>
-                        <th>{{ t('Grade') }}</th>
-                        <th>{{ t('Section') }}</th>
-                        <th>{{ t('Active To') }}</th>
-                        <th>{{ t('Last login') }}</th>
-                        <th>{{ t('Actions') }}</th>
-                        </thead>
-                    </table>
-                </div>
-            </div>
+        <div class="col-lg-3 mb-2">
+            <label>{{t('Grade')}} :</label>
+            <select name="grade_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}"
+                    data-allow-clear="true">
+                <option></option>
+                @foreach($grades as $grade)
+                    <option value="{{$grade->id}}">{{$grade->name}}</option>
+                @endforeach
+            </select>
         </div>
-    </div>
-    <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="deleteModel"
-         aria-hidden="true" style="display: none;">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ t('Confirm Delete') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    </button>
-                </div>
-                <form method="post" action="" id="delete_form">
-                    <input type="hidden" name="_method" value="delete">
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <h5>{{ t('Are You Sure To Delete The Selected Record ?') }}</h5>
-                        <br/>
-                        <p>{{ t('Deleting The Record Will Delete All Records Related To It') }}</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ t('Cancel') }}</button>
-                        <button type="submit" class="btn btn-warning">{{ t('Delete') }}</button>
-                    </div>
-                </form>
-            </div>
+
+        <div class="col-3 mb-2">
+            <label class="">{{t('School')}}:</label>
+            <select class="form-select" name="school_id" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select School')}}">
+                <option></option>
+                @foreach($schools as $school)
+                    <option value="{{$school->id}}">{{$school->name}}</option>
+                @endforeach
+            </select>
         </div>
+
+        <div class="col-3 mb-2">
+            <label class="">{{t('Teacher')}}:</label>
+            <select class="form-select" name="teacher_id" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Teacher')}}">
+                <option></option>
+            </select>
+        </div>
+        <div class="col-2 mb-2">
+            <label class="">{{t('Year')}}:</label>
+            <select class="form-select" name="year_id" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Year')}}">
+                <option></option>
+                @foreach($years as $year)
+                    <option value="{{$year->id}}">{{$year->name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-2 mb-2">
+            <label class="">{{t('Package')}}:</label>
+            <select class="form-select" name="package_id" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Package')}}">
+                <option></option>
+                @foreach($packages as $package)
+                    <option value="{{$package->id}}">{{$package->name}}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-2 mb-2">
+            <label class="">{{t('Section')}}:</label>
+            <select class="form-select" name="section" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Section')}}">
+                <option></option>
+                @foreach(schoolSections() as $section)
+                    <option value="{{$section}}">{{$section}}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-2 mb-2">
+            <label class="">{{t('Gender')}}:</label>
+            <select class="form-select" name="gender" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Gender')}}">
+                <option></option>
+                <option value="Boy">{{t('Boy')}}</option>
+                <option value="Girl">{{'Girl'}}</option>
+            </select>
+        </div>
+
+        <div class="col-2 mb-2">
+            <label class="">{{t('Activation')}}:</label>
+            <select class="form-select" name="status" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Status')}}">
+                <option></option>
+                <option value="active">{{t('Active')}}</option>
+                <option value="expire">{{'Expired'}}</option>
+            </select>
+        </div>
+
+        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+            <label>{{ t('Register Date') }}:</label>
+            <input id="register_date" class="form-control " placeholder="{{t('Select Register Date')}}">
+            <input type="hidden" id="start_register_date" name="start_register_date" value="">
+            <input type="hidden" id="end_register_date" name="end_register_date" value="">
+        </div>
+        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+            <label>{{ t('Login Date') }}:</label>
+            <input id="login_at" class="form-control " placeholder="{{t('Select Login Date')}}">
+            <input type="hidden" id="start_login_at" name="start_login_at" value="">
+            <input type="hidden" id="end_login_at" name="end_login_at" value="">
+        </div>
+        <div class="col-2 mb-2">
+            <label class="mb-1">{{t('Students Status')}}:</label>
+            <select class="form-control form-select reset-no" data-hide-search="true" data-control="select2" data-placeholder="{{t('Select Student Status')}}" name="deleted_at" id="students_status">
+                <option value="1" selected>{{t('Not Deleted Students')}}</option>
+                @can('show deleted users')
+                    <option value="2">{{t('Deleted Students')}}</option>
+                @endcan
+            </select>
+        </div>
+
+
     </div>
 @endsection
+
+@push('breadcrumb')
+    <li class="breadcrumb-item">
+        {{$title}}
+    </li>
+@endpush
+
+
+@section('content')
+    <div class="row">
+        <table class="table table-row-bordered gy-5" id="datatable">
+            <thead>
+            <tr class="fw-semibold fs-6 text-gray-800">
+                <th class="text-start"></th>
+                <th class="text-start">{{ t('Student') }}</th>
+                <th class="text-start">{{ t('School') }}</th>
+                <th class="text-start">{{ t('Dates') }}</th>
+                <th class="text-start">{{ t('Actions') }}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+@endsection
+
+
 @section('script')
-    <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JavaScript -->
     <script>
-        $(document).ready(function () {
-            $(document).on('click', '.deleteRecord', (function () {
-                var id = $(this).data("id");
-                var url = '{{ route("manager.user.delete_duplicate_user", ":id") }}';
-                url = url.replace(':id', id);
-                $('#delete_form').attr('action', url);
-            }));
-            $('#delete_form').submit(function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: $('#delete_form').attr('action'),
-                    type: "post",
-                    data: $("#delete_form").serialize()
-                })
-                    .done(function (info) {
-                        $('#users-table').DataTable().draw(true);
-                        $("#deleteModel").modal('toggle');
-                        toastr.success(info.message);
+        var YES = '{{t('Yes')}}';
+        var NO = '{{t('No')}}';
+        var CSRF = '{{csrf_token()}}';
+        var DELETE_URL = "{{ route('manager.user.delete_duplicate_user') }}";
+        var TABLE_URL = "{{ route('manager.user.duplicate_user') }}";
+        var TABLE_COLUMNS = [
+            {data: 'id', name: 'id'},
+            {data: 'student', name: 'student'},
+            {data: 'school', name: 'school'},
+            {data: 'dates', name: 'dates'},
+            {data: 'actions', name: 'actions'},
+        ];
 
-                    });
-            });
-            $(function () {
-                $('#users-table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ordering: false,
-                    searching: false,
-                    dom: `<'row'<'col-sm-12'tr>>
-      <'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
-
-                    @if(app()->getLocale() == 'ar')
-                    language: {
-                        url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Arabic.json"
-                    },
-                    @endif
-                    ajax: {
-                        url: '{{ route('manager.user.duplicate_user') }}',
-                        data: function (d) {
-                            d.name = $("#name").val();
-                            d.grade = $("#grade").val();
-                            d.school_id = $("#school_id").val();
-                            d.package_id = $("#package_id").val();
-                            d.status = $("#status").val();
-                            d.section = $("#section").val();
-                        }
-                    },
-                    columns: [
-                        {data: 'name', name: 'name'},
-                        {data: 'email', name: 'email'},
-                        {data: 'school', name: 'school'},
-                        {data: 'package', name: 'package'},
-                        {data: 'grade', name: 'grade'},
-                        {data: 'section', name: 'section'},
-                        {data: 'active_to', name: 'active_to'},
-                        {data: 'last_login', name: 'last_login'},
-                        {data: 'actions', name: 'actions'}
-                    ],
-                });
-            });
-            $('#kt_search').click(function (e) {
-                e.preventDefault();
-                $('#users-table').DataTable().draw(true);
-            });
-            //jQuery detect user pressing enter
-            $(document).on('keypress', function (e) {
-                if (e.which == 13) {
-                    e.preventDefault();
-                    $('#users-table').DataTable().draw(true);
-                }
-            });
-
-        });
     </script>
+
+    <script src="{{asset('assets_v1/js/datatable.js')}}?v={{time()}}"></script>
+    <script src="{{asset('assets_v1/js/manager/users.js')}}"></script>
+
+
 @endsection
+
+

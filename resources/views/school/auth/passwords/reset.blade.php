@@ -1,194 +1,112 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+@extends('general.auth')
 
-<!-- begin::Head -->
-<head>
-    <!--end::Base Path -->
-    <meta charset="utf-8"/>
-    <title>استعادة كلمة المرور</title>
-    <meta name="description" content="Dashboard">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+@section('title',t('Reset Password'))
 
-    <!--begin::Fonts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-    <script>
-        WebFont.load({
-            google: {
-                "families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]
-            },
-            active: function () {
-                sessionStorage.fonts = true;
-            }
-        });
-    </script>
+@section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
 
-    <!--end::Fonts -->
-
-    <!--begin::Page Custom Styles(used by this page) -->
-
-    <link href="{{ asset("assets/css/demo6/pages/general/login/login-6.rtl.css") }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset("assets/css/demo6/style.bundle.rtl.css") }}" rel="stylesheet" type="text/css"/>
-    <!--end::Global Theme Styles -->
-
-    <!--begin::Layout Skins(used by all pages) -->
-    <!--end::Layout Skins -->
-</head>
-
-<!-- end::Head -->
-
-<!-- begin::Body -->
-<body
-    class="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--fixed kt-subheader--enabled kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading">
-
-<!-- begin:: Page -->
-<div class="kt-grid kt-grid--ver kt-grid--root">
-    <div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v6 kt-login--signin" id="kt_login">
-        <div
-            class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile">
-            <div class="kt-grid__item  kt-grid__item--order-tablet-and-mobile-2  kt-grid kt-grid--hor kt-login__aside">
-                <div class="kt-login__wrapper">
-                    <div class="kt-login__container">
-                        <div class="kt-login__body">
-                            <div class="kt-login__logo">
-                                <a href="{{ url('/') }}">
-                                    <img src="{{asset('logo.png')}}" width="" alt="logo" class="img-fluid"/>
-                                </a>
-                            </div>
-                            <div class="kt-login__signin">
-                                <div class="kt-login__form">
-                                    @if (session('status'))
-                                        <div class="alert alert-success">
-                                            {{ session('status') }}
-                                        </div>
-                                    @endif
-                                    <form class="kt-form" action="{{ url('/school/password/reset') }}" method="post">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="token" value="{{ $token }}">
-                                        <div class="form-group">
-                                            <input class="form-control {{ $errors->has('email') ? ' has-error' : '' }}"
-                                                   type="text" placeholder="البريد الإلكتروني" name="email"
-                                                   value="{{ old('email') }}" autofocus>
-                                            @if ($errors->has('email'))
-                                                <span class="help-block">
-                                                        <strong>{{ $errors->first('email') }}</strong>
-                                                    </span>
-                                            @endif
-                                        </div>
-                                        <div class="form-group">
-                                            <input
-                                                class="form-control {{ $errors->has('password') ? ' has-error' : '' }}"
-                                                type="password" placeholder="كلمة المرور" name="password"
-                                                autocomplete="off">
-                                            @if ($errors->has('password'))
-                                                <span class="help-block">
-                                                        <strong>{{ $errors->first('password') }}</strong>
-                                                    </span>
-                                            @endif
-                                        </div>
-                                        <div class="form-group">
-                                            <input
-                                                class="form-control {{ $errors->has('password_confirmation') ? ' has-error' : '' }}"
-                                                type="password" placeholder="تأكيد كلمة المرور"
-                                                name="password_confirmation" autocomplete="off">
-                                            @if ($errors->has('password_confirmation'))
-                                                <span class="help-block">
-                                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                                    </span>
-                                            @endif
-                                        </div>
-
-
-                                        <div class="kt-login__actions">
-
-                                            <input type="submit" id="" class="btn btn-danger btn-pill btn-elevate"
-                                                   value="استعادة كلمة المرور">
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="kt-login__account">
-                                    <span class="kt-login__account-msg">
-                                        {{ date('Y') }}&nbsp;&copy;&nbsp;<a href="https://www.abt-assessments.com/" target="_blank" class="kt-link kt-font-danger">ABT assessment</a>
-                                    </span>&nbsp;&nbsp;
-
-                    </div>
-                </div>
+    <main class="login-page login-student">
+        <div class="login-form">
+            <div class="logo">
+                <img src="{{!settingCache('logo')? asset('logo.svg'):asset(settingCache('logo'))}}" alt="">
             </div>
-            <div class="kt-grid__item kt-grid__item--fluid kt-grid__item--center kt-grid kt-grid--ver kt-login__content"
-                 style="background: linear-gradient(to right,#39B448,#31ab3f);">
-                <div class="kt-login__section">
-                    <div class="kt-login__block text-center">
-
-                        <div class=" mb-5">
-                            {{--                                <img src="{{ asset('assets/media/logos/white_logo.svg') }}" width="40%" alt="logo" class="img-fluid"/>--}}
-                        </div>
-
-                        <h3 class="kt-login__title" style="font-size: 2.2rem">إدارة المدرسة</h3>
-                        <h4 class="kt-login__desc " style="font-size: 28px">
-                            استعادة كلمة المرور .
-                        </h4>
-                    </div>
+            <div class="header">
+                <div class="pic">
+                    <img src="{{asset('assets_v1/web_assets/img/reset-password.svg')}}" alt="">
                 </div>
+                <h1 class="title">{{t('Reset Password')}}</h1>
+                <h2 class="info">{{t('Please enter our registered email')}}</h2>
+            </div>
+            <div class="form">
+                <form method="POST" action="{{ url('/school/password/reset') }}" class="needs-validation " novalidate>
+                  @csrf
+                    <input type="hidden" name="token" value="{{ $token }}">
+
+
+                    <div class="form-group">
+                        <label for="email" class="form-label text-start">{{t('Email')}}</label>
+                        <div class="form-icon">
+                                <span class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 27 24">
+                                        <path id="Icon" d="M7.834,0A7.827,7.827,0,0,0,0,7.794v8.412A7.814,7.814,0,0,0,7.834,24H19.166A7.838,7.838,0,0,0,27,16.206V14.258a.953.953,0,0,0-.955-.95l-.013.023a.954.954,0,0,0-.955.95v1.925a5.957,5.957,0,0,1-5.911,5.882H7.834a5.957,5.957,0,0,1-5.911-5.882V7.794A5.956,5.956,0,0,1,7.834,1.913H19.166a5.956,5.956,0,0,1,5.911,5.881.968.968,0,0,0,1.922,0A7.839,7.839,0,0,0,19.166,0Zm3.033,10.694L5.3,15.125a.959.959,0,0,0-.143,1.342A.947.947,0,0,0,6.5,16.61l5.612-4.42a1.943,1.943,0,0,1,2.389,0l5.553,4.42h.012a.97.97,0,0,0,1.349-.143.946.946,0,0,0-.155-1.342L15.7,10.694a3.871,3.871,0,0,0-4.837,0Z" transform="translate(27 24) rotate(180)" fill="#172239"/>
+                                    </svg>
+                                </span>
+                            <input  value="{{ old('email') }}"  type="email" name="email" id="email" class="form-control" placeholder="ex: example@domain.com" required>
+                        </div>
+                        @if ($errors->has('email'))
+                            <span class="text-danger mt-2"><strong>{{ $errors->first('email') }}</strong></span>
+                        @endif
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="password" class="form-label text-start">{{t('Password')}}</label>
+                        <div class="form-icon">
+                                  <span class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="27.933" viewBox="0 0 24 27.933">
+                                        <g id="Icon" transform="translate(0 0.933)">
+                                          <path id="Path" d="M1.175,1.168A4,4,0,1,0,4,0,4,4,0,0,0,1.175,1.168Z" transform="translate(16 19) rotate(180)" fill="#172239"/>
+                                          <path id="Path-2" data-name="Path" d="M8,4V2.667A2.667,2.667,0,0,0,5.333,0H2.667A2.667,2.667,0,0,0,0,2.667V4" transform="translate(8)" fill="none" stroke="#172239" stroke-miterlimit="10" stroke-width="1.867"/>
+                                          <path id="Path-3" data-name="Path" d="M.849,10.693A.9.9,0,0,1,0,9.743H0V7.794C.012,3.495,3.122.013,6.963,0H17.037C20.882,0,24,3.49,24,7.794v8.412c-.006,4.3-3.12,7.788-6.963,7.794H6.963C3.122,23.987.012,20.505,0,16.206a.9.9,0,0,1,.854-.856.9.9,0,0,1,.854.856c.029,3.235,2.364,5.849,5.254,5.881H17.037c2.89-.032,5.226-2.647,5.254-5.881V7.794c-.029-3.235-2.364-5.849-5.254-5.881H6.963c-2.89.032-5.226,2.647-5.254,5.881V9.719a1.011,1.011,0,0,1-.249.672.806.806,0,0,1-.6.278h0Z" transform="translate(0 3)" fill="#172239"/>
+                                        </g>
+                                    </svg>
+                                </span>
+                            <input value="{{ old('password') }}" type="password" name="password" id="password" class="form-control" placeholder="{{t('Password')}}" required>
+                        </div>
+                        @if ($errors->has('password'))
+                            <span class="text-danger mt-2"><strong>{{ $errors->first('password') }}</strong></span>
+                        @endif
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="password" class="form-label text-start">{{t('Password Confirmation')}}</label>
+                        <div class="form-icon">
+                                  <span class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="27.933" viewBox="0 0 24 27.933">
+                                        <g id="Icon" transform="translate(0 0.933)">
+                                          <path id="Path" d="M1.175,1.168A4,4,0,1,0,4,0,4,4,0,0,0,1.175,1.168Z" transform="translate(16 19) rotate(180)" fill="#172239"/>
+                                          <path id="Path-2" data-name="Path" d="M8,4V2.667A2.667,2.667,0,0,0,5.333,0H2.667A2.667,2.667,0,0,0,0,2.667V4" transform="translate(8)" fill="none" stroke="#172239" stroke-miterlimit="10" stroke-width="1.867"/>
+                                          <path id="Path-3" data-name="Path" d="M.849,10.693A.9.9,0,0,1,0,9.743H0V7.794C.012,3.495,3.122.013,6.963,0H17.037C20.882,0,24,3.49,24,7.794v8.412c-.006,4.3-3.12,7.788-6.963,7.794H6.963C3.122,23.987.012,20.505,0,16.206a.9.9,0,0,1,.854-.856.9.9,0,0,1,.854.856c.029,3.235,2.364,5.849,5.254,5.881H17.037c2.89-.032,5.226-2.647,5.254-5.881V7.794c-.029-3.235-2.364-5.849-5.254-5.881H6.963c-2.89.032-5.226,2.647-5.254,5.881V9.719a1.011,1.011,0,0,1-.249.672.806.806,0,0,1-.6.278h0Z" transform="translate(0 3)" fill="#172239"/>
+                                        </g>
+                                    </svg>
+                                </span>
+                            <input value="{{ old('password_confirmation') }}" type="password" name="password" id="password" class="form-control" placeholder="{{t('Password Confirmation')}}" required>
+                        </div>
+                        @if ($errors->has('password_confirmation'))
+                            <span class="text-danger mt-2"><strong>{{ $errors->first('password_confirmation') }}</strong></span>
+                        @endif
+                    </div>
+
+
+                    <div class="form-group ">
+                        <button type="submit" class="btn btn-theme btn-submit w-100">
+                            <span class="spinner-border spinner-border-sm d-none"></span>
+                            <span class="text"> {{t('Reset Password')}}</span>
+                        </button>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            @if(app()->getLocale() == "ar")
+                                <a href="{{ route('switch-language', 'en') }}" class="">
+                                    <img style="border-radius: 50%;" src="{{asset('assets_v1/media/flags/united-states.svg')}}" width="25px" alt="arabic">
+                                    <span class="ms-2 text-dark">English</span>
+                                </a>
+                            @else
+                                <a href="{{ route('switch-language', 'ar') }}" class="">
+                                    <img style="border-radius: 50%;" src="{{asset('assets_v1/media/flags/united-arab-emirates.svg')}}" width="25px" alt="arabic">
+                                    <span class="me-2 text-dark">العربية</span>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<!-- end:: Page -->
-
-<!-- begin::Global Config(global config for global JS sciprts) -->
-<script>
-    var KTAppOptions = {
-        "colors": {
-            "state": {
-                "brand": "#5d78ff",
-                "dark": "#282a3c",
-                "light": "#ffffff",
-                "primary": "#5867dd",
-                "success": "#34bfa3",
-                "info": "#36a3f7",
-                "warning": "#ffb822",
-                "danger": "#fd3995"
-            },
-            "base": {
-                "label": ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"],
-                "shape": ["#f0f3ff", "#d9dffa", "#afb4d4", "#000000"]
-            }
-        }
-    };
-</script>
-
-<!-- end::Global Config -->
-
-<!--begin:: Global Mandatory Vendors -->
-<script src="{{ asset('assets/vendors/general/jquery/dist/jquery.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/vendors/general/popper.js/dist/umd/popper.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/vendors/general/bootstrap/dist/js/bootstrap.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/vendors/general/js-cookie/src/js.cookie.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/vendors/general/moment/min/moment.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/vendors/general/tooltip.js/dist/umd/tooltip.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/vendors/general/perfect-scrollbar/dist/perfect-scrollbar.js') }}"
-        type="text/javascript"></script>
-<script src="{{ asset('assets/vendors/general/sticky-js/dist/sticky.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('assets/vendors/general/wnumb/wNumb.js') }}" type="text/javascript"></script>
-
-<!--end:: Global Mandatory Vendors -->
-
-<!--begin:: Global Optional Vendors -->
-
-<!--end:: Global Optional Vendors -->
-
-<!--begin::Global Theme Bundle(used by all pages) -->
-
-<!--end::Global Theme Bundle -->
-
-<!--begin::Page Scripts(used by this page) -->
-<script src="{{ asset('assets/js/demo1/pages/login/login-general.js') }}" type="text/javascript"></script>
-
-<!--end::Page Scripts -->
-</body>
-
-<!-- end::Body -->
-</html>
+@endsection

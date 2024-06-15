@@ -1,4 +1,12 @@
+{{--
+Dev Omar Shaheen
+Devomar095@gmail.com
+WhatsApp +972592554320
+ --}}
 @extends('manager.layout.container')
+@section('title')
+    {{$title}}
+@endsection
 @section('style')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -22,133 +30,175 @@
     </style>
 
 @endsection
+@push('breadcrumb')
+    <li class="breadcrumb-item b text-muted">
+        {{$title}}
+    </li>
+@endpush
 @section('content')
-    @push('breadcrumb')
-        <li class="breadcrumb-item">
-            <a href="{{ route('manager.story.index') }}">القصص</a>
-        </li>
-        <li class="breadcrumb-item">
-            {{ $title }}
-        </li>
-    @endpush
-    <div class="row">
-        <div class="col-xl-10 offset-1">
-            <div class="kt-portlet">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">{{ $title }}</h3>
+    <form action="{{ isset($story) ? route('manager.story.update', $story->id): route('manager.story.store') }}"
+          method="post" class="form" id="form-data" enctype="multipart/form-data">
+        @csrf
+        @if(isset($story))
+            @method('PATCH')
+        @endif
+        <div class="row">
+            <!--begin::Image input-->
+            <div class="col-12 d-flex flex-column align-items-center mb-5">
+                <div>{{t('Image')}}</div>
+                <div class="image-input image-input-outline" data-kt-image-input="true"
+                     style="background-image: url(/manager_assets/media/svg/avatars/blank.svg)">
+
+                    @if(isset($story) && $story->image )
+                        <div class="image-input-wrapper w-125px h-125px"
+                             style="background-image: url({{asset($story->image)}})"></div>
+
+                    @else
+                        <div class="image-input-wrapper w-125px h-125px"
+                             style="background-image: url(/assets_v1/media/svg/avatars/blank.svg)"></div>
+                    @endif
+
+                    <!--begin::Edit button-->
+                    <label
+                            class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                            data-kt-image-input-action="change"
+                            data-bs-toggle="tooltip"
+                            data-bs-dismiss="click"
+                            title="Change avatar">
+                        <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
+
+                        <!--begin::Inputs-->
+                        <input type="file" name="image" accept=".png, .jpg, .jpeg"/>
+                        <input type="hidden" name="avatar_remove"/>
+                        <!--end::Inputs-->
+                    </label>
+                    <!--end::Edit button-->
+
+                    <!--begin::Cancel button-->
+                    <span
+                            class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                            data-kt-image-input-action="cancel"
+                            data-bs-toggle="tooltip"
+                            data-bs-dismiss="click"
+                            title="Cancel avatar">
+                <i class="ki-outline ki-cross fs-3"></i>
+            </span>
+                    <!--end::Cancel button-->
+
+                    <!--begin::Remove button-->
+                    <span
+                            class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                            data-kt-image-input-action="remove"
+                            data-bs-toggle="tooltip"
+                            data-bs-dismiss="click"
+                            title="Remove avatar">
+                <i class="ki-outline ki-cross fs-3"></i>
+            </span>
+                    <!--end::Remove button-->
+                </div>
+            </div>
+            <!--end::Image input-->
+
+            <div class="row">
+                    <div class="col-6 mb-2">
+                        <div class="form-group">
+                            <label for="name" class="form-label">{{t('Name')}}</label>
+                            <input type="text" id="" name="name" class="form-control"
+                                   placeholder="{{t('Name')}}"
+                                   value="{{ isset($story) ? $story->name : old("name") }}"
+                                   required>
+                        </div>
+                    </div>
+
+
+                <div class="col-6 mb-2">
+                    <div class="form-group">
+                        <label for="grade" class="form-label">{{t('Grade')}}</label>
+                        <select name="grade" class="form-select get_levels" data-control="select2"
+                                data-placeholder="{{t('Select Grade')}}" data-allow-clear="true">
+                            <option></option>
+                            @foreach($grades as $grade=>$name)
+                                <option {{isset($story) && $story->grade == $grade ? 'selected':''}} value="{{$grade}}">{{$name}}</option>
+                            @endforeach
+                        </select>
+
                     </div>
                 </div>
-                <form enctype="multipart/form-data" id="form_information" class="kt-form kt-form--label-right" action="{{ isset($story) ? route('manager.story.update', $story->id): route('manager.story.store') }}" method="post">
-                    {{ csrf_field() }}
-                    @if(isset($story))
-                        <input type="hidden" name="_method" value="patch">
-                    @endif
-                    <div class="kt-portlet__body">
-                        <div class="kt-section kt-section--first">
-                            <div class="kt-section__body">
-                                <div class="row justify-content-center">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="col-xl-3 col-lg-3 col-form-label">صورة</label>
-                                            <div class="col-lg-9 col-xl-6">
-                                                <div class="upload-btn-wrapper">
-                                                    <button class="btn btn-danger">رفع صورة</button>
-                                                    <input name="image" class="imgInp" id="imgInp" type="file" />
-                                                </div>
-                                                <img id="blah" @if(!isset($story) || is_null($story->image)) style="display:none" @endif src="{{ isset($story) && !is_null($story->image)  ? $story->image:'' }}" width="150" alt="No file chosen" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                    <div class="form-group row">
-                                        <label class="col-xl-3 col-lg-3 col-form-label">الاسم</label>
-                                        <div class="col-lg-9 col-xl-6">
-                                            <input class="form-control" name="name" type="text" value="{{ isset($story->name) ? $story->name : old("name") }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-xl-3 col-lg-3 col-form-label">الصف</label>
-                                        <div class="col-lg-9 col-xl-6">
-                                            <select class="form-control" name="grade">
-                                                <option value="15" {{isset($story) && $story->grade == 15 ? 'selected':''}}>Grade KG</option>
-                                                <option value="1" {{isset($story) && $story->grade == 1 ? 'selected':''}}>Grade 1</option>
-                                                <option value="2" {{isset($story) && $story->grade == 2 ? 'selected':''}}>Grade 2</option>
-                                                <option value="3" {{isset($story) && $story->grade == 3 ? 'selected':''}}>Grade 3</option>
-                                                <option value="4" {{isset($story) && $story->grade == 4 ? 'selected':''}}>Grade 4</option>
-                                                <option value="5" {{isset($story) && $story->grade == 5 ? 'selected':''}}>Grade 5</option>
-                                                <option value="6" {{isset($story) && $story->grade == 6 ? 'selected':''}}>Grade 6</option>
-                                                <option value="7" {{isset($story) && $story->grade == 7 ? 'selected':''}}>Grade 7</option>
-                                                <option value="8" {{isset($story) && $story->grade == 8 ? 'selected':''}}>Grade 8</option>
-                                                <option value="9" {{isset($story) && $story->grade == 9 ? 'selected':''}}>Grade 9</option>
-{{--                                                <option value="10" {{isset($story) && $story->grade == 10 ? 'selected':''}}>Grade 10</option>--}}
-{{--                                                <option value="11" {{isset($story) && $story->grade == 11 ? 'selected':''}}>Grade 11</option>--}}
-{{--                                                <option value="12" {{isset($story) && $story->grade == 12 ? 'selected':''}}>Grade 12</option>--}}
-                                            </select>
-                                        </div>
-                                    </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">فيديو
-                                        @if(isset($story) && $story->video)
-                                            <br />
-                                        <a href="{{$story->video}}" class="text-warning">معاينة</a>
-                                        @endif
-                                    </label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control" name="video" type="file">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">فيديوآخر
-                                        @if(isset($story) && $story->alternative_video)
-                                            <br />
-                                        <a href="{{$story->alternative_video}}" class="text-warning">معاينة</a>
-                                        @endif
-                                    </label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control" name="alternative_video" type="file">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">المحتوى
-                                    </label>
-                                    <div class="col-lg-9">
-                                        <textarea class="form-control summernote edit" id='edit' style="margin-top: 30px;" name="content">{{ isset($story->content) ? $story->getOriginal('content') : old("content") }}</textarea>
-                                    </div>
-                                </div>
 
-                                <div class="form-group row">
-                                    <label class="col-3 col-form-label font-weight-bold">تفعيل</label>
-                                    <div class="col-3">
-                                        <span class="kt-switch">
-                                            <label>
-                                            <input type="checkbox" {{isset($story) && $story->active ? 'checked':''}} value="1" name="active">
-                                            <span></span>
-                                            </label>
-                                        </span>
-                                    </div>
-                                </div>
+                <div class="col-6">
+                    <div class="d-flex">
+                        <label>{{t('Video')}} :</label>
+                        @if(isset($story) && $story->video)
+                            <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
+                                <a data-type="video" class="btn btn-icon btn-danger deleteFile" style="height: 20px; width: 20px">
+                                    <i class="la la-close la-2"></i>
+                                </a>
+                                <a href="{{asset($story->video)}}" target="_blank"  class="btn btn-icon btn-success ml-2" style="height: 20px; width: 20px">
+                                    <i class="la la-eye la-2"></i>
+                                </a>
                             </div>
-                        </div>
+                        @endif
+
                     </div>
-                    <div class="kt-portlet__foot">
-                        <div class="kt-form__actions">
-                            <div class="row">
-                                <div class="col-lg-12 text-right">
-                                    <button type="submit" class="btn btn-danger">{{ isset($story) ? "تحديث":"حفظ" }}</button>&nbsp;
-                                </div>
+                    <input type="file" name="video" class="form-control">
+                </div>
+
+                <div class="col-6">
+                    <div class="d-flex">
+                        <label>{{t('Alternative video')}} :</label>
+                        @if(isset($story) && $story->alternative_video)
+                            <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
+                                <a data-type="alternative_video" class="btn btn-icon btn-danger deleteFile" style="height: 20px; width: 20px">
+                                    <i class="la la-close la-2"></i>
+                                </a>
+                                <a href="{{asset($story->alternative_video)}}" target="_blank"  class="btn btn-icon btn-success ml-2" style="height: 20px; width: 20px">
+                                    <i class="la la-eye la-2"></i>
+                                </a>
                             </div>
-                        </div>
+                        @endif
+
                     </div>
-                </form>
+                    <input type="file" name="alternative_video" class="form-control">
+                </div>
+
+                <div class="col-6 mb-2 d-flex gap-2 mt-4">
+                    <div class="form-check form-check-custom form-check-solid">
+                        <input class="form-check-input" type="checkbox" value="1" name="active"
+                               id="flexCheckDefault" {{isset($story) && $story->active ? 'checked':''}}/>
+                        <label class="form-check-label text-dark" for="flexCheckDefault">
+                            {{t('Active')}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12 mb-2 mt-5">
+                    <div class="form-group">
+                        <label for="alternative_video" class="form-label">{{t('Content')}}
+                        </label>
+                        <textarea class="form-control summernote edit" id='edit' style="margin-top: 30px;"
+                                  name="content">{{ isset($story->content) ? $story->getOriginal('content') : old("content") }}</textarea>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row my-5">
+                <div class="separator separator-content my-4"></div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit"
+                            class="btn btn-primary mr-2">{{isset($story)?t('Update'):t('Save')}}</button>
+                </div>
             </div>
         </div>
-    </div>
+
+    </form>
+
 @endsection
 
 @section('script')
-    <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script> <script type="text/javascript"
-                                                                                                                src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
+    <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    {!! JsValidator::formRequest(\App\Http\Requests\Manager\StoryRequest::class, '#form-data'); !!}
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
     <script type="text/javascript" src="{{asset('editor/js/froala_editor.min.js')}}"></script>
@@ -171,9 +221,38 @@
     <script type="text/javascript" src="{{asset('editor/js/plugins/font_family.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('editor/js/plugins/word_paste.min.js')}}"></script>
     <script>
+        @if(isset($story))
+        $(document).on('click', '.deleteFile', (function () {
+            let type = $(this).data('type');
+            let url = "{{route('manager.story.remove-attachment',['id'=>$story->id,'type'=>':type'])}}".replace(':type',type);
+            let parent = $(this).parent();
+
+            showAlert("{{t('Delete Attachment')}}","{{t('Are you sure to for deleting process?')}}",'warning',
+                true,true,function (callback) {
+                    if (callback){
+                        showLoadingModal()
+                        $.ajax({
+                            url: url,
+                            type: 'post',
+                            data: {'_token':"{{csrf_token()}}"},
+                            success: function(response){
+                                hideLoadingModal()
+                                parent.remove()
+                                toastr.success(response.message);
+                            },
+                            error(error){
+                                hideLoadingModal()
+                                toastr.error(error.responseJSON.message);
+                            }
+                        });
+                    }
+                })
+        }));
+        @endif
+
         (function () {
             const editorInstance = new FroalaEditor('.edit', {
-                key: "uXD2lA5D6C4F4G3A3konmA2A-9oC-7H-7ibC4bvddtD3jefpF1F1E1G4F1C11B8C2E5D3==",
+                key: "4NC5fB4D4H4D3F3B3D5D-13tsrH4iggC7jE-11llA-8G1rA-21C-16hE5B4E4H3F2H3B8A4C4E5==",
                 fontFamilySelection: true,
                 heightMin: 500,
                 paragraphStyles: {
@@ -185,7 +264,7 @@
                         'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting']
                     },
                     'moreParagraph': {
-                        'buttons': ['alignLeft', 'alignCenter', 'paragraphStyle',  'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat',  'formatOLSimple','lineHeight', 'outdent', 'indent', 'quote']
+                        'buttons': ['alignLeft', 'alignCenter', 'paragraphStyle', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'formatOLSimple', 'lineHeight', 'outdent', 'indent', 'quote']
                     },
                     'moreRich': {
                         'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR']
@@ -297,5 +376,4 @@
             })
         })()
     </script>
-    {!! JsValidator::formRequest(\App\Http\Requests\Manager\StoryRequest::class, '#form_information'); !!}
 @endsection

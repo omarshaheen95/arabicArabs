@@ -1,7 +1,3 @@
-{{--Dev Omar Shaheen
-    Devomar095@gmail.com
-    WhatsApp +972592554320
-    --}}
 @extends('manager.layout.container')
 @section('style')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -26,147 +22,88 @@
     </style>
 
 @endsection
+@push('breadcrumb')
+    <li class="breadcrumb-item">
+        <a href="{{ route('manager.lesson.index') }}">{{t('Lesson')}}</a>
+    </li>
+    <li class="breadcrumb-item">
+        {{ isset($title) ? $title:'' }}
+    </li>
+@endpush
+@section('title')
+    {{ isset($title) ? $title:'' }}
+@endsection
+@section('actions')
+    @can('lesson review')
+        <a href="{{route('manager.lesson.review', [$lesson->id, 'learn'])}}" target="_blank" class="btn btn-primary btn-elevate btn-icon-sm me-2">
+            <i class="la la-eye"></i>
+            {{t('Preview')}}
+        </a>
+    @endcan
+@endsection
 @section('content')
-    @push('breadcrumb')
-        <li class="breadcrumb-item">
-            <a href="{{ route('manager.lesson.index') }}">الدروس</a>
-        </li>
-        <li class="breadcrumb-item">
-            {{ isset($title) ? $title:'' }}
-
-            -
-            <a href="{{route('manager.lesson.review', [$lesson->id, 'learn'])}}" target="_blank">معاينة</a>
-        </li>
-    @endpush
-    <div class="row">
-        <div class="col-xl-10 offset-1">
-            <div class="kt-portlet">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">{{ isset($title) ? $title:'' }}</h3>
-                    </div>
+    <form enctype="multipart/form-data" id="form_information" class="kt-form kt-form--label-right"
+          action="{{ route('manager.lesson.update_learn', $lesson->id) }}"
+          method="post">
+        {{ csrf_field() }}
+            <div class="row">
+                <label class="col-12 mb-3 fs-2">{{t('Voice')}} :</label>
+                <div class="col-3">
+                    <input class="form-control" name="audio" type="file">
                 </div>
-                <form enctype="multipart/form-data" id="form_information" class="kt-form kt-form--label-right"
-                      action="{{ route('manager.lesson.update_learn', $lesson->id) }}"
-                      method="post">
-                    {{ csrf_field() }}
-                    <div class="kt-portlet__body">
-                        <div class="kt-section kt-section--first">
-                            <div class="kt-section__body">
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">محتوى صوتي
+                @if($lesson->getFirstMediaUrl('audioLessons'))
+                <div class="col-9 row">
+                    <audio class="col-6" style="max-height: 45px" src="{{$lesson->getFirstMediaUrl('audioLessons')}}" controls></audio>
+                    <a class="btn btn-danger btn-icon deleteLessonAudioRecord w-50px" data-id="{{$lesson->id}}"><i class="fa fa-times"></i>
+                    </a>
+                </div>
+                @endif
+                <div class="separator separator-dashed my-5"></div>
+            </div>
 
-                                        @if($lesson->getFirstMediaUrl('audioLessons'))
-                                            <a href="{{$lesson->getFirstMediaUrl('audioLessons')}}"
-                                               class="kt-font-warning" target="_blank">استعراض</a>
-                                            |
-                                            <a href="#deleteLessonAudioModel" data-id="{{$lesson->id}}"
-                                               data-toggle="modal" data-target="#deleteLessonAudioModel"
-                                               class="kt-font-warning deleteLessonAudioRecord" target="_blank">حذف</a>
-
-                                        @endif
-                                    </label>
-                                    <div class="col-lg-9 col-xl-6 col-form-label">
-                                        <input class="form-control" name="audio" type="file">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">محتوى الفيديوهات
-                                    </label>
-                                    @foreach($lesson->getMedia('videoLessons') as $video)
-                                        <div class="col-lg-3 col-xl-3 col-form-label">
-                                            <a href="{{$video->getUrl()}}" class="kt-font-warning" target="_blank">استعراض</a>
-                                            |
-                                            <a href="{{$video->getUrl()}}" data-id="{{$video->id}}" data-toggle="modal"
-                                               data-target="#deleteModel" class="kt-font-warning deleteRecord"
-                                               target="_blank">حذف</a>
-                                        </div>
-                                    @endforeach
-                                    <div class="col-lg-9 col-xl-6 col-form-label">
-                                        <button type="button" id="add_label_new_video"
-                                                class="btn btn-danger btn-icon btn-block add_button">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                        <div id="videos_area" class="row">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <label>المحتوى </label>
-                                        <textarea class="form-control summernote edit" id='edit'
-                                                  style="margin-top: 30px;"
-                                                  name="content">{{ isset($lesson) ? $lesson->content : old("content") }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="row">
+                <label class="col-12 mb-3 fs-2">{{t('Videos')}} :</label>
+                @foreach($lesson->getMedia('videoLessons') as $video)
+                    <div class="col-4 d-flex flex-column">
+                        <label class="fw-bold">{{$loop->index+1}} :</label>
+                        <video style="width: 100%" src="{{$video->getUrl()}}" controls></video>
+                        <div class="d-flex gap-2 mt-2">
+                            <input type="file" name="old_videos[{{$video->id}}]" class="form-control">
+                            <a class="btn btn-danger btn-icon deleteRecord w-50px" data-id="{{$video->id}}"><i class="fa fa-times"></i>
+                            </a>
                         </div>
                     </div>
-                    <div class="kt-portlet__foot">
-                        <div class="kt-form__actions">
-                            <div class="row">
-                                <div class="col-lg-12 text-right">
-                                    <button type="submit"
-                                            class="btn btn-danger">حفظ
-                                    </button>&nbsp;
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
-    <div class="modal fade" id="deleteLessonAudioModel" tabindex="-1" role="dialog"
-         aria-labelledby="deleteLessonAudioModel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    </button>
+                @endforeach
+                <div class="separator separator-dashed my-5"></div>
+                <div class="row">
+                    <a type="button" id="add_label_new_video" class="btn btn-secondary add_button fw-bold">
+                       <i class="fa fa-upload"></i> {{t('Add New Video')}}
+                    </a>
+                    <div id="videos_area" class="row">
+
+                    </div>
+                    <div class="separator separator-dashed my-3"></div>
+
                 </div>
-                <form method="post" action="" id="remove_lesson_audio_form">
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <h5>هل أنت متأكد من حذف السجل المحدد ؟</h5>
-                        <br/>
-                        <p>حذف السجل الحالي يؤدي لحذف السجلات المرتبطة به .</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-warning">حذف</button>
-                    </div>
-                </form>
+
+            </div>
+            <div class="form-group row mt-5">
+                <div class="col-lg-12">
+                    <label class="col-12 mb-3 fs-2">{{t('Content')}} :</label>
+                    <textarea class="form-control summernote edit" id='edit'
+                              style="margin-top: 30px;"
+                              name="content">{{ isset($lesson) ? $lesson->content : old("content") }}</textarea>
+                </div>
+            </div>
+        <div class="row my-5">
+            <div class="separator separator-content my-4"></div>
+            <div class="col-12 d-flex justify-content-end">
+                <button type="submit"
+                        class="btn btn-primary mr-2">{{isset($lesson)?t('Update'):t('Save')}}</button>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="deleteModel"
-         aria-hidden="true" style="display: none;">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    </button>
-                </div>
-                <form method="post" action="" id="remove_video_attachment">
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <h5>هل أنت متأكد من حذف السجل المحدد ؟</h5>
-                        <br/>
-                        <p>حذف السجل الحالي يؤدي لحذف السجلات المرتبطة به .</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-warning">حذف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    </form>
 
 @endsection
 
@@ -325,17 +262,59 @@
     </script>
     <script>
         $(document).on('click', '.deleteLessonAudioRecord', (function () {
-            var id = $(this).data("id");
-            var url = '{{ route("manager.lesson.remove_lesson_audio", ":id") }}';
+            let parent = $(this).parent()
+            let id = $(this).data("id");
+            let url = '{{ route("manager.lesson.remove_lesson_audio", ":id") }}';
             url = url.replace(':id', id);
-            $('#remove_lesson_audio_form').attr('action', url);
+            showAlert("{{t('Delete Voice')}}","{{t('Are you sure to for deleting process?')}}",'warning',
+                true,true,function (callback) {
+                    if (callback){
+                        showLoadingModal()
+                        $.ajax({
+                            url: url,
+                            type: 'post',
+                            data: {'_token':"{{csrf_token()}}"},
+                            success: function(response){
+                                hideLoadingModal()
+                                parent.remove()
+                                toastr.success(response.message);
+                            },
+                            error(error){
+                                hideLoadingModal()
+                                toastr.error(error.responseJSON.message);
+                            }
+                        });
+                    }
+                })
         }));
+
         $(document).on('click', '.deleteRecord', (function () {
-            var id = $(this).data("id");
-            var url = '{{route('manager.lesson.remove_video_attachment', ':id')}}';
+            let parent = $(this).parent().parent()
+            let id = $(this).data("id");
+            let url = '{{route('manager.lesson.remove_video_attachment', ':id')}}';
             url = url.replace(':id', id);
-            $('#remove_video_attachment').attr('action', url);
+            showAlert("{{t('Delete Video')}}","{{t('Are you sure to for deleting process?')}}",'warning',
+                true,true,function (callback) {
+                    if (callback){
+                        showLoadingModal()
+                        $.ajax({
+                            url: url,
+                            type: 'post',
+                            data: {'_token':"{{csrf_token()}}"},
+                            success: function(response){
+                                hideLoadingModal()
+                                parent.remove()
+                                toastr.success(response.message);
+                            },
+                            error(error){
+                                hideLoadingModal()
+                                toastr.error(error.responseJSON.message);
+                            }
+                        });
+                    }
+                })
         }));
+
         $(document).ready(function () {
             var x = 1; //Initial field counter is 1
             var y = 1; //Initial field counter is 1
@@ -354,7 +333,7 @@
                     y++; //Increment field counter.
                     $(wrapper_row).append(
                         "<div class=\"col-lg-4 mt-3\">\n" +
-                        "<label>فيديو  " + y + " : <a href='#' class='kt-font-warning delete_input'>حذف</a></label>\n" +
+                        "<label>{{t('Video')}}  " + y + " : <a href='#' class='text-danger delete_input'>{{t('Delete')}}</a></label>\n" +
                         "<input required class=\"form-control\" name=\"videos[]\" type=\"file\">\n"
                     ); //Add field html
                 }

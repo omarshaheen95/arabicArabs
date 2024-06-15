@@ -1,115 +1,123 @@
-
 @extends('school.layout.container')
-@section('style')
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+@section('title',$title)
+
+
+@section('actions')
+    <div class="dropdown with-filter">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{t('Actions')}}
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#!" onclick="excelExport('{{route('school.teacher.statistics_export')}}')">{{t('Export')}}</a></li>
+        </ul>
+    </div>
+
 @endsection
-@section('content')
-    @push('breadcrumb')
-        <li class="breadcrumb-item">
-            {{ t('Teachers statistics') }}
-        </li>
-    @endpush
-{{--    @push('search')--}}
-{{--        <div class="kt-subheader-search" style="background: linear-gradient(to right,#39B448,#31ab3f);">--}}
-{{--            <h3 class="kt-subheader-search__title">--}}
-{{--                {{ t('search') }}--}}
-{{--            </h3>--}}
-{{--            <form class="kt-form">--}}
-{{--                <div class="kt-grid kt-grid--desktop kt-grid--ver-desktop">--}}
-{{--                    <div class="row" style="width: 100%">--}}
-{{--                        <div class="col-lg-6">--}}
-{{--                            <div class="kt-input-icon kt-input-icon--pill kt-input-icon--right">--}}
-{{--                                <input style="background: white" type="text" id="search" class="form-control form-control-pill"placeholder="الكلمات المفتاحية">--}}
-{{--                                <span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la la-search"></i></span></span>--}}
-{{--                            </div>--}}
 
-{{--                        </div>--}}
-{{--                        <div class="col-lg-2">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </form>--}}
-{{--        </div>--}}
-{{--    @endpush--}}
+@section('filter')
     <div class="row">
-        <div class="col-md-12">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">
-                            {{$title}}
-                        </h3>
-                    </div>
-                    <div class="kt-portlet__head-toolbar">
-                        <div class="kt-portlet__head-wrapper">
-                            <div class="kt-portlet__head-actions">
-                                <a href="{{route('school.teacher.statistics_export')}}" class="btn btn-danger btn-elevate btn-icon-sm">
-                                    <i class="la la-paper-plane"></i>
-                                    استخراج
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="kt-portlet__body">
-                    <table class="table text-center" id="users-table">
-                        <thead>
-                        <th>الاسم</th>
-                        <th>اختبارات دروس منجزة</th>
-                        <th>اختبارات دروس غير الناجحة</th>
+        <div class="col-2 mb-2">
+            <label>{{t('ID')}}:</label>
+            <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
+        </div>
+        <div class="col-3 mb-2">
+            <label>{{t('Name')}}:</label>
+            <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
+        </div>
 
-                        <th>اختبارات قصص منجزة</th>
-                        <th>اختبارات قصص غير الناجحة</th>
-                        <th>آخر دخول</th>
-                        <th>الإجراءات</th>
-                        </thead>
-                    </table>
-                </div>
-            </div>
+        <div class="col-3 mb-2">
+            <label>{{t('Email')}}:</label>
+            <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
+        </div>
+
+        <div class="col-2 mb-2">
+            <label>{{t('Mobile')}}:</label>
+            <input type="text" name="mobile" class="form-control" placeholder="{{t('Mobile')}}">
+        </div>
+
+
+        <div class="col-lg-2 mb-2">
+            <label>{{t('Students')}} :</label>
+            <select name="student_status" id="student_status" class="form-select" data-control="select2"
+                    data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
+                <option></option>
+                <option value="1">{{t('Has students')}}</option>
+                <option value="2">{{t('Has no students')}}</option>
+                <option value="3">{{t('Has active students')}}</option>
+                <option value="4">{{t('Has inactive students')}}</option>
+            </select>
+        </div>
+        <div class="col-lg-2 mb-2">
+            <label>{{t('Approval')}} :</label>
+            <select name="approved" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}"
+                    data-allow-clear="true">
+                <option></option>
+                <option value="1">{{t('Approved')}}</option>
+                <option value="2">{{t('Under review')}}</option>
+            </select>
+        </div>
+        <div class="col-lg-2 mb-2">
+            <label>{{t('Activation')}} :</label>
+            <select name="active" id="status" class="form-select" data-control="select2"
+                    data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
+                <option></option>
+                <option value="1">{{t('Active')}}</option>
+                <option value="2">{{t('Non-Active')}}</option>
+            </select>
         </div>
     </div>
-@endsection
-@section('script')
-    <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JavaScript -->
-    <script>
-        $(document).ready(function(){
-            $(function() {
-                $('#users-table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ordering:false,
-                    searching: false,
-                    dom: `<'row'<'col-sm-12'tr>>
-      <'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
 
-                    @if(app()->getLocale() == 'ar')
-                    language: {
-                        url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Arabic.json"
-                    },
-                    @endif
-                    ajax: {
-                        url : '{{ route('school.teacher.statistics') }}',
-                        data: function (d) {
-                            d.search = $("#search").val();
-                        }
-                    },
-                    columns: [
-                        {data: 'name', name: 'name'},
-                        {data: 'passed_tests', name: 'passed_tests'},
-                        {data: 'failed_tests', name: 'failed_tests'},
-                        {data: 'passed_tests_lessons', name: 'passed_tests_lessons'},
-                        {data: 'failed_tests_lessons', name: 'failed_tests_lessons'},
-                        {data: 'last_login', name: 'last_login'},
-                        {data: 'actions', name: 'actions'}
-                    ],
-                });
-            });
-            $('#search').keyup(function(){
-                $('#users-table').DataTable().draw(true);
-            });
-        });
-    </script>
 @endsection
+
+@push('breadcrumb')
+    <li class="breadcrumb-item">
+        {{$title}}
+    </li>
+@endpush
+
+
+@section('content')
+    <div class="row">
+        <table class="table table-row-bordered gy-5" id="datatable">
+            <thead>
+            <tr class="fw-semibold fs-6 text-gray-800">
+                <th class="text-start"></th>
+                <th class="text-start">{{ t('Teacher') }}</th>
+                <th class="text-start">{{ t('Passed tests') }}</th>
+                <th class="text-start">{{ t('Failed tests') }}</th>
+                <th class="text-start">{{ t('Pending teaks') }}</th>
+                <th class="text-start">{{ t('Completed tasks') }}</th>
+                <th class="text-start">{{ t('Returned tasks') }}</th>
+                <th class="text-start">{{ t('Last login') }}</th>
+                <th class="text-start">{{ t('Actions') }}</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+@endsection
+
+
+@section('script')
+
+    <script>
+        var TABLE_URL = "{{route('school.teacher.statistics') }}";
+        var TABLE_COLUMNS = [
+            {data: 'id', name: 'id'},
+            {data: 'teacher', name: 'teacher'},
+            {data: 'passed_tests', name: 'passed_tests'},
+            {data: 'failed_tests', name: 'failed_tests'},
+            {data: 'pending_tasks', name: 'pending_tasks'},
+            {data: 'corrected_tasks', name: 'corrected_tasks'},
+            {data: 'returned_tasks', name: 'returned_tasks'},
+            {data: 'last_login', name: 'last_login'},
+            {data: 'actions', name: 'actions'}
+        ];
+
+    </script>
+    <script src="{{asset('assets_v1/js/datatable.js')}}?v={{time()}}"></script>
+
+@endsection
+
+
