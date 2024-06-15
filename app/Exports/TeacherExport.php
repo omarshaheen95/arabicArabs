@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Models\Supervisor;
 use App\Models\Teacher;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -21,15 +22,12 @@ class TeacherExport implements WithMapping, Responsable, WithHeadings, FromColle
 {
     use \Maatwebsite\Excel\Concerns\Exportable;
 
-    public $school_id;
-    public $name;
+    public $length;
     public $request;
-    public $status;
 
     public function __construct(Request $request, $school_id = 0)
     {
-        $this->school_id = $school_id ? $school_id : $request->get('school_id', false);
-        $this->name = $request->get('name', false);
+        $this->request = $request;
         $this->length = 1;
     }
 
@@ -41,6 +39,9 @@ class TeacherExport implements WithMapping, Responsable, WithHeadings, FromColle
             'Default Password',
             'Mobile',
             'School',
+            'Active Status',
+            'Status',
+            'Active to',
         ];
     }
 
@@ -52,25 +53,15 @@ class TeacherExport implements WithMapping, Responsable, WithHeadings, FromColle
             '123456',
             $teacher->mobile . ' ',
             optional($teacher->school)->name,
+            $teacher->active?t('Active'):t('Non-Active'),
+            $teacher->approved?t('Approved'):t('Under review'),
+            $teacher->active_to?Carbon::parse($teacher->active_to)->format('d/m/Y h:i A'):''
         ];
     }
 
     public function collection()
     {
-        $school_id = $this->school_id;
-        $name = $this->name;
-
-        $teachers = Teacher::query()->latest()->when($name, function (Builder $query) use ($name) {
-            $query->where('name', 'like', '%' . $name . '%')
-                ->orWhere('email', 'like', '%' . $name . '%')
-                ->orWhere('mobile', 'like', '%' . $name . '%');
-        })->when($school_id, function (Builder $query) use ($school_id) {
-            $query->where('school_id', $school_id);
-        })->when(auth()->user() instanceof Supervisor, function (Builder $query) {
-            $query->whereHas('supervisor_teachers', function (Builder $query) {
-                $query->where('supervisor_id', auth()->id());
-            });
-        });
+        $teachers = Teacher::with('school')->filter($this->request)->latest();
 
         if ($teachers->count() >= 1) {
             $this->length = $teachers->count() + 1;
@@ -91,10 +82,10 @@ class TeacherExport implements WithMapping, Responsable, WithHeadings, FromColle
         });
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $cellRange = 'A1:E1';
+                $cellRange = 'A1:H1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold('bold')->setSize(12);
                 $event->sheet->styleCells(
-                    "A1:E$this->length",
+                    "A1:H$this->length",
                     [
                         'alignment' => [
                             'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,

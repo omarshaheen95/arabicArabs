@@ -7,19 +7,20 @@ WhatsApp +972592554320
 
 namespace App\Http\Controllers\Supervisor;
 
-use App\Exports\Development\StudentStoryTestExport;
+use App\Classes\GeneralFunctions;
 use App\Exports\StudentInformation;
-use App\Exports\Development\StudentTestExport;
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
-use App\Models\Question;
-use App\Models\StoryAssignment;
-use App\Models\StoryQuestion;
+use App\Models\Lesson;
+use App\Models\Package;
+use App\Models\School;
 use App\Models\StudentStoryTest;
 use App\Models\Teacher;
 use App\Models\User;
-use App\Models\UserAssignment;
+use App\Models\UserLesson;
 use App\Models\UserTest;
+use App\Models\UserTracker;
+use App\Models\UserTrackerStory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -30,10 +31,8 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $supervisor = Auth::guard('supervisor')->user();
         if (request()->ajax()) {
-            $rows = User::query()->with(['teacher', 'grade'])
-                ->latest()->search($request);
+            $rows = User::query()->with(['package','grade', 'teacher'])->filter($request)->latest();
 
             return DataTables::make($rows)
                 ->escapeColumns([])
@@ -43,248 +42,228 @@ class StudentController extends Controller
                 ->addColumn('last_login', function ($row) {
                     return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
                 })
-                ->addColumn('teacher', function ($row) {
-                    return optional($row->teacher)->name ?? "غير مسند";
+                ->addColumn('school', function ($row) {
+                    $teacher = optional($row->teacher)->name ? optional($row->teacher)->name : '<span class="text-danger">' . t('Unsigned') . '</span>';
+                    $package = optional($row->package)->name;
+                    $gender = !is_null($row->gender) ? $row->gender : '<span class="text-danger">-</span>';
+                    $html = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Teacher') . ' </span> : ' . '<span> ' . $teacher . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Package') . ' </span> : ' . '<span> ' . $package . '</span></div>' .
+                        '</div>';
+                    return $html;
                 })
                 ->addColumn('active_to', function ($row) {
                     return is_null($row->active_to) ? 'unpaid' : optional($row->active_to)->format('Y-m-d');
                 })
-                ->addColumn('grade', function ($row) {
-                    return optional($row->grade)->name;
+                ->addColumn('package', function ($row) {
+                    return optional($row->package)->name;
+                })
+                ->addColumn('student', function ($row) {
+                    $section = !is_null($row->section) ? $row->section : '<span class="text-danger">-</span>';
+
+                    $student = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex fw-bold">' . $row->name . '</div>' .
+                        '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . ' - ' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
+                    return $student;
+                })
+                ->addColumn('dates', function ($row) {
+                    $register_date = Carbon::parse($row->created_at)->format('Y-m-d');
+                    $active_to = $row->active_to ? optional($row->active_to)->format('Y-m-d') : t('unpaid');
+                    $last_login = $row->last_login ? Carbon::parse($row->last_login)->format('Y-m-d H:i') : '';
+                    if ($row->active == 0) {
+                        $status = '<span class="text-danger">' . t('Suspend') . '</span>';
+                    } elseif ($row->active == 1 && !is_null($row->active_to) && optional($row->active_to)->format('Y-m-d') <= now()) {
+                        $status = '<span class="text-danger">' . t('Expired') . '</span>';
+                    } elseif ($row->active == 1 && !is_null($row->active_to) && optional($row->active_to)->format('Y-m-d') > now()) {
+                        $status = '<span class="text-success">' . t('Active') . '</span>';
+                    } else {
+                        $status = '<span class="text-warning">' . t('Unknown') . '</span>';
+                    }
+
+                    if ($row->active_to) {
+                        $active_to = optional($row->active_to)->format('Y-m-d') <= now() ? '<span class="text-danger">' . optional($row->active_to)->format('Y-m-d') . '</span>' : '<span class="text-success">' . optional($row->active_to)->format('Y-m-d') . '</span>';
+                    }
+                    $data = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Register Date') . '</span> : ' . $register_date . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Active To') . '</span> : ' . $active_to . '-' . $status . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Last Login') . '</span> : ' . $last_login . '</div>' .
+                        '</div>';
+                    return $data;
+                })
+                ->addColumn('actions', function ($row) {
+                    return $row->action_buttons;
                 })
                 ->make();
         }
-        $title = "قائمة الطلاب";
-        $teachers = Teacher::query()->whereHas('supervisor_teachers', function (Builder $query) use ($supervisor) {
-            $query->where('supervisor_id', $supervisor->id);
+        $title = t('Show Users');
+        $packages = Package::query()->get();
+        $teachers = Teacher::query()->whereHas('supervisor_teachers', function (Builder $query){
+            $query->where('supervisor_id', Auth::guard('supervisor')->id());
         })->get();
-        $sections = User::query()
-            ->whereHas('teacher', function (Builder $query) use ($supervisor) {
-                $query->whereHas('supervisor_teachers', function (Builder $query) use ($supervisor) {
-                    $query->where('supervisor_id', $supervisor->id);
-                });
-            })->whereNotNull('section')
-            ->select('section')
-            ->orderBy('section')
-            ->get()->pluck('section')->unique()->values();
-        return view('supervisor.user.index', compact('title', 'teachers', 'sections'));
+        return view('supervisor.user.index', compact('title', 'packages', 'teachers'));
     }
 
     public function exportStudentsExcel(Request $request)
     {
-        $supervisor = Auth::guard('supervisor')->user();
-        $file_name = $supervisor->school->name . " Students Information.xlsx";
-        return (new StudentInformation($request, $supervisor->school_id))
-            ->download($file_name);
+        $file_name = "Students Information.xlsx";
+        if ($request->get('school_id', false)) {
+            $school = School::query()->findOrFail($request->get('school_id'));
+            $file_name = $school->name . " Students Information.xlsx";
+        }
+        return (new StudentInformation($request))->download($file_name);
     }
 
-    public function studentLessonTest(Request $request)
+
+    public function review(Request $request, $id)
     {
+        $user = User::with('grade','teacher','alternateGrade')->whereHas('school.supervisors', function (Builder $query){
+            $query->where('id', Auth::guard('supervisor')->user()->id);
+        })->findOrFail($id);
+
         if (request()->ajax()) {
-            $rows = UserTest::query()->has('lesson')->with(['lesson.grade', 'user'])->search($request)
-                ->latest();
+            $rows = UserTracker::query()->where('user_id', $id)->has('lesson')->with(['lesson.grade'])->filter($request)->latest();
+
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('created_at', function ($row) {
                     return Carbon::parse($row->created_at)->toDateTimeString();
                 })
-                ->addColumn('user', function ($row) {
-                    return $row->user->name;
+                ->addColumn('type', function ($row) {
+                    return t(ucfirst($row->type));
                 })
                 ->addColumn('lesson', function ($row) {
-                    return $row->lesson->name;
+                    $html = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary pe-1">' . t('Grade') . ':</span>' . $row->lesson->grade_name . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary pe-1">' . t('Lesson') . ':</span>' . $row->lesson->name . '</div>' .
+                        '</div>';
+                    return $html;
                 })
-                ->addColumn('grade', function ($row) {
-                    return $row->lesson->grade_id;
-                })
-                ->addColumn('status', function ($row) {
-                    return $row->status;
-                })
-                ->addColumn('total', function ($row) {
-                    return $row->total;
-                })
-                ->addColumn('actions', function ($row) {
-                    return '<a href="' . route('supervisor.student.studentLessonTestShow', $row->id) . '" class="btn btn-icon btn-danger "><i class="la la-eye"></i></a> ';
+                ->addColumn('time_spent', function ($row) {
+                    if (!is_null($row->start_at) && !is_null($row->end_at)) {
+                        $time1 = new \DateTime($row->start_at);
+                        $time2 = new \DateTime($row->end_at);
+                        $interval = $time1->diff($time2);
+                        return $interval->format('%i ' . t('minute(s)'));
+                    } else {
+                        return '-';
+                    }
                 })
                 ->make();
         }
-        $title = "اختبارات الدروس";
+
+        $title = t('Student Lessons review');
+        $teacher = $user->teacher;
+
         $grades = Grade::query()->get();
-        $supervisor = Auth::guard('supervisor')->user();
-        $teachers = Teacher::query()->whereHas('supervisor_teachers', function (Builder $query) use ($supervisor) {
-            $query->where('supervisor_id', $supervisor->id);
-        })->get();
-        return view('supervisor.student_test.index', compact('title', 'grades', 'teachers'));
+        $tests = UserTest::query()->where('user_id', $id)->count();
+        $passed_tests = UserTest::query()->where('user_id', $id)->where('total', '>=', 40)->count();
+
+
+        $user_tracker = UserTracker::query()->where('user_id', $id)->get();
+        $total = $user_tracker->where('user_id', $id)->count();
+        $data['learn'] = $user_tracker->where('user_id', $id)->where('type', 'learn')->count();
+        $data['practise'] = $user_tracker->where('user_id', $id)->where('type', 'practise')->count();
+        $data['test'] = $user_tracker->where('user_id', $id)->where('type', 'test')->count();
+        $data['play'] = $user_tracker->where('user_id', $id)->where('type', 'play')->count();
+
+        $data['learn_avg'] = $total && $data['learn'] ? round(($data['learn'] / $total) * 100, 2) : 0;
+        $data['practise_avg'] = $total && $data['practise'] ? round(($data['practise'] / $total) * 100, 2) : 0;
+        $data['test_avg'] = $total && $data['test'] ? round(($data['test'] / $total) * 100, 2) : 0;
+        $data['play_avg'] = $total && $data['play'] ? round(($data['play'] / $total) * 100, 2) : 0;
+
+        $data['passed_tests'] = UserTest::query()->where('user_id', $id)->where('status', 'Pass')->count();
+        $data['failed_tests'] = UserTest::query()->where('user_id', $id)->where('status', 'Fail')->count();
+        $guard = 'supervisor';
+
+        return view('general.user.user_lesson_review', compact('user', 'teacher',
+            'tests', 'passed_tests', 'title', 'data', 'guard','grades'));
+
     }
 
-    public function studentLessonTestExport(Request $request)
+    public function storyReview(Request $request, $id)
     {
-        $supervisor = Auth::guard('supervisor')->user();
-        return (new StudentTestExport($supervisor->school_id))
-            ->download('Students tests.xlsx');
-    }
+        $user = User::with('grade','teacher','alternateGrade')->whereHas('school.supervisors', function (Builder $query){
+            $query->where('id', Auth::guard('supervisor')->user()->id);
+        })->findOrFail($id);
 
-    public function studentLessonTestShow($id)
-    {
-        $student_test = UserTest::query()->has('lesson')->with(['lesson', 'user'])->search(request())->findOrFail($id);
-        $grade = $student_test->lesson->grade_id;
-        $questions = Question::query()->where('lesson_id', $student_test->lesson_id)->get();
-        return view('teacher.student_test.student_test_result', compact('student_test', 'grade', 'questions'));
-    }
-
-    public function studentStoryTest(Request $request)
-    {
         if (request()->ajax()) {
-            $rows = StudentStoryTest::query()->has('story')->with(['story', 'user'])->search($request)
-                ->latest();
+            $rows = UserTrackerStory::query()->where('user_id', $id)->has('story')->with(['story'])->filter($request)->latest();
+
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('created_at', function ($row) {
                     return Carbon::parse($row->created_at)->toDateTimeString();
                 })
-                ->addColumn('user', function ($row) {
-                    return $row->user->name;
+                ->addColumn('type', function ($row) {
+                    return t(ucfirst($row->type));
                 })
                 ->addColumn('story', function ($row) {
-                    return $row->story->name;
+                    $html = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary pe-1">' . t('Level') . ':</span>' . $row->story->grade_name . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary pe-1">' . t('Story') . ':</span>' . $row->story->name . '</div>' .
+                        '</div>';
+                    return $html;
                 })
-                ->addColumn('grade', function ($row) {
-                    return $row->user->grade->name;
-                })
-                ->addColumn('story_grade', function ($row) {
-                    return $row->story->grade_ar_name;
-                })
-                ->addColumn('status', function ($row) {
-                    return $row->status;
-                })
-                ->addColumn('total', function ($row) {
-                    return $row->total;
-                })
-                ->addColumn('actions', function ($row) {
-                    return '<a href="' . route('supervisor.student.studentStoryTestShow', $row->id) . '" class="btn btn-icon btn-danger "><i class="la la-eye"></i></a> ';
-                })
-                ->make();
-        }
-        $title = "اختبارات القصص";
-        $grades = Grade::query()->get();
-        $supervisor = Auth::guard('supervisor')->user();
-        $teachers = Teacher::query()->whereHas('supervisor_teachers', function (Builder $query) use ($supervisor) {
-            $query->where('supervisor_id', $supervisor->id);
-        })->get();
-        return view('supervisor.student_test.stories', compact('title', 'grades', 'teachers'));
-    }
-
-    public function studentStoryTestExport(Request $request)
-    {
-        return (new StudentStoryTestExport($request))
-            ->download('Students Stories tests.xlsx');
-    }
-
-    public function studentStoryTestShow($id)
-    {
-        $student_test = StudentStoryTest::query()->has('story')->with(['story', 'user'])->search(request())->findOrFail($id);
-        $grade = $student_test->story->grade;
-        $questions = StoryQuestion::query()->where('story_id', $student_test->story_id)->get();
-        return view('teacher.student_test.student_test_result', compact('student_test', 'grade', 'questions'));
-    }
-
-    public function studentLessonAssignment(Request $request)
-    {
-        if (request()->ajax())
-        {
-            $rows = UserAssignment::query()
-                ->with(['user', 'lesson'])
-                ->has('user')
-                ->has('lesson')
-                ->search($request)
-                ->latest();
-
-            return DataTables::make($rows)
-                ->escapeColumns([])
-                ->addColumn('created_at', function ($row){
-                    return Carbon::parse($row->created_at)->toDateTimeString();
-                })
-                ->addColumn('user', function ($row){
-                    return $row->user->name;
-                })
-                ->addColumn('lesson', function ($row) {
-                    return $row->lesson->name;
-                })
-                ->addColumn('grade', function ($row) {
-                    return$row->lesson->grade_id;
-                })
-                ->addColumn('done_tasks_assignment', function ($row) {
-                    return !$row->tasks_assignment ? '-': ($row->done_tasks_assignment ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>');
-                })
-                ->addColumn('done_test_assignment', function ($row) {
-                    return !$row->test_assignment ? '-': ($row->done_test_assignment ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>');
-                })
-                ->addColumn('completed', function ($row) {
-                    return $row->completed ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>';
-                })
-                ->addColumn('submit_status', function ($row) {
-                    return $row->submit_status;
+                ->addColumn('time_spent', function ($row) {
+                    if (!is_null($row->start_at) && !is_null($row->end_at)) {
+                        $time1 = new \DateTime($row->start_at);
+                        $time2 = new \DateTime($row->end_at);
+                        $interval = $time1->diff($time2);
+                        return $interval->format('%i ' . t('minute(s)'));
+                    } else {
+                        return '-';
+                    }
                 })
                 ->make();
         }
-        $title = "متابعة واجبات الدروس";
-        $grades = Grade::query()->get();
-        $supervisor = Auth::guard('supervisor')->user();
-        $teachers = Teacher::query()->whereHas('supervisor_teachers', function (Builder $query) use ($supervisor) {
-            $query->where('supervisor_id', $supervisor->id);
-        })->get();
-        return view('supervisor.student_assignment.lesson', compact('title', 'grades', 'teachers'));
+        $title = t('Student story review');
+        $teacher = $user->teacher;
+
+
+        $tests = StudentStoryTest::query()->where('user_id', $id)->get();
+
+        $user_tracker_stories = UserTrackerStory::query()->where('user_id', $id)->get();
+
+        $total = $user_tracker_stories->where('user_id', $id)->count();
+        $data['watching'] = $user_tracker_stories->where('type', 'watching')->count();
+        $data['reading'] = $user_tracker_stories->where('type', 'reading')->count();
+        $data['test'] = $user_tracker_stories->where('type', 'test')->count();
+        $data['watching_avg'] = $total && $data['watching'] ? round(($data['watching'] / $total) * 100, 2) : 0;
+        $data['reading_avg'] = $total && $data['reading'] ? round(($data['reading'] / $total) * 100, 2) : 0;
+        $data['test_avg'] = $total && $data['test'] ? round(($data['test'] / $total) * 100, 2) : 0;
+        $data['passed_tests'] = $tests->where('status', 'Pass')->count();
+        $data['failed_tests'] = $tests->where('status', 'Fail')->count();
+
+        $guard = 'manager';
+        $tests = $tests->count();
+
+        return view('general.user.user_story_review', compact('user', 'teacher',
+            'tests', 'title', 'data', 'total', 'guard'));
+
     }
 
-    public function studentStoryAssignment(Request $request)
+    public function report(Request $request, $id)
     {
-        if (request()->ajax())
-        {
-            $rows = StoryAssignment::query()
-                ->with(['user', 'story'])
-                ->has('user')
-                ->has('story')
-                ->search($request)
-                ->latest();
-
-            return DataTables::make($rows)
-                ->escapeColumns([])
-                ->addColumn('created_at', function ($row){
-                    return Carbon::parse($row->created_at)->toDateTimeString();
-                })
-                ->addColumn('user', function ($row){
-                    return $row->user->name;
-                })
-                ->addColumn('grade', function ($row){
-                    return $row->user->grade->name;
-                })
-                ->addColumn('story', function ($row) {
-                    return $row->story->name;
-                })
-                ->addColumn('story_grade', function ($row) {
-                    return$row->story->grade_ar_name;
-                })
-                ->addColumn('done_tasks_assignment', function ($row) {
-                    return !$row->tasks_assignment ? '-': ($row->done_tasks_assignment ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>');
-                })
-                ->addColumn('done_test_assignment', function ($row) {
-                    return !$row->test_assignment ? '-': ($row->done_test_assignment ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>');
-                })
-                ->addColumn('completed', function ($row) {
-                    return $row->completed ? '<span class="text-success">مكتمل</span>':'<span class="text-red">غير مكتمل</span>';
-                })
-                ->addColumn('submit_status', function ($row) {
-                    return $row->submit_status;
-                })
-                ->make();
-        }
-        $title = "متابعة واجبات القصص";
-        $grades = Grade::query()->get();
-        $supervisor = Auth::guard('supervisor')->user();
-        $teachers = Teacher::query()->whereHas('supervisor_teachers', function (Builder $query) use ($supervisor) {
-            $query->where('supervisor_id', $supervisor->id);
-        })->get();
-        return view('supervisor.student_assignment.story', compact('title', 'grades', 'teachers'));
+        $request['teacher_id'] = Auth::guard('supervisor')->user()->teachers->pluck('id');
+        $general = new GeneralFunctions();
+        return $general->userReport($request,$id);
     }
+
+
+
+    public function studentsCards(Request $request)
+    {
+        $request->validate(['teacher_id'=>'required']);
+        $students = User::query()->filter($request)->get()->chunk(6);
+        $qr = 1;//isset($request['qr-code']);
+        $student_login_url = config('app.url') . '/login';
+        $school = School::find($request->get('school_id'));
+
+        $title = $school ? $school->name . ' | ' . t('Students Cards') : t('Students Cards');
+        return view('general.cards_and_qr', compact('students', 'student_login_url', 'school', 'qr', 'title'));
+    }
+
 
 }

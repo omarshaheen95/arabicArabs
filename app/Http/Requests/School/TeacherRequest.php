@@ -24,8 +24,12 @@ class TeacherRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [];
-        $rules["name"] = 'required';
+        $rules = [
+          'name'=>'required',
+          'mobile'=>'required',
+          'image'=>'nullable',
+
+        ];
         if (Route::currentRouteName() == 'school.teacher.edit' || Route::currentRouteName() == 'school.teacher.update')
         {
             $id = $this->route('teacher');
@@ -36,7 +40,6 @@ class TeacherRequest extends FormRequest
             $rules["email"] = 'required|email|unique:teachers,email,{$id},id,deleted_at,NULL';
             $rules["password"] = 'required|min:6';
         }
-        $rules["mobile"] = 'required';
         return $rules;
     }
 

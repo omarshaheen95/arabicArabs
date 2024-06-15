@@ -2,41 +2,49 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Classes\GeneralFunctions;
 use App\Exports\StudentInformation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Manager\UserRequest;
 use App\Models\Grade;
 use App\Models\Lesson;
-use App\Models\MatchResult;
-use App\Models\OptionResult;
 use App\Models\Package;
-use App\Models\Payment;
 use App\Models\School;
 use App\Models\SortResult;
-use App\Models\StudentTest;
+use App\Models\StudentStoryTest;
 use App\Models\Teacher;
-use App\Models\TrueFalseResult;
 use App\Models\User;
 use App\Models\UserLesson;
 use App\Models\UserTest;
 use App\Models\UserTracker;
+use App\Models\UserTrackerStory;
 use App\Models\Year;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:show users')->only('index');
+        $this->middleware('permission:add users')->only(['create','store']);
+        $this->middleware('permission:edit users')->only(['edit','update']);
+        $this->middleware('permission:delete users')->only('destroy');
+        $this->middleware('permission:export users')->only('export');
+        $this->middleware('permission:review users')->only('review');
+        $this->middleware('permission:users story review')->only('storyReview');
+        $this->middleware('permission:users login')->only('login');
+        $this->middleware('permission:restore deleted users')->only('restore');
+        $this->middleware('permission:assign teacher')->only('assignedUserToTeacher');
+        $this->middleware('permission:unassign teacher')->only('unassignedUserTeacher');
+        $this->middleware('permission:users activation')->only('activation');
+    }
     public function index(Request $request)
     {
         if (request()->ajax()) {
-            $rows = User::query()
-                ->with(['school', 'package', 'grade'])
-                ->latest()
-                ->search($request);
+            $rows = User::query()->with(['school', 'package', 'teacher', 'year','grade'])->filter($request)->latest();
 
             return DataTables::make($rows)
                 ->escapeColumns([])
@@ -47,89 +55,87 @@ class UserController extends Controller
                     return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
                 })
                 ->addColumn('school', function ($row) {
-                    return optional($row->school)->name;
+                    $school = optional($row->school)->name;
+                    $teacher = optional($row->teacher)->name ? optional($row->teacher)->name : '<span class="text-danger">' . t('Unsigned') . '</span>';
+                    $package = optional($row->package)->name;
+                    $html = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('School') . ' </span> : ' . '<span> ' . $school . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Teacher') . ' </span> : ' . '<span> ' . $teacher . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Package') . ' </span> : ' . '<span> ' . $package . '</span></div>' .
+                        '</div>';
+                    return $html;
                 })
                 ->addColumn('active_to', function ($row) {
-                    return is_null($row->active_to) ? 'غير مدفوع' : Carbon::parse($row->active_to)->format('Y-m-d');
+                    return is_null($row->active_to) ? 'unpaid' : optional($row->active_to)->format('Y-m-d');
                 })
                 ->addColumn('package', function ($row) {
                     return optional($row->package)->name;
                 })
-                ->addColumn('grade', function ($row) {
-                    return optional($row->grade)->name;
-                })
-                ->addColumn('actions', function ($row) {
-                    $edit_url = route('manager.user.edit', $row->id);
-                    $show_url = route('manager.user.show', $row->id);
-                    $login_url = route('manager.user.login', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url', 'show_url', 'login_url'));
-                })
-                ->make();
-        }
-        $title = "عرض المستخدمين";
-        $schools = School::query()->get();
-        $packages = Package::query()->get();
-        $grades = Grade::query()->get();
-        return view('manager.user.index', compact('title', 'schools', 'packages', 'grades'));
-    }
+                ->addColumn('student', function ($row) {
+                    $section = !is_null($row->section) ? $row->section : '<span class="text-danger">-</span>';
 
-    public function duplicateIndex(Request $request)
-    {
-        if (request()->ajax()) {
-            $rows = User::query()->with(['school', 'package'])
-                ->search($request)
-                ->whereIn('name', function ($q) {
-                    $q->select('name')
-                        ->from('users')
-                        ->whereNull('deleted_at')
-                        ->groupBy('name')
-                        ->havingRaw('COUNT(*) > 1');
-                })->orderBy('name')
-                ->latest('id');
+                    $student = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex fw-bold">' . $row->name . '</div>' .
+                        '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . $row->grade->name . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
+                    return $student;
+                })
+                ->addColumn('dates', function ($row) {
+                    $register_date = Carbon::parse($row->created_at)->format('Y-m-d');
+                    $active_to = $row->active_to ? optional($row->active_to)->format('Y-m-d') : t('unpaid');
+                    $last_login = $row->last_login ? Carbon::parse($row->last_login)->format('Y-m-d H:i') : '';
+                    if ($row->active == 0) {
+                        $status = '<span class="text-danger">' . t('Suspend') . '</span>';
+                    } elseif ($row->active == 1 && !is_null($row->active_to) && optional($row->active_to)->format('Y-m-d') <= now()) {
+                        $status = '<span class="text-danger">' . t('Expired') . '</span>';
+                    } elseif ($row->active == 1 && !is_null($row->active_to) && optional($row->active_to)->format('Y-m-d') > now()) {
+                        $status = '<span class="text-success">' . t('Active') . '</span>';
+                    } else {
+                        $status = '<span class="text-warning">' . t('Unknown') . '</span>';
+                    }
 
-            return DataTables::make($rows)
-                ->escapeColumns([])
-                ->addColumn('created_at', function ($row) {
-                    return Carbon::parse($row->created_at)->toDateString();
-                })
-                ->addColumn('last_login', function ($row) {
-                    return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
-                })
-                ->addColumn('school', function ($row) {
-                    return optional($row->school)->name;
-                })
-                ->addColumn('active_to', function ($row) {
-                    return is_null($row->active_to) ? 'غير مدفوع' : optional($row->active_to)->format('Y-m-d');
-                })
-                ->addColumn('package', function ($row) {
-                    return optional($row->package)->name;
+                    if ($row->active_to) {
+                        $active_to = optional($row->active_to)->format('Y-m-d') <= now() ? '<span class="text-danger">' . optional($row->active_to)->format('Y-m-d') . '</span>' : '<span class="text-success">' . optional($row->active_to)->format('Y-m-d') . '</span>';
+                    }
+                    $data = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Register Date') . '</span> : ' . $register_date . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Active To') . '</span> : ' . $active_to . '-' . $status . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Last Login') . '</span> : ' . $last_login . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Year') . '</span> : ' . optional($row->year)->name . '</div>' .
+                        '</div>';
+                    return $data;
                 })
                 ->addColumn('actions', function ($row) {
                     return $row->action_buttons;
                 })
                 ->make();
         }
-        $title = "عرض تكرار المستخدمين";
+        $title = t('Users');
         $schools = School::query()->get();
         $packages = Package::query()->get();
-        return view('manager.user.duplicate_index', compact('title', 'schools', 'packages'));
+        $years = Year::query()->get();
+        $grades = Grade::query()->get();
+        return view('manager.user.index', compact('title', 'schools', 'packages', 'years','grades'));
     }
 
     public function create()
     {
-        $title = "إضافة مستخدم";
+        $title = t('Add User');
         $schools = School::query()->get();
         $grades = Grade::query()->get();
         $years_learning = [0,1,2,3,4,5,6,7,8,9,10,11,12];
         $packages = Package::query()->get();
-        return view('manager.user.edit', compact('schools', 'grades', 'title', 'packages', 'years_learning'));
+        $years = Year::query()->get();
+        return view('manager.user.edit', compact('schools', 'grades', 'title','years', 'packages', 'years_learning'));
     }
 
     public function store(UserRequest $request)
     {
         $data = $request->validated();
         if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request->file('image'), 'users');
+            $data['image'] = $this->uploadFile($request->file('image'), 'users');
         }
         $data['active'] = $request->get('active', 0);
         $data['password'] = bcrypt($request->get('password', 123456));
@@ -148,21 +154,17 @@ class UserController extends Controller
         return $this->redirectWith(false, 'manager.user.index', self::ADDMESSAGE);
     }
 
-    public function show($id)
-    {
-
-    }
-
     public function edit($id)
     {
-        $title = "تعديل المستخدم";
+        $title = t('Edit User');
         $user = User::query()->findOrFail($id);
         $schools = School::query()->get();
         $grades = Grade::query()->get();
         $years_learning = [0,1,2,3,4,5,6,7,8,9,10,11,12];
         $packages = Package::query()->get();
         $teachers = Teacher::query()->where('school_id', $user->school_id)->get();
-        return view('manager.user.edit', compact('user', 'schools', 'grades', 'title', 'packages', 'teachers', 'years_learning'));
+        $years = Year::query()->get();
+        return view('manager.user.edit', compact('user', 'schools', 'grades','years', 'title', 'packages', 'teachers', 'years_learning'));
     }
 
     public function update(UserRequest $request, $id)
@@ -170,13 +172,12 @@ class UserController extends Controller
         $user = User::query()->findOrFail($id);
         $data = $request->validated();
         if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request->file('image'), 'users');
+            $data['image'] = $this->uploadFile($request->file('image'), 'users');
         }
         $data['active'] = $request->get('active', 0);
         $data['password'] = $request->get('password', false) ? bcrypt($request->get('password', 123456)) : $user->password;
         $user->update($data);
         $teacher_id = $request->get('teacher_id', false);
-//        dd($teacher_id);
         if ($teacher_id) {
             $user->teacherUser()->forceDelete();
             $user->teacherUser()->updateOrCreate([
@@ -190,221 +191,60 @@ class UserController extends Controller
         return $this->redirectWith(false, 'manager.user.index', self::EDITMESSAGE);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $user = User::query()->findOrFail($id);
-//        TrueFalseResult::query()->where('user_id', $user->id)->forceDelete();
-//        SortResult::query()->where('user_id', $user->id)->forceDelete();
-//        MatchResult::query()->where('user_id', $user->id)->forceDelete();
-//        OptionResult::query()->where('user_id', $user->id)->forceDelete();
-//        Payment::query()->where('user_id', $user->id)->forceDelete();
-        $user->forceDelete();
-
-
-        return $this->redirectWith(true, null, self::DELETEMESSAGE);
+        $request->validate(['row_id' => 'required']);
+        User::destroy($request->get('row_id'));
+        return $this->sendResponse(null, t('Deleted Successfully'));
     }
 
-    public function destroyDuplicate($id)
-    {
-        $user = User::query()->findOrFail($id);
-//        TrueFalseResult::query()->where('user_id', $user->id)->forceDelete();
-//        SortResult::query()->where('user_id', $user->id)->forceDelete();
-//        MatchResult::query()->where('user_id', $user->id)->forceDelete();
-//        OptionResult::query()->where('user_id', $user->id)->forceDelete();
-//        Payment::query()->where('user_id', $user->id)->forceDelete();
-        $user->forceDelete();
-
-        if (request()->ajax()) {
-            return $this->sendResponse(null, self::DELETEMESSAGE);
-        } else {
-            return $this->redirectWith(true, null, self::DELETEMESSAGE);
-        }
-
-
-    }
-
-    public function exportStudentsExcel(Request $request)
+    public function export(Request $request)
     {
         $file_name = "Students Information.xlsx";
         if ($request->get('school_id', false)) {
             $school = School::query()->findOrFail($request->get('school_id'));
             $file_name = $school->name . " Students Information.xlsx";
         }
-        return (new StudentInformation($request, $request->get('school_id', false)))
-            ->download($file_name);
-    }
-
-    public function correctTest()
-    {
-        $users_tests = UserTest::query()->select(['user_id', 'lesson_id', DB::raw('COUNT( * ) AS c')])->groupBy(['user_id', 'lesson_id'])->having('c', '>', 1)->get();
-
-
-//        foreach ($users_tests as $user_tests)
-//        {
-//            $tests = UserTest::query()->where('user_id', $user_tests->user_id)->where('lesson_id', $user_tests->lesson_id)
-//                ->where('corrected', 1)->where('total', '>=', '40')->orderByDesc('total')->get();
-//
-//            if(optional($tests->first())->total >= 40)
-//            {
-//                UserTest::query()->where('user_id', $user_tests->user_id)->where('lesson_id', $user_tests->lesson_id)
-//                    ->where('id', '<>', $tests->first()->id)->update([
-//                        'approved' => 0,
-//                    ]);
-//            }
-//
-//        }
-
-        dd($users_tests);
-    }
-
-    public function userGrades()
-    {
-        return 'done';
-        //->whereDoesntHave('user_grades')
-        $users = User::query()->where('school_id', 1971)->get();
-        foreach ($users as $user) {
-//            $user->user_grades()->create(['grade' => $user->grade]);
-            $user->update([
-                'grade_id' => $user->grade_id - 1,
-            ]);
-        }
-        return 'done';
+        return (new StudentInformation($request))->download($file_name);
     }
 
     public function review(Request $request, $id)
     {
-        $title = "مراجعة سجل الطالب";
-        $user = User::query()->findOrFail($id);
-        if ($user->teacherUser && $user->teacherUser->teacher) {
-            $teacher = $user->teacherUser->teacher;
-        } else {
-            $teacher = false;
-        }
-        if ($request->has('end_date')) {
-            $request->validate([
-                'start_date' => 'required|date_format:Y-m-d',
-                'end_date' => 'required|date_format:Y-m-d|after:start_date',
-            ], [
-                'end_date.after' => t('The end date must be greater than the start date'),
-            ]);
-        }
-        $start_date = $request->get('start_date', Carbon::now()->startOfMonth()->toDateString());
-        $end_date = $request->get('end_date', Carbon::now()->endOfMonth()->toDateString());
-        $grade = $request->get('grade', $user->grade_id);
-        $tests = UserTest::query()->where('user_id', $id)->count();
-        $passed_tests = UserTest::query()->where('user_id', $id)->where('total', '>=', 40)->count();
-        if ($user->user_grades()->count()) {
-            $grades = $user->user_grades()->pluck('grade_id')->unique()->values()->all();
-        } else {
-            $grades[] = $user->grade;
-        }
-        $tracks = UserTracker::query()->where('user_id', $user->id)->whereHas('lesson', function (Builder $query) use ($grade) {
-//            $query->whereHas('level', function (Builder $query) use ($grade) {
-                $query->where('grade_id', $grade);
-//            });
-        })->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->latest()->get();
+        $general = new GeneralFunctions();
+        return $general->review($request,$id,'manager');
+    }
 
-        $data['total'] = $tracks->count();
-        if ($data['total']) {
-            $data['learn'] = $tracks->where('type', 'learn')->count();
-            $data['practise'] = $tracks->where('type', 'practise')->count();
-            $data['test'] = $tracks->where('type', 'test')->count();
-            $data['play'] = $tracks->where('type', 'play')->count();
-            $data['learn_avg'] = ($data['learn'] / $data['total']) * 100;
-            $data['practise_avg'] = ($data['practise'] / $data['total']) * 100;
-            $data['test_avg'] = ($data['test'] / $data['total']) * 100;
-            $data['play_avg'] = ($data['play'] / $data['total']) * 100;
-        } else {
-            $data['learn'] = 0;
-            $data['practise'] = 0;
-            $data['test'] = 0;
-            $data['play'] = 0;
-            $data['learn_avg'] = 0;
-            $data['practise_avg'] = 0;
-            $data['test_avg'] = 0;
-            $data['play_avg'] = 0;
-        }
-
-
-        return view('manager.user.review', compact('user', 'teacher',
-            'tests', 'passed_tests', 'grades', 'start_date', 'end_date', 'tracks', 'title', 'data'));
-
+    public function storyReview(Request $request, $id)
+    {
+        $general = new GeneralFunctions();
+        return $general->storyReview($request,$id,'manager');
     }
 
     public function report(Request $request, $id)
     {
-        $title = "تقرير الطالب";
-        $student = User::query()->findOrFail($id);
-        if ($student->teacherUser && $student->teacherUser->teacher) {
-            $teacher = $student->teacherUser->teacher;
-        } else {
-            $teacher = null;
-        }
+        $general = new GeneralFunctions();
+        return $general->userReport($request,$id);
+    }
 
-        $start_date = $request->get('start_date', Carbon::now()->startOfMonth()->toDateString());
-        $end_date = $request->get('end_date', Carbon::now()->endOfMonth()->toDateString());
-        $grade = $request->get('grade', $student->grade);
+    public function cards(Request $request)
+    {
+        $request->validate([
+            'import_file_id' => 'sometimes|exists:import_student_files,id',
+            'school_id' => 'required_if:import_file_id,null|exists:schools,id',
+        ]);
 
-        $student_tests = UserTracker::query()->where('user_id', $student->id)
-//            ->whereDate('created_at', '>=', $start_date)
-//            ->whereDate('created_at', '<=', $end_date)
-            ->pluck('lesson_id')->unique()->values()->all();
-        $user_games = 0;
-        $user_tests = 0;
-        $user_learning = 0;
-        $user_training = 0;
-        $user_tracker = 0;
-        $lessons_info = [];
-        foreach ($student_tests as $lesson) {
-            $lesson_info = [];
-            $user_games = UserTracker::query()->where('type', 'play')->where('user_id', $student->id)
-                ->where('lesson_id', $lesson)->count();
-            $user_tests = UserTracker::query()->where('type', 'test')->where('user_id', $student->id)
-                ->where('lesson_id', $lesson)->count();
-            $user_learning = UserTracker::query()->where('type', 'learn')->where('user_id', $student->id)
-                ->where('lesson_id', $lesson)->count();
-            $user_training = UserTracker::query()->where('type', 'practise')->where('user_id', $student->id)
-                ->where('lesson_id', $lesson)->count();
+        $students = User::with(['grade','school'])->filter($request)->get()->chunk(6);
+        $student_login_url = config('app.url') . '/login';
+        $school = School::find($request->get('school_id'));
+        $title = $school ? $school->name . ' | ' . t('Students Cards') : t('Students Cards');
+        return view('general.cards_and_qr', compact('students', 'student_login_url', 'school', 'title'));
+    }
 
-            $user_tracker = UserTracker::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->count();
-            if ($user_tracker) {
-                $lesson_info['games'] = round(($user_games / $user_tracker) * 100, 1);
-                $lesson_info['tests'] = round(($user_tests / $user_tracker) * 100, 1);
-                $lesson_info['trainings'] = round(($user_training / $user_tracker) * 100, 1);
-                $lesson_info['learnings'] = round(($user_learning / $user_tracker) * 100, 1);
-                $lesson_info['tracker'] = $user_tracker;
-            } else {
-                $lesson_info['games'] = 0;
-                $lesson_info['tests'] = 0;
-                $lesson_info['trainings'] = 0;
-                $lesson_info['learnings'] = 0;
-                $lesson_info['tracker'] = 0;
-            }
-
-            $user_test = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->latest('total')->first();
-            $lesson_info['user_test'] = $user_test;
-            if (isset($user_test) && !is_null($user_test->start_at) && !is_null($user_test->end_at)) {
-                $time1 = new \DateTime($user_test->start_at);
-                $time2 = new \DateTime($user_test->end_at);
-                $interval = $time1->diff($time2);
-
-                $lesson_info['time_consumed'] = $interval->format('%i minute(s)');
-
-            } else {
-                $lesson_info['time_consumed'] = '-';
-            }
-
-            $user_lesson = UserLesson::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->where('status', 'corrected')->first();
-            $lesson_info['user_lesson'] = $user_lesson;
-
-            $lesson_info['lesson'] = Lesson::query()->find($lesson);
-
-            array_push($lessons_info, $lesson_info);
-        }
-
-        $lessons_info = array_chunk($lessons_info, 2);
-        return view('manager.user.report', compact('student', 'teacher', 'lessons_info'));
-
+    public function login($id)
+    {
+        $user = User::query()->findOrFail($id);
+        Auth::guard('web')->loginUsingId($id);
+        return redirect()->route('home');
     }
 
     public function updateUsers()
@@ -419,146 +259,198 @@ class UserController extends Controller
         return $users;
     }
 
-    public function cards(Request $request)
+
+    public function activation(Request $request)
     {
-        $request->validate([
-            'school_id' => 'required|exists:schools,id',
-        ]);
-
-
-
-        $students = User::query()->with(['school', 'teacherUser'])->search($request)
-            ->orderBy('grade_id')->get();
-
-        $students = $students->chunk(6);
-        $school = School::query()->find($request->get('school_id'));
-        return view('general.user.cards', compact('students', 'school'));
-    }
-    public function cardsQR(Request $request)
-    {
-        $request->validate([
-            'school_id' => 'required|exists:schools,id',
-        ]);
-
-
-
-        $students = User::query()->with(['school', 'teacherUser'])->search($request)
-            ->orderBy('grade_id')->get();
-
-        $students = $students->chunk(8);
-        $school = School::query()->find($request->get('school_id'));
-        return view('general.user.cards_qr', compact('students', 'school'));
+        $request->validate(['school_id' => 'required']);
+        $data['active'] = $request['activation_data']['activation_status'] == 1 ? 1 : 0;
+        if (isset($request['activation_data']['active_to_date']) && !is_null($request['activation_data']['active_to_date'])) {
+            $data['active_to'] = Carbon::parse($request['activation_data']['active_to_date'])->format('Y-m-d');
+        }
+        User::query()->filter($request)->update($data);
+        return $this->sendResponse(null, t('Activation Updated Successfully'));
     }
 
-    public function updateStudentSchoolExpireDate()
+    public function assignedUserToTeacher(Request $request)
     {
-        $students = User::query()
-            ->whereIn('school_id', [54])
-//            ->whereIn('grade', [7,8])
-//            ->whereDate('active_to', '<', '2022-03-30')
-            ->update([
-//                'alternate_grade' => 1,
-                'active_to' => Carbon::createFromFormat('Y-m-d', '2022-09-10'),
+        $request->validate([
+            'school_id' => 'required',
+            'users_data' => 'required|array',
+            'users_data.teacher_school_id' => 'required',
+            'users_data.users_teacher_id' => 'required',
+        ]);
+        $users = User::query()->filter($request)->get();
+
+        foreach ($users as $user) {
+            if ($user->teacherUser) {
+                $user->teacher_student->delete();
+            }
+            $user->teacherUser()->create([
+                'teacher_id' => $request->get('users_data')['users_teacher_id'],
             ]);
-//        Log::info('users count: '. count($students));
-//        foreach ($students as $student)
-//        {
-////            $email = str_replace(' ', '', $student->email);
-////            $email = strtolower(str_replace('albasmaschool.ae', '@albasmaschool.ae', $student->email));
-//            $student->update([
-//                'email' => $email,
-//            ]);
-//        }
-//            ->update([
-//            'active_to' => Carbon::createFromFormat('Y-m-d', '2022-03-30'),
-//        ]);
-//        foreach ($students as $student)
-//        {
-//            $student->update([
-//                'grade' => $student->grade + 1,
-//            ]);
-//            foreach ($student->user_grades as $user_grade){
-//                $user_grade->update([
-//                    'grade' => $user_grade->grade + 1,
-//                ]);
-//            }
-//        }
-        return $students;
+        }
+
+        return $this->sendResponse(null, t('Users Updated Successfully'));
     }
 
-    public function updateMarks(Request $request)
+    public function unassignedUserTeacher(Request $request)
     {
-        $request->validate([
-            'from' => 'required',
-            'to' => 'required',
-        ]);
-
-        $students = User::query()->where('id', '>=', $request->get('from', false))
-            ->where('id', '<', $request->get('to', false))->get();
-
-//        dd($students);
-
-        foreach ($students as $student) {
-            $student_tests_lessons = UserTest::query()->where('user_id', $student->id)->pluck('lesson_id')->unique()->values()->all();
-            foreach ($student_tests_lessons as $student_tests_lesson) {
-                $lesson = Lesson::query()->find($student_tests_lesson);
-                if ($lesson) {
-                    $mark = $lesson->level->level_mark;
-                    $student_tests = UserTest::query()->where('total', '>=', $mark)
-                        ->where('user_id', $student->id)
-                        ->where('lesson_id', $student_tests_lesson)->orderByDesc('total')->get();
-
-                    UserTest::query()->where('user_id', $student->id)
-                        ->where('lesson_id', $student_tests_lesson)
-                        ->where('total', '<', $mark)->update([
-                            'status' => 'Fail',
-                        ]);
-                    UserTest::query()->where('user_id', $student->id)
-                        ->where('lesson_id', $student_tests_lesson)
-                        ->where('total', '>=', $mark)->update([
-                            'status' => 'Pass',
-                        ]);
-
-                    if (count($student_tests)) {
-                        UserTest::query()->where('user_id', $student->id)
-                            ->where('lesson_id', $student_tests_lesson)
-                            ->where('id', '<>', $student_tests->first()->id)->update([
-                                'approved' => 0,
-                            ]);
-                        UserTest::query()->where('user_id', $student->id)
-                            ->where('lesson_id', $student_tests_lesson)
-                            ->where('id', $student_tests->first()->id)->update([
-                                'approved' => 1,
-                            ]);
-                    }
-                }
-
+        $request->validate(['school_id' => 'required']);
+        $users = User::query()->with('teacherUser')->filter($request)->get();
+        foreach ($users as $user) {
+            if ($user->teacherUser) {
+                $user->teacherUser->delete();
             }
         }
-        return true;
+        return $this->sendResponse(null, t('Unsigned Successfully'));
     }
 
-    public function deleteSchoolStudents($school_id)
+
+    public function restore($id)
     {
-        $users = User::query()->whereDate('created_at', now())->where('school_id', $school_id)->forceDelete();
-//        $users_ids = $users->pluck('id');
-//        dd($users_ids);
-//        dd($users_ids);
-//        TrueFalseResult::query()->whereIn('user_id', $users_ids)->forceDelete();
-//        SortResult::query()->whereIn('user_id', $users_ids)->forceDelete();
-//        MatchResult::query()->whereIn('user_id', $users_ids)->forceDelete();
-//        OptionResult::query()->whereIn('user_id', $users_ids)->forceDelete();
-//        Payment::query()->whereIn('user_id', $users_ids)->forceDelete();
-//        $users->forceDelete();
+        $user = User::query()->withTrashed()->findOrFail($id);
+        if ($user) {
+            $other_users = User::query()->where('email', $user->email)->where('id', '!=', $user->id)->get();
+            if ($other_users->count() > 0) {
+                return $this->sendError(t('Cannot Restore Student Before Email Already Exist'), 402);
+            }
+            $user->restore();
+            return $this->sendResponse(null, t('Successfully Restored'));
+        }
+        return $this->sendError(t('Student Not Restored'), 402);
 
-        return true;
 
     }
 
-    public function userLogin($id)
+    public function updateGrades(Request $request)
     {
-        $user = User::query()->findOrFail($id);
-        Auth::guard('web')->loginUsingId($id);
-        return redirect()->route('home');
+        $request->validate([
+            'school_id' => 'required',
+        ]);
+        $data = [];
+        //check if grade is not null and not false then update users
+        if (isset($request['users_grades']['grade']) && !is_null($request['users_grades']['grade'])) {
+            $data['grade_id'] = $request['users_grades']['grade'];
+        }
+
+        //check if grade is not null and not false then update users
+        if (isset($request['users_grades']['alternate_grade']) && !is_null($request['users_grades']['alternate_grade'])) {
+            $data['alternate_grade_id'] = $request['users_grades']['alternate_grade'];
+        }
+
+        //check if learning_years is null and not false then update users
+        if (isset($request['users_grades']['learning_years']) && !is_null($request['users_grades']['learning_years'])) {
+            $data['year_learning'] = $request['users_grades']['learning_years'];
+        }
+
+        //check if assigned_year_id is null and not false then update users
+        if (isset($request['users_grades']['assigned_year_id']) && !is_null($request['users_grades']['assigned_year_id'])) {
+            $data['year_id'] = $request['users_grades']['assigned_year_id'];
+        }
+
+        User::query()->filter($request)->update($data);
+
+        return $this->sendResponse(null, t('Users Updated Successfully'));
     }
+
+    public function duplicateIndex(Request $request)
+    {
+        if (request()->ajax()) {
+            $rows = User::query()->with(['school', 'package'])
+                ->filter($request)
+                ->whereIn('name', function ($q) {
+                    $q->select('name')
+                        ->from('users')
+                        ->whereNull('deleted_at')
+                        ->groupBy('name')
+                        ->havingRaw('COUNT(*) > 1');
+                })->orderBy('name')
+                ->latest('id');
+
+            return DataTables::make($rows)
+                ->escapeColumns([])
+                ->addColumn('created_at', function ($row) {
+                    return Carbon::parse($row->created_at)->toDateString();
+                })
+                ->addColumn('last_login', function ($row) {
+                    return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
+                })
+                ->addColumn('school', function ($row) {
+                    $school = optional($row->school)->name;
+                    $teacher = optional($row->teacher)->name ? optional($row->teacher)->name : '<span class="text-danger">' . t('Unsigned') . '</span>';
+                    $package = optional($row->package)->name;
+                    $html = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('School') . ' </span> : ' . '<span> ' . $school . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Teacher') . ' </span> : ' . '<span> ' . $teacher . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Package') . ' </span> : ' . '<span> ' . $package . '</span></div>' .
+                        '</div>';
+                    return $html;
+                })
+                ->addColumn('active_to', function ($row) {
+                    return is_null($row->active_to) ? 'unpaid' : optional($row->active_to)->format('Y-m-d');
+                })
+                ->addColumn('package', function ($row) {
+                    return optional($row->package)->name;
+                })
+                ->addColumn('student', function ($row) {
+                    $section = !is_null($row->section) ? $row->section : '<span class="text-danger">-</span>';
+
+                    $student = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex fw-bold">' . $row->name . '</div>' .
+                        '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . $row->grade->name . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
+                    return $student;
+                })
+                ->addColumn('dates', function ($row) {
+                    $register_date = Carbon::parse($row->created_at)->format('Y-m-d');
+                    $active_to = $row->active_to ? optional($row->active_to)->format('Y-m-d') : t('unpaid');
+                    $last_login = $row->last_login ? Carbon::parse($row->last_login)->format('Y-m-d H:i') : '';
+                    if ($row->active == 0) {
+                        $status = '<span class="text-danger">' . t('Suspend') . '</span>';
+                    } elseif ($row->active == 1 && !is_null($row->active_to) && optional($row->active_to)->format('Y-m-d') <= now()) {
+                        $status = '<span class="text-danger">' . t('Expired') . '</span>';
+                    } elseif ($row->active == 1 && !is_null($row->active_to) && optional($row->active_to)->format('Y-m-d') > now()) {
+                        $status = '<span class="text-success">' . t('Active') . '</span>';
+                    } else {
+                        $status = '<span class="text-warning">' . t('Unknown') . '</span>';
+                    }
+
+                    if ($row->active_to) {
+                        $active_to = optional($row->active_to)->format('Y-m-d') <= now() ? '<span class="text-danger">' . optional($row->active_to)->format('Y-m-d') . '</span>' : '<span class="text-success">' . optional($row->active_to)->format('Y-m-d') . '</span>';
+                    }
+                    $data = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Register Date') . '</span> : ' . $register_date . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Active To') . '</span> : ' . $active_to . '-' . $status . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Last Login') . '</span> : ' . $last_login . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Year') . '</span> : ' . optional($row->year)->name . '</div>' .
+                        '</div>';
+                    return $data;
+                })
+                ->addColumn('actions', function ($row) {
+                    return $row->action_buttons;
+                })
+                ->make();
+        }
+        $title = t('Duplicated Users');
+        $schools = School::query()->get();
+        $packages = Package::query()->get();
+        $years = Year::query()->get();
+        $grades = Grade::query()->get();
+        return view('manager.user.duplicate_index', compact('years','grades','title', 'schools', 'packages'));
+    }
+    public function destroyDuplicate(Request $request)
+    {
+        $request->validate(['row_id'=>'required']);
+        $user = User::query()->findOrFail($request->get('row_id'))->forceDelete();
+        if (request()->ajax()) {
+            return $this->sendResponse(null, self::DELETEMESSAGE);
+        } else {
+            return $this->redirectWith(true, null, self::DELETEMESSAGE);
+        }
+
+
+    }
+
 }

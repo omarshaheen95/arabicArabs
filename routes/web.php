@@ -18,6 +18,24 @@ Route::get('page/{key}', 'WebController@page')->name('page');
 
 Route::get('/schools', 'WebController@schools')->name('schools');
 
+Route::get('lang/{locale}', function ($locale) {
+    session(['lang' => $locale]);
+    if (Auth::guard('teacher')->check()){
+        Auth::guard('teacher')->user()->update(['lang' => $locale,]);
+    }
+    if (Auth::guard('manager')->check()){
+        Auth::guard('manager')->user()->update(['lang' => $locale,]);
+    }
+    if (Auth::guard('supervisor')->check()){
+        Auth::guard('supervisor')->user()->update(['lang' => $locale,]);
+    }
+    if (Auth::guard('school')->check()){
+        Auth::guard('school')->user()->update(['lang' => $locale,]);
+    }
+
+    app()->setLocale($locale);
+    return back();
+})->name('switch-language');
 
 Auth::routes();
 

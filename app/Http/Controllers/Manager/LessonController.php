@@ -23,6 +23,7 @@ use App\Models\TTrueFalse;
 use App\Models\User;
 use App\Models\UserAssignment;
 use App\Models\UserTest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\Models\Media;
@@ -30,31 +31,53 @@ use Yajra\DataTables\DataTables;
 
 class LessonController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:show lessons')->only('index');
+        $this->middleware('permission:add lessons')->only(['create','store']);
+        $this->middleware('permission:edit lessons')->only(['update','edit']);
+        $this->middleware('permission:delete lessons')->only('destroy');
+        $this->middleware('permission:lesson review')->only('lessonReview');
+
+        $this->middleware('permission:edit lesson learn')->only([
+            'lessonLearn','updateLessonLearn','deleteLessonAudio','deleteLessonVideo'
+        ]);
+    }
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $rows = Lesson::query()->with(['grade'])->search($request)->latest('id');
+        if (request()->ajax()) {
+
+            $rows = Lesson::query()->with('grade')->filter($request)
+                ->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
-                ->addColumn('status', function ($row) {
-                    return $row->status;
+                ->addColumn('created_at', function ($row) {
+                    return Carbon::parse($row->created_at)->toDateString();
                 })
-                ->addColumn('content_btn', function ($row) {
-                    return $row->content_btn;
+                ->addColumn('name', function ($row) {
+                    return $row->name;
+                })
+                ->addColumn('grade', function ($row) {
+                    return $row->grade->name;
+                })
+                ->addColumn('active', function ($row) {
+                    return $row->active ? '<span class="badge badge-primary">' . t('Active') . '</span>' : '<span class="badge badge-danger">' . t('Inactive') . '</span>';
                 })
                 ->addColumn('actions', function ($row) {
-                    $edit_url = route('manager.lesson.edit', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url'));
-                })->make();
+                    return $row->action_buttons;
+                })
+                ->make();
         }
-        $title = 'عرض الدروس';
+        $title = t('Show Lessons');
         $grades = Grade::query()->get();
-        return view('manager.lesson.index', compact('title', 'grades'));
+        $lesson_types = Lesson::lessonTypes();
+        $section_types = Lesson::sectionTypes();
+        return view('manager.lesson.index', compact('title', 'grades','lesson_types','section_types'));
     }
 
     public function create()
     {
-        $title = "إضافة درس";
+        $title = t('Add Lesson');
         $grades = Grade::query()->get();
         return view('manager.lesson.edit', compact('title', 'grades'));
     }
@@ -76,12 +99,12 @@ class LessonController extends Controller
                 ->toMediaCollection('imageLessons');
         }
 
-        return $this->redirectWith(false, 'manager.lesson.index', 'تم الإضافة بنجاح');
+        return redirect()->route('manager.lesson.index')->with('message', t('Successfully Added'));
     }
 
     public function edit($id)
     {
-        $title = 'تعديل درس';
+        $title = t('Edit Lesson');
         $lesson = Lesson::query()->with(['media'])->findOrFail($id);
         $grades = Grade::query()->get();
         return view('manager.lesson.edit', compact('lesson', 'grades', 'title'));
@@ -97,29 +120,31 @@ class LessonController extends Controller
         $lesson = Lesson::query()->findOrFail($id);
         $data = $request->validated();
         $data['active'] = $request->get('active', false);
+        if (!in_array($request->get('lesson_type'),['grammar', 'dictation', 'rhetoric'])){
+            $data['level']=null;
+        }
         $lesson->update($data);
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $lesson
                 ->addMediaFromRequest('image')
                 ->toMediaCollection('imageLessons');
         }
-        return $this->redirectWith(false, 'manager.lesson.index', 'تم التعديل بنجاح');
-
+        return redirect()->route('manager.lesson.index')->with('message', t('Successfully Updated'));
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $lesson = Lesson::query()->findOrFail($id);
-        $lesson->delete();
-        return $this->redirectWith(false, 'manager.lesson.index', 'تم الحذف بنجاح');
+        $request->validate(['row_id' => 'required']);
+        Lesson::destroy($request->get('row_id'));
+        return $this->sendResponse(null, t('Successfully Deleted'));
     }
+
 
     //Learn
-
     public function lessonLearn($id)
     {
         $lesson = Lesson::query()->with(['media'])->findOrFail($id);
-        $title = 'التعلم والتدريب';
+        $title = t('Learning And Training');
         return view('manager.lesson.learn', compact('lesson', 'title'));
     }
 
@@ -137,51 +162,75 @@ class LessonController extends Controller
         //upload array of videos
         if ($request->hasFile('videos') && $request->file('videos')) {
             foreach ($request->file('videos') as $video) {
-                $lesson
-                    ->addMedia($video)
-                    ->toMediaCollection('videoLessons');
+                $lesson->addMedia($video)->toMediaCollection('videoLessons');
+            }
+        }
+        //add new video and delete old
+        if ($request->hasFile('old_videos') && $request->file('old_videos')) {
+            foreach ($request->file('old_videos') as $id=>$video) {
+                $this->deleteLessonVideo($id);
+                $lesson->addMedia($video)->toMediaCollection('videoLessons');
             }
         }
 
         //get all videos
-
-
-        return redirect()->route('manager.lesson.learn', $lesson->id)->with('message', 'تم الإضافة بنجاح');
+        return redirect()->route('manager.lesson.learn', $lesson->id)->with('message', t('Successfully Updated'));
     }
 
     public function deleteLessonAudio($id)
     {
         $lesson = Lesson::query()->findOrFail($id);
         $lesson->clearMediaCollection('audioLessons');
-        return redirect()->route('manager.lesson.learn', $lesson->id)->with('message', 'تم الحذف بنجاح');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function deleteLessonVideo($video_id)
     {
         $video = Media::query()->findOrFail($video_id);
         $video->delete();
-        return redirect()->route('manager.lesson.learn', $video->model_id)->with('message', 'تم الحذف بنجاح');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function uploadImageLesson(Request $request)
     {
         if ($request->hasFile('imageFile')) {
-            $image = asset($this->uploadImage($request->file('imageFile'), 'lesson_images'));
+            $image = asset($this->uploadFile($request->file('imageFile'), 'lesson_images'));
             return response()->json(["link" => $image]);
         } else {
             return false;
         }
     }
 
-    public function lessonReview($id, $step)
+    public function lessonReview($id, $key)
     {
-        $lesson = Lesson::query()->findOrFail($id);
-        $user = User::query()->first();
-        if (!$user) {
-            return redirect()->route('manager.home')->with('m-class', 'error')->with('message', 'لا يوجد أي حساب مستخدم للمتابعة');
+        $lesson = Lesson::query()->with(['grade', 'media'])->findOrFail($id);
+
+        switch ($key) {
+            case 'learn':
+                return view('general.user.lesson.preview.learn', compact('lesson'));
+            case 'training':
+                $preview=true;
+                $type = 'training';
+                $questions = TQuestion::with(['trueFalse','matches.media','options','sortWords','media'])
+                    ->whereIn('type',[1,2,3,4])->where('lesson_id', $id)->get();
+                return view('general.user.lesson.preview.assessment_and_training', compact('questions', 'lesson','preview','type'));
+
+            case 'test':
+                $preview=true;
+                $type = 'assessment';
+                $questions = Question::with(['trueFalse','matches.media','options','sortWords','media'])->where('lesson_id', $id)->get();
+                if ($lesson->lesson_type == 'writing') {
+                    return view('general.user.lesson.preview.writing_test', compact('questions', 'lesson'));
+
+                }
+                if ($lesson->lesson_type == 'speaking') {
+                    return view('general.user.lesson.preview.speaking_test', compact('questions', 'lesson'));
+
+                }
+                return view('general.user.lesson.preview.assessment_and_training', compact('questions', 'lesson','preview','type'));
+            default:
+                return redirect()->route('manager.home');
         }
-        Auth::guard('web')->loginUsingId($id);
-        return redirect()->route('lesson', [$id, $step]);
     }
 
     public function reCorlessonTest(Request $request)

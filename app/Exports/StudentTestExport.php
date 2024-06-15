@@ -8,6 +8,7 @@ use App\Models\UserTest;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -17,23 +18,24 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\Wizard;
+use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class StudentTestExport implements WithMapping, Responsable, WithHeadings, FromCollection, WithEvents, ShouldAutoSize
+class StudentTestExport implements WithMapping,Responsable,WithHeadings,FromCollection,WithEvents,ShouldAutoSize
 {
     use Exportable;
+    private $last_cell;
+    private $last_row;
+    /**
+     * @var Request
+     */
+    private $request;
 
-    public $school_id;
-    public $teacher_id;
-    public $name;
-    public $grade;
-    public $length;
-
-    public function __construct($school_id = 0, $teacher_id = 0)
+    public function __construct(Request $request)
     {
-        $this->school_id = $school_id;
-        $this->teacher_id = $teacher_id;
-        $this->length = 1;
+        $this->request = $request;
     }
 
     public function headings(): array
@@ -43,7 +45,7 @@ class StudentTestExport implements WithMapping, Responsable, WithHeadings, FromC
             'Email',
             'Student Grade',
             'Lesson',
-            'Level',
+            'Grade',
             'Total',
             'Status',
             'Submitted at',
@@ -55,10 +57,10 @@ class StudentTestExport implements WithMapping, Responsable, WithHeadings, FromC
         return [
             $student->user->name,
             $student->user->email,
-            $student->user->grade_name,
+            $student->user->grade->name,
             $student->lesson->name,
             $student->lesson->grade->name,
-            $student->total,
+            $student->total_per,
             $student->status,
             Carbon::parse($student->created_at)->toDateTimeString(),
 
@@ -67,55 +69,7 @@ class StudentTestExport implements WithMapping, Responsable, WithHeadings, FromC
 
     public function collection()
     {
-        $username = request()->get('username', false);
-        $grade = request()->get('grade', false);
-        $level_id = request()->get('level_id', false);
-        $lesson_id = request()->get('lesson_id', false);
-        $start_at = request()->get('start_at', false);
-        $end_at = request()->get('end_at', false);
-        $status = request()->get('status', false);
-        $teacher = $this->teacher_id;
-        $school_id = $this->school_id;
-
-        $students = UserTest::query()->with(['user', 'lesson', 'lesson.grade'])->has('lesson')->whereHas('user', function (Builder $query) use ($teacher, $username, $school_id) {
-            $query->when($teacher, function (Builder $query) use ($teacher) {
-                $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
-                    $query->where('teacher_id', $teacher);
-                });
-            });
-            $query->when($username, function (Builder $query) use ($username) {
-                $query->where('name', 'like', '%' . $username . '%');
-            });
-//            $query->when($school_id, function (Builder $query) use ($school_id){
-//                $query->where('school_id', $school_id);
-//            });
-        })->when($grade, function (Builder $query) use ($grade) {
-            $query->whereHas('lesson', function (Builder $query) use ($grade) {
-//                $query->whereHas('level', function (Builder $query) use ($grade) {
-                    $query->where('grade_id', $grade);
-//                });
-            });
-        })->when($level_id, function (Builder $query) use ($level_id) {
-            $query->whereHas('lesson', function (Builder $query) use ($level_id) {
-                $query->where('level_id', $level_id);
-            });
-        })->when($lesson_id, function (Builder $query) use ($lesson_id) {
-            $query->where('lesson_id', $lesson_id);
-        })->when($start_at, function (Builder $query) use ($start_at) {
-            $query->whereDate('created_at', '>=', $start_at);
-        })
-            ->when($end_at, function (Builder $query) use ($end_at) {
-                $query->whereDate('created_at', '<=', $end_at);
-            })->when($status && $status == 1, function (Builder $query) {
-                $query->where('total', '>=', 40);
-            })->when($status && $status == 2, function (Builder $query) {
-                $query->where('total', '<', 40);
-            })->latest();
-
-        if ($students->count() >= 1) {
-            $this->length = $students->count() + 1;
-        }
-        $this->length = $students->count() + 1;
+        $students = UserTest::query()->with(['lesson.grade', 'user.school', 'user.grade'])->filter($this->request)->latest();
         return $students->orderBy('user_id')->get();
     }
 
@@ -130,11 +84,13 @@ class StudentTestExport implements WithMapping, Responsable, WithHeadings, FromC
             $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
         });
         return [
-            AfterSheet::class => function (AfterSheet $event) {
-                $cellRange = 'A1:H1';
+            AfterSheet::class    => function(AfterSheet $event) {
+                $this->last_cell = $event->sheet->getHighestColumn();
+                $this->last_row = $event->sheet->getHighestRow();
+                $cellRange = 'A1:'.$this->last_cell.'1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold('bold')->setSize(12);
                 $event->sheet->styleCells(
-                    "A1:H$this->length",
+                    "A1:$this->last_cell$this->last_row",
                     [
                         'alignment' => [
                             'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
@@ -142,6 +98,31 @@ class StudentTestExport implements WithMapping, Responsable, WithHeadings, FromC
 
                     ]
                 );
+
+                $redStyle = new Style(false, true);
+                $redStyle->getFont()->setColor(new Color(Color::COLOR_RED));
+                $greenStyle = new Style(false, true);
+                $greenStyle->getFont()->setColor(new Color(Color::COLOR_GREEN));
+                $orangeStyle = new Style(false, true);
+                $orangeStyle->getFont()->setColor(new Color("FFC107"));
+
+                $cellRange = "A1:".$this->last_cell.$this->last_row;
+                $conditionalStyles = [];
+                $wizardFactory = new Wizard($cellRange);
+                /** @var Wizard\TextValue $textWizard */
+                $textWizard = $wizardFactory->newRule(Wizard::TEXT_VALUE);
+
+                $textWizard->contains("Pass")->setStyle($greenStyle);
+                $conditionalStyles[] = $textWizard->getConditional();
+
+                $textWizard->contains("Fail")->setStyle($redStyle);
+                $conditionalStyles[] = $textWizard->getConditional();
+
+
+
+                $event->sheet
+                    ->getStyle($textWizard->getCellRange())
+                    ->setConditionalStyles($conditionalStyles);
             },
         ];
     }

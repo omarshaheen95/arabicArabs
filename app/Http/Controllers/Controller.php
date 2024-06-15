@@ -52,13 +52,26 @@ class Controller extends BaseController
         return redirect()->route($route)->with('message', $message)->with('m-class', $status);
     }
 
-    protected function uploadImage($file,$path = ''){
+    protected function uploadFile($file,$path = '', $with_date = true){
         $fileName = $file->getClientOriginalName();
         $file_exe = $file->getClientOriginalExtension();
         $new_name = uniqid().'.'.$file_exe;
-        $directory = 'uploads'.'/'.$path;
+        if ($with_date){
+            $directory = 'uploads'.'/'.$path.'/'.date("Y").'/'.date("m").'/'.date("d");
+        }else{
+            $directory = 'uploads'.'/'.$path;
+        }
         $destination = public_path($directory);
         $file->move($destination , $new_name);
         return $directory.'/'.$new_name;
     }
+//    protected function uploadImage($file,$path = ''){
+//        $fileName = $file->getClientOriginalName();
+//        $file_exe = $file->getClientOriginalExtension();
+//        $new_name = uniqid().'.'.$file_exe;
+//        $directory = 'uploads'.'/'.$path;
+//        $destination = public_path($directory);
+//        $file->move($destination , $new_name);
+//        return $directory.'/'.$new_name;
+//    }
 }

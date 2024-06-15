@@ -9,90 +9,159 @@ use App\Models\TOption;
 use App\Models\TQuestion;
 use App\Models\TSortWord;
 use App\Models\TTrueFalse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class TrainingController extends Controller
 {
-    public function lessonTraining($id)
+    public function __construct()
     {
-        $title = 'التدريب';
+        $this->middleware('permission:show lesson training')->only('index');
+        $this->middleware('permission:edit lesson training')
+            ->only(['edit','update','deleteTQuestionAttachment','deleteTMatchImage','removeTSortWord']);
+        $this->middleware('permission:preview lesson training')->only('preview');
+        $this->middleware('permission:delete lesson training')->only('destroy');
+    }
+
+    public function index(Request $request, $lesson)
+    {
+        if (request()->ajax())
+        {
+            $request->merge(['lesson_id' => $lesson]);
+            $rows = TQuestion::query()->filter($request)->latest();
+            return DataTables::make($rows)
+                ->escapeColumns([])
+                ->addColumn('type_name', function ($row) {
+                    return $row->type_name;
+                })
+                ->addColumn('created_at', function ($row){
+                    return Carbon::parse($row->created_at)->toDateString();
+                })
+                ->addColumn('actions', function ($row) {
+                    return $row->action_buttons;
+                })
+                ->make();
+        }
+        $lesson = Lesson::query()->findOrFail($lesson);
+        $title = t('Show Training Questions');
+        return view('manager.lesson.training.index', compact('title', 'lesson'));
+    }
+
+    public function edit($id,$question_id=null)
+    {
+        $title = t('Training');
         $lesson = Lesson::query()->with('grade')->findOrFail($id);
-//        dd(TQuestion::query()->where('lesson_id', $lesson->id)->sum('mark'));
+
         if (in_array($lesson->lesson_type, [ 'grammar', 'dictation', 'rhetoric']))
         {
             if ($lesson->grade->grade_number <= 3)
             {
-                $c_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();
-                $t_f_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();
-                $m_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();
+                $questions = TQuestion::with(['trueFalse','matches.media','options','media'])
+                    ->where('lesson_id', $lesson->id)
+                    ->when($question_id,function ($query) use ($question_id){
+                        $query->where('id', $question_id);
+                    })
+                    ->whereIn('type',[1,2,3])->get();
+
+                $c_questions = $questions->where('type', 2);
+                $t_f_questions = $questions->where('type', 1);
+                $m_questions = $questions->where('type', 3);
                 $total_count = TQuestion::query()->where('lesson_id', $lesson->id)->count();
                 $data_count = [
                     'choose' =>   $total_count ? $c_questions->count() :6,
                     'match' =>  $total_count ? $m_questions->count() :4,
                     'true_false' =>  $total_count ? $t_f_questions->count() :5
                 ];
-                return view('manager.lesson.new_skills_training', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 'data_count'));
+                $compact =  compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 'data_count');
+
+                if ($question_id){
+                    return view('manager.lesson.training.edit_specific_question', $compact);
+                }
+                return view('manager.lesson.training.new_skills_training',$compact);
             }else{
-                $t_f_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();
-                $c_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();
+                $questions = TQuestion::with(['trueFalse','options','media'])
+                    ->where('lesson_id', $lesson->id)
+                    ->when($question_id,function ($query) use ($question_id){
+                        $query->where('id', $question_id);
+                    })
+                    ->whereIn('type',[1,2])->get();
+                $c_questions = $questions->where('type', 2);
+                $t_f_questions = $questions->where('type', 1);
                 $data_count = [
                     'choose' =>   8,
                     'true_false' => 7
                 ];
-                return view('manager.lesson.new_skills_training', compact('title', 'lesson', 't_f_questions', 'c_questions', 'data_count'));
+                $compact = compact('title', 'lesson', 't_f_questions', 'c_questions', 'data_count');
+                if ($question_id){
+                    return view('manager.lesson.training.edit_specific_question', $compact);
+                }
+                return view('manager.lesson.training.new_skills_training', $compact);
             }
         }
-        $t_f_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();
-        $c_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();
-        $m_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();
-        $s_questions = TQuestion::query()->where('lesson_id', $lesson->id)->where('type', 4)->with(['sortWords', 'media'])->get();
 
-//        dd(TQuestion::query()->where('lesson_id', $lesson->id)->sum('mark'));
+        $t_questions = TQuestion::with(['trueFalse','options','matches.media','sortWords','media'])
+            ->where('lesson_id', $lesson->id)
+            ->when($question_id,function ($query) use ($question_id){
+                $query->where('id', $question_id);
+            })
+            ->get();
+        $t_f_questions = $t_questions->where('type', 1);
+        $c_questions = $t_questions->where('type', 2);
+        $m_questions = $t_questions->where('type', 3);
+        $s_questions = $t_questions->where('type', 4);
+        $compact = compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 's_questions');
 
-        return view('manager.lesson.training', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 's_questions'));
+        if ($question_id){
+            return view('manager.lesson.training.edit_specific_question', $compact);
+        }
+        return view('manager.lesson.training.training', $compact);
     }
 
-    public function updateLessonTraining(Request $request, $id, $type)
+    public function update(Request $request, $id, $type)
     {
         $lesson = Lesson::query()->findOrFail($id);
         switch ($type) {
             case 1:
-//                dd($request->all());
                 $this->trueFalseTraining($request, $lesson);
-                return redirect()->route('manager.lesson.training', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
             case 2:
                 $this->optionsTraining($request, $lesson);
-                return redirect()->route('manager.lesson.training', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
             case 3:
-//                dd($request->all());
                 $this->matchTraining($request, $lesson);
-                return redirect()->route('manager.lesson.training', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
             case 4:
-//                dd($request->all());
                 $this->sortTraining($request, $lesson);
-                return redirect()->route('manager.lesson.training', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
         }
     }
 
+    public function destroy(Request $request)
+    {
+        $request->validate(['row_id'=>'required']);
+        TQuestion::destroy($request->get('row_id'));
+        return $this->sendResponse(null,t('Successfully Deleted'));
+    }
     public function deleteTQuestionAttachment($id)
     {
         $question = TQuestion::query()->findOrFail($id);
         $question->clearMediaCollection('t_imageQuestion');
-        return redirect()->back()->with('message', 'تم الحذف بنجاح');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function deleteTMatchImage($id)
     {
         $match = TMatch::query()->findOrFail($id);
         $match->clearMediaCollection('t_match');
-        return redirect()->back()->with('message', 'تم الحذف بنجاح');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function removeTSortWord($id)
     {
         $sort_word = TSortWord::query()->findOrFail($id);
         $sort_word->delete();
-        return $this->redirectWith(true, null, 'Successfully Deleted');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function matchTraining(Request $request, $lesson)

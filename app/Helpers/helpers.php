@@ -1,4 +1,6 @@
 <?php
+
+use Illuminate\Support\Facades\Cache;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\Topics;
@@ -26,7 +28,7 @@ function uploadFile($file, $path ,bool $new_name=true)
     $path = $path.'/'.date("Y").'/'.date("m").'/'.date("d");
     $destination = public_path($path);
     $file->move($destination , $file_new_name);
-    return ['name'=>$new_name?$file_new_name:$file_original_name,'path'=>$path . DIRECTORY_SEPARATOR . $file_new_name];
+    return ['name'=>$new_name?$file_new_name:$file_original_name,'path'=>$path .'/'. $file_new_name];
 }
 function getGradeName($grade)
 {
@@ -117,38 +119,35 @@ function get_firebase_token(string $userid = '')
     $firebase_token = (string)$auth->createCustomToken($userid, $claims);
     return $firebase_token;
 }
-
-function t($key,$placeholder=[],$locale=null)
+function t($key, $placeholder = [], $locale = null)
 {
-
-    $group = 'manager';
-    if(is_null($locale))
-    $locale = config('app.locale');
+    $group = 'translation';
+    if (is_null($locale))
+        $locale = config('app.locale');
     $key = trim($key);
-    $word = $group.'.'.$key;
+    $word = $group . '.' . $key;
     if (Lang::has($word))
-        return trans($word,$placeholder,$locale);
+        return trans($word, $placeholder, $locale);
 
     $messages = [
         $word => $key,
     ];
 
     app('translator')->addLines($messages, $locale);
-    $langs = config('translatable.locales');
-    return $key;
+    $langs = ['en','ar'];
     foreach ($langs as $lang) {
-        $translation_file = base_path() . '/resources/lang/'.$lang.'/' . $group . '.php';
+        $translation_file = base_path() . '/resources/lang/' . $lang . '/' . $group . '.php';
         $fh = fopen($translation_file, 'r+');
         $key = str_replace("'", "\'", $key);
         $new_key = "\n \t'$key' => '$key',\n];\n";
         fseek($fh, -4, SEEK_END);
         fwrite($fh, $new_key);
         fclose($fh);
-     }
-    return trans($word,$placeholder,$locale);
-    return $key;
-
+    }
+    return trans($word, $placeholder, $locale);
+    //return $key;
 }
+
 function w($key,$placeholder=[],$locale=null)
 {
 
@@ -1488,4 +1487,55 @@ function get_guard(){
 
     }
     return null;
+}
+
+function settingCache($key)
+{
+    //Cache::forget('settings');
+    $cache = Cache::remember('settings', 60 * 48, function () {
+        return \App\Models\Setting::get();
+    });
+
+    //dd($cache->where('key','mobile')->pluck('value')->first());
+    return $cache->where('key',$key)->pluck('value')->first() ;
+
+}
+
+function sysDomain()
+{
+    $host = request()->getHost();
+    if(strpos($host, 'www') !== false){
+        return $host;
+    } else{
+        return 'www.'.$host;
+    }
+
+}
+
+function deleteFile($path, string $disk = 'public')
+{
+    return \Illuminate\Support\Facades\File::delete(public_path($path));
+}
+function storyGradesSys()
+{
+  return  [15=>'Grade KG',1=>'Grade 1',2=>'Grade 2',3=>'Grade 3',4=>'Grade 4',5=>'Grade 5',
+        6=>'Grade 6',7=>'Grade 7',8=>'Grade 8',9=>'Grade 9'];
+//   return[
+//
+//       ['name'=>'Grade KG','value'=>15],
+//       ['name'=>'Grade 1','value'=>1],
+//       ['name'=>'Grade 2','value'=>2],
+//       ['name'=>'Grade 3','value'=>3],
+//       ['name'=>'Grade 4','value'=>4],
+//       ['name'=>'Grade 5','value'=>5],
+//       ['name'=>'Grade 6','value'=>6],
+//       ['name'=>'Grade 7','value'=>7],
+//       ['name'=>'Grade 8','value'=>8],
+//       ['name'=>'Grade 9','value'=>9],
+//   ] ;
+}
+function lessonTypes()
+{
+    return ['reading','writing','listening','speaking','grammar','dictation','rhetoric'];
+    //return ['قراءة','كتابة','استماع','تحدث','القواعد النحوية','الإملاء','البلاغة'];
 }

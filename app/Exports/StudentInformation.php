@@ -30,19 +30,12 @@ class StudentInformation implements WithMapping, Responsable, WithHeadings, From
 {
     use Exportable;
 
-    public $school_id;
-    public $teacher_id;
-    public $name;
-    public $grade;
     public $length;
-    public $status;
-    public $section;
-    public $created_at;
+
     public $request;
 
-    public function __construct(Request $request,$school_id = 0)
+    public function __construct(Request $request)
     {
-        $this->school_id = request()->get('school_id', $school_id);
         $this->request = $request;
         $this->length = 1;
     }
@@ -50,14 +43,16 @@ class StudentInformation implements WithMapping, Responsable, WithHeadings, From
     public function headings(): array
     {
         return [
-            'اسم الطالب',
-            'الصف',
-            'الشعبة',
-            'البريد الإلكتروني',
-            'كلمة المرور الإفتراضية',
-            'الموبايل',
-            'المدرسة',
-            'المعلم',
+            'Student Name',
+            'Grade',
+            'Section',
+            'Email',
+            'Default Password',
+            'Mobile',
+            'School Name',
+            'Teacher Name',
+            'Active To',
+            'Last Login',
         ];
     }
 
@@ -71,7 +66,9 @@ class StudentInformation implements WithMapping, Responsable, WithHeadings, From
             '123456',
             $student->mobile . ' ',
             optional($student->school)->name,
-            optional(optional($student->teacherUser)->teacher)->name,
+            optional(optional($student->teacher_student)->teacher)->name,
+            is_null($student->active_to) ? 'unpaid' : optional($student->active_to)->format('Y-m-d'),
+            $student->last_login?Carbon::parse($student->last_login)->toDateTimeString():''
 
         ];
     }
@@ -80,12 +77,7 @@ class StudentInformation implements WithMapping, Responsable, WithHeadings, From
     {
 
 
-        $students = User::query()
-            ->with(['teacherUser.teacher', 'teacherUser'])
-            ->latest()->when($this->school_id, function (Builder $query) {
-            $query->where('school_id', $this->school_id);
-        })->search($this->request);
-
+        $students = User::query()->with(['teacherUser.teacher','school'])->filter($this->request)->latest();
 
         if ($students->count() >= 1) {
             $this->length = $students->count() + 1;
@@ -107,7 +99,7 @@ class StudentInformation implements WithMapping, Responsable, WithHeadings, From
         });
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $cellRange = 'A1:G1';
+                $cellRange = 'A1:J1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold('bold')->setSize(12);
                 $event->sheet->styleCells(
                     "A1:H$this->length",

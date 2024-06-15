@@ -6,6 +6,7 @@ use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,70 @@ class Lesson extends Model implements HasMedia
     ];
 
     protected $cascadeDeletes = ['questions', 't_questions', 'userAssignments', 'userTests', 'userLessons', 'userTracks'];
+
+
+    public function scopeFilter(Builder $query,$request =null): Builder
+    {
+        if (!$request){
+            $request = \request();
+        }
+        return $query
+            ->when($value = $request->get('id', false), function (Builder $query) use ($value) {
+                $query->where('id', $value);
+            })->when($value = $request->get('row_id', []), function (Builder $query) use ($value) {
+                $query->whereIn('id', $value);
+            })->when($value = $request->get('grade_id', false), function (Builder $query) use ($value) {
+                $query->where('grade_id', $value);
+
+            })->when($value = $request->get('name', false), function (Builder $query) use ($value) {
+                $query->where('name', $value);
+
+            })->when($value = $request->get('level', false), function (Builder $query) use ($value) {
+                $query->where('level', $value);
+
+            })->when($value = $request->get('lesson_type', false), function (Builder $query) use ($value) {
+                $query->where('lesson_type', $value);
+
+            })->when($value = $request->get('section_type', false), function (Builder $query) use ($value) {
+                $query->where('section_type', $value);
+
+            })->when($value = $request->get('active', false), function (Builder $query) use ($value) {
+                $query->where('active', $value != 2);
+            })->when($value = $request->get('hidden_status', false) == 1, function (Builder $query) use ($request) {
+                $query->whereDoesntHave('hiddenLessons', function ($query) use ($request) {
+                    $query->where('school_id', Auth::guard('school')->user()->id);
+                });
+            })
+            ->when($value = $request->get('hidden_status', false) == 2, function (Builder $query) use ($request) {
+                $query->whereHas('hiddenLessons', function ($query) use ($request) {
+                    $query->where('school_id', Auth::guard('school')->user()->id);
+                });
+            });
+    }
+
+    public function getActionButtonsAttribute()
+    {
+        $actions = [];
+        if (\request()->is('manager/*')) {
+            $actions = [
+                ['key' => 'edit', 'name' => t('Edit'), 'route' => route('manager.lesson.edit', $this->id), 'permission' => 'edit lessons'],
+                ['key' => 'learn', 'name' => t('Learn'), 'route' => route('manager.lesson.learn', $this->id), 'permission' => 'edit lesson learn'],
+                ['key' => 'training', 'name' => t('Training'), 'route' => route('manager.lesson.training.index', $this->id), 'permission' => 'show lesson training'],
+                ['key' => 'blank', 'name' => t('Training Preview'), 'route' => route('manager.lesson.review', [$this->id, 'training']), 'permission' => 'lesson review'],
+                ['key' => 'assessment', 'name' => t('Assessment'), 'route' => route('manager.lesson.assessment.index', $this->id), 'permission' => 'show lesson assessment'],
+                ['key' => 'blank', 'name' => t('Assessment Preview'), 'route' => route('manager.lesson.review', [$this->id, 'test']), 'permission' => 'lesson review'],
+                ['key' => 'delete', 'name' => t('Delete'), 'route' => $this->id, 'permission' => 'delete lessons'],
+            ];
+        } elseif (\request()->is('school/*')) {
+            $actions = [];
+        } elseif (\request()->is('teacher/*')) {
+            $actions = [];
+        } elseif (\request()->is('supervisor/*')) {
+            $actions = [];
+        }
+        return view('general.action_menu')->with('actions', $actions);
+
+    }
 
     public function getTypeNameAttribute()
     {
@@ -68,27 +133,6 @@ class Lesson extends Model implements HasMedia
         return $this->belongsTo(Grade::class);
     }
 
-    public function scopeSearch(Builder $query, Request $request)
-    {
-        return
-            $query->when($name = $request->get('name', false), function ($query) use ($name) {
-                $query->where('name', 'like', "%$name%");
-            })->when($grade = $request->get('grade_id', false), function ($query) use ($grade) {
-                $query->where('grade_id', $grade);
-            })->when($lesson_type = $request->get('lesson_type', false), function ($query) use ($lesson_type) {
-                $query->where('lesson_type', $lesson_type);
-            })->when($id_num = $request->get('id', false), function ($query) use ($id_num) {
-                $query->where('id', $id_num);
-            })->when($section_type = $request->get('section_type', false), function ($query) use ($section_type) {
-                if ($section_type != 'general')
-                {
-                    $query->where('section_type', $section_type);
-                }else{
-                    $query->whereNull('section_type');
-                }
-
-            });
-    }
 
     public function registerMediaCollections(): void
     {
@@ -110,19 +154,6 @@ class Lesson extends Model implements HasMedia
             ->sharpen(10);
     }
 
-    public function getContentBtnAttribute()
-    {
-        $training_practices = ['reading','listening','grammar','dictation','rhetoric'];
-        $btn = '<a href="'.route('manager.lesson.learn', $this->id).'" class="btn btn-danger ">التعلم</a> ';
-
-        if (in_array($this->lesson_type, $training_practices))
-        {
-            $btn .= '<a href="'.route('manager.lesson.training', $this->id).'" class="btn btn-danger ">التدريب</a> ';
-        }
-        $btn .= '<a href="'.route('manager.lesson.assessment', $this->id).'" class="btn btn-danger ">الاختبار</a>';
-
-        return $btn;
-    }
 
     public function getSectionTypeNameAttribute()
     {
@@ -194,6 +225,14 @@ class Lesson extends Model implements HasMedia
         }
     }
 
+    public static function lessonTypes()
+    {
+        return['reading', 'writing', 'listening', 'speaking', 'grammar', 'dictation', 'rhetoric'];
+    }
+    public static function sectionTypes()
+    {
+        return['informative', 'literary'];
+    }
     public function questions()
     {
         return $this->hasMany(Question::class);
@@ -223,5 +262,8 @@ class Lesson extends Model implements HasMedia
         return $this->hasMany(UserTracker::class);
     }
 
-
+    public function hiddenLessons(): HasMany
+    {
+        return $this->hasMany(HiddenLesson::class, 'lesson_id');
+    }
 }

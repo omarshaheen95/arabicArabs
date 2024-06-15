@@ -43,6 +43,7 @@ class UserRequest extends FormRequest
 //                'type' => 'required|in:trial,member',
                 'active_to' => 'required|date_format:Y-m-d',
                 'year_learning' => 'required',
+                'year_id' => 'required',
                 'country_code' => 'required',
                 'short_country' => 'required',
                 'section' => 'nullable',

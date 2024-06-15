@@ -32,6 +32,7 @@ class UserRequest extends FormRequest
             'country_code' => 'required',
             'section' => 'nullable',
             'short_country' => 'required',
+            'year_id' => 'required',
             "phone" => ['required'],
             'mobile' => ['required', 'phone:'.request()->get('short_country')],
             'teacher_id' => 'nullable|exists:teachers,id',

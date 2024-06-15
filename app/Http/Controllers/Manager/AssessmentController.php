@@ -10,110 +10,177 @@ use App\Models\Question;
 use App\Models\SortWord;
 use App\Models\TrueFalse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Yajra\DataTables\Facades\DataTables;
 
 class AssessmentController extends Controller
 {
-    public function lessonAssessment($id)
+    public function __construct()
     {
-        $title = 'الاختبار';
+        $this->middleware('permission:show lesson assessment')->only('index');
+        $this->middleware('permission:edit lesson assessment')
+            ->only(['edit','update','deleteAQuestionAttachment','deleteAMatchImage','removeASortWord']);
+        $this->middleware('permission:preview lesson assessment')->only('preview');
+        $this->middleware('permission:delete lesson assessment')->only('destroy');
+    }
+    public function index(Request $request, $lesson)
+    {
+        if (request()->ajax())
+        {
+            $request->merge(['lesson_id' => $lesson]);
+            $rows = Question::query()->filter($request)->latest();
+            return DataTables::make($rows)
+                ->escapeColumns([])
+                ->addColumn('type_name', function ($row) {
+                    return $row->type_name;
+                })
+                ->addColumn('created_at', function ($row){
+                    return Carbon::parse($row->created_at)->toDateString();
+                })
+                ->addColumn('actions', function ($row) {
+                    return $row->action_buttons;
+                })
+                ->make();
+        }
+        $lesson = Lesson::query()->findOrFail($lesson);
+        $title = t('Show Assessment Questions');
+        return view('manager.lesson.assessment.index', compact('title', 'lesson'));
+    }
+
+    public function edit($id,$question_id=null)
+    {
+        $title = t('Assessment');
         $lesson = Lesson::query()->with(['media'])->findOrFail($id);
-//        Question::query()->where('lesson_id', $id)->delete();
-//        dd(Question::query()->where('lesson_id', $id)->sum('mark'));
         if (!in_array($lesson->lesson_type, ['reading', 'listening', 'grammar', 'dictation', 'rhetoric'])) {
             if ($lesson->lesson_type == 'writing')
             {
                 $questions = Question::query()->where('type', 5)->where('lesson_id', $lesson->id)->with(['media'])->get();
-                return view('manager.lesson.assessment_listening_speaking', compact('title', 'lesson', 'questions'));
+                return view('manager.lesson.assessment.assessment_listening_speaking', compact('title', 'lesson', 'questions'));
             }
             if ($lesson->lesson_type == 'speaking')
             {
                 $questions = Question::query()->where('type', 6)->where('lesson_id', $lesson->id)->with(['media'])->get();
-                return view('manager.lesson.assessment_listening_speaking', compact('title', 'lesson', 'questions'));
+                return view('manager.lesson.assessment.assessment_listening_speaking', compact('title', 'lesson', 'questions'));
             }
             return $this->redirectWith(false, 'manager.lesson.index', 'لا يمكن اضافة اختبار لهذا الدرس', 'error');
         }
+
         if (in_array($lesson->lesson_type, [ 'grammar', 'dictation', 'rhetoric']))
         {
             if ($lesson->grade->grade_number <= 3)
             {
-                $t_f_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();//->sum('mark');
-                $c_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();//->sum('mark');
-                $m_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();//->sum('mark');
+                $questions = Question::with(['trueFalse','options','matches.media','media'],'media')
+                    ->where('lesson_id', $lesson->id)
+                    ->when($question_id,function ($query) use ($question_id){
+                        $query->where('id', $question_id);
+                    })
+                    ->whereIn('type',[1,2,3])
+                    ->get();
+                $t_f_questions = $questions->where('type', 1);//->sum('mark');
+                $c_questions = $questions->where('type', 2);//->sum('mark');
+                $m_questions = $questions->where('type', 3);//->sum('mark');
                 $total_count = $t_f_questions->count() + $c_questions->count() + $m_questions->count();
                 $data_count = [
                     'choose' =>   $total_count ? $c_questions->count() :6,
                     'match' =>  $total_count ? $m_questions->count() :4,
                     'true_false' =>  $total_count ? $t_f_questions->count() :5
                 ];
-                return view('manager.lesson.new_skills_assessment', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 'data_count'));
+                $compact = compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 'data_count');
+                if($question_id){
+                    return view('manager.lesson.assessment.edit_specific_question', $compact);
+                }
+                return view('manager.lesson.assessment.new_skills_assessment', $compact);
             }else{
-                $t_f_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();//->sum('mark');
-                $c_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();//->sum('mark');
-                $data_count = [
-                    'choose' =>   8,
-                    'true_false' => 7
-                ];
-                return view('manager.lesson.new_skills_assessment', compact('title', 'lesson', 't_f_questions', 'c_questions', 'data_count'));
+                $questions = Question::with(['trueFalse','options','media'],'media')
+                    ->where('lesson_id', $lesson->id)
+                    ->when($question_id,function ($query) use ($question_id){
+                        $query->where('id', $question_id);
+                    })
+                    ->whereIn('type',[1,2])
+                    ->get();
+                $t_f_questions = $questions->where('type', 1);//->sum('mark');
+                $c_questions = $questions->where('type', 2);//->sum('mark');
+                $data_count = ['choose' =>   8, 'true_false' => 7];
+                $compact = compact('title', 'lesson', 't_f_questions', 'c_questions', 'data_count');
+                if($question_id){
+                    return view('manager.lesson.assessment.edit_specific_question', $compact);
+                }
+                return view('manager.lesson.assessment.new_skills_assessment', $compact);
             }
         }
-        $t_f_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 1)->with('trueFalse', 'media')->get();//->sum('mark');
-        $c_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 2)->with('options', 'media')->get();//->sum('mark');
-        $m_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 3)->with(['matches', 'matches.media', 'media'])->get();//->sum('mark');
-        $s_questions = Question::query()->where('lesson_id', $lesson->id)->where('type', 4)->with(['sortWords', 'media'])->get();//->sum('mark');
-//        dd($t_f_questions + $c_questions + $m_questions + $s_questions);
 
-        return view('manager.lesson.assessment', compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 's_questions'));
+        $questions = Question::with(['trueFalse','options','matches', 'matches.media','sortWords','media'],'media')
+            ->where('lesson_id', $lesson->id)
+            ->when($question_id,function ($query) use ($question_id){
+                $query->where('id', $question_id);
+            })
+            ->get();
+        $t_f_questions = $questions->where('type', 1);//->sum('mark');
+        $c_questions = $questions->where('type', 2);//->sum('mark');
+        $m_questions = $questions->where('type', 3);//->sum('mark');
+        $s_questions = $questions->where('type', 4);//->sum('mark');
+        $compact = compact('title', 'lesson', 'm_questions', 't_f_questions', 'c_questions', 's_questions');
+        if($question_id){
+            return view('manager.lesson.assessment.edit_specific_question', $compact);
+        }
+        return view('manager.lesson.assessment.assessment', $compact);
     }
 
-    public function updateLessonAssessment(Request $request, $id, $type)
+    public function update(Request $request, $id, $type)
     {
         $lesson = Lesson::query()->findOrFail($id);
         switch ($type) {
             case 1:
 //                dd($request->all());
                 $this->trueFalseAssessment($request, $lesson);
-                return redirect()->route('manager.lesson.assessment', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
             case 2:
                 $this->optionsAssessment($request, $lesson);
-                return redirect()->route('manager.lesson.assessment', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
             case 3:
 //                dd($request->all());
                 $this->matchAssessment($request, $lesson);
-                return redirect()->route('manager.lesson.assessment', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
             case 4:
 //                dd($request->all());
                 $this->sortAssessment($request, $lesson);
-                return redirect()->route('manager.lesson.assessment', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
             case 'writing':
 //                dd($request->all());
                 $this->writingAssessment($request, $lesson);
-                return redirect()->route('manager.lesson.assessment', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
             case 'speaking':
 //                dd($request->all());
                 $this->speakingAssessment($request, $lesson);
-                return redirect()->route('manager.lesson.assessment', $lesson->id)->with('message', 'تم إضافة الأسئلة بنجاح');
+                return $this->sendResponse(null,t('Successfully Updated'));
         }
     }
 
+    public function destroy(Request $request)
+    {
+        $request->validate(['row_id'=>'required']);
+        Question::destroy($request->get('row_id'));
+        return $this->sendResponse(null,t('Successfully Deleted'));
+    }
     public function deleteAQuestionAttachment($id)
     {
         $question = Question::query()->findOrFail($id);
         $question->clearMediaCollection('imageQuestion');
-        return redirect()->back()->with('message', 'تم الحذف بنجاح');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function deleteAMatchImage($id)
     {
         $match = QMatch::query()->findOrFail($id);
         $match->clearMediaCollection('match');
-        return redirect()->back()->with('message', 'تم الحذف بنجاح');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function removeASortWord($id)
     {
         $sort_word = SortWord::query()->findOrFail($id);
         $sort_word->delete();
-        return $this->redirectWith(true, null, 'Successfully Deleted');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function matchAssessment(Request $request, $lesson)
@@ -469,4 +536,6 @@ class AssessmentController extends Controller
 
         return true;
     }
+
+
 }

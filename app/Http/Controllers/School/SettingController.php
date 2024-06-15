@@ -2,36 +2,154 @@
 
 namespace App\Http\Controllers\School;
 
+use App\Classes\GeneralFunctions;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\School\SchoolPasswordRequest;
+use App\Http\Requests\School\SchoolProfileRequest;
 use App\Models\Grade;
-use App\Models\Lesson;
-use App\Models\Level;
-use App\Models\UserLesson;
+use App\Models\LoginSession;
+use App\Models\StoryAssignment;
+use App\Models\StudentStoryTest;
 use App\Models\UserTest;
+use App\Models\Supervisor;
+use App\Models\UserAssignment;
+use App\Models\UserLesson;
 use App\Models\Teacher;
 use App\Models\User;
 use App\Models\UserTracker;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Proengsoft\JsValidation\Facades\JsValidatorFacade as JsValidator;
 
 class SettingController extends Controller
 {
-    public function home()
+    public function home(Request $request)
     {
         $title = t('Dashboard');
-        $school = Auth::guard('school')->user();
-        $students = User::query()->where('school_id', $school->id)->count();
-        $tests = UserTest::query()->whereHas('user', function (Builder $query) use($school){
-            $query->where('school_id', $school->id);
-        })->count();
-        $teachers = Teacher::query()->where('school_id', $school->id)->count();
 
-        return view('school.home', compact('title', 'students', 'tests', 'teachers'));
+       if (Auth::guard('school')->user()->active){
+           $students = User::query()->filter($request)->count();
+           $tests = UserTest::query()->filter($request)->count();
+           $teachers = Teacher::query()->filter($request)->count();
+           $supervisors = Supervisor::query()->where('school_id', Auth::guard('school')->id())->count();
+
+           //get data for chart statistics for students terms and students login
+           $students_login_data = LoginSession::query()
+               ->whereHasMorph('model', User::class, function (Builder $query) {
+                   $query->where('school_id', Auth::guard('school')->id());
+               })
+               ->where('model_type', User::class)->groupBy('date')->orderBy('date')
+               ->whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])
+               ->get(array(
+                   DB::raw('DATE_FORMAT(created_at, "%H:00") as date'),
+                   DB::raw('COUNT(*) as counts')
+               ));
+           $StudentsLogin_data = ['categories' => $students_login_data->pluck('date'), 'data' => $students_login_data->pluck('counts'), 'total' => "(" . t('Total') . ' : ' . $students_login_data->sum('counts') . ")"];
+
+           $lessons_tests = UserTest::query()->whereRelation('user', 'school_id', Auth::guard('school')->id())->groupBy('date')->orderBy('date')
+               ->whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])
+               ->get(array(
+                   DB::raw('DATE_FORMAT(created_at, "%h:00 %p") as date'),
+                   DB::raw('COUNT(*) as counts')
+               ));
+           $LessonsTests_data = ['categories' => $lessons_tests->pluck('date'), 'data' => $lessons_tests->pluck('counts'), 'total' => "(" . t('Total') . ' : ' . $lessons_tests->sum('counts') . ")"];
+
+           $lessons_assignments = UserAssignment::query()->whereRelation('user', 'school_id', Auth::guard('school')->id())->groupBy('date')->orderBy('date')
+               ->whereBetween('completed_at', [now()->startOfDay(), now()->endOfDay()])
+               ->get(array(
+                   DB::raw('DATE_FORMAT(completed_at, "%h:00 %p") as date'),
+                   DB::raw('COUNT(*) as counts')
+               ));
+           $LessonsAssignments_data = ['categories' => $lessons_assignments->pluck('date'), 'data' => $lessons_assignments->pluck('counts'), 'total' => "(" . t('Total') . ' : ' . $lessons_assignments->sum('counts') . ")"];
+
+
+           $stories_tests = StudentStoryTest::query()->whereRelation('user', 'school_id', Auth::guard('school')->id())->groupBy('date')->orderBy('date')
+               ->whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])
+               ->get(array(
+                   DB::raw('DATE_FORMAT(created_at, "%h:00 %p") as date'),
+                   DB::raw('COUNT(*) as counts')
+               ));
+           $StoriesTests_data = ['categories' => $stories_tests->pluck('date'), 'data' => $stories_tests->pluck('counts'), 'total' => "(" . t('Total') . ' : ' . $stories_tests->sum('counts') . ")"];
+
+           $stories_assignments = StoryAssignment::query()->whereRelation('user', 'school_id', Auth::guard('school')->id())->groupBy('date')->orderBy('date')
+               ->whereBetween('completed_at', [now()->startOfDay(), now()->endOfDay()])
+               ->get(array(
+                   DB::raw('DATE_FORMAT(completed_at, "%h:00 %p") as date'),
+                   DB::raw('COUNT(*) as counts')
+               ));
+           $StoriesAssignments_data = ['categories' => $stories_assignments->pluck('date'), 'data' => $stories_assignments->pluck('counts'), 'total' => "(" . t('Total') . ' : ' . $stories_assignments->sum('counts') . ")"];
+
+           return view('school.home', compact('title', 'students', 'supervisors', 'tests', 'teachers', 'StudentsLogin_data', 'LessonsTests_data', 'StoriesTests_data', 'LessonsAssignments_data', 'StoriesAssignments_data'));
+
+       }else{
+           return view('school.home', compact('title'));
+       }
     }
 
+    public function chartStatisticsData(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'model' => 'required',
+        ]);
+        if (Carbon::parse($request->start_date)->diffInMonths(Carbon::parse($request->end_date)) > 1) {
+            $format = "%Y-%m";
+        } elseif (Carbon::parse($request->start_date)->diffInDays(Carbon::parse($request->end_date)) > 1) {
+            $format = "%Y-%m-%d";
+        } else {
+            $format = "%h:00 %p";
+        }
+        $model = $request->get('model');
+        $items_data = collect();
+        if ($model == 'LessonsTests') {
+            $items_data = UserTest::query()->whereRelation('user', 'school_id', Auth::guard('school')->id())->groupBy('date')->orderBy('date')
+                ->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfDay(), Carbon::parse($request->end_date)->endOfDay()])
+                ->get(array(
+                    DB::raw('DATE_FORMAT(created_at, "' . $format . '") as date'),
+                    DB::raw('COUNT(*) as counts')
+                ));
+        } elseif ($model == 'StoriesTests') {
+            $items_data = StudentStoryTest::query()->whereRelation('user', 'school_id', Auth::guard('school')->id())->groupBy('date')->orderBy('date')
+                ->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfDay(), Carbon::parse($request->end_date)->endOfDay()])
+                ->get(array(
+                    DB::raw('DATE_FORMAT(created_at, "' . $format . '") as date'),
+                    DB::raw('COUNT(*) as counts')
+                ));
+        } elseif ($model == 'LessonsAssignments') {
+            $items_data = UserAssignment::query()->whereRelation('user', 'school_id', Auth::guard('school')->id())->groupBy('date')->orderBy('date')
+                ->whereBetween('completed_at', [Carbon::parse($request->start_date)->startOfDay(), Carbon::parse($request->end_date)->endOfDay()])
+                ->get(array(
+                    DB::raw('DATE_FORMAT(completed_at, "' . $format . '") as date'),
+                    DB::raw('COUNT(*) as counts')
+                ));
+        } elseif ($model == 'StoriesAssignments') {
+            $items_data = StoryAssignment::query()->whereRelation('user', 'school_id', Auth::guard('school')->id())->groupBy('date')->orderBy('date')
+                ->whereBetween('completed_at', [Carbon::parse($request->start_date)->startOfDay(), Carbon::parse($request->end_date)->endOfDay()])
+                ->get(array(
+                    DB::raw('DATE_FORMAT(completed_at, "' . $format . '") as date'),
+                    DB::raw('COUNT(*) as counts')
+                ));
+        }  elseif ($model == 'StudentsLogin') {
+            $items_data = LoginSession::query()
+                //where has user relation and user school_id equal to school id
+                ->whereHasMorph('model', User::class, function (Builder $query) {
+                    $query->where('school_id', Auth::guard('school')->id());
+                })
+                ->where('model_type', User::class)->groupBy('date')->orderBy('date')
+                ->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfDay(), Carbon::parse($request->end_date)->endOfDay()])
+                ->get(array(
+                    DB::raw('DATE_FORMAT(created_at, "' . $format . '") as date'),
+                    DB::raw('COUNT(*) as counts')
+                ));
+        }
+        $collect_data = ['categories' => $items_data->pluck('date'), 'data' => $items_data->pluck('counts'), 'total' => "(" . t('Total') . ' : ' . $items_data->sum('counts') . ")"];
+        return $this->sendResponse($collect_data, 'Successfully');
+    }
     public function lang($local)
     {
         session(['lang' => $local]);
@@ -45,411 +163,54 @@ class SettingController extends Controller
         return back();
     }
 
-    public function view_profile()
+    public function editProfile()
     {
-        $title = t('Show Profile');
-        $this->validationRules = [
-            'name' => 'required',
-            'password' => 'nullable',
-            'email' => 'required|email|unique:schools,email',
-        ];
-        $validator = JsValidator::make($this->validationRules, $this->validationMessages);
-        return view('school.profile.profile', compact('title', 'validator'));
+        $title = t('Edit Profile');
+        $school = Auth::guard('school')->user();
+        return view('school.profile.profile', compact('title','school'));
     }
 
-    public function profile(Request $request)
+    public function updateProfile(SchoolProfileRequest $request)
     {
-        $user = Auth::guard('school')->user();
-        $request->validate([
-            'name' => 'required',
-            'mobile' => 'required',
-            'website' => 'required',
-            'email' => 'required|email:rfc,dns|unique:schools,email,'. $user->id,
-        ]);
-        $data = $request->all();
-        $user->update($data);
-        return redirect()->route('school.home')->with('message', t('Successfully Updated'))->with('m-class', 'success');
+        $data =  $request->validated();
+        if (request()->hasFile('logo')) {
+            $data['logo']  = $this->uploadFile(request()->file('logo'), 'schools_images');
+        }
+        Auth::guard('school')->user()->update($data);
+        return redirect()->back()->with('message', 'Successfully Updated');
     }
 
-    public function view_password()
+    public function editPassword()
     {
-        $title = t('Change Password');
-        $this->validationRules = [
-            'current_password' => 'required',
-            'password' => 'required|min:6|confirmed'
-        ];
-        $validator = JsValidator::make($this->validationRules, $this->validationMessages);
-        return view('school.profile.password', compact('title', 'validator'));
+        $title = t('Edit Password');
+        return view('school.profile.password', compact('title'));
     }
 
-    public function password(Request $request)
+    public function updatePassword(SchoolPasswordRequest $request)
     {
-        $user = Auth::guard('school')->user();
-        $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|min:6|confirmed'
-        ]);
-        if(Hash::check($request->get('current_password'), $user->password)) {
+        $data = $request->validated();
+        $manager = Auth::guard('manager')->user();
+        if (Hash::check($request->get('old_password'), $manager->password)) {
             $data['password'] = bcrypt($request->get('password'));
-            $user->update($data);
-        }else{
-            return $this->redirectWith(true, null, 'Current Password Invalid', 'error');
+            $manager->update($data);
+            return redirect()->back()->with('message', t('Successfully Updated'))->with('m-class', 'success');
+        } else {
+            return redirect()->back()->withErrors([t('Current Password Invalid')])->with('message', t('Current Password Invalid'))->with('m-class', 'error');
         }
-
-        return redirect()->route('school.home')->with('message', t('Successfully Updated'))->with('m-class', 'success');
     }
 
-    public function getLevelsByGrade(Request $request,$id)
-    {
-        $levels = Level::query()->where('grade', $id)->get();
-        $selected = $request->get('selected', 0);
-        if ($selected)
-        {
-            $html = '<option selected disabled value="">'.t('Select Level').'</option>';
-        }else{
-            $html = '<option selected value="">'.t('Select Level').'</option>';
-        }
 
-        foreach ($levels as $level) {
-            $html .= '<option value="'.$level->id.'">'.$level->name.'</option>';
-        }
-        return response()->json(['html'=>$html]);
-    }
-
-    public function getLessonsByLevel(Request $request,$id)
-    {
-        $lessons = Lesson::query()->where('level_id', $id)->get();
-        $selected = $request->get('selected', 0);
-        if ($selected)
-        {
-            $html = '<option selected disabled value="">'.t('Select Lesson').'</option>';
-        }else{
-            $html = '<option selected value="">'.t('Select Lesson').'</option>';
-        }
-
-        foreach ($lessons as $lesson) {
-            $html .= '<option value="'.$lesson->id.'">'.$lesson->name.'</option>';
-        }
-        return response()->json(['html'=>$html]);
-    }
 
     public function preUsageReport()
     {
         $title = t('Usage Report');
         $grades = Grade::query()->get();
-        return view('school.report.pre_usage_report', compact('title', 'grades'));
+        return view('general.reports.usage_report.pre_usage_report', compact('title', 'grades'));
     }
 
     public function usageReport(Request $request)
     {
-//        dd($request->all());
-        $request->validate([
-            'start_date' => 'required',
-            'end_date' => 'required',
-        ]);
-        $school = Auth::guard('school')->user();
-        $grades = $request->get('grades', []);
-        $start_date = $request->get('start_date', []);
-        $end_date = $request->get('end_date', []);
-
-        $data['total_students'] = User::query()
-            ->where(function (Builder $query) use ($grades) {
-                $query->whereIn('grade_id', $grades)
-                    ->orWhereIn('alternate_grade_id', $grades);
-            })
-            ->where('school_id', $school->id)
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->count();
-
-        $data['total_teachers'] = Teacher::query()
-            ->where('school_id', $school->id)
-            ->whereDate('last_login', '>=', $start_date)
-//            ->whereDate('last_login', '<=', $end_date)
-            ->count();
-
-        $data['top_teacher'] = Teacher::query()
-            ->where('school_id', $school->id)
-            ->whereDate('last_login', '>=', $start_date)
-//            ->whereDate('last_login', '<=', $end_date)
-            ->orderBy('passed_tests', 'desc')
-            ->first();
-        $data['top_student'] = User::query()
-            ->where(function (Builder $query) use ($grades) {
-                $query->whereIn('grade_id', $grades)
-                    ->orWhereIn('alternate_grade_id', $grades);
-            })
-            ->where('school_id', $school->id)
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->withCount(['user_test' => function ($query) {
-                $query->where('status', 'Pass');
-            }])
-            ->orderBy('user_test_count', 'desc')
-            ->first();
-        $data['total_tests'] = UserTest::query()
-            ->whereHas('user', function (Builder $query) use ($school, $grades) {
-                $query->where(function (Builder $query) use ($grades) {
-                    $query->whereIn('grade_id', $grades)
-                        ->orWhereIn('alternate_grade_id', $grades);
-                })
-                    ->where('school_id', $school->id);
-            })
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->count();
-        $data['total_pass_tests'] = UserTest::query()
-            ->whereHas('user', function (Builder $query) use ($school, $grades) {
-                $query->where(function (Builder $query) use ($grades) {
-                    $query->whereIn('grade_id', $grades)
-                        ->orWhereIn('alternate_grade_id', $grades);
-                })
-                    ->where('school_id', $school->id);
-            })
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->where('status', 'Pass')
-            ->count();
-        $data['total_fail_tests'] = UserTest::query()
-            ->whereHas('user', function (Builder $query) use ($school, $grades) {
-                $query->where(function (Builder $query) use ($grades) {
-                    $query->whereIn('grade_id', $grades)
-                        ->orWhereIn('alternate_grade_id', $grades);
-                })
-                    ->where('school_id', $school->id);
-            })
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->where('status', 'Fail')
-            ->count();
-        $data['total_assignments'] = UserLesson::query()
-            ->whereHas('user', function (Builder $query) use ($school, $grades) {
-                $query->where(function (Builder $query) use ($grades) {
-                    $query->whereIn('grade_id', $grades)
-                        ->orWhereIn('alternate_grade_id', $grades);
-                })
-                    ->where('school_id', $school->id);
-            })
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->count();
-        $data['total_corrected_assignments'] = UserLesson::query()
-            ->whereHas('user', function (Builder $query) use ($school, $grades) {
-                $query->where(function (Builder $query) use ($grades) {
-                    $query->whereIn('grade_id', $grades)
-                        ->orWhereIn('alternate_grade_id', $grades);
-                })
-                    ->where('school_id', $school->id);
-            })
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->where('status', 'corrected')
-            ->count();
-        $data['total_uncorrected_assignments'] = UserLesson::query()
-            ->whereHas('user', function (Builder $query) use ($school, $grades) {
-                $query->where(function (Builder $query) use ($grades) {
-                    $query->whereIn('grade_id', $grades)
-                        ->orWhereIn('alternate_grade_id', $grades);
-                })
-                    ->where('school_id', $school->id);
-            })
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->whereIn('status', ['pending', 'returned'])
-            ->count();
-
-        $teachers = Teacher::query()
-            ->where('school_id', $school->id)
-            ->whereDate('last_login', '>=', $start_date)
-            ->whereDate('last_login', '<=', $end_date)
-            ->get();
-
-        $tracks = UserTracker::query()
-            ->whereHas('user', function (Builder $query) use ($school, $grades) {
-                $query->where(function (Builder $query) use ($grades) {
-                    $query->whereIn('grade_id', $grades)
-                        ->orWhereIn('alternate_grade_id', $grades);
-                })
-                    ->where('school_id', $school->id);
-            })
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->latest()->get();
-
-        if ($data['total_practice'] = $tracks->count()) {
-            $data['learn'] = $tracks->where('type', 'learn')->count();
-            $data['practise'] = $tracks->where('type', 'practise')->count();
-            $data['test'] = $tracks->where('type', 'test')->count();
-            $data['play'] = $tracks->where('type', 'play')->count();
-            $data['learn_avg'] = ($data['learn'] / $data['total_practice']) * 100;
-            $data['practise_avg'] = ($data['practise'] / $data['total_practice']) * 100;
-            $data['test_avg'] = ($data['test'] / $data['total_practice']) * 100;
-            $data['play_avg'] = ($data['play'] / $data['total_practice']) * 100;
-        } else {
-            $data['total_practice'] = 0;
-            $data['learn'] = 0;
-            $data['practise'] = 0;
-            $data['test'] = 0;
-            $data['play'] = 0;
-            $data['learn_avg'] = 0;
-            $data['practise_avg'] = 0;
-            $data['test_avg'] = 0;
-            $data['play_avg'] = 0;
-        }
-
-        $grades_data = [];
-        foreach ($grades as $grade) {
-            $grades_data[$grade]['total_students'] = User::query()
-                ->where(function (Builder $query) use ($grade) {
-                    $query->where('grade_id', $grade)
-                        ->orWhere('alternate_grade_id', $grade);
-                })
-                ->where('school_id', $school->id)
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->count();
-
-            $grades_data[$grade]['total_teachers'] = Teacher::query()
-                ->where('school_id', $school->id)
-                ->whereDate('last_login', '>=', $start_date)
-//                ->whereDate('last_login', '<=', $end_date)
-                ->whereHas('students', function (Builder $query) use ($grade) {
-                    $query->whereHas('user', function (Builder $query) use ($grade) {
-                        $query->where('grade_id', $grade);
-                    });
-                })
-                ->count();
-
-            $grades_data[$grade]['top_teacher'] = Teacher::query()
-                ->where('school_id', $school->id)
-                ->whereDate('last_login', '>=', $start_date)
-//                ->whereDate('last_login', '<=', $end_date)
-                ->whereHas('students', function (Builder $query) use ($grade) {
-                    $query->whereHas('user', function (Builder $query) use ($grade) {
-                        $query->where('grade_id', $grade);
-                    });
-                })
-                ->orderBy('passed_tests', 'desc')
-                ->first();
-
-            $grades_data[$grade]['top_student'] = User::query()
-                ->where(function (Builder $query) use ($grade) {
-                    $query->where('grade_id', $grade)
-                        ->orWhere('alternate_grade_id', $grade);
-                })
-                ->where('school_id', $school->id)
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->withCount(['user_test' => function ($query) {
-                    $query->where('status', 'Pass');
-                }])
-                ->orderBy('user_test_count', 'desc')
-                ->first();
-            $grades_data[$grade]['total_tests'] = UserTest::query()
-                ->whereHas('user', function (Builder $query) use ($school, $grade) {
-                    $query->where(function (Builder $query) use ($grade) {
-                        $query->where('grade_id', $grade)
-                            ->orWhere('alternate_grade_id', $grade);
-                    })
-                        ->where('school_id', $school->id);
-                })
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->count();
-            $grades_data[$grade]['total_pass_tests'] = UserTest::query()
-                ->whereHas('user', function (Builder $query) use ($school, $grade) {
-                    $query->where(function (Builder $query) use ($grade) {
-                        $query->where('grade_id', $grade)
-                            ->orWhere('alternate_grade_id', $grade);
-                    })
-                        ->where('school_id', $school->id);
-                })
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->where('status', 'Pass')
-                ->count();
-            $grades_data[$grade]['total_fail_tests'] = UserTest::query()
-                ->whereHas('user', function (Builder $query) use ($school, $grade) {
-                    $query->where(function (Builder $query) use ($grade) {
-                        $query->where('grade_id', $grade)
-                            ->orWhere('alternate_grade_id', $grade);
-                    })
-                        ->where('school_id', $school->id);
-                })
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->where('status', 'Fail')
-                ->count();
-            $grades_data[$grade]['total_assignments'] = UserLesson::query()
-                ->whereHas('user', function (Builder $query) use ($school, $grade) {
-                    $query->where(function (Builder $query) use ($grade) {
-                        $query->where('grade_id', $grade)
-                            ->orWhere('alternate_grade_id', $grade);
-                    })
-                        ->where('school_id', $school->id);
-                })
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->count();
-            $grades_data[$grade]['total_corrected_assignments'] = UserLesson::query()
-                ->whereHas('user', function (Builder $query) use ($school, $grade) {
-                    $query->where(function (Builder $query) use ($grade) {
-                        $query->where('grade_id', $grade)
-                            ->orWhere('alternate_grade_id', $grade);
-                    })
-                        ->where('school_id', $school->id);
-                })
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->where('status', 'corrected')
-                ->count();
-            $grades_data[$grade]['total_uncorrected_assignments'] = UserLesson::query()
-                ->whereHas('user', function (Builder $query) use ($school, $grade) {
-                    $query->where(function (Builder $query) use ($grade) {
-                        $query->where('grade_id', $grade)
-                            ->orWhere('alternate_grade_id', $grade);
-                    })
-                        ->where('school_id', $school->id);
-                })
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->whereIn('status', ['pending', 'returned'])
-                ->count();
-
-            $tracks = UserTracker::query()
-                ->whereHas('user', function (Builder $query) use ($school, $grade) {
-                    $query->where(function (Builder $query) use ($grade) {
-                        $query->where('grade_id', $grade)
-                            ->orWhere('alternate_grade_id', $grade);
-                    })
-                        ->where('school_id', $school->id);
-                })
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->latest()->get();
-
-            if ($grades_data[$grade]['total_practice'] = $tracks->count()) {
-                $grades_data[$grade]['learn'] = $tracks->where('type', 'learn')->count();
-                $grades_data[$grade]['practise'] = $tracks->where('type', 'practise')->count();
-                $grades_data[$grade]['test'] = $tracks->where('type', 'test')->count();
-//                $grades_data[$grade]['play'] = $tracks->where('type', 'play')->count();
-                $grades_data[$grade]['learn_avg'] = ($grades_data[$grade]['learn'] / $grades_data[$grade]['total_practice']) * 100;
-                $grades_data[$grade]['practise_avg'] = ($grades_data[$grade]['practise'] / $grades_data[$grade]['total_practice']) * 100;
-                $grades_data[$grade]['test_avg'] = ($grades_data[$grade]['test'] / $grades_data[$grade]['total_practice']) * 100;
-//                $grades_data[$grade]['play_avg'] = ($grades_data[$grade]['play'] / $grades_data[$grade]['total_practice']) * 100;
-            } else {
-                $grades_data[$grade]['total_practice'] = 0;
-                $grades_data[$grade]['learn'] = 0;
-                $grades_data[$grade]['practise'] = 0;
-                $grades_data[$grade]['test'] = 0;
-//                $grades_data[$grade]['play'] = 0;
-                $grades_data[$grade]['learn_avg'] = 0;
-                $grades_data[$grade]['practise_avg'] = 0;
-                $grades_data[$grade]['test_avg'] = 0;
-//                $grades_data[$grade]['play_avg'] = 0;
-            }
-        }
-
-        return view('school.report.usage_report', compact('grades', 'grades_data', 'data', 'school', 'teachers', 'start_date', 'end_date'));
+        $general = new GeneralFunctions();
+        return $general->usageReport($request);
     }
 }

@@ -24,9 +24,12 @@ class SupervisorRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [];
-        $rules["name"] = 'required';
-        $rules["teachers"] = 'nullable|array';
+        $rules = [
+            'name'=>'required',
+            'teachers'=>'nullable|array',
+            'image'=>'nullable'
+        ];
+
         if (Route::currentRouteName() == 'school.supervisor.edit' || Route::currentRouteName() == 'school.supervisor.update')
         {
             $id = $this->route('supervisor');

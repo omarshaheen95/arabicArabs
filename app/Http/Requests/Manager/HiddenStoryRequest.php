@@ -9,14 +9,14 @@ namespace App\Http\Requests\Manager;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ImportStudentFileRequest extends FormRequest
+class HiddenStoryRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
-            'school_id' => 'required|exists:schools,id',
-            'package_id' => 'required|exists:packages,id',
-            'file' => 'required|file|mimes:xlsx,xls,csv',
+            'school_id' => ['required', 'exists:schools,id'],
+            'story_id.*' => ['required', 'exists:stories,id'],
+            'grade' => ['required', 'numeric', 'in:15,1,2,3,4,5,6,7,8,9'],
         ];
     }
 

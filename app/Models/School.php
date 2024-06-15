@@ -9,18 +9,63 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
-use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Traits\LogsActivity;
+
 
 class School extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
+    use Notifiable, SoftDeletes,LogsActivity;
+
     protected $fillable = [
-        'name', 'email', 'password', 'website', 'mobile', 'logo', 'active', 'last_login'
+        'name', 'email', 'password', 'website', 'mobile', 'logo', 'active','lang', 'last_login','last_login_info'
     ];
+    protected static $logOnlyDirty = true;
+    protected static $submitEmptyLogs = false;
+    protected static $logAttributes = ['*'];
+
 
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function scopeFilter(Builder $query, $request =null): Builder
+    {
+        if (!$request){
+            $request = \request();
+        }
+        return $query->when($value = $request->get('id',false), function (Builder $query) use ($value) {
+            $query->where('id', $value);
+        })->when($value = $request->get('name',false), function (Builder $query) use ($value) {
+            $query->where('name','like','%' . $value. '%');
+        })->when($value = $request->get('email',false), function (Builder $query) use ($value) {
+            $query->where('email','like','%' . $value. '%');
+        })->when($value = $request->get('mobile',false), function (Builder $query) use ($value) {
+            $query->where('mobile', $value);
+        })->when($value = $request->get('active',false), function (Builder $query) use ($value) {
+            $query->where('active', $value!=2);
+        })->when($value = $request->get('row_id',[]), function (Builder $query) use ($value) {
+            $query->whereIn('id', $value);;
+        });
+    }
+
+    public function getActionButtonsAttribute()
+    {
+        $actions=[];
+        if (\request()->is('manager/*')){
+            $actions =  [
+                ['key'=>'edit','name'=>t('Edit'),'route'=>route('manager.school.edit', $this->id),'permission'=>'edit schools'],
+                ['key'=>'login','name'=>t('Login'),'route'=>route('manager.school.login', $this->id),'permission'=>'school login'],
+                ['key'=>'delete','name'=>t('Delete'),'route'=>$this->id,'permission'=>'delete schools'],
+            ];
+        }
+        elseif (\request()->is('supervisor/*')){
+            $actions =  [];
+        }
+        return view('general.action_menu')->with('actions',$actions);
+
+    }
+
 
     public function sendPasswordResetNotification($token)
     {
@@ -31,7 +76,10 @@ class School extends Authenticatable
     {
         return is_null($value) ? asset('assets/media/icons/school.png'):asset($value);
     }
-
+    public function login_sessions()
+    {
+        return $this->morphMany(LoginSession::class, 'model');
+    }
     public function students()
     {
         return $this->hasMany(User::class);
@@ -52,17 +100,9 @@ class School extends Authenticatable
         return $this->unreadNotifications()->count();
     }
 
-    public function getActiveStatusAttribute()
+    public function scopeActive(Builder $query)
     {
-        return $this->active ? 'فعالة':'غير فعالة';
+        return $query->where('active', 1);
     }
 
-    public function scopeSearch(Builder $query, Request $request)
-    {
-        return $query->when($name = $request->get('name', false), function($query) use($name){
-            $query->where('name', 'like',  '%' . $name . '%')
-                ->orWhere('email', 'like', '%'.$name.'%')
-                ->orWhere('mobile', 'like', '%'.$name.'%');
-        });
-    }
 }

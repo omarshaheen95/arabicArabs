@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
 class StudentStoryTest extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,CascadeSoftDeletes;
     protected $fillable = [
         'user_id', 'story_id', 'corrected', 'total', 'notes', 'max_time', 'approved', 'start_at', 'end_at', 'status'
     ];
+    protected $cascadeDeletes = ['storyMatchResults','storyOptionResults','storySortResults','storyTrueFalseResults'];
+
     //boot with query where has story
     protected static function boot()
     {
@@ -21,6 +25,105 @@ class StudentStoryTest extends Model
         static::addGlobalScope('story', function (Builder $builder) {
             $builder->has('story');
         });
+    }
+    public function getActionButtonsAttribute()
+    {
+        $actions = [];
+        if (\request()->is('manager/*')) {
+
+            $actions[] = ['key' => 'show', 'name' => t('Show'), 'route' => route('manager.stories_tests.show', $this->id),'permission'=>'show story tests'];
+            if ($this->status == 'Pass') {
+                $actions[] = ['key' => 'blank', 'name' => t('Certificate'), 'route' => route('manager.stories_tests.certificate', $this->id),'permission'=>'story tests certificate'];
+            }
+            $actions[] = ['key' => 'delete', 'name' => t('Delete'), 'route' => $this->id, 'permission' => 'delete story tests'];
+
+        } elseif (\request()->is('school/*')) {
+            $actions = [
+                ['key' => 'show', 'name' => t('Show'), 'route' => route('school.stories_tests.show', $this->id)],
+            ];
+            if ($this->status == 'Pass') {
+                $actions[] = ['key' => 'blank', 'name' => t('Certificate'), 'route' => route('school.stories_tests.certificate', $this->id)];
+            }
+        } elseif (\request()->is('teacher/*')) {
+            $actions = [
+                ['key' => 'show', 'name' => t('Show'), 'route' => route('teacher.stories_tests.show', $this->id)],
+            ];
+            if ($this->status == 'Pass') {
+                $actions[] = ['key' => 'blank', 'name' => t('Certificate'), 'route' => route('teacher.stories_tests.certificate', $this->id)];
+            }
+        } elseif (\request()->is('supervisor/*')) {
+            if ($this->status == 'Pass') {
+                $actions[] = ['key' => 'blank', 'name' => t('Certificate'), 'route' => route('supervisor.stories_tests.certificate', $this->id)];
+            }else{
+                return '';
+            }
+        }
+        return view('general.action_menu')->with('actions', $actions);
+
+    }
+
+    public function scopeFilter(Builder $query, Request $request): Builder
+    {
+
+        return $query->when($value = $request->get('id', false), function (Builder $query) use ($value) {
+                $query->where('id', $value);
+            })->when($value = $request->get('user_id', false), function (Builder $query) use ($value) {
+                $query->where('user_id', $value);
+            })->when($value = $request->get('user_name', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('name', 'like', '%' . $value . '%');
+                });
+            })->when($value = $request->get('user_email', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('email', $value);
+                });
+            })->when($value = $request->get('school_id', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('school_id', $value);
+                });
+            })->when($value = $request->get('teacher_id', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->whereHas('teacherUser', function (Builder $query) use ($value) {
+                        $query->where('teacher_id', $value);
+                    });
+                });
+            })->when($value = $request->get('section', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('section', $value);
+                });
+            })->when($value = $request->get('student_grade', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('grade_id', $value);
+                });
+            })->when($value = $request->get('user_status', false), function (Builder $query) use ($value) {
+                if ($value == 'active') {
+                    $query->whereHas('user', function (Builder $query) use ($value) {
+                        $query->where('active_to', '>=', now());
+                    });
+                } elseif ($value == 'expire') {
+                    $query->whereHas('user', function (Builder $query) use ($value) {
+                        $query->where(function ($q) {
+                            $q->where('active_to', '<', now())->orWhereNull('active_to');
+                        });
+                    });
+                }
+            })->when($value = $request->get('start_date', false), function (Builder $query) use ($value) {
+                $query->whereDate('created_at', '>=', $value);
+            })->when($value = $request->get('end_date', false), function (Builder $query) use ($value) {
+                $query->whereDate('created_at', '<=', $value);
+            })->when($value = $request->get('grade', false), function (Builder $query) use ($value) {
+                $query->whereHas('story', function (Builder $query) use ($value) {
+                    $query->where('grade', $value);
+                });
+            })->when($value = $request->get('story_id', false), function (Builder $query) use ($value) {
+                $query->where('story_id', $value);
+            })->when($value = $request->get('status', false), function (Builder $query) use ($value) {
+                $query->where('status', $value);
+            })->when($value = $request->get('row_id', []), function (Builder $query) use ($value) {
+                $query->whereIn('id', $value);
+            }) ->when($value = $request->get('supervisor_id', false), function (Builder $query) use ($value){
+                $query->whereRelation('user.teacher.supervisor_teachers','supervisor_id',$value);
+            });
     }
 
     public function user()
@@ -32,12 +135,23 @@ class StudentStoryTest extends Model
     {
         return $this->belongsTo(Story::class);
     }
-
-    public function getActionButtonsAttribute()
+    public function storyMatchResults(): HasMany
     {
-        $button = '<a target="_blank" href="'.route('manager.story.student_test', $this->id).'" class="btn btn-success">تصحيح </a>';
-        $button .= ' <button type="button" data-id="'.$this->id.'" data-toggle="modal" data-target="#deleteModel" class="deleteRecord btn btn-icon btn-warning"><i class="la la-trash"></i></button> ';
-        return $button;
+        return $this->hasMany(StoryMatchResult::class, 'student_story_test_id');
+    }
+    public function storyOptionResults(): HasMany
+    {
+        return $this->hasMany(StoryOptionResult::class, 'student_story_test_id');
+    }
+
+    public function storySortResults(): HasMany
+    {
+        return $this->hasMany(StorySortResult::class, 'student_story_test_id');
+    }
+
+    public function storyTrueFalseResults(): HasMany
+    {
+        return $this->hasMany(StoryTrueFalseResult::class, 'student_story_test_id');
     }
 
     public function getReadingBenchmarkAttribute()
@@ -77,48 +191,5 @@ class StudentStoryTest extends Model
 //        }
 //    }
 
-    public function scopeSearch(Builder $builder, Request $request)
-    {
-        return $builder->when($request->get('corrected', false) == 1, function (Builder $query) {
-            $query->where('corrected', 1);
-        })
-            ->when($request->get('corrected', false) == 2, function (Builder $query) {
-                $query->where('corrected', 0);
-            })
-            ->when($username = $request->get('username', false), function (Builder $query) use ($username) {
-                $query->whereHas('user', function (Builder $query) use ($username) {
-                    $query->where('name', 'like', '%' . $username . '%');
-                });
-            })->when($grade = $request->get('grade', false), function (Builder $query) use ($grade) {
-                $query->whereHas('user', function (Builder $query) use ($grade) {
-                    $query->where('grade_id', $grade);
-                });
-            })->when($grade = $request->get('story_grade', false), function (Builder $query) use ($grade) {
-                $query->whereHas('story', function (Builder $query) use ($grade) {
-                    $query->where('grade', $grade);
-                });
-            })->when($story_id = $request->get('story_id', false), function (Builder $query) use ($story_id) {
-                $query->where('story_id', $story_id);
-            })->when($start_at = $request->get('start_at', false), function (Builder $query) use ($start_at) {
-                $query->where('created_at', '<=', $start_at);
-            })->when($end_at = $request->get('end_at', false), function (Builder $query) use ($end_at) {
-                $query->where('created_at', '>=', $end_at);
-            })->when($status = $request->get('status', false), function (Builder $query) use ($status) {
-                $query->where('status', $status);
-            })->when($value = $request->get('supervisor_id', false), function (Builder $query) use ($value) {
-                $query->whereHas('user', function (Builder $query) use ($value) {
-                    $query->whereHas('teacher', function (Builder $query) use ($value) {
-                        $query->whereHas('supervisor_teachers', function (Builder $query) use ($value) {
-                            $query->where('supervisor_id', $value);
-                        });
-                    });
-                });
-            })->when($value = $request->get('teacher_id', false), function (Builder $query) use ($value) {
-                $query->whereHas('user', function (Builder $query) use ($value) {
-                    $query->whereHas('teacherUser', function (Builder $query) use ($value) {
-                        $query->where('teacher_id', $value);
-                    });
-                });
-            });
-    }
+
 }
