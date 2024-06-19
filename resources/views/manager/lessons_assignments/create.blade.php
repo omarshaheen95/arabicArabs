@@ -129,7 +129,7 @@
 @section('script')
 
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest(\App\Http\Requests\Manager\AssignmentRequest::class, '#form_information'); !!}
+    {!! JsValidator::formRequest(\App\Http\Requests\Manager\LessonAssignmentRequest::class, '#form_information'); !!}
 
     <script>
         var getTeacherBySchool = '{{ route("manager.getTeacherBySchool", ":id") }}';

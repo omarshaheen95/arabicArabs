@@ -172,6 +172,7 @@
         getTeacherBySchool('teacher_school_id')
         getSectionBySchool()
         getSectionByTeacher()
+        getLessonsByGrade()
     </script>
 
 @endsection

@@ -170,15 +170,14 @@ WhatsApp +972592554320
             {data: 'lesson', name: 'lesson'},
             {data: 'actions', name: 'actions'},
         ];
-    </script>
 
-    <script src="{{asset('assets_v1/js/datatable.js')}}?v={{time()}}"></script>
-    <script src="{{asset('assets_v1/js/custom.js')}}"></script>
-
-    <script>
         getTeacherBySchool('teacher_school_id')
         getSectionBySchool()
         getSectionByTeacher()
         getLessonsByGrade()
+
     </script>
+
+    <script src="{{asset('assets_v1/js/datatable.js')}}?v={{time()}}"></script>
+
 @endsection

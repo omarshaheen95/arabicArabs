@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -1538,4 +1539,20 @@ function lessonTypes()
 {
     return ['reading','writing','listening','speaking','grammar','dictation','rhetoric'];
     //return ['قراءة','كتابة','استماع','تحدث','القواعد النحوية','الإملاء','البلاغة'];
+}
+
+function teacherSections($teacher_id=null)
+{
+    if (!$teacher_id){
+        $teacher_id = request()->get('teacher_id');
+    }
+    return  \App\Models\User::query()
+        ->whereHas('teacherUser', function (Builder $query) use ($teacher_id) {
+            $query->where('teacher_id', $teacher_id);
+        })
+        ->whereNotNull('section')
+        ->select('section')
+        ->orderBy('section')
+        ->get()
+        ->pluck('section')->unique()->values();
 }

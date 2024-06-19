@@ -35,11 +35,17 @@ class HomeController extends Controller
 //        Log::critical(date('Y-m-d'));
 //        Log::critical(Carbon::createFromFormat('Y-m-d', '2021-07-01'));
         $title = 'المهارات والدروس';
-        $grade = Grade::query()->where('id', Auth::user()->grade_id)->first();
+        $user = Auth::guard('web')->user();
+        if ($user->demo){
+            $grades = Grade::query()->whereIn('id', $user->demo_grades)->get();
+            $alternate_grades = [];
+        }else{
+            $grades = Grade::query()->where('id', Auth::user()->grade_id)->get();
+            $alternate_grades = Grade::query()->where('id', Auth::user()->alternate_grade_id)->get();
+        }
 
-        $alternate_grade = Grade::query()->where('id', Auth::user()->alternate_grade_id)->first();
 
-        return view('user.levels', compact('title', 'grade', 'alternate_grade'));
+        return view('user.levels', compact('title', 'grades', 'alternate_grades'));
     }
 
     public function subLevels($grade, $type)
@@ -73,7 +79,7 @@ class HomeController extends Controller
     {
         $user = Auth::guard('web')->user();
         $grade = Grade::query()->findOrFail($id);
-        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1) {
+        if (!$user->demo && $user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1) {
             return redirect()->route('home')->with('message', 'الدروس غير متاحة')->with('m-class', 'error');
         }
         $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use ($level) {
@@ -86,7 +92,7 @@ class HomeController extends Controller
     {
         $user = Auth::guard('web')->user();
         $grade = Grade::query()->findOrFail($id);
-        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1) {
+        if (!$user->demo && $user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1) {
             return redirect()->route('home')->with('message', 'الدروس غير متاحة')->with('m-class', 'error');
         }
         $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use ($level) {
@@ -99,7 +105,7 @@ class HomeController extends Controller
     {
         $lesson = Lesson::query()->with(['grade', 'media'])->findOrFail($id);
         $user = Auth::guard('web')->user();
-        if ($user->grade_id != $lesson->grade_id && $user->alternate_grade_id != $lesson->grade_id && $user->id != 1) {
+        if (!$user->demo && $user->grade_id != $lesson->grade_id && $user->alternate_grade_id != $lesson->grade_id && $user->id != 1) {
             return redirect()->route('home')->with('message', 'الدرس غير متاح')->with('m-class', 'error');
         }
         switch ($key) {

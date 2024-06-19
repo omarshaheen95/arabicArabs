@@ -9,7 +9,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Exports\StudentAssignmentExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Manager\AssignmentRequest;
+use App\Http\Requests\Manager\LessonAssignmentRequest;
 use App\Models\Grade;
 use App\Models\School;
 use App\Models\User;
@@ -98,7 +98,7 @@ class LessonAssignmentController extends Controller
         return view('manager.lessons_assignments.create', compact('title','grades', 'schools'));
     }
 
-    public function store(AssignmentRequest $request)
+    public function store(LessonAssignmentRequest $request)
     {
         $data = $request->validated();
         $students_array = $data['students'];

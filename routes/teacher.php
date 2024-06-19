@@ -1,68 +1,103 @@
 <?php
+
+use App\Http\Controllers\GeneralController;
 use Illuminate\Support\Facades\Route;
+
 Route::group(['namespace' => 'Teacher'], function() {
 
     Route::get('/home', 'SettingController@home')->name('home');
-//Set Local
+    //Set Local
     Route::get('lang/{local}', 'SettingController@lang')->name('switch-language');
-    Route::group(['middleware' => [\App\Http\Middleware\ApprovedTeacherMiddleware::class]], function () {
-        Route::get('profile', 'SettingController@view_profile')->name('profile.show');
-        Route::post('profile', 'SettingController@profile')->name('profile.update');
-        Route::get('password', 'SettingController@view_password')->name('password.show');
-        Route::post('password', 'SettingController@password')->name('password.update');
 
-        Route::get('getStudentsByGrade/{id}', 'SettingController@getStudentsByGrade')->name('getStudentsByGrade');
-        Route::get('getLevelsByGrade/{id}', 'SettingController@getLevelsByGrade')->name('getLevelsByGrade');
-        Route::get('getStoriesByGrade/{id}', 'SettingController@getStoriesByGrade')->name('getStoriesByGrade');
-        Route::get('getLessonsByGrade/{lid}', 'SettingController@getLessonsByGrade')->name('getLessonsByGrade');
+    //Profile
+    Route::get('profile/edit', 'SettingController@editProfile')->name('edit-profile');
+    Route::post('profile/update', 'SettingController@updateProfile')->name('update-profile');
+    Route::get('password/edit', 'SettingController@editPassword')->name('edit-password');
+    Route::post('password/update', 'SettingController@updatePassword')->name('update-password');
 
-//Teacher
-        Route::resource('teacher', 'TeacherController');
+    //Student
+    Route::get('students_school', 'StudentController@index')->name('students_school.index');
 
-//Students
-        Route::resource('students_school', 'StudentController')->except(['create', 'store', 'destroy']);
-        Route::get('my_students', 'StudentController@myStudents')->name('student.my_students');
-        Route::post('student_assign', 'StudentController@studentAssign')->name('student.student_assign');
-        Route::post('delete_student_assign', 'StudentController@deleteStudentAssign')->name('student.delete_student_assign');
-        Route::post('export_students_excel', 'StudentController@exportStudentsExcel')->name('user.export_students_excel');
-        Route::get('student/{id}/review', 'StudentController@review')->name('student.review');
-        Route::get('student/{id}/report', 'StudentController@report')->name('user.report');
-        Route::get('student/print/cards', 'StudentController@cards')->name('user.cards');
-        Route::get('student/print/cards_qr', 'StudentController@cardsQR')->name('user.cardsQR');
-//Student Assignment
-        Route::get('student_assignments', 'StudentAssignmentController@index')->name('student_assignments.index');
-        Route::post('student_assignments', 'StudentAssignmentController@store')->name('student_assignments.store');
-        Route::get('student_story_assignments', 'StudentAssignmentController@indexStory')->name('student_story_assignments.index');
-        Route::post('student_story_assignments', 'StudentAssignmentController@storeStory')->name('student_story_assignments.store');
+    Route::get('my_students', 'StudentController@myStudents')->name('student.my_students');
+    Route::get('my_students/{id}/edit', 'StudentController@edit')->name('student.edit');
+    Route::patch('my_students/{id}', 'StudentController@update')->name('student.update');
 
-        Route::delete('student_assignment/{id}', 'StudentAssignmentController@deleteLessonAssignment')->name('deleteLessonAssignment');
+    Route::get('students/cards', 'StudentController@cards')->name('student.student-cards-export');
+    Route::post('students/export', 'StudentController@exportStudentsExcel')->name('user.export_students_excel');
 
-//Student tests
-        Route::get('students_tests', 'StudentTestController@index')->name('students_tests.index');
-        Route::get('students_tests/{id}', 'StudentTestController@show')->name('students_tests.show');
-        Route::get('students_tests/{id}/preview', 'StudentTestController@preview')->name('students_tests.preview');
-        Route::post('students_tests/{id}', 'StudentTestController@correct')->name('students_tests.correct');
-        Route::post('export_students_tests_excel', 'StudentTestController@exportStudentsTestsExcel')->name('students_tests.export_excel');
+    Route::post('student_assign', 'StudentController@studentAssign')->name('student.student_assign');
+    Route::post('delete_student_assign', 'StudentController@deleteStudentAssign')->name('student.delete_student_assign');
 
-//Student Story
-        Route::get('students_record', 'StoryController@studentsRecords')->name('students_record.index');
-        Route::get('students_record/{id}', 'StoryController@showStudentsRecords')->name('students_record.show');
-        Route::post('students_record/{id}', 'StoryController@updateStudentsRecords')->name('students_record.update');
-        Route::delete('students_record/{id}', 'StoryController@deleteStudentsRecords')->name('students_record.delete');
+    Route::post('updateLearningYears', 'StudentController@updateLearningYears')->name('student.updateLearningYears');
 
+    Route::get('student/{id}/review', 'StudentController@review')->name('user.review');
+    Route::get('student/{id}/story_review', 'StudentController@storyReview')->name('user.story-review');
+    Route::get('student/{id}/report', 'StudentController@report')->name('user.report');
 
-        Route::get('curriculum/{grade}', 'CurriculumController@curriculum')->name('curriculum.home');
-        Route::get('levels/{grade}', 'CurriculumController@lessonsLevels')->name('levels');
-        Route::get('stories/{grade}', 'CurriculumController@storiesLevels')->name('levels.stories');
+    //Students Tests
+    Route::get('lessons_tests', 'StudentTestController@lessonsIndex')->name('lessons_tests.index');
+    Route::get('lessons_tests/{id}', 'StudentTestController@lessonsShow')->name('lessons_tests.show');
+    Route::delete('lessons_tests', 'StudentTestController@lessonsDestroy')->name('lessons_tests.destroy');
+    Route::get('lessons_tests/{id}/certificate', 'StudentTestController@lessonsCertificate')->name('lessons_tests.certificate');
+    Route::post('lessons_tests/export', 'StudentTestController@lessonsExportStudentsTestsExcel')->name('lessons_tests.export_excel');
+
+    Route::get('stories_tests', 'StudentTestController@storiesIndex')->name('stories_tests.index');
+    Route::get('stories_tests/{id}', 'StudentTestController@storiesShow')->name('stories_tests.show');
+    Route::delete('stories_tests', 'StudentTestController@storiesDestroy')->name('stories_tests.destroy');
+    Route::get('stories_tests/{id}/certificate', 'StudentTestController@storiesCertificate')->name('stories_tests.certificate');
+    Route::post('stories_tests/export', 'StudentTestController@exportStoriesTestsExcel')->name('stories_tests.export_excel');
+
+    Route::get('stories_records', 'StudentTestController@storiesRecordsIndex')->name('stories_records.index');
+    Route::get('stories_records/{id}', 'StudentTestController@storiesRecordsShow')->name('stories_records.show');
+    Route::patch('stories_records/{id}', 'StudentTestController@storiesRecordsUpdate')->name('stories_records.update');
+    Route::delete('stories_records', 'StudentTestController@storiesRecordsDestroy')->name('stories_records.destroy');
+    Route::post('stories_records_tests/export', 'StudentTestController@exportStoriesRecordsExcel')->name('stories_records.export_excel');
 
 
-        Route::get('stories_level/{level}', 'CurriculumController@stories')->name('stories.list');
-        Route::get('stories/{id}/{key}/{grade}', 'CurriculumController@story')->name('stories.show');
+    //Students Works
+    Route::get('students_works', 'StudentWorksController@index')->name('students_works.index');
+    Route::get('students_works/{id}', 'StudentWorksController@show')->name('students_works.show');
+    Route::post('students_works/{id}', 'StudentWorksController@update')->name('students_works.update');
+    Route::delete('students_works', 'StudentWorksController@destroy')->name('students_works.destroy');
+    Route::post('students_works_export', 'StudentWorksController@studentLessonExport')->name('students_works.export');
+
+    //Lessons Assignments
+    Route::resource('lesson_assignment', 'LessonAssignmentController')->except(['destroy']);
+    Route::delete('lesson_assignment/delete', 'LessonAssignmentController@destroy')->name('lesson_assignment.destroy');
+    Route::post('lesson_assignment/export', 'LessonAssignmentController@export')->name('lesson_assignment.export');
+
+    //Stories Assignments
+    Route::resource('story_assignment', 'StoryAssignmentController')->except(['destroy']);
+    Route::delete('story_assignment/delete', 'StoryAssignmentController@destroy')->name('story_assignment.destroy');
+    Route::post('story_assignment/export', 'StoryAssignmentController@export')->name('story_assignment.export');
+
+    //MotivationalCertificate
+    Route::resource('motivational_certificate', 'MotivationalCertificateController')->except(['destroy', 'edit', 'update']);
+    Route::delete('motivational_certificate/delete', 'MotivationalCertificateController@destroy')->name('motivational_certificate.destroy');
+    Route::post('motivational_certificate/export', 'MotivationalCertificateController@export')->name('motivational_certificate.export');
 
 
-        Route::get('lessons/{id}/{type}', 'CurriculumController@lessons')->name('lessons');
-        Route::get('lesson/{id}/{key}', 'CurriculumController@lesson')->name('lesson');
-    });
+    //Curriculum
+    Route::get('curriculum/{grade}', 'CurriculumController@curriculum')->name('curriculum.home');
+    Route::get('levels/{grade}', 'CurriculumController@lessonsLevels')->name('levels');
+    Route::get('stories/{grade}', 'CurriculumController@storiesLevels')->name('levels.stories');
+
+    Route::get('stories_level/{level}', 'CurriculumController@stories')->name('stories.list');
+    Route::get('stories/{id}/{key}/{grade}', 'CurriculumController@story')->name('stories.show');
+
+    Route::get('lessons/{id}/{type}', 'CurriculumController@lessons')->name('lessons');
+    Route::get('lesson/{id}/{key}', 'CurriculumController@lesson')->name('lesson');
+
+    //General
+    Route::get('getLessonsByGrade', [GeneralController::class,'getLessonsByGrade'])->name('getLessonsByGrade');
+    Route::get('getStoriesByGrade', [GeneralController::class,'getStoriesByGrade'])->name('getStoriesByGrade');
+    Route::get('getStudentsByGrade/{id}', [GeneralController::class,'getStudentsByGrade'])->name('getStudentsByGrade');
+
+    //Reports
+    Route::get('usage_report', 'SettingController@usageReport')->name('report.usage_report');
+    Route::get('pre_usage_report', 'SettingController@preUsageReport')->name('report.pre_usage_report');
+
+
 
 
 });

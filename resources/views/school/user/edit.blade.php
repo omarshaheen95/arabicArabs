@@ -308,6 +308,10 @@
             $('#generateUserName').click(function () {
                 generateUserName();
             });
+            $('#Phone').keyup(function () {
+                $('#mobileHidden').val(iti.getNumber());
+                console.log(iti.getNumber());
+            });
             $('#active_to_date').flatpickr();
             //on change package get days and create date from today + days with format Y-m-d and add to flatpickr active to
             $('select[name="package_id"]').change(function () {

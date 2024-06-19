@@ -159,6 +159,11 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'story tests certificate', 'guard_name' => 'manager', 'group' => 'users tests'],
             ['name' => 'export story tests', 'guard_name' => 'manager', 'group' => 'users tests'],
 
+            ['name' => 'show motivational certificate', 'guard_name' => 'manager', 'group' => 'motivational certificate'],
+            ['name' => 'delete motivational certificate', 'guard_name' => 'manager', 'group' => 'motivational certificate'],
+            ['name' => 'add motivational certificate', 'guard_name' => 'manager', 'group' => 'motivational certificate'],
+            ['name' => 'export motivational certificate', 'guard_name' => 'manager', 'group' => 'motivational certificate'],
+
         ];
 
         //insert permissions

@@ -49,6 +49,8 @@ class UserRequest extends FormRequest
                 'section' => 'nullable',
                 "phone" => ['required'],
                 'mobile' => ['required', 'phone:'.request()->get('short_country')],
+                'demo_grades' => 'required_if:demo,1',
+
             ];
         }else{
             return [
@@ -69,6 +71,8 @@ class UserRequest extends FormRequest
                 'section' => 'nullable',
                 "phone" => ['required'],
                 'mobile' => ['required', 'phone:'.request()->get('short_country')],
+                'demo_grades' => 'required_if:demo,1',
+
             ];
         }
 

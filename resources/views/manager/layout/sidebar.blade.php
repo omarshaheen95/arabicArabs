@@ -280,6 +280,19 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                         <!--end:Menu sub-->
                     </div>
                 @endif
+                @can('show motivational certificate')
+                    <div class="menu-item">
+                        <a class="menu-link @if(Request::is('manager/motivational_certificate*'))active @endif" href="{{ route('manager.motivational_certificate.index') }}">
+                    <span class="menu-icon">
+                        <i class="ki-duotone ki-teacher fs-2">
+                             <span class="path1"></span>
+                             <span class="path2"></span>
+                            </i>
+                    </span>
+                            <span class="menu-title">{{t('Motivational Certificates')}}</span>
+                        </a>
+                    </div>
+                @endcan
 
                 @if(Auth::guard('manager')->user()->hasAnyDirectPermission(['show hidden lessons','show hidden stories']))
                     <div data-kt-menu-trigger="click"

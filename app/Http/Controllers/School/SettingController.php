@@ -174,7 +174,7 @@ class SettingController extends Controller
     {
         $data =  $request->validated();
         if (request()->hasFile('logo')) {
-            $data['logo']  = $this->uploadFile(request()->file('logo'), 'schools_images');
+            $data['logo']  = $this->uploadFile(request()->file('logo'), 'profile_images/schools');
         }
         Auth::guard('school')->user()->update($data);
         return redirect()->back()->with('message', 'Successfully Updated');

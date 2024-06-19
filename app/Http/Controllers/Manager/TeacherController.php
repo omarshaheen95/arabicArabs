@@ -40,7 +40,7 @@ class TeacherController extends Controller
     public function index(Request $request)
     {
         if (request()->ajax()) {
-            $rows = Teacher::query()->with(['school'])->withCount('users')->filter($request)->latest();
+            $rows = Teacher::query()->with(['school','students'])->withCount('users')->filter($request)->withCount('students')->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('created_at', function ($row) {

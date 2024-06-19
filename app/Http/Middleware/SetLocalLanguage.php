@@ -33,9 +33,10 @@ class SetLocalLanguage
             $request['supervisor_id'] = Auth::guard('supervisor')->user()->id;
         }else if(\request()->is('teacher/*') && Auth::guard('teacher')->check() ){
             $locale = isAPI()? request()->header('Accept-Language') : Auth::guard('teacher')->user()->lang ;
-            //$request['school_id'] = $inspection_schools;//inspection schools in all request
+            $teacher =  Auth::guard('teacher')->user();
             $request['current_guard'] = 'teacher';
-            $request['teacher_id'] = Auth::guard('teacher')->user()->id;
+            $request['school_id'] = $teacher->school_id;
+            $request['teacher_id'] = $teacher->id;
         }else{
             $locale = isAPI()? request()->header('Accept-Language') : (session('lang') ?  session('lang'): 'ar') ;
             $request['current_guard'] = null;

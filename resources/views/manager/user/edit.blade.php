@@ -20,7 +20,7 @@
         </style>
     @endif
 @endsection
-
+{{--@dd($user->toArray())--}}
 
 @section('content')
     <form action="{{ isset($user) ? route('manager.user.update', $user->id): route('manager.user.store') }}"
@@ -251,18 +251,61 @@
                                value="{{ isset($user) ? $user->id_number : old("id_number") }}" placeholder="{{t('SID')}}">
                     </div>
                 </div>
-                <div class="col-6 mb-2 d-flex gap-2 mt-4">
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input class="form-check-input" type="checkbox" value="1" name="active" id="flexCheckDefault" {{isset($user) && $user->active ? 'checked':''}}/>
-                        <label class="form-check-label text-dark" for="flexCheckDefault">
-                            {{t('Active')}}
-                        </label>
+
+                <div class="col-12 row">
+                    <div class="col-1 mb-2 d-flex gap-2 mt-4">
+                        <div class="form-check form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="1" name="active" id="flexCheckDefault" {{isset($user) && $user->active ? 'checked':''}}/>
+                            <label class="form-check-label text-dark" for="flexCheckDefault">
+                                {{t('Active')}}
+                            </label>
+                        </div>
                     </div>
 
-
+                    <div class="col-1 mb-2 d-flex gap-2 mt-4">
+                        <div class="form-check form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="1" name="demo" id="flexCheckDefault" {{isset($user) && $user->demo ? 'checked':''}}/>
+                            <label class="form-check-label text-dark" for="flexCheckDefault">
+                                {{t('Demo')}}
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
 
+                <div id="demo_data" class="col-12 row justify-content-center d-none" dir="ltr">
+                    <div class="col-5">
+                        <label>{{t('Grades')}}</label>
+                        <select name="from[]" id="multiselect" class="form-control" size="8" multiple="multiple">
+                            @foreach($grades as $grade)
+                                <option value="{{$grade->id}}">{{$grade->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-2 d-flex flex-column justify-content-center align-items-center mt-5" >
+                        <button type="button" id="multiselect_rightAll" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-forward"></i></button>
+                        <button type="button" id="multiselect_rightSelected" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-chevron-right"></i></button>
+                        <button type="button" id="multiselect_leftSelected" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-chevron-left"></i></button>
+                        <button type="button" id="multiselect_leftAll" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-backward"></i></button>
+                    </div>
+
+                    <div class="col-5">
+                        <label>{{t('Selected Grades')}}</label>
+                        <select name="demo_grades[]" id="multiselect_to" class="form-control" size="8" multiple="multiple">
+
+                            @if(isset($user->demo_grades)&&count($user->demo_grades)>0)
+                                @php
+                                    $demo_grades = $grades->whereIn('id',$user->demo_grades);
+                                @endphp
+                                @foreach($demo_grades as $grade)
+                                    <option value="{{$grade->id}}">{{$grade->name}}</option>
+                                @endforeach
+                            @endif
+
+                        </select>
+                    </div>
+                </div>
 
 
             </div>
@@ -280,7 +323,10 @@
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
     {!! JsValidator::formRequest(\App\Http\Requests\Manager\UserRequest::class, '#form-profile-save'); !!}
     <script src="{{asset('intl-tel-input-master/build/js/intlTelInput.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('assets_v1/lib/multiselect/multiselect.min.js')}}"></script>
+
     <script type="text/javascript">
+
         var input = document.querySelector("#Phone");
         window.intlTelInput(input, {
             formatOnDisplay: false,
@@ -330,6 +376,10 @@
             $('#generateUserName').click(function () {
                 generateUserName();
             });
+            $('#Phone').keyup(function () {
+                $('#mobileHidden').val(iti.getNumber());
+                console.log(iti.getNumber());
+            });
             $('#active_to_date').flatpickr();
             //on change package get days and create date from today + days with format Y-m-d and add to flatpickr active to
             $('select[name="package_id"]').change(function () {
@@ -352,6 +402,27 @@
                     console.log('data', data.html)
                 });
             });
+        });
+
+
+        //Demo -------------------------------------------------------------------
+        if (parseInt($('input[name="demo"]:checked').val()) === 1) {
+            $('#demo_data').removeClass('d-none');
+        }
+
+        //show and hide Demo data
+        $('input[name="demo"]').change(function () {
+            var demo = $('input[name="demo"]:checked').val();
+            if (parseInt(demo) === 1) {
+                $('#demo_data').removeClass('d-none');
+            } else {
+                $('#demo_data').addClass('d-none');
+            }
+        });
+
+        //Init multiselecet For Levels
+        $('#multiselect').multiselect({
+            sort:false
         });
     </script>
 

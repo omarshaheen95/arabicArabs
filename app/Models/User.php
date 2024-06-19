@@ -19,7 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password', 'mobile', 'school_id', 'grade_id', 'alternate_grade_id', 'year_learning',
         'section', 'country_code', 'short_country', 'id_number',
-        'active', 'type', 'active_from', 'active_to', 'package_id', 'manager_id', 'year_id', 'last_login', 'image', 'import_file_id'
+        'active', 'type','demo_grades', 'active_from', 'active_to', 'package_id', 'manager_id', 'year_id', 'last_login', 'image', 'import_file_id'
         ,'last_login_info'
     ];
 
@@ -241,6 +241,19 @@ class User extends Authenticatable
     public function getImageAttribute($value)
     {
         return is_null($value) ? asset('assets/media/icons/student.png') : asset($value);
+    }
+    public function getDemoAttribute()
+    {
+        return (bool)$this->demo_grades;
+    }
+    public function getDemoGradesAttribute($value)
+    {
+        return $value?json_decode($value):[];
+    }
+
+    public function setDemoGradesAttribute($value)
+    {
+        $this->attributes['demo_grades']=json_encode($value);
     }
 
     public function user_tracker()

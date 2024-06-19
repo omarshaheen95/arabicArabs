@@ -360,7 +360,7 @@ class UserController extends Controller
 
         if ($request->hasFile('image'))
         {
-            $data['image'] = $this->uploadImage($request->file('image'), 'users');
+            $data['image'] = $this->uploadFile($request->file('image'), 'users');
         }
         $user->update($data);
         return $this->redirectWith(true, null, 'تم تحديث البيانات بنجاح');
@@ -447,7 +447,7 @@ class UserController extends Controller
         $record = null;
 
         if($request->hasFile('record_file')){
-            $record = $this->uploadImage($request->file('record_file'), 'record_result');
+            $record = $this->uploadFile($request->file('record_file'), 'record_result');
         }else if(isset($_FILES['record1']) && $_FILES['record1']['type'] != 'text/plain' && $_FILES['record1']['error'] <= 0){
             $new_name = uniqid().'.'.'wav';
             $destination = public_path('uploads/record_result');
@@ -459,7 +459,7 @@ class UserController extends Controller
 
 
         if($request->hasFile('writing_attachment')){
-            $writing_attachment_file = $this->uploadImage($request->file('writing_attachment'), 'writing_attachments');
+            $writing_attachment_file = $this->uploadFile($request->file('writing_attachment'), 'writing_attachments');
         }else{
             $writing_attachment_file = $user_lesson->getOriginal('attach_writing_answer');
         }
