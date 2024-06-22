@@ -30,7 +30,9 @@ class LessonController extends Controller
 
         $student = Auth::user();
 
-
+        if ($student->demo){
+            return redirect()->route('home')->with('message', "(Demo)تمت العملية بنجاح")->with('m-class', 'success');
+        }
 //        $student_term = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $id)->first();
 //        if ($student_term)
 //        {
@@ -260,7 +262,9 @@ class LessonController extends Controller
     public function lessonWritingTest(Request $request, $id)
     {
         $student = Auth::user();
-
+        if ($student->demo){
+            return redirect()->route('home')->with('message', "(Demo)تمت العملية بنجاح")->with('m-class', 'success');
+        }
 //        $student_term = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $id)->first();
 //        if ($student_term)
 //        {
@@ -283,7 +287,7 @@ class LessonController extends Controller
         {
             if ($request->hasFile("writing_attachment.$key"))
             {
-                $attachment = $this->uploadImage($request->file("writing_attachment.$key"), 'writing_results');
+                $attachment = $this->uploadFile($request->file("writing_attachment.$key"), 'writing_results');
             }else{
                 $attachment = null;
             }
@@ -335,7 +339,9 @@ class LessonController extends Controller
     public function lessonSpeakingTest(Request $request, $id)
     {
         $student = Auth::user();
-
+        if ($student->demo){
+            return redirect()->route('home')->with('message', "(Demo)تمت العملية بنجاح")->with('m-class', 'success');
+        }
 //        $student_term = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $id)->first();
 //        if ($student_term)
 //        {
@@ -374,7 +380,7 @@ class LessonController extends Controller
 //        {
 //            if ($request->hasFile("writing_attachment.$key"))
 //            {
-//                $attachment = $this->uploadImage($request->file("writing_attachment.$key"), 'writing_results');
+//                $attachment = $this->uploadFile($request->file("writing_attachment.$key"), 'writing_results');
 //            }else{
 //                $attachment = null;
 //            }

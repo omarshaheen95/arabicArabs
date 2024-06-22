@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\School;
 
+use App\Classes\GeneralFunctions;
 use App\Events\NewTeacherEvent;
 use App\Exports\TeacherExport;
 use App\Exports\TeacherStatisticsExport;
@@ -25,43 +26,50 @@ class TeacherController extends Controller
     public function index(Request $request)
     {
         if (request()->ajax()) {
-            $school = Auth::guard('school')->user();
-            $search = $request->get('search', false);
-            $rows = Teacher::query()->when($search, function (Builder $query) use ($search) {
-                $query->where('name', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%')
-                    ->orWhere('mobile', 'like', '%' . $search . '%');
-            })->where('school_id', $school->id)->latest();
+
+            $rows = Teacher::with('school','students')->withCount('students')->filter($request)->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
+                ->addColumn('teacher', function ($row){
+                    return '<div class="d-flex flex-column">'.
+                        '<div class="d-flex fw-bold">'.'<span class="fw-bold me-1">'.t('ID').' : </span>'.$row->id.'</div>'.
+                        '<div class="d-flex fw-bold">'.'<span class="fw-bold me-1">'.t('Name').' : </span>'.$row->name.'</div>'.
+                        '<div class="d-flex"><span class="fw-bold text-primary me-1">'.t('Mobile').' : </span><span style="direction: ltr">'.$row->mobile.'</span></div>'.
+                        '<div class="d-flex text-danger">'.'<span class="fw-bold text-primary me-1">'.t('Email').' : </span>'.'<span style="direction: ltr">'.$row->email.'</span></div>'.
+                        '</div>';
+                })
                 ->addColumn('created_at', function ($row) {
                     return Carbon::parse($row->created_at)->toDateString();
                 })
                 ->addColumn('last_login', function ($row) {
-                    return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
+                    return $row->last_login?Carbon::parse($row->last_login)->toDateTimeString():'';
+                })
+                ->addColumn('active_to', function ($row) {
+                    return $row->active_to;
                 })
                 ->addColumn('active', function ($row) {
-                    return $row->active_status;
+                    return $row->active ? '<span class="badge badge-primary">'.t('Active').'</span>' : '<span class="badge badge-danger">'.t('Inactive').'</span>';
                 })
-                ->addColumn('status', function ($row) {
-                    return $row->approved_status;
+                ->addColumn('approved', function ($row) {
+                    return $row->approved ? '<span class="badge badge-primary">'.t('Approved').'</span>' : '<span class="badge badge-warning">'.t('Under review').'</span>';
+                })->addColumn('students_count', function ($row) {
+                    return $row->students_count;
                 })
                 ->addColumn('school', function ($row) {
                     return $row->school->name;
                 })
                 ->addColumn('actions', function ($row) {
-                    $edit_url = route('school.teacher.edit', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url'));
+                    return $row->action_buttons;
                 })
                 ->make();
         }
-        $title = "المعلمين";
+        $title = t('Show teachers');
         return view('school.teacher.index', compact('title'));
     }
 
     public function create()
     {
-        $title = "إضافة معلم";
+        $title = t('Add teacher');
         return view('school.teacher.edit', compact('title'));
     }
 
@@ -69,7 +77,7 @@ class TeacherController extends Controller
     {
         $data = $request->validated();
         if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request->file('image'), 'teachers');
+            $data['image'] = $this->uploadFile($request->file('image'), 'teachers');
         }
         $school = Auth::guard('school')->user();
         $data['school_id'] = $school->id;
@@ -81,64 +89,63 @@ class TeacherController extends Controller
 //        event(new NewTeacherEvent($teacher));
         $message = "$school->name added new teacher ($teacher->name) check it form follow link: " . route('manager.teacher.edit', $teacher->id);
 //        supportMessage($message);
-        return redirect()->route('school.teacher.index')->with('message', "تم الإضافة بنجاح");
+        return redirect()->route('school.teacher.index')->with('message', t('Successfully Added'));
     }
 
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
-        $title = "تعديل معلم";
-        $school = Auth::guard('school')->user();
-        $teacher = Teacher::query()->where('school_id', $school->id)->findOrFail($id);
+        $title = t('Edit teacher');
+        $teacher = Teacher::query()->filter($request)->findOrFail($id);
         $schools = School::query()->get();
         return view('school.teacher.edit', compact('title', 'teacher', 'schools'));
     }
 
     public function update(TeacherRequest $request, $id)
     {
-        $school = Auth::guard('school')->user();
-        $teacher = Teacher::query()->where('school_id', $school->id)->findOrFail($id);
+        $teacher = Teacher::query()->filter($request)->findOrFail($id);
         $data = $request->validated();
-        if ($request->hasFile('teacher')) {
-            $data['teacher'] = $this->uploadImage($request->file('teacher'), 'teachers');
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->uploadFile($request->file('image'), 'teachers');
         }
         $data['active'] = $request->get('active', 0);
         $data['password'] = $request->get('password', false) ? bcrypt($request->get('password', 123456)) : $teacher->password;
         $teacher->update($data);
-        return redirect()->route('school.teacher.index')->with('message', "تم التحديث بنجاح");
+        return redirect()->route('school.teacher.index')->with('message', t('Successfully Updated'));
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $school = Auth::guard('school')->user();
-        $teacher = Teacher::query()->where('school_id', $school->id)->findOrFail($id);
-        $teacher->delete();
-        return redirect()->route('school.teacher.index')->with('message', "تم الحذف بنجاح");
+        $request->validate(['row_id'=>'required']);
+        Teacher::query()->filter($request)->delete();
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function teachersStatistics(Request $request)
     {
         if (request()->ajax()) {
-            $school = Auth::guard('school')->user();
-            $search = $request->get('search', false);
-            $rows = Teacher::query()->when($search, function (Builder $query) use ($search) {
-                $query->where('name', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%')
-                    ->orWhere('mobile', 'like', '%' . $search . '%');
-            })->where('school_id', $school->id)->latest();
+            $rows = Teacher::query()->withCount(['students'])->filter($request)->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('created_at', function ($row) {
                     return Carbon::parse($row->created_at)->toDateString();
                 })
                 ->addColumn('last_login', function ($row) {
-                    return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
+                    return $row->last_login?Carbon::parse($row->last_login)->toDateTimeString():'';
+                })
+                ->addColumn('teacher', function ($row) {
+                    return '<div class="d-flex flex-column">' .
+                        '<div class="d-flex fw-bold">' . '<span class="fw-bold me-1">' . t('Name') . ' : </span>' . $row->name . '</div>' .
+                        '<div class="d-flex text-danger">' . '<span style="direction: ltr">' . $row->email . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary me-1">' . t('Students') . ' : </span><span style="direction: ltr">' . $row->students_count . '</span></div>' .
+                        '</div>';
                 })
                 ->addColumn('actions', function ($row) {
-                    return '<a href="' . route('school.teacher.statistics_report', $row->id) . '" class="btn btn-icon btn-danger "><i class="la la-eye"></i></a> ';
+                    $actions = [['key'=>'blank','name'=>t('Report'),'route'=>route('school.teacher.statistics_report', $row->id)],];
+                    return view('general.action_menu')->with('actions',$actions);
                 })
                 ->make();
         }
-        $title = "إحصائيات المعلمين";
+        $title = t('Show teachers statistics');
         return view('school.teacher.statistics', compact('title'));
     }
 
@@ -148,97 +155,10 @@ class TeacherController extends Controller
             ->download('Teachers statistics.xlsx');
     }
 
-    public function teachersStatisticsReport($id)
+    public function teachersStatisticsReport(Request $request,$id)
     {
-        $school = Auth::guard('school')->user();
-        $teacher = Teacher::query()->where('school_id', $school->id)->findOrFail($id);
-
-        $teacher_students = TeacherUser::query()->where('teacher_id', $teacher->id)->pluck('user_id')->unique()->values()->all();
-        $students_grades = User::query()->whereIn('id', $teacher_students)
-            ->orderBy('grade_id')
-            ->pluck('grade_id')->unique()->values()->all();
-
-        $students_alternate_grades = User::query()->whereIn('id', $teacher_students)->whereNotNull('alternate_grade_id')
-            ->orderBy('alternate_grade_id')
-            ->pluck('alternate_grade_id')->unique()->values()->all();
-
-        $students_grades = array_merge($students_grades, $students_alternate_grades);
-        sort($students_grades);
-        $grades_info = [];
-
-        foreach ($students_grades as $students_grade) {
-            $grade_info = [];
-            $user_tests = UserTracker::query()->where('type', 'test')->whereIn('user_id', $teacher_students)
-                ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade_id', $students_grade);
-//                    });
-                })->count();
-            $user_learning = UserTracker::query()->where('type', 'learn')->whereIn('user_id', $teacher_students)
-                ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade_id', $students_grade);
-//                    });
-                })->count();
-            $user_training = UserTracker::query()->where('type', 'practise')->whereIn('user_id', $teacher_students)
-                ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade_id', $students_grade);
-//                    });
-                })->count();
-
-            $user_tracker = UserTracker::query()->whereIn('user_id', $teacher_students)
-                ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade_id', $students_grade);
-//                    });
-                })
-                ->count();
-
-
-
-            $students_tests = UserTest::query()->whereHas('user', function (Builder $query) use ($teacher) {
-                    $query->whereHas('teacherUser', function (Builder $query) use ($teacher) {
-                        $query->where('teacher_id', $teacher->id);
-                    });
-                })
-                ->whereHas('lesson', function (Builder $query) use ($students_grade) {
-//                    $query->whereHas('level', function (Builder $query) use ($students_grade) {
-                        $query->where('grade_id', $students_grade);
-//                    });
-                })->get();
-
-
-            $passed_tests = $students_tests->where('status', 'Pass')->count();
-            $failed_tests = $students_tests->where('status', 'Fail')->count();
-
-            $grade_info['passed_tests'] = $passed_tests;
-            $grade_info['failed_tests'] = $failed_tests;
-            $grade_info['total_tests'] = $students_tests->count();
-            if ($user_tracker) {
-                $grade_info['tests'] = round(($user_tests / $user_tracker) * 100, 1);
-                $grade_info['trainings'] = round(($user_training / $user_tracker) * 100, 1);
-                $grade_info['learnings'] = round(($user_learning / $user_tracker) * 100, 1);
-                $grade_info['tracker'] = $user_tracker;
-
-            } else {
-                $grade_info['tests'] = 0;
-                $grade_info['trainings'] = 0;
-                $grade_info['learnings'] = 0;
-                $grade_info['tracker'] = 0;
-            }
-
-            $grade_info['grade'] = $students_grade;
-
-            array_push($grades_info, $grade_info);
-        }
-
-//        dd($grades_info);
-
-
-        return view('school.teacher.report', compact('teacher', 'grades_info'));
-
-
+        $general =  new GeneralFunctions();
+        return $general->teacherReport($request,$id);
     }
 
     public function teacherExport(Request $request)

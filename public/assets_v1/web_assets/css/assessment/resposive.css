@@ -1,0 +1,186 @@
+@media (max-width: 1440px) and (min-width: 1200px){
+    .container{
+        max-width: 1240px;
+    }
+}
+@media (max-width: 1440px){
+    .intro-box .intro {
+        font-size: 26px;
+    }
+    .intro-box .title {
+        font-size: 60px;
+    }
+    .intro-box .description {
+        font-size: 16px;
+    } 
+    .level-card .level-box {
+        min-width: 190px;
+    }
+    .level-section .level-vector {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        z-index: -1;
+        height: 70%;
+    }
+    .price-card .price-box {
+        display: block;
+        min-width: 226px;
+    }
+}
+@media (max-width: 1200px){ 
+    .navbar-collapse{
+        position: fixed;
+        z-index: 19;
+    }
+    .navbar-collapse.collapsing .navbar-nav {
+        display: block;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -270px;
+        transition: all 0.2s ease; 
+        justify-content: start !important;  
+        height: 100%;
+        overflow-y: scroll; 
+    } 
+    .navbar-container .main-nav{
+        gap: 0;
+    }
+    .navbar-collapse.show .navbar-nav {
+        background-color: #fff;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        flex-direction: column;
+        height: auto;
+        width: 270px; 
+        padding: 1rem;
+        transition: left 0.35s ease;
+        box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15);
+        z-index: 99;
+        overflow-y: scroll;
+        gap: 0;
+        align-items: initial;
+    } 
+    
+    [dir="rtl"] .navbar-collapse.collapsing .navbar-nav {
+        left: auto;
+        right: -300px;
+    } 
+    [dir="rtl"] .navbar-collapse.show .navbar-nav {
+        left: auto;
+        right: 0;
+        transition: right 0.35s ease;
+    }
+
+    .navbar-collapse.show .navbar-nav .nav-item{
+        display: block;
+    }
+    .navbar-collapse.show .navbar-nav .nav-link{
+        font-size: 16px;
+        font-weight: bold;
+        width: 100%;
+        height: 60px;
+        border-bottom: 1px solid #f1f1f1;
+    } 
+    .navbar-collapse.show .navbar-nav .nav-link::after{
+        display: none;
+    }  
+    .navbar-collapse.show .navbar-nav li:last-child .nav-link{
+        border-bottom: none;
+    } 
+    .navbar-collapse.show .navbar-nav li:last-child .nav-link.btn{
+        text-align: center;
+    }
+    .navbar-collapse.show .navbar-nav .navbar-logo{
+        width: 100%;
+    }
+    .navbar-collapse.show .navbar-nav .navbar-logo img{
+        height: 30px !important;
+    }
+    .intro-box { 
+        height: calc( 100vh - 140px );
+    }
+    .price-card{
+        justify-content: center;
+    }
+    .price-card .price-box:nth-child(even){
+        transform: translateY(0);
+    }
+}
+@media (max-width: 786px){
+    .footer-navbar,
+    .footer-card{
+        flex-direction: column;
+    }
+    
+    .footer-card .footer-box,
+    .footer-navbar .nav{
+        margin-top: 30px;
+    }
+    
+    .footer-card .footer-box:nth-child(2){
+        border: none;
+    }
+    .footer-card .footer-box:last-child{
+        margin-bottom: 30px;
+    }
+}
+@media (max-width: 579px){
+    .navbar .navbar-container {
+        padding: 20px 30px;
+    }
+    .navbar .navbar-container .logo,
+    .navbar .navbar-container .logo img{
+        height: 45px;
+    }
+    .intro-box{
+        padding: 40px 1rem 0;
+    }
+    .intro-box .intro {
+        font-size: 16px;
+    }
+    .intro-box .title {
+        font-size: 32px;
+    } 
+    .intro-box .sub-title,
+    .intro-box .description{
+        font-size: 14px;
+        line-height: 1.8
+    } 
+    .intro-box .btns{
+        flex-direction: column-reverse;
+    }
+    .section-title .title{
+        font-size: 24px;
+    }
+    .section-title .info{
+        font-size: 16px;
+    }
+    .footer-copyright{
+        flex-direction: column;
+    }
+    .footer-copyright .nav,
+    .footer-navbar .nav {
+        gap: 20px 30px;
+        justify-content: center;
+    }
+    .footer-copyright .nav{
+        margin-top: 30px;
+    }
+    .footer-navbar .nav .nav-item::after {
+        left: -15px;
+    }
+    [dir="ltr"] .footer-navbar .nav .nav-item::after {
+        left: auto;
+        right: -15px;
+    }
+}
+@media (max-width: 420px){
+}
+
+@media (max-width: 375px){
+}

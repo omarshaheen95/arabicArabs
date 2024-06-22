@@ -24,28 +24,22 @@ class LessonRequest extends FormRequest
      */
     public function rules()
     {
+        $rules= [
+            'name' => 'required',
+            'grade_id' => 'required',
+            'lesson_type' => 'required',
+            'section_type' => 'nullable',//'required_if:lesson_type,reading,listening',
+            'ordered' => 'required',
+            'color' => 'nullable',
+            'level'=>'required_if:lesson_type,grammar,dictation,rhetoric'
+
+        ];
+
         if (in_array(Route::currentRouteName(), ['manager.news.store', 'manager.news.create'])) {
-            return [
-                'name' => 'required',
-                'grade_id' => 'required',
-                'lesson_type' => 'required',
-                'section_type' => 'nullable',//'required_if:lesson_type,reading,listening',
-                'ordered' => 'required',
-                'color' => 'nullable',
-                'image' => 'required|image',
-
-            ];
+            $rules['image'] = 'required|image';
         } else {
-            return [
-                'name' => 'required',
-                'grade_id' => 'required',
-                'lesson_type' => 'required',
-                'section_type' => 'nullable',//'required_if:lesson_type,reading,listening',
-                'ordered' => 'required',
-                'color' => 'nullable',
-                'image' => 'nullable|image',
-
-            ];
+            $rules['image'] = 'nullable|image';
         }
+        return $rules;
     }
 }

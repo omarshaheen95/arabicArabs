@@ -21,27 +21,28 @@ class TeacherStatisticsExport implements WithMapping, Responsable, WithHeadings,
 {
     use \Maatwebsite\Excel\Concerns\Exportable;
 
-    public $school_id;
-    public $name;
+    public $length;
     public $request;
+    private $last_cell;
+    private $last_row;
     public $status;
 
     public function __construct(Request $request, $school_id = false)
     {
-        $this->school_id = $school_id ? $school_id:$request->get('school_id', false);
-        $this->name = $request->get('name', false);
+        $this->request = $request;
         $this->length = 1;
     }
 
     public function headings(): array
     {
         return [
-            'اسم المعلم',
-            'اختبارات دروس منجزة',
-            'اختبارات دروس فاشلة',
-            'اختبارات قصص منجزة',
-            'اختبارات قصص فاشلة',
-            'آخر دخول',
+            'Teacher Name',
+            'Passed tests',
+            'Failed tests',
+            'Pending teaks',
+            'Completed tasks',
+            'Returned tasks',
+            'Last login',
         ];
     }
 
@@ -51,32 +52,16 @@ class TeacherStatisticsExport implements WithMapping, Responsable, WithHeadings,
             $teacher->name,
             "$teacher->passed_tests",
             "$teacher->failed_tests",
-            "$teacher->passed_tests_lessons",
-            "$teacher->failed_tests_lessons",
-            $teacher->last_login ? Carbon::parse($teacher->last_login)->toDateTimeString():'',
+            "$teacher->pending_tasks",
+            "$teacher->corrected_tasks",
+            "$teacher->returned_tasks",
+            $teacher->last_login,
         ];
     }
 
     public function collection()
     {
-        $school_id = $this->school_id;
-        $name = $this->name;
-
-        $teachers = Teacher::query()->latest()->when($name, function (Builder $query) use ($name) {
-            $query->where('name', 'like','%' . $name . '%')
-                ->orWhere('email', 'like', '%' . $name . '%')
-                ->orWhere('mobile', 'like', '%' . $name . '%');
-        })->when($school_id, function (Builder $query) use ($school_id) {
-            $query->where('school_id', $school_id);
-        })->when(auth()->user() instanceof Supervisor, function (Builder $query) {
-            $query->whereHas('supervisor_teachers', function (Builder $query) {
-                $query->where('supervisor_id', auth()->id());
-            });
-        });
-
-        if ($teachers->count() >= 1) {
-            $this->length = $teachers->count() + 1;
-        }
+        $teachers = Teacher::query()->filter($this->request)->latest();
         $this->length = $teachers->count() + 1;
         return $teachers->get();
     }
@@ -93,10 +78,12 @@ class TeacherStatisticsExport implements WithMapping, Responsable, WithHeadings,
         });
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $cellRange = 'A1:F1';
+                $this->last_cell = $event->sheet->getHighestColumn();
+                $this->last_row = $event->sheet->getHighestRow();
+                $cellRange = 'A1:'.$this->last_cell.'1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold('bold')->setSize(12);
                 $event->sheet->styleCells(
-                    "A1:F$this->length",
+                    "A1:$this->last_cell$this->last_row",
                     [
                         'alignment' => [
                             'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,

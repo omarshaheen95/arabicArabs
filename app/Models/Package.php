@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Package extends Model
 {
@@ -15,16 +16,44 @@ class Package extends Model
         'name', 'days', 'price', 'active',
     ];
 
-    public function scopeSearch(Builder $query, Request $request)
+
+    public function getActionButtonsAttribute()
     {
-        return
-            $query->when($name = $request->get('name', false), function ($query) use ($name) {
-                $query->where('name', 'like', "%$name%");
-            });
+        $actions=[];
+        if (\request()->is('manager/*')){
+            $actions =  [
+                ['key'=>'edit','name'=>t('Edit'),'route'=>route('manager.package.edit', $this->id),'permission'=>'edit packages'],
+                ['key'=>'delete','name'=>t('Delete'),'route'=>$this->id,'permission'=>'delete packages'],
+            ];
+        }
+        elseif (\request()->is('supervisor/*')){
+            $actions =  [];
+        }
+        return view('general.action_menu')->with('actions',$actions);
+
     }
 
-    public function getActiveStatusAttribute()
+    public function scopeFilter(Builder $query,$request=null): Builder{
+        if (!$request){
+            $request = \request();
+        }
+        return $query->when($value = $request->get('id',false), function (Builder $query) use ($value) {
+            $query->where('id', $value);
+        })->when($value = $request->get('row_id',[]), function (Builder $query) use ($value) {
+            $query->whereIn('id', $value);
+        })->when($value = $request->get('name',false), function (Builder $query) use ($value) {
+            $query->where('name','LIKE','%'.$value.'%');
+        })->when($value = $request->get('days',false), function (Builder $query) use ($value) {
+            $query->where('days', $value);
+        })->when($value = $request->get('price',false), function (Builder $query) use ($value) {
+            $query->where('price', $value);
+        })->when($value = $request->get('active',false), function (Builder $query) use ($value) {
+            $query->where('active', $value!=2);
+        });
+    }
+
+    public function users()
     {
-        return $this->active ? 'فعالة':'غير فعالة';
+        return $this->hasMany(User::class);
     }
 }

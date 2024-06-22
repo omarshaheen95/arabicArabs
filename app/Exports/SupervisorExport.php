@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Supervisor;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -19,26 +20,24 @@ class SupervisorExport implements WithMapping, Responsable, WithHeadings, FromCo
 {
     use \Maatwebsite\Excel\Concerns\Exportable;
 
-    public $school_id;
-    public $name;
-    public $request;
-    public $status;
 
-    public function __construct(Request $request, $school_id = 0)
+    public $request;
+    public $length;
+    public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->school_id = $school_id ? $school_id : $request->get('school_id', false);
-        $this->name = $request->get('name', false);
         $this->length = 1;
     }
 
     public function headings(): array
     {
         return [
-            'اسم المشرف',
-            'البريد الإلكتروني',
-            'كلمة المرور الافتراضية',
-            'المدرسة',
+            'Supervisor Name',
+            'Email',
+            'Default Password',
+            'School',
+            'Active Status',
+            'Status',
         ];
     }
 
@@ -49,15 +48,15 @@ class SupervisorExport implements WithMapping, Responsable, WithHeadings, FromCo
             $row->email,
             '123456',
             optional($row->school)->name,
+            $row->active?t('Active'):t('Non-Active'),
+            $row->approved?t('Approved'):t('Under review'),
         ];
     }
 
     public function collection()
     {
-        $school_id = $this->school_id;
-        $name = $this->name;
 
-        $rows = Supervisor::query()->latest()->search($this->request);
+        $rows = Supervisor::query()->filter($this->request)->latest();
 
         if ($rows->count() >= 1) {
             $this->length = $rows->count() + 1;
@@ -78,7 +77,7 @@ class SupervisorExport implements WithMapping, Responsable, WithHeadings, FromCo
         });
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $cellRange = 'A1:D1';
+                $cellRange = 'A1:G1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold('bold')->setSize(12);
                 $event->sheet->styleCells(
                     "A1:D$this->length",

@@ -1,57 +1,69 @@
 @extends('manager.layout.container')
+@section('pre_style')
+    <link href="{{asset('assets/plugins/custom/datatables/datatables.bundle.css?v=7.0.5')}}" rel="stylesheet"
+          type="text/css"/>
+@endsection
+@section('page-title')
+    {{$title}}
+@endsection
+@push('breadcrumb')
+    <li class="breadcrumb-item text-muted">
+        <a href="{{route('manager.import_files.index')}}" class="text-muted">
+            {{t('Import Files')}}
+        </a>
+    </li>
+    <li class="breadcrumb-item text-muted">
+        {{$title}}
+    </li>
 
-
+@endpush
 @section('content')
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="kt-portlet">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">{{$title}}</h3>
-                    </div>
-                </div>
+    <!--begin::Card-->
+    <div class="card ">
+        <div class="card-header">
+            <h3 class="card-label">{{$title}}</h3>
+        </div>
+        <div class="card-body">
 
-                    <div class="kt-portlet__body">
-                        <div class="kt-section kt-section--first">
-                            <div class="kt-section__body">
-                                @if(!is_null($file->error))
-                                    <p>{{$file->error}}</p>
-                                @elseif(!is_null($file->failures))
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <th>Rows In File</th>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($file->failures as $key => $row)
-                                            <tr>
-                                                <td>Row : {{$key}}</td>
-                                            </tr>
-                                            @foreach($row as $log_error)
-                                                <td>{{$log_error}}</td>
-                                        @endforeach
-                                        @endforeach
-                                    </table>
-                                @elseif(isset($error))
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <th>Rows In File</th>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($error as $key => $row)
-                                            <tr>
-                                                <td>Row : {{$key}}</td>
-                                            </tr>
-                                            @foreach($row as $log_error)
-                                                <td>{{$log_error}}</td>
-                                        @endforeach
-                                        @endforeach
-                                    </table>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-            </div>
+            @if(!is_null($file->error))
+                <p>{{$file->error}}</p>
+            @elseif(!is_null($file->failures))
+                <table class="table table-bordered">
+                    <thead>
+                    <th>Rows In File</th>
+                    </thead>
+                    <tbody>
+                    @foreach($file->failures as $key => $row)
+                        <tr>
+                            <td>Row : {{$key}}</td>
+                        </tr>
+                        @foreach($row as $log_error)
+                            <td>{{$log_error}}</td>
+                    @endforeach
+                    @endforeach
+                </table>
+            @elseif(isset($error))
+                <table class="table table-bordered">
+                    <thead>
+                    <th>Rows In File</th>
+                    </thead>
+                    <tbody>
+                    @foreach($error as $key => $row)
+                        <tr>
+                            <td>Row : {{$key}}</td>
+                        </tr>
+                        @foreach($row as $log_error)
+                            <td>{{$log_error}}</td>
+                    @endforeach
+                    @endforeach
+                </table>
+            @endif
+
+
         </div>
     </div>
+    <!--end::Card-->
 @endsection
+@section('script')
 
+@endsection

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -17,6 +19,49 @@ class Question extends Model implements HasMedia
     protected $fillable = [
         'lesson_id', 'content', 'type', 'mark',
     ];
+
+    public function getTypeNameAttribute()
+    {
+        switch ($this->type)
+        {
+            case 1:
+                return t('True False');
+            case 2:
+                return t('Choose Answer');
+            case 3:
+                return t('Match');
+            case 4:
+                return t('Sort Words');
+            default:
+                return '';
+        }
+    }
+
+    public function getActionButtonsAttribute()
+    {
+        $actions =  [
+            ['key'=>'edit','name'=>t('Edit'),'route'=>route('manager.lesson.assessment.edit', ['id'=>$this->lesson_id,'question_id'=>$this->id]),'permission'=>'edit lesson assessment'],
+            ['key'=>'delete','name'=>t('Delete'),'route'=>$this->id,'permission'=>'delete lesson assessment'],
+        ];
+        return view('general.action_menu')->with('actions',$actions);
+    }
+
+    public function scopeFilter(Builder $query,$request=null): Builder{
+        if (!$request){
+            $request = \request();
+        }
+        return $query->when($value = $request->get('id',false), function (Builder $query) use ($value) {
+            return $query->where('id', $value);
+        })->when($value = $request->get('row_id',[]), function (Builder $query) use ($value) {
+            $query->whereIn('id', $value);
+        })->when($value = $request->get('lesson_id',false), function (Builder $query) use ($value) {
+            return $query->where('lesson_id', $value);
+        })->when($value = $request->get('type',false), function (Builder $query) use ($value) {
+            return $query->where('type', $value);
+        })->when($value = $request->get('content',false), function (Builder $query) use ($value) {
+            return $query->where('content', 'like', '%' . $value . '%');
+        });
+    }
 
     public function lesson()
     {
@@ -43,6 +88,25 @@ class Question extends Model implements HasMedia
         return $this->hasMany(Option::class);
     }
 
+    public function true_false_results()
+    {
+        return $this->hasMany(TrueFalseResult::class, 'question_id');
+    }
+
+    public function option_results()
+    {
+        return $this->hasMany(OptionResult::class, 'question_id');
+    }
+
+    public function match_results()
+    {
+        return $this->hasMany(MatchResult::class, 'question_id');
+    }
+
+    public function sort_results()
+    {
+        return $this->hasMany(SortResult::class, 'question_id');
+    }
     public function studentAnswer($test_id, $student_id = null)
     {
         if (is_null($student_id)) {
@@ -198,21 +262,6 @@ class Question extends Model implements HasMedia
             ->singleFile();
     }
 
-    public function getTypeNameAttribute()
-    {
-        switch ($this->type) {
-            case 1:
-                return 'صح أو خطأ';
-            case 2:
-                return 'اختيار من متعدد';
-            case 3:
-                return 'توصيل';
-            case 4:
-                return 'ترتيب';
-            default:
-                return '';
-        }
-    }
 
     public function getTypeEngNameAttribute()
     {

@@ -1,153 +1,111 @@
+{{--
+Dev Omar Shaheen
+Devomar095@gmail.com
+WhatsApp +972592554320
+--}}
 @extends('manager.layout.container')
-@section('style')
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-@endsection
-@section('content')
-    @push('breadcrumb')
-        <li class="breadcrumb-item">
-            القصص
-        </li>
-    @endpush
 
+@section('title',$title)
+
+
+@section('actions')
+    @can('add stories')
+        <a href="{{route('manager.story.create')}}" class="btn btn-primary btn-elevate btn-icon-sm me-2">
+            <i class="la la-plus"></i>
+            {{t('Add Story')}}
+        </a>
+    @endcan
+
+    <div class="dropdown with-filter">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{t('Actions')}}
+        </button>
+        @can('delete stories')
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
+        </ul>
+        @endcan
+
+    </div>
+
+@endsection
+
+@section('filter')
     <div class="row">
-        <div class="col-md-12">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">
-                            القصص
-                        </h3>
-                    </div>
-                    <div class="kt-portlet__head-toolbar">
-                        <div class="kt-portlet__head-wrapper">
-                            <div class="kt-portlet__head-actions">
-                                <a href="{{ route('manager.story.create') }}" class="btn btn-danger btn-elevate btn-icon-sm">
-                                    <i class="la la-plus"></i>
-                                    إضافة قصة
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="kt-portlet__body">
-                    <form class="kt-form kt-form--fit kt-margin-b-15" action="" id="search_form" method="get">
-                        <div class="row ">
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
-                                <label>الاسم :</label>
-                                <input type="text" name="name" id="name" class="form-control kt-input"
-                                       placeholder="الاسم ">
-                            </div>
-                            <div class="col-lg-2 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
-                                <label>الصف :</label>
-                                <select class="form-control select2L" name="grade">
-                                    <option selected value="">الكل</option>
-                                    <option value="15" {{isset($story) && $story->grade == 1 ? 'selected':''}}>Grade KG</option>
-                                    <option value="1" {{isset($story) && $story->grade == 1 ? 'selected':''}}>Grade 1</option>
-                                    <option value="2" {{isset($story) && $story->grade == 2 ? 'selected':''}}>Grade 2</option>
-                                    <option value="3" {{isset($story) && $story->grade == 3 ? 'selected':''}}>Grade 3</option>
-                                    <option value="4" {{isset($story) && $story->grade == 4 ? 'selected':''}}>Grade 4</option>
-                                    <option value="5" {{isset($story) && $story->grade == 5 ? 'selected':''}}>Grade 5</option>
-                                    <option value="6" {{isset($story) && $story->grade == 6 ? 'selected':''}}>Grade 6</option>
-                                    <option value="7" {{isset($story) && $story->grade == 7 ? 'selected':''}}>Grade 7</option>
-                                    <option value="8" {{isset($story) && $story->grade == 8 ? 'selected':''}}>Grade 8</option>
-                                    <option value="9" {{isset($story) && $story->grade == 9 ? 'selected':''}}>Grade 9</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile kt-margin-b-15">
-                                <label>الإجراءات:</label>
-                                <br/>
-                                <button type="button" class="btn btn-danger btn-elevate btn-icon-sm" id="kt_search">
-                                    <i class="la la-search"></i>
-                                    بحث
-                                </button>
-                            </div>
-                        </div>
+        <div class="col-1 mb-2">
+            <label>{{t('ID')}}:</label>
+            <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
+        </div>
+        <div class="col-3 mb-2">
+            <label>{{t('Name')}}:</label>
+            <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
+        </div>
+        <div class="col-lg-3 mb-2">
+            <label>{{t('Grade')}} :</label>
+            <select name="grade" id="grade" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}" data-allow-clear="true">
+                <option></option>
+                @foreach($grades as $grade=>$name)
+                    <option value="{{$grade}}">{{$name}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-3 mb-2">
+            <label>{{t('Activation')}} :</label>
+            <select name="active" id="status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
+                <option></option>
+                <option value="1">{{t('Active')}}</option>
+                <option value="2">{{t('Non-Active')}}</option>
+            </select>
+        </div>
 
-                    </form>
-                    <table class="table text-center" id="users-table">
-                        <thead>
-                        <th>الاسم</th>
-                        <th>الصف</th>
-                        <th>الاجراء</th>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
+
+
     </div>
-    <div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" aria-labelledby="deleteModel"
-         aria-hidden="true" style="display: none;">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    </button>
-                </div>
-                <form method="post" action="" id="delete_form">
-                    <input type="hidden" name="_method" value="delete">
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <h5>هل أنت متأكد من حذف السجل المحدد ؟</h5>
-                        <br/>
-                        <p>حذف السجل المحدد سيؤدي لحذف السجلات المرتبطة به .</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-warning">حذف</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+
+@endsection
+
+@push('breadcrumb')
+    <li class="breadcrumb-item">
+        {{$title}}
+    </li>
+@endpush
+
+
+@section('content')
+    <div class="row">
+        <table class="table table-row-bordered gy-5" id="datatable">
+            <thead>
+            <tr class="fw-semibold fs-6 text-gray-800">
+                <th class="text-start"></th>
+                <th class="text-start">{{ t('Name') }}</th>
+                <th class="text-start">{{ t('Grade') }}</th>
+                <th class="text-start">{{ t('Activation') }}</th>
+                <th class="text-start">{{ t('Actions') }}</th>
+            </tr>
+            </thead>
+        </table>
     </div>
 @endsection
+
+
 @section('script')
-    <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <!-- Bootstrap JavaScript -->
-    <script>
-        $(document).ready(function(){
-            $(document).on('click','.deleteRecord',(function(){
-                var id = $(this).data("id");
-                var url = '{{ route("manager.story.destroy", ":id") }}';
-                url = url.replace(':id', id );
-                $('#delete_form').attr('action',url);
-            }));
-            $(function() {
-                $('#users-table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ordering:false,
-                    searching: false,
-                    dom: `<'row'<'col-sm-12'tr>>
-      <'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
 
-                    @if(app()->getLocale() == 'ar')
-                    language: {
-                        url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Arabic.json"
-                    },
-                    @endif
-                    ajax: {
-                        url : '{{ route('manager.story.index') }}',
-                        data: function (d) {
-                            var frm_data = $('#search_form').serializeArray();
-                            $.each(frm_data, function (key, val) {
-                                d[val.name] = val.value;
-                            });
-                        }
-                    },
-                    columns: [
-                        {data: 'name', name: 'name'},
-                        {data: 'grade', name: 'grade'},
-                        {data: 'actions', name: 'actions'}
-                    ],
-                });
-            });
-            $('#kt_search').click(function (e) {
-                e.preventDefault();
-                $('#users-table').DataTable().draw(true);
-            });
-        });
+    <script>
+        var DELETE_URL = "{{route('manager.story.destroy') }}";
+        var TABLE_URL = "{{route('manager.story.index') }}";
+
+        var TABLE_COLUMNS = [
+            {data: 'id', name: 'id'},
+            {data: 'name', name: 'name'},
+            {data: 'grade', name: 'grade'},
+            {data: 'active', name: 'active'},
+            {data: 'actions', name: 'actions'}
+        ];
+
+
     </script>
+    <script src="{{asset('assets_v1/js/datatable.js')}}?v={{time()}}"></script>
 @endsection
+
+
+

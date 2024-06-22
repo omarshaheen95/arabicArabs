@@ -45,18 +45,36 @@ class StoryQuestion extends Model
     {
         return $this->hasMany(StoryOption::class);
     }
+    public function true_false_results()
+    {
+        return $this->hasMany(StoryTrueFalseResult::class, 'story_question_id');
+    }
 
+    public function option_results()
+    {
+        return $this->hasMany(StoryOptionResult::class, 'story_question_id');
+    }
+
+    public function match_results()
+    {
+        return $this->hasMany(StoryMatchResult::class, 'story_question_id');
+    }
+
+    public function sort_results()
+    {
+        return $this->hasMany(StorySortResult::class, 'story_question_id');
+    }
     public function getTypeNameAttribute()
     {
         switch ($this->type) {
             case 1:
-                return 'صح أو خطأ';
+                return t('True False');
             case 2:
-                return 'اختيار من متعدد';
+                return t('Choose Answer');
             case 3:
-                return 'توصيل';
+                return t('Match');
             case 4:
-                return 'ترتيب';
+                return t('Sort Words');
             default:
                 return '';
         }

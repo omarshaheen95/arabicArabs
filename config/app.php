@@ -55,7 +55,7 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
-
+    'languages' => ['ar', 'en'],
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -177,7 +177,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-
+        Spatie\Activitylog\ActivitylogServiceProvider::class
 
 
     ],

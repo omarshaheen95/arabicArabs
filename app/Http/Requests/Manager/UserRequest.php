@@ -43,11 +43,14 @@ class UserRequest extends FormRequest
 //                'type' => 'required|in:trial,member',
                 'active_to' => 'required|date_format:Y-m-d',
                 'year_learning' => 'required',
+                'year_id' => 'required',
                 'country_code' => 'required',
                 'short_country' => 'required',
                 'section' => 'nullable',
                 "phone" => ['required'],
                 'mobile' => ['required', 'phone:'.request()->get('short_country')],
+                'demo_grades' => 'required_if:demo,1',
+
             ];
         }else{
             return [
@@ -68,6 +71,8 @@ class UserRequest extends FormRequest
                 'section' => 'nullable',
                 "phone" => ['required'],
                 'mobile' => ['required', 'phone:'.request()->get('short_country')],
+                'demo_grades' => 'required_if:demo,1',
+
             ];
         }
 

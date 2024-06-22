@@ -1,63 +1,105 @@
-{{--Dev Omar Shaheen
-    Devomar095@gmail.com
-    WhatsApp +972592554320
-    2/4/2020 helpingHand--}}
 @extends('supervisor.layout.container')
-@section('style')
-@endsection
+@section('title',$title)
+
+@push('breadcrumb')
+    <li class="breadcrumb-item text-muted">
+        {{ $title}}
+    </li>
+@endpush
+
 @section('content')
-    @push('breadcrumb')
-        <li class="breadcrumb-item">
-            {{$title}}
-        </li>
-    @endpush
-    <div class="row">
-        <div class="col-xl-10 offset-1">
-            <div class="kt-portlet">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">{{$title}}</h3>
-                    </div>
+    <form enctype="multipart/form-data" id="form_information" class="kt-form kt-form--label-right"
+          action="{{ route('supervisor.update-profile')}}"
+          method="post">
+        @csrf
+
+
+        <div class="d-flex flex-column align-items-center mb-10">
+            <label class="form-label mb-2">{{t('Image')}}</label>
+            <div class="">
+
+                <!--begin::Image input-->
+                <div class="image-input image-input-outline" data-kt-image-input="true"
+                     style="background-image: url({{asset('assets_v1/media/svg/avatars/blank.svg')}})">
+
+                    @if($supervisor->image)
+                        <div class="image-input-wrapper w-125px h-125px"
+                             style="background-image: url({{asset($supervisor->image)}})"></div>
+                    @else
+                        <div class="image-input-wrapper w-125px h-125px"
+                             style="background-image: url({{asset('assets_v1/media/svg/avatars/blank.svg')}})"></div>
+                    @endif
+
+                    <!--begin::Edit button-->
+                    <label
+                        class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                        data-kt-image-input-action="change"
+                        data-bs-toggle="tooltip"
+                        data-bs-dismiss="click"
+                        title="Change avatar">
+                        <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
+
+                        <!--begin::Inputs-->
+                        <input type="file" name="image" accept=".png, .jpg, .jpeg"/>
+                        <input type="hidden" name="avatar_remove"/>
+                        <!--end::Inputs-->
+                    </label>
+                    <!--end::Edit button-->
+
+                    <!--begin::Cancel button-->
+                    <span
+                        class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                        data-kt-image-input-action="cancel"
+                        data-bs-toggle="tooltip"
+                        data-bs-dismiss="click"
+                        title="Cancel avatar">
+                                                <i class="ki-outline ki-cross fs-3"></i>
+                                            </span>
+                    <!--end::Cancel button-->
+
+                    <!--begin::Remove button-->
+                    <span
+                        class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                        data-kt-image-input-action="remove"
+                        data-bs-toggle="tooltip"
+                        data-bs-dismiss="click"
+                        title="Remove avatar">
+                                                <i class="ki-outline ki-cross fs-3"></i>
+                                            </span>
+                    <!--end::Remove button-->
                 </div>
-                <form enctype="multipart/form-data" id="form_information" class="kt-form kt-form--label-right" action="{{ route('supervisor.profile.update') }}" method="post">
-                    {{ csrf_field() }}
-                    <div class="kt-portlet__body">
-                        <div class="kt-section kt-section--first">
-                            <div class="kt-section__body">
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">الاسم</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control" name="name" type="text" value="{{ Auth::user()->name }}">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-xl-3 col-lg-3 col-form-label">البريد الإلكتروني</label>
-                                    <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control" name="email" type="email" value="{{ Auth::user()->email }}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="kt-portlet__foot">
-                        <div class="kt-form__actions">
-                            <div class="row">
-                                <div class="col-lg-3 col-xl-3">
-                                </div>
-                                <div class="col-lg-9 col-xl-9">
-                                    <button type="submit" class="btn btn-brand">حفظ</button>&nbsp;
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                <!--end::Image input-->
+
+
             </div>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <label class="form-label">{{t('Name')}}</label>
+                <input class="form-control direct-search" name="name" type="text"
+                       value="{{$supervisor->name}}">
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label">{{t('Email')}}</label>
+                <input class="form-control" name="email" type="text"
+                       value="{{$supervisor->email}}">
+            </div>
+
+        </div>
+        <div class="row my-5">
+            <div class="separator separator-content my-4"></div>
+            <div class="col-12 d-flex justify-content-end">
+                <button type="submit"
+                        class="btn btn-primary">{{t('Update') }}</button>&nbsp;
+            </div>
+        </div>
+    </form>
+
 @endsection
+
 @section('script')
-    <script>
-    </script>
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! $validator->selector('#form_information') !!}
+    {!! JsValidator::formRequest(\App\Http\Requests\Supervisor\SupervisorProfileRequest::class, '#form_information'); !!}
+
 @endsection

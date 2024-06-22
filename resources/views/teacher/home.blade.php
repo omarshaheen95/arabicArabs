@@ -1,77 +1,98 @@
 @extends('teacher.layout.container')
 
-@section('content')
-    <div class="row justify-content-center">
-        <div class="col-md-2">
-            <div class="kt-portlet">
-                <div class="kt-portlet__body">
-                    <!--begin::Form-->
-                    <div class="kt-form">
-                        <div class="row">
-                            <div class="col-4 justify-content-center text-center">
-                                <i class="flaticon2-group" style="font-size: 3.5rem"></i>
-                            </div>
-
-                            <label class="col-8 text-center">
-                                <span style="font-size: 2rem">
-                                    {{ $school_students }}
-                                </span>
-                                <br>
-                                طلاب المدرسة
-                            </label>
-
-                        </div>
+@section('charts')
+    <div class="row gy-5 g-xl-10 justify-content-center">
+        <div class="col-sm-6 col-xl-2 mb-xl-10">
+            <div class="card h-lg-100">
+                <!--begin::Body-->
+                <div class="card-body d-flex justify-content-between align-items-start flex-column">
+                    <!--begin::Icon-->
+                    <div class="m-0">
+                        <i class="ki-duotone ki-profile-user fs-2hx text-gray-600">
+                            <i class="path1"></i>
+                            <i class="path2"></i>
+                            <i class="path3"></i>
+                            <i class="path4"></i>
+                        </i>
                     </div>
-                    <!--end::Form-->
+                    <!--end::Icon-->
+                    <!--begin::Section-->
+                    <div class="d-flex flex-column mt-5">
+                        <!--begin::Number-->
+                        <span class="fw-semibold fs-2x text-gray-800 lh-1 ls-n2">{{$school_students}} </span>
+                        <!--end::Number-->
+
+                        <!--begin::Follower-->
+                        <div class="m-0">
+                            <span class="fw-semibold fs-6 text-gray-400">{{t('School Students')}}</span>
+                        </div>
+                        <!--end::Follower-->
+                    </div>
+                    <!--end::Section-->
                 </div>
+                <!--end::Body-->
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="kt-portlet">
-                <div class="kt-portlet__body">
-                    <!--begin::Form-->
-                    <div class="kt-form">
-                        <div class="row">
-                            <div class="col-4 justify-content-center text-center">
-                                <i class="flaticon2-group" style="font-size: 3.5rem"></i>
-                            </div>
-
-                            <label class="col-8 text-center">
-                                <span style="font-size: 2rem">
-                                    {{ $students }}
-                                </span>
-                                <br>
-                                طلابي
-                            </label>
-
-                        </div>
+        <div class="col-sm-6 col-xl-2 mb-xl-10">
+            <div class="card h-lg-100">
+                <!--begin::Body-->
+                <div class="card-body d-flex justify-content-between align-items-start flex-column">
+                    <!--begin::Icon-->
+                    <div class="m-0">
+                        <i class="ki-duotone ki-note-2 fs-2hx text-gray-600">
+                            <i class="path1"></i>
+                            <i class="path2"></i>
+                            <i class="path3"></i>
+                            <i class="path4"></i>
+                        </i>
                     </div>
-                    <!--end::Form-->
+                    <!--end::Icon-->
+                    <!--begin::Section-->
+                    <div class="d-flex flex-column mt-5">
+                        <!--begin::Number-->
+                        <span class="fw-semibold fs-2x text-gray-800 lh-1 ls-n2">{{$tests}} </span>
+                        <!--end::Number-->
+
+                        <!--begin::Follower-->
+                        <div class="m-0">
+                            <span class="fw-semibold fs-6 text-gray-400">{{t('Students Tests')}}</span>
+                        </div>
+                        <!--end::Follower-->
+                    </div>
+                    <!--end::Section-->
                 </div>
+                <!--end::Body-->
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="kt-portlet">
-                <div class="kt-portlet__body">
-                    <!--begin::Form-->
-                    <div class="kt-form">
-                        <div class="row">
-                            <div class="col-4 justify-content-center text-center">
-                                <i class="flaticon2-writing" style="font-size: 3.5rem"></i>
-                            </div>
-
-                            <label class="col-8 text-center">
-                                <span style="font-size: 2rem">
-                                    {{ $tests }}
-                                </span>
-                                <br>
-                                اختبارات الدروس للطلاب
-                            </label>
-
-                        </div>
+        <div class="col-sm-6 col-xl-2 mb-xl-10">
+            <div class="card h-lg-100">
+                <!--begin::Body-->
+                <div class="card-body d-flex justify-content-between align-items-start flex-column">
+                    <!--begin::Icon-->
+                    <div class="m-0">
+                        <i class="ki-duotone ki-profile-user fs-2hx text-gray-600">
+                            <i class="path1"></i>
+                            <i class="path2"></i>
+                            <i class="path3"></i>
+                            <i class="path4"></i>
+                        </i>
                     </div>
-                    <!--end::Form-->
+                    <!--end::Icon-->
+                    <!--begin::Section-->
+                    <div class="d-flex flex-column mt-5">
+                        <!--begin::Number-->
+                        <span class="fw-semibold fs-2x text-gray-800 lh-1 ls-n2">{{$students}} </span>
+                        <!--end::Number-->
+
+                        <!--begin::Follower-->
+                        <div class="m-0">
+                            <span class="fw-semibold fs-6 text-gray-400">{{t('Students')}}</span>
+                        </div>
+                        <!--end::Follower-->
+                    </div>
+                    <!--end::Section-->
                 </div>
+                <!--end::Body-->
             </div>
         </div>
     </div>

@@ -25,20 +25,23 @@ class SchoolRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [];
-        $rules["name"] = 'required';
+        $rules = [
+            'name' => 'required',
+            'logo' => 'nullable',
+            'mobile' => 'required',
+            'website' => 'nullable',
+        ];
         if (Route::currentRouteName() == 'manager.school.edit' || Route::currentRouteName() == 'manager.school.update')
         {
             $id = $this->route('school');
-            $rules["email"] = ['required', 'email:rfc,dns', "unique:schools,email,$id,id,deleted_at,NULL"];
+            $rules["email"] = "required|email:rfc,dns|unique:schools,email,$id,id,deleted_at,NULL";
             $rules["password"] = 'nullable|min:6';
         }else{
 
             $rules["email"] = 'required|email:rfc,dns|unique:schools,email,{$id},id,deleted_at,NULL';
             $rules["password"] = 'required|min:6';
         }
-        $rules["mobile"] = 'required';
-        $rules["website"] = 'nullable';
+
         return $rules;
     }
 

@@ -23,7 +23,7 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('student');
+        $id = $this->route('id');
         return [
             'name' => 'required',
             'email' => "required|email:rfc,dns|unique:users,email,$id,id,deleted_at,NULL",
@@ -32,9 +32,9 @@ class UserRequest extends FormRequest
             'country_code' => 'required',
             'section' => 'nullable',
             'short_country' => 'required',
+            'year_id' => 'required',
             "phone" => ['required'],
             'mobile' => ['required', 'phone:'.request()->get('short_country')],
-            'teacher_id' => 'nullable|exists:teachers,id',
         ];
     }
 

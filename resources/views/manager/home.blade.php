@@ -1,371 +1,578 @@
 @extends('manager.layout.container')
-@section('style')
-    <style>
-        #chartdiv1, #chartdiv2, #chartdiv3, #chartdiv0 {
-            width: 100%;
-            height: 400px;
-        }
-    </style>
-@endsection
-@section('content')
-    <div class="row">
-        <div class="col-md-2">
-            <div class="kt-portlet">
-                <div class="kt-portlet__body">
-                    <!--begin::Form-->
-                    <div class="kt-form">
-                        <div class="row">
-                            <div class="col-4 justify-content-center text-center">
-                                <i class="flaticon2-architecture-and-city" style="font-size: 3.5rem"></i>
-                            </div>
-                            <div class="col-2">
-                            </div>
-                            <label class="col-6 text-center">
-                                <span style="font-size: 2rem">
-                                    {{ $schools }}
-                                </span>
-                                <br>
-                                المدارس
-                            </label>
-
+@section('title',$title)
+@can('show statistics')
+    @section('charts')
+        <div class="row gy-5 g-xl-10 justify-content-center">
+            <div class="col-sm-6 col-xl-2 mb-xl-10">
+                <div class="card h-lg-100">
+                    <!--begin::Body-->
+                    <div class="card-body d-flex justify-content-between align-items-start flex-column">
+                        <!--begin::Icon-->
+                        <div class="m-0">
+                            <i class="ki-duotone ki-home-3 fs-2hx text-gray-600">
+                                <i class="path1"></i>
+                                <i class="path2"></i>
+                            </i>
                         </div>
+                        <!--end::Icon-->
+                        <!--begin::Section-->
+                        <div class="d-flex flex-column mt-5">
+                            <!--begin::Number-->
+                            <span class="fw-semibold fs-2x text-gray-800 lh-1 ls-n2">{{$data['schools']}} </span>
+                            <!--end::Number-->
+
+                            <!--begin::Follower-->
+                            <div class="m-0">
+                                <span class="fw-semibold fs-6 text-gray-400">{{t('Schools')}}</span>
+                            </div>
+                            <!--end::Follower-->
+                        </div>
+                        <!--end::Section-->
                     </div>
-                    <!--end::Form-->
+                    <!--end::Body-->
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-2 mb-xl-10">
+                <div class="card h-lg-100">
+                    <!--begin::Body-->
+                    <div class="card-body d-flex justify-content-between align-items-start flex-column">
+                        <!--begin::Icon-->
+                        <div class="m-0">
+                            <i class="ki-duotone ki-people fs-2hx text-gray-600">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                                <span class="path3"></span>
+                                <span class="path4"></span>
+                                <span class="path5"></span>
+                            </i>
+                        </div>
+                        <!--end::Icon-->
+                        <!--begin::Section-->
+                        <div class="d-flex flex-column mt-5">
+                            <!--begin::Number-->
+                            <span class="fw-semibold fs-2x text-gray-800 lh-1 ls-n2">{{$data['supervisors']}} </span>
+                            <!--end::Number-->
+
+                            <!--begin::Follower-->
+                            <div class="m-0">
+                                <span class="fw-semibold fs-6 text-gray-400">{{t('Supervisors')}}</span>
+                            </div>
+                            <!--end::Follower-->
+                        </div>
+                        <!--end::Section-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-2 mb-xl-10">
+                <div class="card h-lg-100">
+                    <!--begin::Body-->
+                    <div class="card-body d-flex justify-content-between align-items-start flex-column">
+                        <!--begin::Icon-->
+                        <div class="m-0">
+                            <i class="ki-duotone ki-user-tick fs-2hx text-gray-600">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                                <span class="path3"></span>
+                            </i>
+                        </div>
+                        <!--end::Icon-->
+                        <!--begin::Section-->
+                        <div class="d-flex flex-column mt-5">
+                            <!--begin::Number-->
+                            <span class="fw-semibold fs-2x text-gray-800 lh-1 ls-n2">{{$data['teachers']}} </span>
+                            <!--end::Number-->
+
+                            <!--begin::Follower-->
+                            <div class="m-0">
+                                <span class="fw-semibold fs-6 text-gray-400">{{t('Teachers')}}</span>
+                            </div>
+                            <!--end::Follower-->
+                        </div>
+                        <!--end::Section-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-2 mb-xl-10">
+                <div class="card h-lg-100">
+                    <!--begin::Body-->
+                    <div class="card-body d-flex justify-content-between align-items-start flex-column">
+                        <!--begin::Icon-->
+                        <div class="m-0">
+                            <i class="ki-duotone ki-user fs-2hx text-gray-600">
+                                <i class="path1"></i>
+                                <i class="path2"></i>
+                            </i>
+                        </div>
+                        <!--end::Icon-->
+                        <!--begin::Section-->
+                        <div class="d-flex flex-column mt-5">
+                            <!--begin::Number-->
+                            <span class="fw-semibold fs-2x text-gray-800 lh-1 ls-n2">{{$data['students']}} </span>
+                            <!--end::Number-->
+
+                            <!--begin::Follower-->
+                            <div class="m-0">
+                                <span class="fw-semibold fs-6 text-gray-400">{{t('Students')}}</span>
+                            </div>
+                            <!--end::Follower-->
+                        </div>
+                        <!--end::Section-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-xl-2 mb-xl-10">
+                <div class="card h-lg-100">
+                    <!--begin::Body-->
+                    <div class="card-body d-flex justify-content-between align-items-start flex-column">
+                        <!--begin::Icon-->
+                        <div class="m-0">
+                            <i class="ki-duotone ki-clipboard fs-2hx text-gray-600">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                                <span class="path3"></span>
+                            </i>
+                        </div>
+                        <!--end::Icon-->
+                        <!--begin::Section-->
+                        <div class="d-flex flex-column mt-5">
+                            <!--begin::Number-->
+                            <span class="fw-semibold fs-2x text-gray-800 lh-1 ls-n2">{{$data['lessons']}} </span>
+                            <!--end::Number-->
+
+                            <!--begin::Follower-->
+                            <div class="m-0">
+                                <span class="fw-semibold fs-6 text-gray-400">{{t('Lessons')}}</span>
+                            </div>
+                            <!--end::Follower-->
+                        </div>
+                        <!--end::Section-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-2 mb-xl-10">
+                <div class="card h-lg-100">
+                    <!--begin::Body-->
+                    <div class="card-body d-flex justify-content-between align-items-start flex-column">
+                        <!--begin::Icon-->
+                        <div class="m-0">
+
+                            <i class="ki-duotone ki-book-open  fs-2hx text-gray-600">
+                                <i class="path1"></i>
+                                <i class="path2"></i>
+                                <i class="path3"></i>
+                                <i class="path4"></i>
+                            </i>
+                        </div>
+                        <!--end::Icon-->
+                        <!--begin::Section-->
+                        <div class="d-flex flex-column mt-5">
+                            <!--begin::Number-->
+                            <span class="fw-semibold fs-2x text-gray-800 lh-1 ls-n2">{{$data['stories']}} </span>
+                            <!--end::Number-->
+
+                            <!--begin::Follower-->
+                            <div class="m-0">
+                                <span class="fw-semibold fs-6 text-gray-400">{{t('Stories')}}</span>
+                            </div>
+                            <!--end::Follower-->
+                        </div>
+                        <!--end::Section-->
+                    </div>
+                    <!--end::Body-->
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="kt-portlet">
-                <div class="kt-portlet__body">
-                    <!--begin::Form-->
-                    <div class="kt-form">
-                        <div class="row">
-                            <div class="col-4 justify-content-center text-center">
-                                <i class="flaticon2-user-outline-symbol" style="font-size: 3.5rem"></i>
+        <div class="row gy-5 g-xl-10 justify-content-center">
+            <div class="col-xl-6">
+                <!--begin::Chart widget 38-->
+                <div class="card card-flush  mb-xl-10">
+                    <!--begin::Header-->
+                    <div class="card-header pt-7">
+                        <!--begin::Title-->
+                        <h5 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-gray-800" style="font-size: 1rem">{{t('Completed Lessons Tests')}} <span
+                                    id="LessonsTests_total"
+                                    class="fs-6 text-danger">{{$LessonsTests_data['total']}}</span></span>
+                        </h5>
+                        <!--end::Title-->
+                        <!--begin::Toolbar-->
+                        <div class="card-toolbar">
+                            <!--begin::Daterangepicker(defined in src/js/layout/app.js)-->
+                            <div class=" mb-5 input-group input-group-solid">
+                                <div class="position-relative d-flex align-items-center">
+                                    <!--begin::Datepicker-->
+                                    <input id="LessonsTestsPicker" class="form-control form-control-solid ps-12 fs-8"
+                                           placeholder="Select a date" name="due_date" type="text" readonly="readonly">
+                                    <input type="hidden" name="start_LessonsTestsPicker" id="start_LessonsTestsPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <input type="hidden" name="end_LessonsTestsPicker" id="end_LessonsTestsPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <!--end::Datepicker-->
+                                    <!--begin::Icon-->
+                                    <i class="ki-duotone ki-calendar-8 fs-2 position-absolute mx-4">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                        <span class="path6"></span>
+                                    </i>
+                                    <!--end::Icon-->
+                                </div>
                             </div>
-                            <div class="col-2">
-                            </div>
-                            <label class="col-6 text-center">
-                                <span style="font-size: 2rem">
-                                    {{ $supervisors }}
-                                </span>
-                                <br>
-                                المشرفون
-                            </label>
-
+                            <!--end::Daterangepicker-->
                         </div>
+                        <!--end::Toolbar-->
                     </div>
-                    <!--end::Form-->
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body d-flex align-items-end px-0 pt-3 pb-5">
+                        <!--begin::Chart-->
+                        <div id="LessonsTests_chart" class="h-325px w-100 min-h-auto ps-4 pe-6"></div>
+                        <!--end::Chart-->
+                    </div>
+                    <!--end: Card Body-->
                 </div>
+                <!--end::Chart widget 38-->
             </div>
-        </div>
-        <div class="col-md-2">
-            <div class="kt-portlet">
-                <div class="kt-portlet__body">
-                    <!--begin::Form-->
-                    <div class="kt-form">
-                        <div class="row">
-                            <div class="col-4 justify-content-center text-center">
-                                <i class="flaticon2-user-outline-symbol" style="font-size: 3.5rem"></i>
+            <div class="col-xl-6">
+                <!--begin::Chart widget 38-->
+                <div class="card card-flush  mb-xl-10">
+                    <!--begin::Header-->
+                    <div class="card-header pt-7">
+                        <!--begin::Title-->
+                        <h5 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-gray-800" style="font-size: 1rem">{{t('Completed Lessons Assignments')}} <span
+                                    id="LessonsAssignments_total"
+                                    class="fs-6 text-danger">{{$LessonsAssignments_data['total']}}</span></span>
+                        </h5>
+                        <!--end::Title-->
+                        <!--begin::Toolbar-->
+                        <div class="card-toolbar">
+                            <!--begin::Daterangepicker(defined in src/js/layout/app.js)-->
+                            <div class=" mb-5 input-group input-group-solid">
+                                <div class="position-relative d-flex align-items-center">
+                                    <!--begin::Datepicker-->
+                                    <input id="LessonsAssignmentsPicker" class="form-control form-control-solid ps-12 fs-8"
+                                           placeholder="Select a date" name="due_date" type="text" readonly="readonly">
+                                    <input type="hidden" name="start_LessonsAssignmentsPicker" id="start_LessonsAssignmentsPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <input type="hidden" name="end_LessonsAssignmentsPicker" id="end_LessonsAssignmentsPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <!--end::Datepicker-->
+                                    <!--begin::Icon-->
+                                    <i class="ki-duotone ki-calendar-8 fs-2 position-absolute mx-4">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                        <span class="path6"></span>
+                                    </i>
+                                    <!--end::Icon-->
+                                </div>
                             </div>
-                            <div class="col-2">
-                            </div>
-                            <label class="col-6 text-center">
-                                <span style="font-size: 2rem">
-                                    {{ $teachers }}
-                                </span>
-                                <br>
-                                المعلمون
-                            </label>
-
+                            <!--end::Daterangepicker-->
                         </div>
+                        <!--end::Toolbar-->
                     </div>
-                    <!--end::Form-->
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="kt-portlet">
-                <div class="kt-portlet__body">
-                    <!--begin::Form-->
-                    <div class="kt-form">
-                        <div class="row">
-                            <div class="col-4 justify-content-center text-center">
-                                <i class="flaticon2-group" style="font-size: 3.5rem"></i>
-                            </div>
-                            <div class="col-2">
-                            </div>
-                            <label class="col-6 text-center">
-                                <span style="font-size: 2rem">
-                                    {{ $students }}
-                                </span>
-                                <br>
-                                الطلاب
-                            </label>
-
-                        </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body d-flex align-items-end px-0 pt-3 pb-5">
+                        <!--begin::Chart-->
+                        <div id="LessonsAssignments_chart" class="h-325px w-100 min-h-auto ps-4 pe-6"></div>
+                        <!--end::Chart-->
                     </div>
-                    <!--end::Form-->
+                    <!--end: Card Body-->
                 </div>
+                <!--end::Chart widget 38-->
             </div>
-        </div>
-        <div class="col-md-2">
-            <div class="kt-portlet">
-                <div class="kt-portlet__body">
-                    <!--begin::Form-->
-                    <div class="kt-form">
-                        <div class="row">
-                            <div class="col-4 justify-content-center text-center">
-                                <i class="flaticon2-writing" style="font-size: 3.5rem"></i>
-                            </div>
-                            <div class="col-2">
-                            </div>
-                            <label class="col-6 text-center">
-                                <span style="font-size: 2rem">
-                                    {{ $tests }}
-                                </span>
-                                <br>
-                                اختبارات مكتملة
-                            </label>
-
-                        </div>
-                    </div>
-                    <!--end::Form-->
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="kt-portlet">
-                <div class="kt-portlet__body">
-                    <!--begin::Form-->
-                    <div class="kt-form">
-                        <div class="row">
-                            <div class="col-4 justify-content-center text-center">
-                                <i class="flaticon2-open-text-book " style="font-size: 3.5rem"></i>
-                            </div>
-                            <div class="col-2">
-                            </div>
-                            <label class="col-6 text-center">
-                                <span style="font-size: 2rem">
-                                    {{ $lessons}}
-                                </span>
-                                <br>
-                                الدروس
-                            </label>
-
-                        </div>
-                    </div>
-                    <!--end::Form-->
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">
-                            إجمالي الاختبارات خلال الشهر الحالي
+            <div class="col-xl-6">
+                <!--begin::Chart widget 38-->
+                <div class="card card-flush  mb-xl-10">
+                    <!--begin::Header-->
+                    <div class="card-header pt-7">
+                        <!--begin::Title-->
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-gray-800" style="font-size: 1rem">{{t('Completed Stories Tests')}} <span
+                                    id="StoriesTests_total"
+                                    class="fs-6 text-danger">{{$StoriesTests_data['total']}}</span></span>
                         </h3>
+                        <!--end::Title-->
+                        <!--begin::Toolbar-->
+                        <div class="card-toolbar">
+                            <!--begin::Daterangepicker(defined in src/js/layout/app.js)-->
+                            <div class=" mb-5 input-group input-group-solid">
+                                <div class="position-relative d-flex align-items-center">
+                                    <!--begin::Datepicker-->
+                                    <input id="StoriesTestsPicker" class="form-control form-control-solid ps-12 fs-8"
+                                           placeholder="Select a date" name="due_date" type="text" readonly="readonly">
+                                    <input type="hidden" name="PickerStoriesTestsPicker" id="start_StoriesTestsPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <input type="hidden" name="end_StoriesTestsPicker" id="end_StoriesTestsPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <!--end::Datepicker-->
+                                    <!--begin::Icon-->
+                                    <i class="ki-duotone ki-calendar-8 fs-2 position-absolute mx-4">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                        <span class="path6"></span>
+                                    </i>
+                                    <!--end::Icon-->
+                                </div>
+                            </div>
+                            <!--end::Daterangepicker-->
+                        </div>
+                        <!--end::Toolbar-->
                     </div>
-                    <div class="kt-portlet__head-toolbar">
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body d-flex align-items-end px-0 pt-3 pb-5">
+                        <!--begin::Chart-->
+                        <div id="StoriesTests_chart" class="h-325px w-100 min-h-auto ps-4 pe-6"></div>
+                        <!--end::Chart-->
                     </div>
+                    <!--end: Card Body-->
                 </div>
-                <div class="kt-portlet__body kt-portlet__body--fluid">
-                    <div id="chartdiv0" style="direction: ltr">
-
-                    </div>
-                </div>
+                <!--end::Chart widget 38-->
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">
-                            إجمالي الطلاب الجدد خلال الشهر الحالي
+            <div class="col-xl-6">
+                <!--begin::Chart widget 38-->
+                <div class="card card-flush  mb-xl-10">
+                    <!--begin::Header-->
+                    <div class="card-header pt-7">
+                        <!--begin::Title-->
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-gray-800" style="font-size: 1rem">{{t('Completed Stories Assignments')}} <span
+                                    id="StoriesAssignments_total"
+                                    class="fs-6 text-danger">{{$StoriesAssignments_data['total']}}</span></span>
                         </h3>
+                        <!--end::Title-->
+                        <!--begin::Toolbar-->
+                        <div class="card-toolbar">
+                            <!--begin::Daterangepicker(defined in src/js/layout/app.js)-->
+                            <div class=" mb-5 input-group input-group-solid">
+                                <div class="position-relative d-flex align-items-center">
+                                    <!--begin::Datepicker-->
+                                    <input id="StoriesAssignmentsPicker" class="form-control form-control-solid ps-12 fs-8"
+                                           placeholder="Select a date" name="due_date" type="text" readonly="readonly">
+                                    <input type="hidden" name="start_StoriesAssignmentsPicker" id="start_StoriesAssignmentsPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <input type="hidden" name="end_StoriesAssignmentsPicker" id="end_StoriesAssignmentsPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <!--end::Datepicker-->
+                                    <!--begin::Icon-->
+                                    <i class="ki-duotone ki-calendar-8 fs-2 position-absolute mx-4">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                        <span class="path6"></span>
+                                    </i>
+                                    <!--end::Icon-->
+                                </div>
+                            </div>
+                            <!--end::Daterangepicker-->
+                        </div>
+                        <!--end::Toolbar-->
                     </div>
-                    <div class="kt-portlet__head-toolbar">
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body d-flex align-items-end px-0 pt-3 pb-5">
+                        <!--begin::Chart-->
+                        <div id="StoriesAssignments_chart" class="h-325px w-100 min-h-auto ps-4 pe-6"></div>
+                        <!--end::Chart-->
                     </div>
+                    <!--end: Card Body-->
                 </div>
-                <div class="kt-portlet__body kt-portlet__body--fluid">
-                    <div id="chartdiv1" style="direction: ltr">
-
-                    </div>
-                </div>
+                <!--end::Chart widget 38-->
             </div>
+            <div class="col-xl-12">
+                <!--begin::Chart widget 38-->
+                <div class="card card-flush  mb-xl-10">
+                    <!--begin::Header-->
+                    <div class="card-header pt-7">
+                        <!--begin::Title-->
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-gray-800" style="font-size: 1rem">{{t('Students Login Statistics')}} <span
+                                    id="StoriesAssignments_total"
+                                    class="fs-6 text-danger">{{$StudentsLogin_data['total']}}</span></span>
+                        </h3>
+                        <!--end::Title-->
+                        <!--begin::Toolbar-->
+                        <div class="card-toolbar">
+                            <!--begin::Daterangepicker(defined in src/js/layout/app.js)-->
+                            <div class=" mb-5 input-group input-group-solid">
+                                <div class="position-relative d-flex align-items-center">
+                                    <!--begin::Datepicker-->
+                                    <input id="StudentsLoginPicker" class="form-control form-control-solid ps-12 fs-8"
+                                           placeholder="Select a date" name="due_date" type="text" readonly="readonly">
+                                    <input type="hidden" name="start_StudentsLoginPicker" id="start_StudentsLoginPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <input type="hidden" name="end_StudentsLoginPicker" id="end_StudentsLoginPicker"
+                                           value="{{date('Y-m-d')}}"/>
+                                    <!--end::Datepicker-->
+                                    <!--begin::Icon-->
+                                    <i class="ki-duotone ki-calendar-8 fs-2 position-absolute mx-4">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                        <span class="path6"></span>
+                                    </i>
+                                    <!--end::Icon-->
+                                </div>
+                            </div>
+                            <!--end::Daterangepicker-->
+                        </div>
+                        <!--end::Toolbar-->
+                    </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body d-flex align-items-end px-0 pt-3 pb-5">
+                        <!--begin::Chart-->
+                        <div id="StudentsLogin_chart" class="h-325px w-100 min-h-auto ps-4 pe-6"></div>
+                        <!--end::Chart-->
+                    </div>
+                    <!--end: Card Body-->
+                </div>
+                <!--end::Chart widget 38-->
+            </div>
+
         </div>
-    </div>
-@endsection
-@section('script')
-    <script src="{{asset('core_ar.js')}}"></script>
-    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-    <script src="https://www.amcharts.com/lib/4/themes/material.js"></script>
-    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
-    <script src="https://www.amcharts.com/lib/4/lang/ar.js"></script>
 
-    <script>
-        am4core.ready(function () {
+    @endsection
+    @section('script')
 
-// Themes begin
-            am4core.useTheme(am4themes_animated);
-// Themes end
+        <script>
+            @foreach(['LessonsTests', 'LessonsAssignments', 'StoriesAssignments', 'StoriesTests', 'StudentsLogin'] as $type)
+            var {{$type}}Data = {
+                'categories': {!! json_encode(${$type.'_data'}['categories']) !!},
+                'data': {!! json_encode(${$type.'_data'}['data']) !!},
+            };
 
-// Create chart instance
-            var chart = am4core.create("chartdiv0", am4charts.XYChart);
-            @if(isRtlJS())
-                chart.rtl = true;
-            @endif
-            // Add data
-            chart.data = [
-                    @foreach($tests_date as $test)
-                {
-                    "date": "{{ $test->date }}",
-                    "value": {{ $test->counts }}
-                },
-                @endforeach
-            ];
+            initializeDateRangePicker('{{$type}}Picker', [$('#start_{{$type}}Picker').val(), $('#end_{{$type}}Picker').val()]);
 
-// Set input format for the dates
-            chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
-
-// Create axes
-            var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-// Create series
-            var series = chart.series.push(new am4charts.LineSeries());
-            series.dataFields.valueY = "value";
-            series.dataFields.dateX = "date";
-            series.tooltipText = "{value}"
-            series.strokeWidth = 2;
-            series.minBulletDistance = 15;
-
-// Drop-shaped tooltips
-            series.tooltip.background.cornerRadius = 20;
-            series.tooltip.background.strokeOpacity = 0;
-            series.tooltip.pointerOrientation = "vertical";
-            series.tooltip.label.minWidth = 40;
-            series.tooltip.label.minHeight = 40;
-            series.tooltip.label.rtl = true;
-            series.tooltip.label.textAlign = "middle";
-            series.tooltip.label.textValign = "middle";
-//
-// // Make bullets grow on hover
-            var bullet = series.bullets.push(new am4charts.CircleBullet());
-            bullet.circle.strokeWidth = 2;
-            bullet.circle.radius = 4;
-            bullet.circle.fill = am4core.color("#fff");
-
-            var bullethover = bullet.states.create("hover");
-            bullethover.properties.scale = 1.3;
-
-// // Make a panning cursor
-            chart.cursor = new am4charts.XYCursor();
-            chart.cursor.rtl = true;
-            chart.cursor.behavior = "panXY";
-            chart.cursor.xAxis = dateAxis;
-            chart.cursor.snapToSeries = series;
-            chart.cursor.label.minWidth = 40;
-            chart.cursor.label.minHeight = 40;
-            chart.cursor.label.textAlign = "middle";
-            chart.cursor.label.textValign = "middle";
-
-// // Create vertical scrollbar and place it before the value axis
-//             chart.scrollbarY = new am4core.Scrollbar();
-//             chart.scrollbarY.parent = chart.leftAxesContainer;
-//             chart.scrollbarY.toBack();
-//
-// // Create a horizontal scrollbar with previe and place it underneath the date axis
-//             chart.scrollbarX = new am4charts.XYChartScrollbar();
-//             chart.scrollbarX.series.push(series);
-//             chart.scrollbarX.parent = chart.bottomAxesContainer;
-
-            chart.events.on("ready", function () {
-                //dateAxis.zoom({start:0.79, end:1});
+            $('#{{$type}}Picker').on('apply.daterangepicker', function (ev, picker) {
+                chartStatisticsData("{{$type}}");
             });
 
-        }); // end am4core.ready()
-        am4core.ready(function () {
 
-// Themes begin
-            am4core.useTheme(am4themes_animated);
-// Themes end
+            var {{$type}}DataChart = function () {
+                var e = {self: null, rendered: !1}, t = function () {
+                    var t = document.getElementById("{{$type}}_chart");
+                    if (t) {
+                        var a = parseInt(KTUtil.css(t, "height")), l = KTUtil.getCssVariableValue("--bs-gray-900"),
+                            r = KTUtil.getCssVariableValue("--bs-border-dashed-color"), o = {
+                                series: [{name: "", data: {{$type}}Data.data}],
+                                chart: {fontFamily: "inherit", type: "bar", height: a, toolbar: {show: !1}},
+                                plotOptions: {
+                                    bar: {
+                                        horizontal: !1,
+                                        columnWidth: ["28%"],
+                                        borderRadius: 5,
+                                        dataLabels: {position: "top"},
+                                        startingShape: "flat"
+                                    }
+                                },
+                                legend: {show: !1},
+                                dataLabels: {
+                                    enabled: !0,
+                                    offsetY: -28,
+                                    style: {fontSize: "13px", colors: [l]},
+                                    formatter: function (e) {
+                                        return e
+                                    }
+                                },
+                                stroke: {show: !0, width: 2, colors: ["transparent"]},
+                                xaxis: {
+                                    categories: {{$type}}Data.categories,
+                                    axisBorder: {show: !1},
+                                    axisTicks: {show: !1},
+                                    labels: {
+                                        style: {
+                                            colors: KTUtil.getCssVariableValue("--bs-gray-500"),
+                                            fontSize: "13px"
+                                        }
+                                    },
+                                    crosshairs: {fill: {gradient: {opacityFrom: 0, opacityTo: 0}}}
+                                },
+                                yaxis: {
+                                    labels: {
+                                        style: {colors: KTUtil.getCssVariableValue("--bs-gray-500"), fontSize: "13px"},
 
-// Create chart instance
-            var chart = am4core.create("chartdiv1", am4charts.XYChart);
-            @if(isRtlJS())
-            // chart.rtl = true;
-            @endif
-            // Add data
-            chart.data = [
-                    @foreach($users_date as $user)
-                {
-                    "date": "{{ $user->date }}",
-                    "value": {{ $user->counts }}
-                },
-                @endforeach
-            ];
+                                    }
+                                },
+                                fill: {opacity: 1},
+                                states: {
+                                    normal: {filter: {type: "none", value: 0}},
+                                    hover: {filter: {type: "none", value: 0}},
+                                    active: {allowMultipleDataPointsSelection: !1, filter: {type: "none", value: 0}}
+                                },
+                                tooltip: {
+                                    style: {fontSize: "12px"},
+                                },
+                                colors: [KTUtil.getCssVariableValue("--bs-primary"), KTUtil.getCssVariableValue("--bs-primary-light")],
+                                grid: {borderColor: r, strokeDashArray: 4, yaxis: {lines: {show: !0}}}
+                            };
+                        e.self = new ApexCharts(t, o), setTimeout((function () {
+                            e.self.render(), e.rendered = !0
+                        }), 200)
+                    }
+                };
+                return {
+                    init: function () {
+                        t(), KTThemeMode.on("kt.thememode.change", (function () {
+                            e.rendered && e.self.destroy(), t()
+                        }))
+                    },
+                    refetch: function () {
+                        e.self.destroy();
+                        t();
+                    }
+                }
+            }();
+            {{$type}}DataChart.init();
+            @endforeach
 
-// Set input format for the dates
-            chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+            //send start and end date to controller to get data through ajax
+            function chartStatisticsData(chartType) {
+                var start_date = $('#start_' + chartType+'Picker').val();
+                var end_date = $('#end_' + chartType+'Picker').val();
+                console.log(start_date);
+                console.log(end_date);
+                $.ajax({
+                    url: "{{ route('manager.statistics.chart_statistics_data') }}",
+                    type: "POST",
+                    data: {
+                        start_date: start_date,
+                        end_date: end_date,
+                        model: chartType,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (data) {
+                        $('#' +  chartType + '_total').text(data.data.total);
+                        //access to variable name dynamically from chartType variable value and assign new data to it
+                        window[chartType + 'Data'] = {
+                            'categories': data.data.categories,
+                            'data': data.data.data,
+                        };
+                        window[chartType + 'DataChart'].refetch();
 
-// Create axes
-            var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    }
+                });
+            }
+        </script>
+    @endsection
+@endcan
 
-// Create series
-            var series = chart.series.push(new am4charts.LineSeries());
-            series.dataFields.valueY = "value";
-            series.dataFields.dateX = "date";
-            series.tooltipText = "{value}"
-            series.strokeWidth = 2;
-            series.minBulletDistance = 15;
-
-// Drop-shaped tooltips
-            series.tooltip.background.cornerRadius = 20;
-            series.tooltip.background.strokeOpacity = 0;
-            series.tooltip.pointerOrientation = "vertical";
-            series.tooltip.label.minWidth = 40;
-            series.tooltip.label.minHeight = 40;
-            series.tooltip.label.textAlign = "middle";
-            series.tooltip.label.textValign = "middle";
-
-// Make bullets grow on hover
-            var bullet = series.bullets.push(new am4charts.CircleBullet());
-            bullet.circle.strokeWidth = 2;
-            bullet.circle.radius = 4;
-            bullet.circle.fill = am4core.color("#fff");
-
-            var bullethover = bullet.states.create("hover");
-            bullethover.properties.scale = 1.3;
-
-// Make a panning cursor
-            chart.cursor = new am4charts.XYCursor();
-            chart.cursor.behavior = "panXY";
-            chart.cursor.xAxis = dateAxis;
-            chart.cursor.snapToSeries = series;
-
-// // Create vertical scrollbar and place it before the value axis
-//             chart.scrollbarY = new am4core.Scrollbar();
-//             chart.scrollbarY.parent = chart.leftAxesContainer;
-//             chart.scrollbarY.toBack();
-//
-// // Create a horizontal scrollbar with previe and place it underneath the date axis
-//             chart.scrollbarX = new am4charts.XYChartScrollbar();
-//             chart.scrollbarX.series.push(series);
-//             chart.scrollbarX.parent = chart.bottomAxesContainer;
-
-            chart.events.on("ready", function () {
-                //dateAxis.zoom({start:0.79, end:1});
-            });
-
-        }); // end am4core.ready()
-
-    </script>
-@endsection

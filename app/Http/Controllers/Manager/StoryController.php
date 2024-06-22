@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Manager\StoryRequest;
+use App\Models\Lesson;
+use App\Models\Question;
 use App\Models\Story;
 use App\Models\StoryMatch;
 use App\Models\StoryOption;
 use App\Models\StoryQuestion;
 use App\Models\StorySortWord;
 use App\Models\StoryTrueFalse;
+use App\Models\TQuestion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -18,52 +21,64 @@ use Yajra\DataTables\DataTables;
 
 class StoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:show stories')->only('index');
+        $this->middleware('permission:add stories')->only(['create','store']);
+        $this->middleware('permission:edit stories')->only(['update','edit']);
+        $this->middleware('permission:delete stories')->only('destroy');
+
+        $this->middleware('permission:edit story assessment')->only([
+            'storeAssessmentStory','storyAssessment','updateAssessmentStory','review'
+        ]);
+    }
     public function index(Request $request)
     {
         if ($request->ajax()) {
 
-            $name = $request->get('name', false);
-            $grade = $request->get('grade', false);
-            $rows = Story::query()->when($name, function (Builder $query) use ($name) {
-                $query->where('name', 'like','%' . $name . '%');
-            })->when($grade, function (Builder $query) use ($grade) {
-                    $query->where('grade', $grade);
-            })->latest();
-
+            $rows = Story::query()->filter($request)->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
-                ->addColumn('created_at', function ($row) {
+                ->addColumn('created_at', function ($row){
                     return Carbon::parse($row->created_at)->toDateString();
                 })
-                ->addColumn('grade', function ($row) {
-                    return 'Grade '  . ($row->grade == 15 ? 'KG' : $row->grade);
+                ->addColumn('name', function ($row){
+                    return $row->name;
+                })
+                ->addColumn('grade', function ($row){
+                    return $row->grade_name;
+                })
+                ->addColumn('active', function ($row) {
+                    return $row->active ? '<span class="badge badge-primary">'.t('Active').'</span>' : '<span class="badge badge-danger">'.t('Inactive').'</span>';
                 })
                 ->addColumn('actions', function ($row) {
                     return $row->action_buttons;
                 })
                 ->make();
         }
-        $title = "";
-        return view('manager.story.index', compact('title'));
+        $title = t('Stories');
+        $grades = storyGradesSys();
+        return view('manager.story.index', compact('title','grades'));
     }
 
     public function create()
     {
-        $title = 'إضافة قصة';
-        return view('manager.story.edit', compact('title',));
+        $title = t('Add Story');
+        $grades = storyGradesSys();
+        return view('manager.story.edit', compact('title','grades'));
     }
 
     public function store(StoryRequest $request)
     {
         $data = $request->validated();
         if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request->file('image'), 'stories_image');
+            $data['image'] = $this->uploadFile($request->file('image'), 'stories_image');
         }
         if ($request->hasFile('video')) {
-            $data['video'] = $this->uploadImage($request->file('video'), 'stories_video');
+            $data['video'] = $this->uploadFile($request->file('video'), 'stories_video');
         }
         if ($request->hasFile('alternative_video')) {
-            $data['alternative_video'] = $this->uploadImage($request->file('alternative_video'), 'stories_video');
+            $data['alternative_video'] = $this->uploadFile($request->file('alternative_video'), 'stories_video');
         }
         $data['active'] = $request->get('active', 0);
         Story::query()->create($data);
@@ -72,10 +87,10 @@ class StoryController extends Controller
 
     public function edit($id)
     {
-        $title = "تعديل القصة";
+        $title = t('Edit Story');
+        $grades = storyGradesSys();
         $story = Story::query()->findOrFail($id);
-//        dd($story->questions()->sum('mark'));
-        return view('manager.story.edit', compact('title',  'story'));
+        return view('manager.story.edit', compact('title',  'story','grades'));
     }
 
     public function update(StoryRequest $request, $id)
@@ -84,10 +99,13 @@ class StoryController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request->file('image'), 'stories_image');
+            $data['image'] = $this->uploadFile($request->file('image'), 'stories_image');
         }
         if ($request->hasFile('video')) {
-            $data['video'] = $this->uploadImage($request->file('video'), 'stories_video');
+            $data['video'] = $this->uploadFile($request->file('video'), 'stories_video');
+        }
+        if ($request->hasFile('alternative_video')) {
+            $data['alternative_video'] = $this->uploadFile($request->file('alternative_video'), 'stories_video', true);
         }
         $data['active'] = $request->get('active', 1);
 
@@ -95,22 +113,32 @@ class StoryController extends Controller
         return redirect()->route('manager.story.index')->with('message', t('Successfully Updated'));
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $story = Story::query()->findOrFail($id);
-        $story->delete();
-        return redirect()->route('manager.story.index')->with('message', t('Successfully Deleted'));
+        $request->validate(['row_id'=>'required']);
+        Story::destroy($request->get('row_id'));
+        return $this->sendResponse(null,t('Successfully Deleted'));
+    }
+
+    public function removeStoryAttachment($id,$type)
+    {
+     if ($type == 'video' || $type=='alternative_video'){
+         Story::query()->where('id',$id)->update([$type=>null]) ;
+     }
+        return $this->sendResponse(null,t('Successfully Deleted'));
+
     }
 
     public function storyAssessment($id)
     {
-        $title = 'أسئلة القصة';
+        $title = t('Story Assessment Questions');
         $story = Story::query()->findOrFail($id);
 
-        $t_f_questions = StoryQuestion::query()->where('story_id', $id)->where('type', 1)->get();
-        $c_questions = StoryQuestion::query()->where('story_id', $id)->where('type', 2)->get();
-        $m_questions = StoryQuestion::query()->where('story_id', $id)->where('type', 3)->get();
-        $s_questions = StoryQuestion::query()->where('story_id', $id)->where('type', 4)->get();
+        $questions = StoryQuestion::query()->where('story_id', $id)->whereIn('type', [1,2,3,4])->get();
+        $t_f_questions = $questions->where('type', 1);
+        $c_questions = $questions->where('type', 2);
+        $m_questions = $questions->where('type', 3);
+        $s_questions = $questions->where('type', 4);
         $questions = StoryQuestion::query()->where('story_id', $id)->get();
         if (($story->grade >= 1 && $story->grade <= 2) || $story->grade == 15)
         {
@@ -194,7 +222,7 @@ class StoryController extends Controller
             $true_false_answers = $request->get('t_f', []);
             foreach ($true_false_questions as $key => $true_false_question) {
                 if ($request->hasFile("t_f_q_attachment.$key")) {
-                    $attachment = $this->uploadImage(request()->file('t_f_q_attachment')[$key], 'story_assessment_attachments');
+                    $attachment = $this->uploadFile(request()->file('t_f_q_attachment')[$key], 'story_assessment_attachments');
                     $question = StoryQuestion::create([
                         'content' => isset($true_false_question) ? $true_false_question : 'no question',
                         'attachment' => $attachment,
@@ -223,7 +251,7 @@ class StoryController extends Controller
 
             foreach ($c_questions as $key => $c_question) {
                 if ($request->hasFile("c_q_attachment.$key")) {
-                    $attachment = $this->uploadImage(request()->file('c_q_attachment')[$key], 'story_assessment_attachments');
+                    $attachment = $this->uploadFile(request()->file('c_q_attachment')[$key], 'story_assessment_attachments');
                     $question = StoryQuestion::create([
                         'content' => $c_question ? $c_question : 'no question',
                         'attachment' => $attachment,
@@ -259,7 +287,7 @@ class StoryController extends Controller
             $m_q_image = $request->get('m_q_image', []);
             foreach ($m_questions as $key => $m_question) {
                 if ($request->hasFile("m_q_attachment.$key")) {
-                    $attachment = $this->uploadImage(request()->file('m_q_attachment')[$key], 'story_assessment_attachments');
+                    $attachment = $this->uploadFile(request()->file('m_q_attachment')[$key], 'story_assessment_attachments');
                     $question = StoryQuestion::create([
                         'content' => $m_question ? $m_question : 'no question',
                         'attachment' => $attachment,
@@ -282,7 +310,7 @@ class StoryController extends Controller
                 foreach ($m_q_options as $m_a_key => $m_q_option) {
                     $result = $m_q_answer[$m_a_key];
                     if($request->hasFile("m_q_image.$key.$m_a_key")){
-                        $image = $this->uploadImage(request()->file('m_q_image')[$key][$m_a_key], 'assessment_match_attachments');
+                        $image = $this->uploadFile(request()->file('m_q_image')[$key][$m_a_key], 'assessment_match_attachments');
                     }else{
                         $image = null;
                     }
@@ -303,7 +331,7 @@ class StoryController extends Controller
             $counter = 1;
             foreach ($s_questions as $key => $s_question) {
                 if ($request->hasFile("s_q_attachment.$key")) {
-                    $attachment = $this->uploadImage(request()->file('s_q_attachment')[$key], 'story_assessment_attachments');
+                    $attachment = $this->uploadFile(request()->file('s_q_attachment')[$key], 'story_assessment_attachments');
                     $question = StoryQuestion::create([
                         'content' => $s_question ? $s_question : 'no question',
                         'attachment' => $attachment,
@@ -334,7 +362,7 @@ class StoryController extends Controller
             }
         }
 
-        return $this->redirectWith(true, 'manager.story.index', 'Assessment Updated Successfully ');
+        return $this->sendResponse(null,t('Successfully Updated'));
     }
 
     public function updateAssessmentStory(Request $request, $id, $step)
@@ -351,7 +379,7 @@ class StoryController extends Controller
             foreach ($true_false_questions as $key => $true_false_question) {
                 $question = StoryQuestion::query()->where('story_id', $story->id)->find($key);
                 if ($question) {
-                    $attachment = $request->hasFile("t_f_q_attachment.$key") ? $this->uploadImage(request()->file('t_f_q_attachment')[$key], 'story_assessment_attachments') : $question->getOriginal('attachment');
+                    $attachment = $request->hasFile("t_f_q_attachment.$key") ? $this->uploadFile(request()->file('t_f_q_attachment')[$key], 'story_assessment_attachments') : $question->getOriginal('attachment');
                     $question->update([
                         'content' => isset($true_false_question) ? $true_false_question : 'no question',
                         'attachment' => $attachment,
@@ -372,7 +400,7 @@ class StoryController extends Controller
             foreach ($c_questions as $key => $c_question) {
                 $question = StoryQuestion::query()->where('story_id', $story->id)->find($key);
                 if ($question) {
-                    $attachment = $request->hasFile("c_q_attachment.$key") ? $this->uploadImage(request()->file('c_q_attachment')[$key], 'story_assessment_attachments') : $question->getOriginal('attachment');
+                    $attachment = $request->hasFile("c_q_attachment.$key") ? $this->uploadFile(request()->file('c_q_attachment')[$key], 'story_assessment_attachments') : $question->getOriginal('attachment');
                     $question->update([
                         'content' => $c_question ? $c_question : 'no question',
                         'attachment' => $attachment,
@@ -401,7 +429,7 @@ class StoryController extends Controller
             foreach ($m_questions as $key => $m_question) {
                 $question = StoryQuestion::query()->where('story_id', $story->id)->find($key);
                 if ($question) {
-                    $attachment = $request->hasFile("m_q_attachment.$key") ? $this->uploadImage(request()->file('m_q_attachment')[$key], 'story_assessment_attachments') : $question->getOriginal('attachment');
+                    $attachment = $request->hasFile("m_q_attachment.$key") ? $this->uploadFile(request()->file('m_q_attachment')[$key], 'story_assessment_attachments') : $question->getOriginal('attachment');
                     $question->update([
                         'content' => $m_question ? $m_question : 'no question',
                         'attachment' => $attachment,
@@ -412,7 +440,7 @@ class StoryController extends Controller
                 $match = StoryMatch::query()->find($m_a_key);
                 $result = $m_q_answer[$m_a_key];
                 if($request->hasFile("m_q_image.$m_a_key")){
-                    $image = $this->uploadImage(request()->file('m_q_image')[$m_a_key], 'assessment_match_attachments');
+                    $image = $this->uploadFile(request()->file('m_q_image')[$m_a_key], 'assessment_match_attachments');
                 }else{
                     $image = $match->getOriginal('image');
                 }
@@ -435,7 +463,7 @@ class StoryController extends Controller
             foreach ($s_questions as $key => $s_question) {
                 $question = StoryQuestion::query()->where('story_id', $story->id)->find($key);
                 if ($question) {
-                    $attachment = $request->hasFile("s_q_attachment.$key") ? $this->uploadImage(request()->file('s_q_attachment')[$key], 'story_assessment_attachments') : $question->getOriginal('attachment');
+                    $attachment = $request->hasFile("s_q_attachment.$key") ? $this->uploadFile(request()->file('s_q_attachment')[$key], 'story_assessment_attachments') : $question->getOriginal('attachment');
                     $question->update([
                         'content' => $s_question ? $s_question : 'no question',
                         'attachment' => $attachment,
@@ -462,8 +490,7 @@ class StoryController extends Controller
             }
         }
 
-        return redirect()->route('manager.story.assessment', $story->id)->with('m-class', 'success')->with('message', 'Assessment Updated Successfully');
-//        return $this->redirectWith(false, 'manager.story.index', 'Assessment Updated Successfully ');
+        return $this->sendResponse(null,t('Successfully Updated'));
     }
 
     public function removeAttachment($id)
@@ -472,14 +499,14 @@ class StoryController extends Controller
         $question->update([
             'attachment' => null,
         ]);
-        return $this->redirectWith(true, null, 'Successfully Deleted');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function removeSortWord($id)
     {
         $sort_word = StorySortWord::query()->findOrFail($id);
         $sort_word->delete();
-        return $this->redirectWith(true, null, 'Successfully Deleted');
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
     public function removeMatchAttachment($id)
@@ -488,7 +515,16 @@ class StoryController extends Controller
         $question->update([
             'image' => null,
         ]);
-        return $this->redirectWith(true, null, 'Successfully Deleted');
+        return $this->sendResponse(null,t('Successfully Deleted'));
+    }
+
+    public function review($id)
+    {
+        $story = Story::find($id);
+        $preview=true;
+        $title = t('Story Assessment Preview');
+        $questions = StoryQuestion::with(['trueFalse','matches','options','sort_words'])->where('story_id', $id)->get();
+        return view('general.user.story.preview.assessment', compact('questions', 'story','preview','title'));
     }
 
 }

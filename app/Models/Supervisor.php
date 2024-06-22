@@ -14,18 +14,68 @@ class Supervisor extends Authenticatable
     use Notifiable, SoftDeletes;
 
     protected $fillable = [
-        'name', 'email', 'password', 'school_id', 'active', 'approved', 'last_login'
+        'name', 'email','image', 'password', 'school_id', 'active', 'active_to', 'approved','lang','last_login','last_login_info'
     ];
 
     protected $hidden = [
         'password', 'remember_token',
     ];
 
+    protected static $recordEvents = ['created', 'updated','deleted'];
+    protected static $logAttributes = ['name', 'email','image', 'password', 'school_id', 'active', 'approved'];
+    protected static $logOnlyDirty = true;
+    protected static $submitEmptyLogs = false;
+    public function getActionButtonsAttribute()
+    {
+        $actions = [];
+        if (\request()->is('manager/*')) {
+            $actions = [
+                ['key' => 'edit', 'name' => t('Edit'), 'route' => route('manager.supervisor.edit', $this->id), 'permission' => 'edit supervisors'],
+                ['key' => 'login', 'name' => t('Login'), 'route' => route('manager.supervisor.login', $this->id), 'permission' => 'supervisors login'],
+                ['key' => 'delete', 'name' => t('Delete'), 'route' => $this->id, 'permission' => 'delete supervisors'],
+            ];
+        } elseif (\request()->is('school/*')) {
+            $actions = [
+                ['key' => 'edit', 'name' => t('Edit'), 'route' => route('school.supervisor.edit', $this->id)],
+                ['key' => 'delete', 'name' => t('Delete'), 'route' => $this->id],
+            ];
+        } else {
+            return '';
+        }
+        return view('general.action_menu')->with('actions', $actions);
+
+    }
+
+    public function scopeFilter(Builder $query, $request =null): Builder
+    {
+        if (!$request){
+            $request = \request();
+        }
+        return $query->when($value = $request->get('school_id', false), function (Builder $query) use ($value) {
+            $query->where('school_id', $value);
+        })->when($value = $request->get('email', false), function (Builder $query) use ($value) {
+            $query->where('email', 'LIKE', '%' . $value . '%');
+        })->when($value = $request->get('name', false), function (Builder $query) use ($value) {
+            $query->where('name', 'LIKE', '%' . $value . '%');
+        })->when($value = $request->get('active', false), function (Builder $query) use ($value) {
+            $query->where('active', $value != 2);
+        })->when($value = $request->get('approved', false), function (Builder $query) use ($value) {
+            $query->where('approved', $value != 2);
+        })->when($value = $request->get('id', false), function (Builder $query) use ($value) {
+            $query->where('id', $value);
+        })->when($value = $request->get('row_id', []), function (Builder $query) use ($value) {
+            $query->whereIn('id', $value);
+        });
+    }
+
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new SupervisorResetPassword($token));
     }
-
+    public function login_sessions()
+    {
+        return $this->morphMany(LoginSession::class, 'model');
+    }
     public function school()
     {
         return $this->belongsTo(School::class);
@@ -41,31 +91,5 @@ class Supervisor extends Authenticatable
         return $this->belongsToMany(Teacher::class, 'supervisor_teachers', 'supervisor_id', 'teacher_id')->whereNull('supervisor_teachers.deleted_at');
     }
 
-    public function scopeSearch(Builder $query, Request $request)
-    {
-        return $query->when($name = $request->get('name', false), function (Builder $query) use ($name) {
-            $query->where('name', 'like', '%' . $name . '%')
-                ->orWhere('email', 'like', '%' . $name . '%');
-        })->when($school = $request->get('school_id', false), function (Builder $query) use ($school) {
-            $query->where('school_id', $school);
-        });
-    }
 
-    public function getActiveStatusAttribute()
-    {
-        return $this->active ? 'فعال':'غير فعال';
-    }
-
-    public function getApprovedStatusAttribute()
-    {
-        return $this->approved ? 'فعال':'غير فعال';
-    }
-
-    public function getSchoolActionButtonsAttribute()
-    {
-        $button = '';
-        $button .= '<a href="' . route('school.supervisor.edit', $this->id) . '" class="btn btn-icon btn-danger "><i class="la la-pencil"></i></a> ';
-        $button .= '<button type="button" data-id="' . $this->id . '" data-toggle="modal" data-target="#deleteModel" class="deleteRecord btn btn-icon btn-danger"><i class="la la-trash"></i></button>';
-        return $button;
-    }
 }

@@ -36,6 +36,7 @@ class TeacherRequest extends FormRequest
             $rules["email"] = 'required|email|unique:teachers,email,{$id},id,deleted_at,NULL';
             $rules["password"] = 'required|min:6';
         }
+        $rules["active_to"] = 'required|date_format:Y-m-d';
         $rules["mobile"] = 'required';
         $rules["school_id"] = 'required|exists:schools,id';
         return $rules;

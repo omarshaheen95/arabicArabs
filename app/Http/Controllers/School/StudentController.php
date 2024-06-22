@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\School;
 
+use App\Classes\GeneralFunctions;
 use App\Exports\StudentInformation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\School\UserRequest;
+use App\Models\Grade;
 use App\Models\Lesson;
 use App\Models\MatchResult;
 use App\Models\OptionResult;
+use App\Models\Package;
 use App\Models\Payment;
 use App\Models\School;
 use App\Models\SortResult;
@@ -18,6 +21,7 @@ use App\Models\TrueFalseResult;
 use App\Models\User;
 use App\Models\UserLesson;
 use App\Models\UserTracker;
+use App\Models\Year;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -28,53 +32,84 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $school = Auth::guard('school')->user();
-        if (request()->ajax())
-        {
-            $name = $request->get('name', false);
-            $grade = $request->get('grade', false);
-            $teacher = $request->get('teacher_id', false);
-            $section = $request->get('section', false);
-            $rows = User::query()->with(['teacherUser.teacher', 'teacherUser', 'grade'])
-                ->where('school_id', $school->id)
-               ->latest()->search($request);
-
+        if (request()->ajax()) {
+            $rows = User::with(['teacher','grade'])->filter($request)->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
-                ->addColumn('created_at', function ($row){
-                    return Carbon::parse($row->created_at)->toDateString();
-                })
-                ->addColumn('last_login', function ($row){
-                    return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString():'';
+                ->addColumn('student', function ($row){
+                    $section = !is_null($row->section) ? $row->section : '<span class="text-danger">-</span>';
+
+                    $student = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex fw-bold">' . $row->name . '</div>' .
+                        '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . ' - ' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
+                    return $student;
                 })
                 ->addColumn('teacher', function ($row) {
-                    return optional(optional($row->teacherUser)->teacher)->name ?? "غير مسند";
+                    $teacher = optional($row->teacher)->name ? optional($row->teacher)->name : '<span class="text-danger">' . t('Unsigned') . '</span>';
+                    $package = optional($row->package)->name;
+                    $html = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Teacher') . ' </span> : ' . '<span> ' . $teacher . '</span></div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Package') . ' </span> : ' . '<span> ' . $package . '</span></div>' .
+                        '</div>';
+                    return $html;
                 })
                 ->addColumn('active_to', function ($row) {
-                    return is_null($row->active_to) ? 'unpaid':optional($row->active_to)->format('Y-m-d');
+                    return is_null($row->active_to) ? 'unpaid' : optional($row->active_to)->format('Y-m-d');
                 })
                 ->addColumn('grade', function ($row) {
                     return $row->grade->name;
+                })->addColumn('active', function ($row) {
+                    return $row->active?'<span class="badge badge-primary">'.t('Active').'</span>':'<span class="badge badge-danger">'.t('Non-Active').'</span>';
+                })
+                ->addColumn('dates', function ($row){
+                    $register_date = Carbon::parse($row->created_at)->format('Y-m-d');
+                    $active_to = $row->active_to ? optional($row->active_to)->format('Y-m-d') : t('unpaid');
+                    $last_login = $row->last_login ? Carbon::parse($row->last_login)->format('Y-m-d H:i') : '';
+                    if ($row->active == 0) {
+                        $status = '<span class="text-danger">' . t('Suspend') . '</span>';
+                    } elseif ($row->active == 1 && !is_null($row->active_to) && optional($row->active_to)->format('Y-m-d') <= now()) {
+                        $status = '<span class="text-danger">' . t('Expired') . '</span>';
+                    } elseif ($row->active == 1 && !is_null($row->active_to) && optional($row->active_to)->format('Y-m-d') > now()) {
+                        $status = '<span class="text-success">' . t('Active') . '</span>';
+                    } else {
+                        $status = '<span class="text-warning">' . t('Unknown') . '</span>';
+                    }
+
+                    if ($row->active_to) {
+                        $active_to = optional($row->active_to)->format('Y-m-d') <= now() ? '<span class="text-danger">' . optional($row->active_to)->format('Y-m-d') . '</span>' : '<span class="text-success">' . optional($row->active_to)->format('Y-m-d') . '</span>';
+                    }
+                    $data = '<div class="d-flex flex-column">' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Register Date') . '</span> : ' . $register_date . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Active To') . '</span> : ' . $active_to . '-' . $status . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Last Login') . '</span> : ' . $last_login . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Year') . '</span> : ' . optional($row->year)->name . '</div>' .
+                        '</div>';
+                    return $data;
                 })
                 ->addColumn('actions', function ($row) {
-                    $edit_url = route('school.student.edit', $row->id);
-                    $show_url = route('school.student.review', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url', 'show_url'));
+                    return $row->action_buttons;
                 })
                 ->make();
         }
-        $title = "قائمة الطلاب";
-        $teachers = Teacher::query()->where('school_id', $school->id)->get();
-        return view('school.user.index', compact('title', 'teachers'));
+        $title = t('Show Users');
+        $teachers = Teacher::query()->filter($request)->get();
+        $packages = Package::query()->where('active', 1)->get();
+        $grades = Grade::query()->get();
+        return view('school.user.index', compact('title', 'teachers', 'packages','grades'));
     }
 
     public function edit($id)
     {
-        $title = "تعديل طالب";
+        $title = t('Edit Student');
         $school = Auth::guard('school')->user();
         $user = User::query()->where('school_id', $school->id)->findOrFail($id);
         $teachers = Teacher::query()->where('school_id', $school->id)->get();
-        return view('school.user.edit', compact('user', 'teachers', 'title'));
+        $grades = Grade::query()->get();
+        $years = Year::query()->get();
+        $years_learning  = range(1,12);
+        return view('school.user.edit', compact('user', 'teachers', 'title','grades','years','years_learning'));
     }
 
     public function update(UserRequest $request, $id)
@@ -84,7 +119,7 @@ class StudentController extends Controller
         $data = $request->validated();
         if ($request->hasFile('image'))
         {
-            $data['image'] = $this->uploadImage($request->file('image'), 'users');
+            $data['image'] = $this->uploadFile($request->file('image'), 'users');
         }
         $data['password'] = $request->get('password', false) ? bcrypt($request->get('password', 123456)):$user->password;
         $user->update($data);
@@ -100,21 +135,14 @@ class StudentController extends Controller
         }else{
             $user->teacherUser()->delete();
         }
-        return $this->redirectWith(false, 'school.student.index', "تم التحديث بنجاح");
+        return $this->redirectWith(false, 'school.student.index', 'Successfully Updated');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $school = Auth::guard('school')->user();
-        $user = User::query()->where('school_id', $school->id)->findOrFail($id);
-//        TrueFalseResult::query()->where('user_id', $user->id)->forceDelete();
-//        SortResult::query()->where('user_id', $user->id)->forceDelete();
-//        MatchResult::query()->where('user_id', $user->id)->forceDelete();
-//        OptionResult::query()->where('user_id', $user->id)->forceDelete();
-//        Payment::query()->where('user_id', $user->id)->forceDelete();
-        $user->forceDelete();
-
-        return $this->redirectWith(true, null, "تم الحذف بنجاح");
+        $request->validate(['row_id'=>'required']);
+        User::destroy($request->get('row_id'));
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 
 
@@ -122,197 +150,36 @@ class StudentController extends Controller
     {
         $school = Auth::guard('school')->user();
         $file_name = "$school->name Students Information.xlsx";
-        return (new StudentInformation($request,$school->id))
+        return (new StudentInformation($request))
             ->download($file_name);
     }
 
-    public function review(Request $request,$id)
+    public function review(Request $request, $id)
     {
-        $title = "مراجعة الطالب";
-        $school = Auth::guard('school')->user();
-        $user = User::query()->where('school_id', $school->id)->findOrFail($id);
-
-        if ($user->teacher_student && $user->teacher_student->teacher)
-        {
-            $teacher = $user->teacherUser->teacher;
-        }else{
-            $teacher = false;
-        }
-        if ($request->has('end_date'))
-        {
-            $request->validate([
-                'start_date' => 'required|date_format:Y-m-d',
-                'end_date' => 'required|date_format:Y-m-d|after:start_date',
-            ],[
-                'end_date.after' => "تاريخ النهياة يجب أن يكون أكب رمن تاريخ البداية",
-            ]);
-        }
-        $start_date = $request->get('start_date', Carbon::now()->startOfMonth()->toDateString());
-        $end_date = $request->get('end_date', Carbon::now()->endOfMonth()->toDateString());
-
-        $grade = $request->get('grade',$user->grade);
-
-        $tests = UserTest::query()->where('user_id', $id)->count();
-        $passed_tests = UserTest::query()->where('user_id', $id)->where('total', '>=', 60)->count();
-
-        if ($user->user_grades()->count())
-        {
-            $grades = $user->user_grades()->pluck('grade_id')->unique()->values()->all();
-        }else{
-            $grades[] = $user->grade;
-        }
-        $tracks = UserTracker::query()->where('user_id', $user->id)
-                ->whereHas('lesson', function (Builder $query) use ($grade){
-                    $query->where('grade_id', $grade);
-            })
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->latest()
-            ->get();
-
-        $data['total'] = $tracks->count();
-        if ($data['total']){
-            $data['learn'] = $tracks->where('type', 'learn')->count();
-            $data['practise'] = $tracks->where('type', 'practise')->count();
-            $data['test'] = $tracks->where('type', 'test')->count();
-            $data['learn_avg'] = ($data['learn'] / $data['total']) * 100;
-            $data['practise_avg'] = ($data['practise'] / $data['total']) * 100;
-            $data['test_avg'] = ($data['test'] / $data['total']) * 100;
-        }else{
-            $data['learn'] = 0;
-            $data['practise'] = 0;
-            $data['test'] = 0;
-            $data['learn_avg'] = 0;
-            $data['practise_avg'] = 0;
-            $data['test_avg'] = 0;
-        }
-
-
-
-
-        return view('school.user.review', compact('user', 'teacher',
-            'tests', 'passed_tests', 'grades', 'start_date', 'end_date', 'tracks', 'title', 'data'));
-
+        $general = new GeneralFunctions();
+        return $general->review($request,$id,'manager');
     }
 
-    public function report(Request $request,$id)
+    public function storyReview(Request $request, $id)
     {
-        $title = t('Student report');
-        $school = Auth::guard('school')->user();
-        $student = User::query()->where('school_id', $school->id)->findOrFail($id);
-        if ($student->teacher_student && $student->teacher_student->teacher)
-        {
-            $teacher = $student->teacher_student->teacher;
-        }else{
-            $teacher = false;
-        }
-
-        $start_date = $request->get('start_date', Carbon::now()->startOfMonth()->toDateString());
-        $end_date = $request->get('end_date', Carbon::now()->endOfMonth()->toDateString());
-        $grade = $request->get('grade',$student->grade);
-
-        $student_tests = UserTracker::query()->where('user_id', $student->id)
-//            ->whereDate('created_at', '>=', $start_date)
-//            ->whereDate('created_at', '<=', $end_date)
-            ->pluck('lesson_id')->unique()->values()->all();
-        $user_games = 0;
-        $user_tests = 0;
-        $user_learning = 0;
-        $user_training = 0;
-        $user_tracker = 0;
-        $lessons_info = [];
-        foreach ($student_tests as $lesson)
-        {
-            $lesson_info = [];
-            $user_games = UserTracker::query()->where('type', 'play')->where('user_id', $student->id)
-                ->where('lesson_id', $lesson)->count();
-            $user_tests = UserTracker::query()->where('type', 'test')->where('user_id', $student->id)
-                ->where('lesson_id', $lesson)->count();
-            $user_learning = UserTracker::query()->where('type', 'learn')->where('user_id', $student->id)
-                ->where('lesson_id', $lesson)->count();
-            $user_training = UserTracker::query()->where('type', 'practise')->where('user_id', $student->id)
-                ->where('lesson_id', $lesson)->count();
-
-            $user_tracker = UserTracker::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->count();
-            if ($user_tracker)
-            {
-                $lesson_info['games'] = round(($user_games / $user_tracker) * 100, 1);
-                $lesson_info['tests'] = round(($user_tests / $user_tracker) * 100, 1);
-                $lesson_info['trainings'] = round(($user_training / $user_tracker) * 100, 1);
-                $lesson_info['learnings'] = round(($user_learning / $user_tracker) * 100, 1);
-                $lesson_info['tracker'] = $user_tracker;
-            }else{
-                $lesson_info['games'] = 0;
-                $lesson_info['tests'] = 0;
-                $lesson_info['trainings'] = 0;
-                $lesson_info['learnings'] = 0;
-                $lesson_info['tracker'] = 0;
-            }
-
-            $user_test = UserTest::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->latest('total')->first();
-            $lesson_info['user_test'] = $user_test;
-            if (isset($user_test) && !is_null($user_test->start_at) && !is_null($user_test->end_at))
-            {
-                $time1 = new \DateTime($user_test->start_at);
-                $time2 = new \DateTime($user_test->end_at);
-                $interval = $time1->diff($time2);
-
-                $lesson_info['time_consumed'] = $interval->format('%i minute(s)');
-
-            }else{
-                $lesson_info['time_consumed'] = '-';
-            }
-
-            $user_lesson = UserLesson::query()->where('user_id', $student->id)->where('lesson_id', $lesson)->where('status', 'corrected')->first();
-            $lesson_info['user_lesson'] = $user_lesson;
-
-            $lesson_info['lesson'] = Lesson::query()->find($lesson);
-
-            array_push($lessons_info,$lesson_info);
-        }
-
-        $lessons_info = array_chunk($lessons_info, 2);
-        return view('school.user.report', compact('student', 'teacher', 'lessons_info'));
-
+        $general = new GeneralFunctions();
+        return $general->storyReview($request,$id,'manager');
     }
+
+    public function report(Request $request, $id)
+    {
+        $general = new GeneralFunctions();
+        return $general->userReport($request,$id);
+    }
+
 
     public function cards(Request $request)
     {
-        $name = $request->get('name', false);
-        $grade = $request->get('grade', false);
-        $teacher_id = $request->get('teacher_id', false);
-        $section = $request->get('section', false);
-        $school_id = Auth::guard('school')->user()->id;
-        $students = User::query()
-
-            ->with(['teacherUser.teacher', 'teacherUser'])
-           ->when($school_id, function (Builder $query) use ($school_id){
-            $query->where('school_id', $school_id);
-        })->search($request)
-            ->orderBy('grade_id')->get();
-
-        $students = $students->chunk(6);
-        $school = School::query()->find($school_id);
-        return view('general.user.cards', compact('students', 'school'));
-    }
-    public function cardsQR(Request $request)
-    {
-        $name = $request->get('name', false);
-        $grade = $request->get('grade', false);
-        $teacher_id = $request->get('teacher_id', false);
-        $section = $request->get('section', false);
-        $school_id = Auth::guard('school')->user()->id;
-        $students = User::query()
-
-            ->with(['teacherUser.teacher', 'teacherUser'])
-           ->when($school_id, function (Builder $query) use ($school_id){
-            $query->where('school_id', $school_id);
-        })->search($request)
-            ->orderBy('grade_id')->get();
-
-        $students = $students->chunk(8);
-        $school = School::query()->find($school_id);
-        return view('general.user.cards_qr', compact('students', 'school'));
+        $students = User::with(['grade','school'])->filter($request)->get()->chunk(6);
+        $student_login_url = config('app.url') . '/login';
+        $school = School::find($request->get('school_id'));
+        $title = $school ? $school->name . ' | ' . t('Students Cards') : t('Students Cards');
+        return view('general.cards_and_qr', compact('students', 'student_login_url', 'school', 'title'));
     }
 
 

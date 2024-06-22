@@ -11,32 +11,42 @@ use Yajra\DataTables\DataTables;
 
 class PackageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:show packages')->only('index');
+        $this->middleware('permission:add packages')->only(['create','store']);
+        $this->middleware('permission:edit packages')->only(['edit','update']);
+        $this->middleware('permission:delete packages')->only('destroy');
+    }
     public function index(Request $request)
     {
         if (request()->ajax())
         {
-            $rows = Package::query()->latest()->search($request);
+            $rows = Package::query()->filter($request)->withCount(['users'])
+                ->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('created_at', function ($row){
                     return Carbon::parse($row->created_at)->toDateString();
                 })
+                ->addColumn('name', function ($row){
+                    return $row->name;
+                })
                 ->addColumn('active', function ($row) {
-                    return $row->active_status;
+                    return $row->active ? '<span class="badge badge-primary">'.t('Active').'</span>' : '<span class="badge badge-danger">'.t('Inactive').'</span>';
                 })
                 ->addColumn('actions', function ($row) {
-                    $edit_url = route('manager.package.edit', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url'));
+                    return $row->action_buttons;
                 })
                 ->make();
         }
-        $title = "قائمة الباقات";
+        $title = t('Show packages');
         return view('manager.package.index', compact('title'));
     }
 
     public function create()
     {
-        $title = "إضافة باقة";
+        $title = t('Add package');
         return view('manager.package.edit', compact('title'));
     }
 
@@ -45,12 +55,12 @@ class PackageController extends Controller
         $data = $request->validated();
         $data['active'] = $request->get('active', 0);
         Package::create($data);
-        return redirect()->route('manager.package.index')->with('message', self::ADDMESSAGE);
+        return redirect()->route('manager.package.index')->with('message', t('Successfully Added'));
     }
 
     public function edit($id)
     {
-        $title = "تعديل باقة";
+        $title = t('Edit package');
         $package = Package::query()->findOrFail($id);
         return view('manager.package.edit', compact('title', 'package'));
     }
@@ -61,13 +71,13 @@ class PackageController extends Controller
         $data = $request->validated();
         $data['active'] = $request->get('active', 0);
         $package->update($data);
-        return redirect()->route('manager.package.index')->with('message', self::EDITMESSAGE);
+        return redirect()->route('manager.package.index')->with('message', t('Successfully Updated'));
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $package = Package::query()->findOrFail($id);
-        $package->delete();
-        return redirect()->route('manager.package.index')->with('message', self::DELETEMESSAGE);
+        $request->validate(['row_id'=>'required']);
+        Package::destroy($request->get('row_id'));
+        return $this->sendResponse(null,t('Successfully Deleted'));
     }
 }

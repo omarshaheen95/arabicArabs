@@ -16,10 +16,20 @@ use Yajra\DataTables\DataTables;
 
 class SupervisorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:show supervisors')->only('index');
+        $this->middleware('permission:add supervisors')->only(['create','store']);
+        $this->middleware('permission:edit supervisors')->only(['edit','update']);
+        $this->middleware('permission:delete supervisors')->only('destroy');
+        $this->middleware('permission:export supervisors')->only('export');
+        $this->middleware('permission:supervisors activation')->only(['activation']);
+    }
+
     public function index(Request $request)
     {
         if (request()->ajax()) {
-            $rows = Supervisor::query()->with(['school'])->search($request)->latest();
+            $rows = Supervisor::query()->withCount(['supervisor_teachers'])->with(['school'])->filter($request)->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('created_at', function ($row) {
@@ -28,30 +38,35 @@ class SupervisorController extends Controller
                 ->addColumn('last_login', function ($row) {
                     return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
                 })
+                ->addColumn('supervisor_data', function ($row){
+                    return '<div class="d-flex flex-column">'.
+                        '<div class="d-flex fw-bold">'.'<span class="fw-bold me-1">'.t('Name').' : </span>'.$row->name.'</div>'.
+                        '<div class="d-flex"><span class="fw-bold text-primary me-1">'.t('School').' : </span><span style="direction: ltr">'.optional($row->school)->name.'</span></div>'.
+                        '<div class="d-flex text-danger">'.'<span style="direction: ltr">'.$row->email.'</span></div>'.
+                        '</div>';
+                })
                 ->addColumn('active', function ($row) {
-                    return $row->active_status;
+                    return $row->active ? '<span class="badge badge-primary">'.t('Active').'</span>' : '<span class="badge badge-danger">'.t('Inactive').'</span>';
                 })
-                ->addColumn('status', function ($row) {
-                    return $row->approved_status;
+                ->addColumn('approved', function ($row) {
+                    return $row->approved ? '<span class="badge badge-primary">'.t('Approved').'</span>' : '<span class="badge badge-warning">'.t('Under review').'</span>';
                 })
-                ->addColumn('school', function ($row) {
-                    return $row->school->name;
+                ->addColumn('teachers_count', function ($row) {
+                    return $row->supervisor_teachers_count;
                 })
                 ->addColumn('actions', function ($row) {
-                    $edit_url = route('manager.supervisor.edit', $row->id);
-                    $login_url = route('manager.supervisor.login', $row->id);
-                    return view('manager.setting.btn_actions', compact('row', 'edit_url', 'login_url'));
+                    return $row->action_buttons;
                 })
                 ->make();
         }
-        $title = "قائمة المشرفين";
+        $title = t('Show supervisors');
         $schools = School::query()->get();
         return view('manager.supervisor.index', compact('title', 'schools'));
     }
 
     public function create()
     {
-        $title = "إضافة مشرف";
+        $title = t('Add supervisor');
         $schools = School::query()->get();
         $teachers = [];
         return view('manager.supervisor.edit', compact('title', 'schools', 'teachers'));
@@ -61,22 +76,21 @@ class SupervisorController extends Controller
     {
         $data = $request->validated();
         if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request->file('image'), 'supervisors');
+            $data['image'] = $this->uploadFile($request->file('image'), 'supervisors');
         }
         $data['active'] = $request->get('active', 0);
         $data['approved'] = $request->get('approved', 0);
         $data['password'] = bcrypt($request->get('password', 123456));
+
         $supervisor = Supervisor::query()->create($data);
-        if ($request->has('teachers') && count($request->get('teachers', [])) > 0){
-            $supervisor->teachers()->sync($request->get('teachers', []));
-        }
-        return redirect()->route('manager.supervisor.index')->with('message', self::ADDMESSAGE);
+        $supervisor->teachers()->sync($request->get('teachers', []));
+        return redirect()->route('manager.supervisor.index')->with('message', t('Successfully Added'));
     }
 
     public function edit($id)
     {
-        $title = "تعديل مشرف";
-        $supervisor = Supervisor::query()->findOrFail($id);
+        $title = t('Edit Supervisor');
+        $supervisor = Supervisor::query()->with(['supervisor_teachers'])->findOrFail($id);
         $schools = School::query()->get();
         $teachers = Teacher::query()->where('school_id', $supervisor->school_id)->get();
         return view('manager.supervisor.edit', compact('title', 'teachers', 'supervisor', 'schools'));
@@ -87,33 +101,52 @@ class SupervisorController extends Controller
         $supervisor = Supervisor::query()->findOrFail($id);
         $data = $request->validated();
         if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request->file('image'), 'supervisors');
+            $data['image'] = $this->uploadFile($request->file('image'), 'supervisors');
         }
         $data['active'] = $request->get('active', 0);
         $data['approved'] = $request->get('approved', 0);
         $data['password'] = $request->get('password', false) ? bcrypt($request->get('password', 123456)) : $supervisor->password;
         $supervisor->update($data);
         $supervisor->teachers()->sync($request->get('teachers', []));
-        return redirect()->route('manager.supervisor.index')->with('message', self::EDITMESSAGE);
+        return redirect()->route('manager.supervisor.index')->with('message', t('Successfully Updated'));
     }
 
-    public function destroy($id)
+    public function login($id)
     {
-        $supervisor = Supervisor::query()->findOrFail($id);
-        $supervisor->delete();
-        return redirect()->route('manager.supervisor.index')->with('message', self::DELETEMESSAGE);
-    }
-
-    public function exportSupervisorsExcel(Request $request)
-    {
-        return (new SupervisorExport($request))
-            ->download('Supervisors Information.xlsx');
-    }
-
-    public function supervisorLogin($id)
-    {
-        $supervisor = Supervisor::query()->findOrFail($id);
-        Auth::guard('supervisor')->login($supervisor);
+        Supervisor::query()->findOrFail($id);
+        Auth::guard('supervisor')->loginUsingId($id);
         return redirect()->route('supervisor.home');
+    }
+
+    public function export(Request $request)
+    {
+        return (new SupervisorExport($request))->download('Supervisors Information.xlsx');
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate(['row_id'=>'required']);
+        Supervisor::destroy($request->get('row_id'));
+        return $this->sendResponse(null,t('Successfully Deleted'));
+    }
+
+    public function activation(Request $request)
+    {
+        $data = [];
+        $activation_data = $request->get('activation_data',false);
+        if ($activation_data){
+            if ($activation_data['active']){
+                $data['active'] = $activation_data['active']!=2;
+            }
+            if ($activation_data['approved']){
+                $data['approved'] = $activation_data['approved']!=2;
+            }
+        }
+
+        if (count($data)){
+            $update = Supervisor::query()->filter($request)->update($data);
+            return $this->sendResponse(null,t('Updated Successfully : '.$update));
+        }
+        return $this->sendResponse(null,t('Successfully Updated'));
     }
 }

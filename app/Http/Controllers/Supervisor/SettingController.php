@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Supervisor;
 
+use App\Classes\GeneralFunctions;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Supervisor\SupervisorPasswordRequest;
+use App\Http\Requests\Supervisor\SupervisorProfileRequest;
 use App\Models\Grade;
-use App\Models\Lesson;
-use App\Models\Story;
 use App\Models\UserLesson;
 use App\Models\UserTest;
 use App\Models\Teacher;
@@ -21,7 +22,7 @@ class SettingController extends Controller
 {
     public function home()
     {
-        $title = 'لوحة التحكم';
+        $title = t('Dashboard');
         $supervisor = Auth::guard('supervisor')->user();
         $students = User::query()->whereHas('teacher', function (Builder $query) use($supervisor){
             $query->whereHas('supervisor_teachers', function (Builder $query) use($supervisor){
@@ -43,79 +44,58 @@ class SettingController extends Controller
     }
 
 
-    public function view_profile()
+    public function editProfile()
     {
         $title = t('Show Profile');
-        $user = Auth::guard('supervisor')->user();
+        $supervisor = Auth::guard('supervisor')->user();
         $this->validationRules = [
+            'image' => 'nullable',
             'name' => 'required',
-            'email' => 'required|email|unique:supervisors,email,'. $user->id,
+            'email' => 'required|email|unique:supervisors,email,'. $supervisor->id,
         ];
-        $validator = JsValidator::make($this->validationRules, $this->validationMessages);
-        return view('supervisor.profile.profile', compact('title', 'validator'));
+        return view('supervisor.profile.profile', compact('title','supervisor'));
     }
 
-    public function profile(Request $request)
+    public function updateProfile(SupervisorProfileRequest $request)
     {
         $user = Auth::guard('supervisor')->user();
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email:rfc,dns|unique:supervisors,email,'. $user->id,
-        ]);
-        $data = $request->all();
+        $data = $request->validated();
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->uploadFile($request->file('image'), 'profile_images/supervisors');
+        }
         $user->update($data);
         return redirect()->route('supervisor.home')->with('message', t('Successfully Updated'))->with('m-class', 'success');
     }
 
-    public function view_password()
+    public function editPassword()
     {
         $title = t('Change Password');
-        $this->validationRules = [
-            'current_password' => 'required',
-            'password' => 'required|min:6|confirmed'
-        ];
-        $validator = JsValidator::make($this->validationRules, $this->validationMessages);
-        return view('supervisor.profile.password', compact('title', 'validator'));
+        return view('supervisor.profile.password', compact('title'));
     }
 
-    public function password(Request $request)
+    public function updatePassword(SupervisorPasswordRequest $request)
     {
-        $user = Auth::guard('school')->user();
-        $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|min:6|confirmed'
-        ]);
-        if(Hash::check($request->get('current_password'), $user->password)) {
+        $data = $request->validated();
+        $user = Auth::guard('supervisor')->user();
+        if (Hash::check($request->get('old_password'), $user->password)) {
             $data['password'] = bcrypt($request->get('password'));
             $user->update($data);
-        }else{
-            return $this->redirectWith(true, null, 'Current Password Invalid', 'error');
+            return redirect()->back()->with('message', t('Successfully Updated'))->with('m-class', 'success');
+        } else {
+            return redirect()->back()->withErrors([t('Current Password Invalid')])->with('message', t('Current Password Invalid'))->with('m-class', 'error');
         }
-
-        return redirect()->route('supervisor.home')->with('message', t('Successfully Updated'))->with('m-class', 'success');
     }
 
-    public function getStoriesByGrade($id)
+    public function preUsageReport()
     {
-        $levels = Story::query()->where('grade', $id)->get();
-        $html = '<option selected value="">'.t('Select Story').'</option>';
-        foreach ($levels as $level) {
-            $html .= '<option value="'.$level->id.'">'.$level->name.'</option>';
-        }
-        return response()->json(['html'=>$html]);
+        $title = t('Usage Report');
+        $grades = Grade::query()->get();
+        return view('general.reports.usage_report.pre_usage_report', compact('title', 'grades'));
     }
 
-    public function getLessonsByGrade(Request $request, $id)
+    public function usageReport(Request $request)
     {
-        $lesson_type = $request->get('lesson_type', null);
-        $lessons = Lesson::query()->when($lesson_type, function(Builder $query) use($lesson_type){
-            $query->where('lesson_type', $lesson_type);
-        })->where('grade_id', $id)->get();
-        $html = '<option selected value="">اختر درس</option>';
-        foreach ($lessons as $lesson) {
-            $html .= '<option value="'.$lesson->id.'">'.$lesson->name.'</option>';
-        }
-        return response()->json(['html'=>$html]);
+        $general = new GeneralFunctions();
+        return $general->usageReport($request);
     }
-
 }
