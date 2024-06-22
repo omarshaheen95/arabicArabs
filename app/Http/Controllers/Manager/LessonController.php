@@ -47,7 +47,9 @@ class LessonController extends Controller
     {
         if (request()->ajax()) {
 
-            $rows = Lesson::query()->with('grade')->filter($request)
+            $rows = Lesson::query()->with(['grade', 'questions' => function ($query) {
+                $query->selectRaw('sum(mark) as total_mark, lesson_id')->groupBy('lesson_id');
+            }])->filter($request)
                 ->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
@@ -55,7 +57,7 @@ class LessonController extends Controller
                     return Carbon::parse($row->created_at)->toDateString();
                 })
                 ->addColumn('name', function ($row) {
-                    return $row->name;
+                    return $row->name .' - '.t('Mark').' : ' . optional($row->questions->first())->total_mark;
                 })
                 ->addColumn('grade', function ($row) {
                     return $row->grade->name;

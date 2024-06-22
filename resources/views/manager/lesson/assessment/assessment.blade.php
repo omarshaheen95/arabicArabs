@@ -78,6 +78,8 @@
                                         $mark = 6;
                                     }elseif ($lesson->grade->grade_number == 0){
                                         $mark = 9;
+                                    }else if($loop->first && $lesson->grade->grade_number <= 3){
+                                        $mark = 7;
                                     }else{
                                         $mark = 6;
                                     }
@@ -138,19 +140,24 @@
                                 @endphp
                             @endforeach
                         @else
+                            @php
+                                if ($lesson->grade->grade_number >= 7)
+                                {
+                                    $mark = 6;
+                                }elseif ($lesson->grade->grade_number >= 4){
+                                    $mark = 6;
+                                }elseif ($lesson->grade->grade_number == 0){
+                                    $mark = 9;
+                                }else{
+                                    $mark = 6;
+                                }
+                            @endphp
                             @for($i = 1; $i<=$lesson->grade->true_false;$i++)
-                                @php
-                                    if ($lesson->grade->grade_number >= 7)
-                                    {
-                                        $mark = 6;
-                                    }elseif ($lesson->grade->grade_number >= 4){
-                                        $mark = 6;
-                                    }elseif ($lesson->grade->grade_number == 0){
-                                        $mark = 9;
-                                    }else{
-                                        $mark = 6;
-                                    }
-                                @endphp
+                                @if($i == 1 && $lesson->grade->grade_number <= 3)
+                                    @php
+                                        $mark = 7;
+                                    @endphp
+                                @endif
                                 <div class="form-group row">
                                     <div class="col-lg-7">
                                         <label class="text-dark fw-bold">{{ t('Q')}}  {{$i}}:</label>
@@ -636,14 +643,23 @@
                                 @endphp
                             @endforeach
                         @else
-
+                            @php
+                                if ($lesson->grade->grade_number >= 7)
+                                {
+                                    $mark = 0;
+                                }elseif ($lesson->grade->grade_number >= 4){
+                                    $mark = 8;
+                                }else{
+                                    $mark = 6;
+                                }
+                            @endphp
                             @for($i=1;$i<=$lesson->grade->sort;$i++)
                                 <div class="form-group row mb-2">
                                     <div class="col-lg-9">
                                         <label class="text-dark fw-bold">{{ t('Q')}}  {{$i}}:</label>
                                         <input required class="form-control" name="s_question[{{$i}}]"
                                                type="text">
-                                        <input type="hidden" name="mark[{{$i}}]" value="6">
+                                        <input type="hidden" name="mark[{{$i}}]" value="{{$mark}}">
 
 
                                     </div>

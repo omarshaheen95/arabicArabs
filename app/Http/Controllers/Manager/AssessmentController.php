@@ -69,7 +69,7 @@ class AssessmentController extends Controller
         {
             if ($lesson->grade->grade_number <= 3)
             {
-                $questions = Question::with(['trueFalse','options','matches.media','media'],'media')
+                $questions = Question::with(['trueFalse','options','matches.media','media'])
                     ->where('lesson_id', $lesson->id)
                     ->when($question_id,function ($query) use ($question_id){
                         $query->where('id', $question_id);
@@ -91,16 +91,22 @@ class AssessmentController extends Controller
                 }
                 return view('manager.lesson.assessment.new_skills_assessment', $compact);
             }else{
-                $questions = Question::with(['trueFalse','options','media'],'media')
+                $questions = Question::with(['trueFalse','options','media','matches', 'matches.media'])
                     ->where('lesson_id', $lesson->id)
                     ->when($question_id,function ($query) use ($question_id){
                         $query->where('id', $question_id);
                     })
-                    ->whereIn('type',[1,2])
+                    ->whereIn('type',[1,2,3])
                     ->get();
                 $t_f_questions = $questions->where('type', 1);//->sum('mark');
                 $c_questions = $questions->where('type', 2);//->sum('mark');
-                $data_count = ['choose' =>   8, 'true_false' => 7];
+                $m_questions = $questions->where('type', 3);//->sum('mark');
+                $total_count = $t_f_questions->count() + $c_questions->count() + $m_questions->count();
+                $data_count = [
+                    'choose' =>   $total_count ? $c_questions->count() :8,
+                    'match' =>  $total_count ? $m_questions->count() :0,
+                    'true_false' =>  $total_count ? $t_f_questions->count() :7
+                ];
                 $compact = compact('title', 'lesson', 't_f_questions', 'c_questions', 'data_count');
                 if($question_id){
                     return view('manager.lesson.assessment.edit_specific_question', $compact);
@@ -109,7 +115,7 @@ class AssessmentController extends Controller
             }
         }
 
-        $questions = Question::with(['trueFalse','options','matches', 'matches.media','sortWords','media'],'media')
+        $questions = Question::with(['trueFalse','options','matches', 'matches.media','sortWords','media'])
             ->where('lesson_id', $lesson->id)
             ->when($question_id,function ($query) use ($question_id){
                 $query->where('id', $question_id);

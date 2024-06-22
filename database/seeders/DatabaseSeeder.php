@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ManagersTableSeeder::class,
             GradesTableSeeder::class,
             SettingTableSeeder::class,
+            PermissionsTableSeeder::class
         ]);
     }
 }

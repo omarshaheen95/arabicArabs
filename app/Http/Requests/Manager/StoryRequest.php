@@ -27,6 +27,7 @@ class StoryRequest extends FormRequest
         $rules["name"] = 'required';
         $rules["image"] = 'nullable|image';
         $rules["video"] = 'nullable';
+        $rules["alternative_video"] = 'nullable';
         $rules["content"] = 'nullable';
         $rules["grade"] = 'required';
 //        $rules["ordered"] = 'required';
