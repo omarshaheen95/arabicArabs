@@ -82,6 +82,7 @@
                                                 @php
                                                     $i = 1;
                                                 @endphp
+
                                                 @foreach($t_f_questions as $t_f_question)
                                                     @php
                                                         if ($lesson->grade->grade_number >= 7)
@@ -91,10 +92,13 @@
                                                             $mark = 6;
                                                         }elseif ($lesson->grade->grade_number == 0){
                                                             $mark = 9;
+                                                        }else if($loop->first && $lesson->grade->grade_number <= 3){
+                                                            $mark = 7;
                                                         }else{
                                                             $mark = 6;
                                                         }
                                                     @endphp
+
                                                     <div class="form-group row">
                                                         <div class="col-lg-7">
                                                             <label class="text-info">س {{$i}}:</label>
@@ -147,19 +151,24 @@
                                                     @endphp
                                                 @endforeach
                                             @else
+                                                @php
+                                                    if ($lesson->grade->grade_number >= 7)
+                                                    {
+                                                        $mark = 6;
+                                                    }elseif ($lesson->grade->grade_number >= 4){
+                                                        $mark = 6;
+                                                    }elseif ($lesson->grade->grade_number == 0){
+                                                        $mark = 9;
+                                                    }else{
+                                                        $mark = 6;
+                                                    }
+                                                @endphp
                                                 @for($i = 1; $i<=$lesson->grade->true_false;$i++)
-                                                    @php
-                                                        if ($lesson->grade->grade_number >= 7)
-                                                        {
-                                                            $mark = 6;
-                                                        }elseif ($lesson->grade->grade_number >= 4){
-                                                            $mark = 6;
-                                                        }elseif ($lesson->grade->grade_number == 0){
-                                                            $mark = 9;
-                                                        }else{
-                                                            $mark = 6;
-                                                        }
-                                                    @endphp
+                                                    @if($i == 1 && $lesson->grade->grade_number <= 3)
+                                                        @php
+                                                            $mark = 7;
+                                                        @endphp
+                                                    @endif
                                                     <div class="form-group row">
                                                         <div class="col-lg-7">
                                                             <label>س {{$i}}:</label>
@@ -689,7 +698,16 @@
                                                     @endphp
                                                 @endforeach
                                             @else
-
+                                                @php
+                                                    if ($lesson->grade->grade_number >= 7)
+                                                    {
+                                                        $mark = 0;
+                                                    }elseif ($lesson->grade->grade_number >= 4){
+                                                        $mark = 8;
+                                                    }else{
+                                                        $mark = 6;
+                                                    }
+                                                @endphp
                                                 @for($i=1;$i<=$lesson->grade->sort;$i++)
                                                     <div class="form-group row">
                                                         <div class="col-lg-8">

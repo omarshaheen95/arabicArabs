@@ -33,7 +33,7 @@
                                         <td>{{$student_assignment->lesson->name}}</td>
                                         <td>الصف {{$student_assignment->lesson->grade_name}}</td>
                                         <td>
-                                            @if($student_assignment->lesson->lesson_type == 'reading' || $student_assignment->lesson->lesson_type == 'listening')
+                                            @if($student_assignment->lesson->lesson_type != 'writing' && $student_assignment->lesson->lesson_type != 'speaking')
                                                 <a href="{{route('lesson', [$student_assignment->lesson_id, 'learn'])}}#tasks">
                                                     الذهاب للدرس</a>
                                             @else

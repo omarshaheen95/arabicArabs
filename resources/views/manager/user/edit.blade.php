@@ -190,17 +190,17 @@ WhatsApp +972592554320
                                                value="{{ isset($user->active_to) ? $user->active_to->format('Y-m-d') : old("active_to") }}">
                                     </div>
                                 </div>
-                                {{--                                <div class="form-group row">--}}
-                                {{--                                    <label class="col-3 col-form-label font-weight-bold">{{t('Active')}}</label>--}}
-                                {{--                                    <div class="col-3">--}}
-                                {{--                                        <span class="kt-switch">--}}
-                                {{--                                            <label>--}}
-                                {{--                                            <input type="checkbox" {{isset($user) && $user->active ? 'checked':''}} value="1" name="active">--}}
-                                {{--                                            <span></span>--}}
-                                {{--                                            </label>--}}
-                                {{--                                        </span>--}}
-                                {{--                                    </div>--}}
-                                {{--                                </div>--}}
+                                                                <div class="form-group row">
+                                                                    <label class="col-3 col-form-label font-weight-bold">{{t('Demo')}}</label>
+                                                                    <div class="col-3">
+                                                                        <span class="kt-switch">
+                                                                            <label>
+                                                                            <input type="checkbox" {{isset($user) && $user->demo ? 'checked':''}} value="1" name="demo">
+                                                                            <span></span>
+                                                                            </label>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                             </div>
                         </div>
                     </div>

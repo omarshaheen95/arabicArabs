@@ -33,7 +33,10 @@ class LessonController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $rows = Lesson::query()->with(['grade'])->search($request)->latest('id');
+            //get lesson with sum question mark
+            $rows = Lesson::query()->with(['grade', 'questions' => function ($query) {
+                $query->selectRaw('sum(mark) as total_mark, lesson_id')->groupBy('lesson_id');
+            }])->search($request)->latest('id');
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('status', function ($row) {
@@ -41,6 +44,16 @@ class LessonController extends Controller
                 })
                 ->addColumn('content_btn', function ($row) {
                     return $row->content_btn;
+                })
+                ->addColumn('name', function ($row) {
+                    return $row->name. ' - Mark: ' . optional($row->questions->first())->total_mark;
+                })
+                ->addColumn('grade', function ($row) {
+                    if (in_array($row->lesson_type, ['grammar', 'dictation', 'rhetoric']))
+                    {
+                        return $row->grade->name . ' - Level: ' . $row->level;
+                    }
+                    return $row->grade->name;
                 })
                 ->addColumn('actions', function ($row) {
                     $edit_url = route('manager.lesson.edit', $row->id);
@@ -188,10 +201,14 @@ class LessonController extends Controller
     {
 
         $tests = UserTest::query()
-            ->whereRelation('lesson', 'grade_id', 13)
-            ->whereHas('lesson', function (\Illuminate\Database\Eloquent\Builder $query) {
-                $query->whereIn('lesson_type', ['reading', 'listening']);
-            })
+            ->has('user')
+            ->where('lesson_id', '>=', 2)
+            ->where('lesson_id', '<=', 152)
+//            ->whereRelation('lesson', 'grade_id', 13)
+//            ->whereHas('lesson', function (\Illuminate\Database\Eloquent\Builder $query) {
+//                $query->whereIn('lesson_type', ['reading', 'listening']);
+//            })
+//            ->where('total', '>', 100)
             ->get();
 //        dd($tests->count());
         foreach ($tests as $test) {

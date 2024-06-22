@@ -89,6 +89,9 @@ class StoryController extends Controller
         if ($request->hasFile('video')) {
             $data['video'] = $this->uploadImage($request->file('video'), 'stories_video');
         }
+        if ($request->hasFile('alternative_video')) {
+            $data['alternative_video'] = $this->uploadImage($request->file('alternative_video'), 'stories_video');
+        }
         $data['active'] = $request->get('active', 1);
 
         $story->update($data);

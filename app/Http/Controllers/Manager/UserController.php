@@ -132,6 +132,7 @@ class UserController extends Controller
             $data['image'] = $this->uploadImage($request->file('image'), 'users');
         }
         $data['active'] = $request->get('active', 0);
+        $data['demo'] = $request->get('demo', 0);
         $data['password'] = bcrypt($request->get('password', 123456));
         $data['manager_id'] = Auth::guard('manager')->user()->id;
         $data['active_from'] = now();
@@ -173,6 +174,7 @@ class UserController extends Controller
             $data['image'] = $this->uploadImage($request->file('image'), 'users');
         }
         $data['active'] = $request->get('active', 0);
+        $data['demo'] = $request->get('demo', 0);
         $data['password'] = $request->get('password', false) ? bcrypt($request->get('password', 123456)) : $user->password;
         $user->update($data);
         $teacher_id = $request->get('teacher_id', false);

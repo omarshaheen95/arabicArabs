@@ -73,7 +73,7 @@ class HomeController extends Controller
     {
         $user = Auth::guard('web')->user();
         $grade = Grade::query()->findOrFail($id);
-        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1) {
+        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1 && !$user->demo) {
             return redirect()->route('home')->with('message', 'الدروس غير متاحة')->with('m-class', 'error');
         }
         $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use ($level) {
@@ -86,7 +86,7 @@ class HomeController extends Controller
     {
         $user = Auth::guard('web')->user();
         $grade = Grade::query()->findOrFail($id);
-        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1) {
+        if ($user->grade_id != $grade->id && $user->alternate_grade_id != $grade->id && $user->id != 1 && !$user->demo) {
             return redirect()->route('home')->with('message', 'الدروس غير متاحة')->with('m-class', 'error');
         }
         $lessons = Lesson::query()->where('lesson_type', $type)->where('grade_id', $grade->id)->when($level, function (Builder $query) use ($level) {
@@ -99,7 +99,7 @@ class HomeController extends Controller
     {
         $lesson = Lesson::query()->with(['grade', 'media'])->findOrFail($id);
         $user = Auth::guard('web')->user();
-        if ($user->grade_id != $lesson->grade_id && $user->alternate_grade_id != $lesson->grade_id && $user->id != 1) {
+        if ($user->grade_id != $lesson->grade_id && $user->alternate_grade_id != $lesson->grade_id && $user->id != 1 && !$user->demo) {
             return redirect()->route('home')->with('message', 'الدرس غير متاح')->with('m-class', 'error');
         }
         switch ($key) {

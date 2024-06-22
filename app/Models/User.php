@@ -18,7 +18,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password', 'mobile', 'school_id', 'grade_id', 'alternate_grade_id', 'year_learning',
         'section', 'country_code', 'short_country', 'id_number',
-        'active', 'type', 'active_from', 'active_to', 'package_id', 'manager_id', 'year_id', 'last_login', 'image', 'import_student_file_id'
+        'active', 'type', 'active_from', 'active_to', 'package_id', 'manager_id', 'year_id', 'last_login', 'image', 'import_student_file_id', 'demo'
     ];
 
     protected $hidden = [

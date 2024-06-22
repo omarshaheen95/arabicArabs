@@ -132,7 +132,7 @@ WhatsApp +972592554320
                                                 <div class="form-group row">
                                                     <div class="col-lg-12">
                                                         <label>محتوى عام :</label>
-                                                        <textarea required class="form-control edit" id='edit'
+                                                        <textarea class="form-control edit" id='edit'
                                                                   name="content"></textarea>
                                                     </div>
                                                 </div>

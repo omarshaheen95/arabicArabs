@@ -187,7 +187,7 @@
                     columns: [
                         {data: 'id', name: 'id'},
                         {data: 'name', name: 'name'},
-                        {data: 'grade.name', name: 'grade.name'},
+                        {data: 'grade', name: 'grade'},
                         {data: 'type_name', name: 'type_name'},
                         {data: 'section_name', name: 'section_name'},
                         {data: 'content_btn', name: 'content_btn'},

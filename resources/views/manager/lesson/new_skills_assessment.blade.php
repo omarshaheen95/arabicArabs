@@ -68,7 +68,7 @@
                                                 @endphp
                                                 @foreach($t_f_questions as $t_f_question)
                                                     @php
-                                                        if ($lesson->grade->grade_number <= 3)
+                                                        if ($lesson->level <= 3)
                                                         {
                                                             if ($i <= 3)
                                                             {
@@ -139,7 +139,7 @@
                                             @else
                                                 @for($i = 1; $i<=$data_count['true_false'];$i++)
                                                     @php
-                                                        if ($lesson->grade->grade_number <= 3)
+                                                        if ($lesson->level <= 3)
                                                         {
                                                             if ($i <= 3)
                                                             {
@@ -210,7 +210,7 @@
                                                 @endphp
                                                 @foreach($c_questions as $c_question)
                                                     @php
-                                                        if ($lesson->grade->grade_number <= 3)
+                                                        if ($lesson->level <= 3)
                                                         {
                                                                 $mark = 6;
                                                         }else{
@@ -285,7 +285,7 @@
                                             @else
                                                 @for($i = 1; $i<=$data_count['choose'];$i++)
                                                     @php
-                                                        if ($lesson->grade->grade_number <= 3)
+                                                        if ($lesson->level <= 3)
                                                         {
                                                                 $mark = 6;
                                                         }else{

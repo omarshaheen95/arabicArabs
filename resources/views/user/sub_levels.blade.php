@@ -25,10 +25,10 @@
                         <div class="col-lg-3 col-md-6 col-sm-6">
                             <div class="lesson-box">
                                 <div class="pic">
-                                    <img src="{{asset("web_assets/img/sub_levels/".$level["level"].".svg")}}?v=2" alt="">
+                                    <img src="{{asset("web_assets/img/levels/".$level["level"].".svg")}}?v=3" alt="">
                                 </div>
                                 <div class="content">
-                                    <div class="title"> الصف {{$level["level"]}}</div>
+                                    <div class="title"> المستوى {{$level["level"]}}</div>
                                     <a href="{{route('sub_lessons', [$grade->id, $type, $level["level"]])}}"
                                        class="btn   btn-theme w-75 mb-4">
                                         دخول
