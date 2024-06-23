@@ -23,7 +23,11 @@ class TextTranslationController extends Controller
     public function index()
     {
         $folders = [];
-        foreach (config('app.languages') as $local)
+//        foreach (config('app.languages') as $local)
+//        {
+//            $folders[$local]['files'] = File::allFiles(base_path().'/resources/lang/'.$local);
+//        }
+        foreach (['ar'] as $local)
         {
             $folders[$local]['files'] = File::allFiles(base_path().'/resources/lang/'.$local);
         }

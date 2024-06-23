@@ -82,21 +82,21 @@
 
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            @if(app()->getLocale() == "ar")
-                                <a href="{{ route('switch-language', 'en') }}" class="">
-                                    <img style="border-radius: 50%;" src="{{asset('assets_v1/media/flags/united-states.svg')}}" width="25px" alt="arabic">
-                                    <span class="ms-2 text-dark">English</span>
-                                </a>
-                            @else
-                                <a href="{{ route('switch-language', 'ar') }}" class="">
-                                    <img style="border-radius: 50%;" src="{{asset('assets_v1/media/flags/united-arab-emirates.svg')}}" width="25px" alt="arabic">
-                                    <span class="me-2 text-dark">العربية</span>
-                                </a>
-                            @endif
-                        </div>
-                    </div>
+{{--                    <div class="row mt-3">--}}
+{{--                        <div class="col-12">--}}
+{{--                            @if(app()->getLocale() == "ar")--}}
+{{--                                <a href="{{ route('switch-language', 'en') }}" class="">--}}
+{{--                                    <img style="border-radius: 50%;" src="{{asset('assets_v1/media/flags/united-states.svg')}}" width="25px" alt="arabic">--}}
+{{--                                    <span class="ms-2 text-dark">English</span>--}}
+{{--                                </a>--}}
+{{--                            @else--}}
+{{--                                <a href="{{ route('switch-language', 'ar') }}" class="">--}}
+{{--                                    <img style="border-radius: 50%;" src="{{asset('assets_v1/media/flags/united-arab-emirates.svg')}}" width="25px" alt="arabic">--}}
+{{--                                    <span class="me-2 text-dark">العربية</span>--}}
+{{--                                </a>--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
                 </form>
             </div>

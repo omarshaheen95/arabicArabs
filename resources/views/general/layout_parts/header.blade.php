@@ -32,21 +32,21 @@
                 <div class="app-navbar-item ms-1 ms-md-3">
                     <!--begin::Menu toggle-->
                         <!--begin::Item-->
-                    @if(app()->getLocale() == "ar")
-                        <a href="{{ route('switch-language', 'en') }}" class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent"
-                           data-kt-menu-placement="{{$lang=='ar'?'bottom-start':'bottom-end'}}">
-	                            <span class="symbol symbol-25px">
-                                    <img src="{{asset('assets_v1/media/flags/united-states.svg')}}" alt=""/>
-                                </span>
-                        </a>
-                    @else
-                        <a href="{{ route('switch-language', 'ar') }}" class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent"
-                           data-kt-menu-placement="{{$lang=='ar'?'bottom-start':'bottom-end'}}">
-	                            <span class="symbol symbol-25px">
-                                  <img src="{{asset('assets_v1/media/flags/united-arab-emirates.svg')}}" alt=""/>
-                                </span>
-                        </a>
-                    @endif
+{{--                    @if(app()->getLocale() == "ar")--}}
+{{--                        <a href="{{ route('switch-language', 'en') }}" class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent"--}}
+{{--                           data-kt-menu-placement="{{$lang=='ar'?'bottom-start':'bottom-end'}}">--}}
+{{--	                            <span class="symbol symbol-25px">--}}
+{{--                                    <img src="{{asset('assets_v1/media/flags/united-states.svg')}}" alt=""/>--}}
+{{--                                </span>--}}
+{{--                        </a>--}}
+{{--                    @else--}}
+{{--                        <a href="{{ route('switch-language', 'ar') }}" class="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px" data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-attach="parent"--}}
+{{--                           data-kt-menu-placement="{{$lang=='ar'?'bottom-start':'bottom-end'}}">--}}
+{{--	                            <span class="symbol symbol-25px">--}}
+{{--                                  <img src="{{asset('assets_v1/media/flags/united-arab-emirates.svg')}}" alt=""/>--}}
+{{--                                </span>--}}
+{{--                        </a>--}}
+{{--                    @endif--}}
 
                 </div>
                 <!--end::Local-->
@@ -155,7 +155,13 @@
                             <div class="menu-content d-flex align-items-center px-3">
                                 <!--begin::Avatar-->
                                 <div class="symbol symbol-50px me-5">
-                                    <img alt="Logo" src="{{asset('assets_v1/media/svg/avatars/blank.svg')}}" />
+                                    @if(isset(Auth::guard()->user()->image))
+                                        <img alt="Logo" src="{{asset(Auth::guard()->user()->image)}}"  />
+                                    @elseif(isset(Auth::guard()->user()->logo))
+                                        <img alt="Logo" src="{{asset(Auth::guard()->user()->logo)}}"  />
+                                    @else
+                                        <img alt="Logo" src="{{asset('assets_v1/media/svg/avatars/blank.svg')}}"  />
+                                    @endif
                                 </div>
                                 <!--end::Avatar-->
                                 <!--begin::Username-->
