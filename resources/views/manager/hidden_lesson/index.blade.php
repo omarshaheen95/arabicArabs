@@ -32,7 +32,7 @@
 @section('filter')
     <div class="row">
         <div class="col-3 mb-2">
-            <label class="">{{t('School')}}:</label>
+            <label class="mb-2">{{t('School')}}:</label>
             <select class="form-select" name="school_id" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select School')}}">
                 <option></option>
@@ -42,7 +42,7 @@
             </select>
         </div>
         <div class="col-lg-3 mb-2">
-            <label>{{t('Grade')}} :</label>
+            <label class="mb-2">{{t('Grade')}} :</label>
             <select name="grade_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}"
                     data-allow-clear="true">
                 <option></option>
@@ -53,13 +53,13 @@
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Lesson')}} :</label>
+            <label class="mb-2">{{t('Lesson')}} :</label>
             <select  name="lesson_id" id="lesson_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Lesson')}}" data-allow-clear="true">
                 <option></option>
             </select>
         </div>
         <div class="col-lg-3 mb-2">
-            <label>{{t('Hidden at')}} :</label>
+            <label class="mb-2">{{t('Hidden at')}} :</label>
             <input autocomplete="disabled" class="form-control form-control-solid" name="date_range" value="" placeholder="{{t('Pick date range')}}" id="date_range"/>
             <input type="hidden" name="start_date" id="start_date_range" />
             <input type="hidden" name="end_date" id="end_date_range" />

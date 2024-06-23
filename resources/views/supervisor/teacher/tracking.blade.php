@@ -21,27 +21,27 @@
     <div class="row">
         <input type="hidden" name="supervisor_id" value="{{Auth::user()->id}}">
         <div class="col-1 mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
         <div class="col-3 mb-2">
-            <label>{{t('Name')}}:</label>
+            <label class="mb-2">{{t('Name')}}:</label>
             <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
         </div>
 
         <div class="col-3 mb-2">
-            <label>{{t('Email')}}:</label>
+            <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
 
         <div class="col-2 mb-2">
-            <label>{{t('Mobile')}}:</label>
+            <label class="mb-2">{{t('Mobile')}}:</label>
             <input type="text" name="mobile" class="form-control" placeholder="{{t('Mobile')}}">
         </div>
 
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Students')}} :</label>
+            <label class="mb-2">{{t('Students')}} :</label>
             <select name="student_status" id="student_status" class="form-select" data-control="select2"
                     data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
@@ -52,7 +52,7 @@
             </select>
         </div>
         <div class="col-lg-2 mb-2">
-            <label>{{t('Approval')}} :</label>
+            <label class="mb-2">{{t('Approval')}} :</label>
             <select name="approved" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}"
                     data-allow-clear="true">
                 <option></option>
@@ -61,7 +61,7 @@
             </select>
         </div>
         <div class="col-lg-2 mb-2">
-            <label>{{t('Activation')}} :</label>
+            <label class="mb-2">{{t('Activation')}} :</label>
             <select name="active" id="status" class="form-select" data-control="select2"
                     data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>

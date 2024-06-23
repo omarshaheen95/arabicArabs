@@ -15,7 +15,7 @@
         </div>
 
         <div class="col-lg-3  mb-2">
-            <label>{{t('School')}}:</label>
+            <label class="mb-2">{{t('School')}}:</label>
             <select name="school_id" class="form-control form-select" data-control="select2"
                     data-placeholder="{{t('Select School')}}" data-allow-clear="true">
                 <option></option>
@@ -25,7 +25,7 @@
             </select>
         </div>
         <div class="col-lg-3  mb-2">
-            <label>{{t('Status')}}:</label>
+            <label class="mb-2">{{t('Status')}}:</label>
             <select name="status" class="form-control form-select" data-control="select2"
                     data-placeholder="{{t('Select Status')}}" data-hide-search="true" data-allow-clear="true">
                 <option></option>
@@ -35,7 +35,7 @@
             </select>
         </div>
         <div class="col-lg-3  mb-2">
-            <label>{{t('Type')}}:</label>
+            <label class="mb-2">{{t('Type')}}:</label>
             <select name="model_type" class="form-control form-select" data-control="select2"
                     data-placeholder="{{t('Select Type')}}" data-hide-search="true" data-allow-clear="true">
                 <option></option>

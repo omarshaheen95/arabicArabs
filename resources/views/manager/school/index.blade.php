@@ -33,25 +33,25 @@
 @section('filter')
     <div class="row">
         <div class="col-1 mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
         <div class="col-3 mb-2">
-            <label>{{t('Name')}}:</label>
+            <label class="mb-2">{{t('Name')}}:</label>
             <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
         </div>
 
         <div class="col-3 mb-2">
-            <label>{{t('Email')}}:</label>
+            <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
 
         <div class="col-3 mb-2">
-            <label>{{t('Mobile')}}:</label>
+            <label class="mb-2">{{t('Mobile')}}:</label>
             <input type="text" name="mobile" class="form-control" placeholder="{{t('Mobile')}}">
         </div>
         <div class="col-lg-2 mb-2">
-            <label>{{t('Activation')}} :</label>
+            <label class="mb-2">{{t('Activation')}} :</label>
             <select name="active" id="status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Active')}}</option>
@@ -104,7 +104,7 @@
                 <div class="modal-body d-flex flex-column">
                     <form id="activation_form">
                         <div class="mb-2">
-                            <label>{{t('Activation Status')}} :</label>
+                            <label class="mb-2">{{t('Activation Status')}} :</label>
                             <select name="active" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                                 <option></option>
                                 <option value="1">{{t('Activate')}}</option>

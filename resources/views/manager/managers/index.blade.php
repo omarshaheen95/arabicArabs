@@ -37,21 +37,21 @@
 @section('filter')
     <div class="row">
         <div class="col-lg-3 mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" id="id" name="id" class="form-control kt-input" placeholder="E.g: 4590">
         </div>
 
         <div class="col-lg-3  mb-2">
-            <label>{{t('Name')}}:</label>
+            <label class="mb-2">{{t('Name')}}:</label>
             <input type="text" id="name" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
         </div>
 
         <div class="col-lg-3  mb-2">
-            <label>{{t('Email')}}:</label>
+            <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" id="email" name="email" class="form-control kt-input" placeholder="{{t('Email')}}">
         </div>
         <div class="col-lg-3  mb-2">
-            <label>{{t('Status')}}:</label>
+            <label class="mb-2">{{t('Status')}}:</label>
             <select name="active" class="form-control form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-hide-search="true" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Active')}}</option>

@@ -20,7 +20,7 @@
 @section('filter')
     <div class="row">
         <div class="col-lg-3 mb-2">
-            <label>{{t('Grade')}} :</label>
+            <label class="mb-2">{{t('Grade')}} :</label>
             <select name="grade_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}" data-allow-clear="true">
                 <option></option>
                 @foreach($grades as $grade)
@@ -30,13 +30,13 @@
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Lesson')}} :</label>
+            <label class="mb-2">{{t('Lesson')}} :</label>
             <select  name="id" id="lesson_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Lesson')}}" data-allow-clear="true">
                 <option></option>
             </select>
         </div>
         <div class="col-lg-3 mb-2">
-            <label>{{t('Status')}} :</label>
+            <label class="mb-2">{{t('Status')}} :</label>
             <select  name="hidden_status" id="hidden_status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Active')}}</option>

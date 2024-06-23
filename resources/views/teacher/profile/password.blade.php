@@ -17,17 +17,17 @@
             <div class="form-group row">
 
                 <div class="col-lg-4">
-                    <label>{{t('Old Password')}} :</label>
+                    <label class="mb-2">{{t('Old Password')}} :</label>
                     <input name="old_password" type="password" placeholder="{{t('Old Password')}}"
                            class="form-control"/>
                 </div>
                 <div class="col-lg-4">
-                    <label>{{t('Password')}} :</label>
+                    <label class="mb-2">{{t('Password')}} :</label>
                     <input name="password" type="password" placeholder="{{t('Password')}}"
                            class="form-control"/>
                 </div>
                 <div class="col-lg-4">
-                    <label>{{t('Confirmed Password')}} :</label>
+                    <label class="mb-2">{{t('Confirmed Password')}} :</label>
                     <input name="password_confirmation" type="password" placeholder="{{t('Confirmed Password')}}"
                            class="form-control"/>
                 </div>

@@ -28,7 +28,7 @@ WhatsApp +972592554320
                         <label class="col-xl-3 col-lg-3 col-form-label">{{ t('Attach Writing Answer') }}</label>
                         <div class="col-lg-9 col-xl-6">
                             @if(isset($user_lesson) && !is_null($user_lesson->attach_writing_answer))
-                                <label>
+                                <label class="mb-2">
                                     <a href="{{$user_lesson->attach_writing_answer}}" class="kt-font-warning"
                                        target="_blank">{{t('Browse')}}</a>
                                 </label>

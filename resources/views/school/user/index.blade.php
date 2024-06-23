@@ -22,19 +22,19 @@
 @section('filter')
     <div class="row">
         <div class="col-1  mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
         <div class="col-lg-3  mb-2">
-            <label>{{t('Student Name')}}:</label>
+            <label class="mb-2">{{t('Student Name')}}:</label>
             <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Student Name')}}">
         </div>
         <div class="col-lg-3  mb-2">
-            <label>{{t('Email')}}:</label>
+            <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
         <div class="col-lg-2 mb-2">
-            <label>{{t('Learning Years')}} :</label>
+            <label class="mb-2">{{t('Learning Years')}} :</label>
             <select name="year_learning" class="form-select" data-control="select2"
                     data-placeholder="{{t('Select Year')}}" data-allow-clear="true">
                 <option></option>
@@ -45,7 +45,7 @@
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Grade')}} :</label>
+            <label class="mb-2">{{t('Grade')}} :</label>
             <select name="grade_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}"
                     data-allow-clear="true">
                 <option></option>
@@ -56,7 +56,7 @@
         </div>
 
         <div class="col-3 mb-2">
-            <label class="">{{t('Teacher')}}:</label>
+            <label class="mb-2">{{t('Teacher')}}:</label>
             <select class="form-select" name="teacher_id" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Teacher')}}">
                 <option></option>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="col-2 mb-2">
-            <label class="">{{t('Section')}}:</label>
+            <label class="mb-2">{{t('Section')}}:</label>
             <select class="form-select" name="section" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Section')}}">
                 <option></option>
@@ -76,7 +76,7 @@
 
 
         <div class="col-2 mb-2">
-            <label class="">{{t('Package')}}:</label>
+            <label class="mb-2">{{t('Package')}}:</label>
             <select class="form-select" name="package_id" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Package')}}">
                 <option></option>
@@ -86,13 +86,13 @@
             </select>
         </div>
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-            <label>{{ t('Register Date') }}:</label>
+            <label class="mb-2">{{ t('Register Date') }}:</label>
             <input id="register_date" class="form-control " placeholder="{{t('Select Register Date')}}">
             <input type="hidden" id="start_register_date" name="start_register_date" value="">
             <input type="hidden" id="end_register_date" name="end_register_date" value="">
         </div>
         <div class="col-2 mb-2">
-            <label class="">{{t('Activation')}}:</label>
+            <label class="mb-2">{{t('Activation')}}:</label>
             <select class="form-select" name="status" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Status')}}">
                 <option></option>
@@ -103,7 +103,7 @@
 
 
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-            <label>{{ t('Login Date') }}:</label>
+            <label class="mb-2">{{ t('Login Date') }}:</label>
             <input id="login_at" class="form-control " placeholder="{{t('Select Login Date')}}">
             <input type="hidden" id="start_login_at" name="start_login_at" value="">
             <input type="hidden" id="end_login_at" name="end_login_at" value="">

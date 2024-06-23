@@ -28,15 +28,15 @@ WhatsApp +972592554320
 @section('filter')
     <div class="row">
         <div class="col-1 mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
         <div class="col-3 mb-2">
-            <label>{{t('Name')}}:</label>
+            <label class="mb-2">{{t('Name')}}:</label>
             <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
         </div>
         <div class="col-lg-3 mb-2">
-            <label>{{t('Grade')}} :</label>
+            <label class="mb-2">{{t('Grade')}} :</label>
             <select name="grade" id="grade" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}" data-allow-clear="true">
                 <option></option>
                 @foreach($grades as  $grade)
@@ -46,7 +46,7 @@ WhatsApp +972592554320
         </div>
 
         <div class="col-2 mb-2">
-            <label>{{t('Level')}} :</label>
+            <label class="mb-2">{{t('Level')}} :</label>
             <select name="level" id="level" class="form-select" data-control="select2" data-placeholder="{{t('Select Level')}}" data-allow-clear="true">
                 <option></option>
                 @foreach(range(1,12) as  $level)
@@ -56,7 +56,7 @@ WhatsApp +972592554320
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Lesson Type')}} :</label>
+            <label class="mb-2">{{t('Lesson Type')}} :</label>
             <select name="lesson_type" id="lesson_type" class="form-select" data-control="select2" data-placeholder="{{t('Select Lesson Type')}}" data-allow-clear="true">
                 <option></option>
                 @foreach($lesson_types as  $lesson_type)
@@ -66,7 +66,7 @@ WhatsApp +972592554320
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Section Type')}} :</label>
+            <label class="mb-2">{{t('Section Type')}} :</label>
             <select name="section_type" id="section_type" class="form-select" data-control="select2" data-placeholder="{{t('Select Section Type')}}" data-allow-clear="true">
                 <option></option>
                 @foreach($section_types as  $section_type)
@@ -75,7 +75,7 @@ WhatsApp +972592554320
             </select>
         </div>
         <div class="col-3 mb-2">
-            <label>{{t('Activation')}} :</label>
+            <label class="mb-2">{{t('Activation')}} :</label>
             <select name="active" id="status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Active')}}</option>

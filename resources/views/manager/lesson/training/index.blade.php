@@ -14,15 +14,15 @@ WhatsApp +972592554320
 @section('filter')
     <div class="row">
         <div class="col-1 mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
         <div class="col-3 mb-2">
-            <label>{{t('Question')}}:</label>
+            <label class="mb-2">{{t('Question')}}:</label>
             <input type="text" name="content" class="form-control direct-search" placeholder="{{t('Question')}}">
         </div>
         <div class="col-3 mb-2">
-            <label>{{t('Type')}} :</label>
+            <label class="mb-2">{{t('Type')}} :</label>
             <select name="type" id="type" class="form-select" data-control="select2" data-placeholder="{{t('Select Type')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('True&False')}}</option>

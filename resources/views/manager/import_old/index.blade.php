@@ -70,7 +70,7 @@ WhatsApp +972592554320
                             <label class="col-6 col-form-label font-weight-bold">{{t('Delete students when deleting the import file')}}</label>
                             <div class="col-3">
                                         <span class="kt-switch">
-                                            <label>
+                                            <label class="mb-2">
                                             <input type="checkbox" value="1" name="delete_students">
                                             <span></span>
                                             </label>

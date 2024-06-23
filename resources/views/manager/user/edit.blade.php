@@ -273,9 +273,9 @@
                 </div>
 
 
-                <div id="demo_data" class="col-12 row justify-content-center d-none" dir="ltr">
+                <div id="demo_data" class="col-12 row justify-content-center d-none" dir="rtl">
                     <div class="col-5">
-                        <label>{{t('Grades')}}</label>
+                        <label class="mb-2">{{t('Grades')}}</label>
                         <select name="from[]" id="multiselect" class="form-control" size="8" multiple="multiple">
                             @foreach($grades as $grade)
                                 <option value="{{$grade->id}}">{{$grade->name}}</option>
@@ -283,15 +283,15 @@
                         </select>
                     </div>
 
-                    <div class="col-2 d-flex flex-column justify-content-center align-items-center mt-5" >
-                        <button type="button" id="multiselect_rightAll" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-forward"></i></button>
-                        <button type="button" id="multiselect_rightSelected" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-chevron-right"></i></button>
-                        <button type="button" id="multiselect_leftSelected" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-chevron-left"></i></button>
-                        <button type="button" id="multiselect_leftAll" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-backward"></i></button>
+                    <div class="col-2 d-flex flex-column justify-content-center align-items-center mt-5" dir="rtl">
+                        <button type="button"  id="multiselect_leftAll" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-forward"></i></button>
+                        <button type="button" id="multiselect_leftSelected" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-chevron-right"></i></button>
+                        <button type="button" id="multiselect_rightSelected" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-chevron-left"></i></button>
+                        <button type="button" id="multiselect_rightAll" class="btn btn-secondary btn-sm mb-1"><i class="fa fa-backward"></i></button>
                     </div>
 
                     <div class="col-5">
-                        <label>{{t('Selected Grades')}}</label>
+                        <label class="mb-2">{{t('Selected Grades')}}</label>
                         <select name="demo_grades[]" id="multiselect_to" class="form-control" size="8" multiple="multiple">
 
                             @if(isset($user->demo_grades)&&count($user->demo_grades)>0)
@@ -422,7 +422,7 @@
 
         //Init multiselecet For Levels
         $('#multiselect').multiselect({
-            sort:false
+            sort:false,
         });
     </script>
 

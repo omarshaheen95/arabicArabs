@@ -66,7 +66,7 @@
                                                value="{{$t_f_question->content}}">
                                     </div>
                                     <div class="col-lg-2">
-                                        <label>{{ t('Correct Answer')}} :</label>
+                                        <label class="mb-2">{{ t('Correct Answer')}} :</label>
                                         <div class="d-flex gap-1">
                                             <div class="form-check form-check-custom form-check-solid form-check-sm">
                                                 <input required class="form-check-input" type="radio"
@@ -90,7 +90,7 @@
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="d-flex">
-                                            <label>{{t('Attachment')}} :</label>
+                                            <label class="mb-2">{{t('Attachment')}} :</label>
                                             @if($t_f_question->getFirstMediaUrl('imageQuestion'))
                                                 <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
                                                     <a data-id="{{$t_f_question->id}}" class="btn btn-icon btn-danger deleteRecord" style="height: 20px; width: 20px">
@@ -167,7 +167,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="d-flex">
-                                                <label>{{t('Attachment')}} :</label>
+                                                <label class="mb-2">{{t('Attachment')}} :</label>
                                                 @if($c_question->getFirstMediaUrl('imageQuestion'))
                                                     <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
                                                         <a data-id="{{$c_question->id}}" class="btn btn-icon btn-danger deleteRecord" style="height: 20px; width: 20px">
@@ -189,7 +189,7 @@
                                         @endphp
                                         @foreach($c_question->options as $option)
                                             <div class="col-lg-3">
-                                                <label>{{$o_counter}} :</label>
+                                                <label class="mb-2">{{$o_counter}} :</label>
                                                 <input required type="text" class="form-control"
                                                        name="old_c_q_option[{{$c_question->id}}][{{$option->id}}]"
                                                        value="{{$option->content}}">
@@ -238,7 +238,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="d-flex">
-                                                <label>{{t('Attachment')}} :</label>
+                                                <label class="mb-2">{{t('Attachment')}} :</label>
                                                 @if($m_question->getFirstMediaUrl('imageQuestion'))
                                                     <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
                                                         <a data-id="{{$m_question->id}}" class="btn btn-icon btn-danger deleteRecord" style="height: 20px; width: 20px">
@@ -263,20 +263,20 @@
                                     @foreach($m_question->matches as $match)
                                         <div class="form-group row mt-2">
                                             <div class="col-lg-8">
-                                                <label>{{ t('Option')}}  {{$o_counter}}:</label>
+                                                <label class="mb-2">{{ t('Option')}}  {{$o_counter}}:</label>
                                                 <input required class="form-control"
                                                        name="old_m_q_option[{{$match->id}}]"
                                                        value="{{$match->content}}" type="text">
                                             </div>
                                             <div class="col-lg-2">
-                                                <label>{{ t('Answer')}} :</label>
+                                                <label class="mb-2">{{ t('Answer')}} :</label>
                                                 <input required class="form-control"
                                                        name="old_m_q_answer[{{$match->id}}]"
                                                        value="{{$match->result}}" type="text">
                                             </div>
                                             <div class="col-lg-2">
                                                 <div class="d-flex">
-                                                    <label>{{t('Image')}} :</label>
+                                                    <label class="mb-2">{{t('Image')}} :</label>
                                                     @if($match->getFirstMediaUrl('match'))
                                                         <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
                                                             <a data-id="{{$match->id}}" class="btn btn-icon btn-danger deleteMatchImageRecord" style="height: 20px; width: 20px">
@@ -336,7 +336,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="d-flex">
-                                                <label>{{t('Attachment')}} :</label>
+                                                <label class="mb-2">{{t('Attachment')}} :</label>
                                                 @if($s_question->getFirstMediaUrl('t_imageQuestion'))
                                                     <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
                                                         <a data-id="{{$m_question->id}}" class="btn btn-icon btn-danger deleteRecord" style="height: 20px; width: 20px">
@@ -358,7 +358,7 @@
                                         @endphp
                                         @foreach($s_question->sortWords as $sort_word)
                                             <div class="col-4 mb-3 option">
-                                                <label>{{ t('Option')}}  {{$o_counter}} :
+                                                <label class="mb-2">{{ t('Option')}}  {{$o_counter}} :
                                                     <a href="#"
                                                        data-id="{{$sort_word->id}}"
                                                        data-bs-toggle="modal"
@@ -509,7 +509,7 @@
                             y++; //Increment field counter.
                             $(this).parent().before(
                                 "<div class=\"col-lg-4 mt-3 option\">\n" +
-                                "<label>{{ t('Option')}}  " + y + " : <a href='#' class='text-danger delete_input'>{{ t('Delete')}} </a></label>\n" +
+                                "<label class="mb-2">{{ t('Option')}}  " + y + " : <a href='#' class='text-danger delete_input'>{{ t('Delete')}} </a></label>\n" +
                                 "<input required class=\"form-control\" name=\"s_q_option[" + row_id + "]["+y+"]\" type=\"text\">\n")
                         }
                     });

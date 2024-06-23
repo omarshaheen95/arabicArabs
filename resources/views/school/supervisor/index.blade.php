@@ -23,23 +23,23 @@
 @section('filter')
     <div class="row">
         <div class="col-2 mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
 
         <div class="col-3 mb-2">
-            <label>{{t('Name')}}:</label>
+            <label class="mb-2">{{t('Name')}}:</label>
             <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
         </div>
 
         <div class="col-3 mb-2">
-            <label>{{t('Email')}}:</label>
+            <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
 
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Active Status')}} :</label>
+            <label class="mb-2">{{t('Active Status')}} :</label>
             <select name="active" id="status" class="form-select" data-control="select2" data-placeholder="{{t('Select Active Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Active')}}</option>
@@ -48,7 +48,7 @@
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Status')}} :</label>
+            <label class="mb-2">{{t('Status')}} :</label>
             <select name="approved" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Approved')}}</option>

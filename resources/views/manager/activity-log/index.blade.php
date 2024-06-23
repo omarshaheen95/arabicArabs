@@ -14,17 +14,17 @@
         <div class="col-lg-3 mb-2">
             <input type="hidden" name="causedByManager" value="{{request()->get('causedByManager', false)}}">
             <input type="hidden" name="causedBySchool" value="{{request()->get('causedBySchool', false)}}">
-            <label>{{t('Name')}}:</label>
+            <label class="mb-2">{{t('Name')}}:</label>
             <input type="text"  name="name" class="form-control" placeholder="{{t('Name')}}">
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Email')}}:</label>
+            <label class="mb-2">{{t('Email')}}:</label>
             <input type="text"  name="email" class="form-control" placeholder="{{t('Email')}}">
         </div>
 
         <div class="col-3 mb-2">
-            <label>{{t('Type')}} :</label>
+            <label class="mb-2">{{t('Type')}} :</label>
             <select name="type" class="form-select" data-control="select2" data-allow-clear="true" data-placeholder="{{t('Select Type')}}">
                 <option></option>
                 <option value="created">{{t('Created')}}</option>
@@ -34,7 +34,7 @@
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Date Range')}} :</label>
+            <label class="mb-2">{{t('Date Range')}} :</label>
             <input autocomplete="disabled" class="form-control form-control-solid" value="" placeholder="{{t('Pick date rage')}}" id="date_range_picker"/>
             <input type="hidden" name="date_start" id="start_date_range_picker" />
             <input type="hidden" name="date_end" id="end_date_range_picker" />

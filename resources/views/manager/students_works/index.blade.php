@@ -36,19 +36,19 @@ WhatsApp +972592554320
 @section('filter')
     <div class="row">
         <div class="col-1  mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
         <div class="col-lg-3  mb-2">
-            <label>{{t('Student Name')}}:</label>
+            <label class="mb-2">{{t('Student Name')}}:</label>
             <input type="text" name="user_name" class="form-control direct-search" placeholder="{{t('Student Name')}}">
         </div>
         <div class="col-lg-3  mb-2">
-            <label>{{t('Email')}}:</label>
+            <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" name="user_email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
         <div class="col-lg-2 mb-2">
-            <label>{{t('Learning Years')}} :</label>
+            <label class="mb-2">{{t('Learning Years')}} :</label>
             <select name="year_learning" class="form-select" data-control="select2"
                     data-placeholder="{{t('Select Year')}}" data-allow-clear="true">
                 <option></option>
@@ -59,7 +59,7 @@ WhatsApp +972592554320
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Grade')}} :</label>
+            <label class="mb-2">{{t('Grade')}} :</label>
             <select name="grade_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}"
                     data-allow-clear="true">
                 <option></option>
@@ -70,7 +70,7 @@ WhatsApp +972592554320
         </div>
 
         <div class="col-3 mb-2">
-            <label class="">{{t('School')}}:</label>
+            <label class="mb-2">{{t('School')}}:</label>
             <select class="form-select" name="school_id" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select School')}}">
                 <option></option>
@@ -81,7 +81,7 @@ WhatsApp +972592554320
         </div>
 
         <div class="col-3 mb-2">
-            <label class="">{{t('Teacher')}}:</label>
+            <label class="mb-2">{{t('Teacher')}}:</label>
             <select class="form-select" name="teacher_id" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Teacher')}}">
                 <option></option>
@@ -89,7 +89,7 @@ WhatsApp +972592554320
         </div>
 
         <div class="col-3 mb-2">
-            <label class="">{{t('Section')}}:</label>
+            <label class="mb-2">{{t('Section')}}:</label>
             <select class="form-select" name="section" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Section')}}">
                 <option></option>
@@ -101,7 +101,7 @@ WhatsApp +972592554320
 
 
         <div class="col-3 mb-2">
-            <label class="">{{t('Activation')}}:</label>
+            <label class="mb-2">{{t('Activation')}}:</label>
             <select class="form-select" name="user_status" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Status')}}">
                 <option></option>
@@ -111,7 +111,7 @@ WhatsApp +972592554320
         </div>
 
         <div class="col-3 mb-2">
-            <label class="">{{t('Status')}}:</label>
+            <label class="mb-2">{{t('Status')}}:</label>
             <select class="form-select" name="status" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Status')}}">
                 <option></option>
@@ -123,7 +123,7 @@ WhatsApp +972592554320
 
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Lesson')}} :</label>
+            <label class="mb-2">{{t('Lesson')}} :</label>
             <select name="lesson_id" id="lesson_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Lesson')}}" data-allow-clear="true">
                 <option></option>
 

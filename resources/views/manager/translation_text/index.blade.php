@@ -49,7 +49,7 @@
                                             @if(is_array($translations))
                                                 @foreach($translations as $t_key => $v_key)
                                                     <div class="col-lg-4 mt-4 trans-div">
-                                                        <label>{{$t_key}}:</label>
+                                                        <label class="mb-2">{{$t_key}}:</label>
                                                         <textarea name="{{$t_key}}"
                                                                   class="form-control">{{$v_key}}</textarea>
                                                     </div>

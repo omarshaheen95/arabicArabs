@@ -14,7 +14,7 @@
             {{csrf_field()}}
             <div class="row kt-margin-b-20">
                 <div class="col-lg-12 mb-2">
-                    <label>{{t('Grade')}} :</label>
+                    <label class="mb-2">{{t('Grade')}} :</label>
                     <select id="grades" name="grades[]" class="form-select grade" data-control="select2" data-placeholder="{{t('Select Grade')}}"
                             data-allow-clear="true" multiple>
                         <option value="all" >{{t('All')}}</option>
@@ -24,7 +24,7 @@
                     </select>
                 </div>
                 <div class="col-lg-4 mb-2">
-                    <label>{{t('Select date')}} :</label>
+                    <label class="mb-2">{{t('Select date')}} :</label>
                     <input autocomplete="disabled" class="form-control form-control-solid" id="date_range" name="date_range" value="" placeholder="{{t('Pick date range')}}" />
                     <input type="hidden" name="start_date" id="start_date_range" />
                     <input type="hidden" name="end_date" id="end_date_range" />

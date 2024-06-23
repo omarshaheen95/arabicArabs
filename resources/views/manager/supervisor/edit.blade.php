@@ -93,7 +93,7 @@
 
                 <div class="col-6 mb-2">
                     <div class="form-group">
-                        <label>{{t('School')}} :</label>
+                        <label class="mb-2">{{t('School')}} :</label>
                         <select name="school_id" class="form-select" data-control="select2" data-placeholder="{{t('Select School')}}" data-allow-clear="true">
                             <option></option>
                             @foreach($schools as $school)
@@ -105,7 +105,7 @@
 
                 <div class="col-12 mb-2">
                     <div class="form-group">
-                        <label>{{t('Teachers')}} :</label>
+                        <label class="mb-2">{{t('Teachers')}} :</label>
                         <select name="teachers[]" class="form-select" data-control="select2" data-placeholder="{{t('Select Teachers')}}" data-allow-clear="true" multiple>
                             <option></option>
                             @foreach($teachers as $teacher)

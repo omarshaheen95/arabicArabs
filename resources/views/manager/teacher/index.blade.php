@@ -35,27 +35,27 @@
 @section('filter')
     <div class="row">
         <div class="col-1 mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
         <div class="col-3 mb-2">
-            <label>{{t('Name')}}:</label>
+            <label class="mb-2">{{t('Name')}}:</label>
             <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
         </div>
 
         <div class="col-3 mb-2">
-            <label>{{t('Email')}}:</label>
+            <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
 
         <div class="col-2 mb-2">
-            <label>{{t('Mobile')}}:</label>
+            <label class="mb-2">{{t('Mobile')}}:</label>
             <input type="text" name="mobile" class="form-control" placeholder="{{t('Mobile')}}">
         </div>
 
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('School')}} :</label>
+            <label class="mb-2">{{t('School')}} :</label>
             <select name="school_id" class="form-select" data-control="select2" data-placeholder="{{t('Select School')}}" data-allow-clear="true">
                 <option></option>
                 @foreach($schools as $school)
@@ -65,7 +65,7 @@
         </div>
 
         <div class="col-lg-2 mb-2">
-            <label>{{t('Students')}} :</label>
+            <label class="mb-2">{{t('Students')}} :</label>
             <select name="student_status" id="student_status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Has students')}}</option>
@@ -75,7 +75,7 @@
             </select>
         </div>
         <div class="col-lg-2 mb-2">
-            <label>{{t('Approval')}} :</label>
+            <label class="mb-2">{{t('Approval')}} :</label>
             <select name="approved" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Approved')}}</option>
@@ -83,7 +83,7 @@
             </select>
         </div>
         <div class="col-lg-2 mb-2">
-            <label>{{t('Activation')}} :</label>
+            <label class="mb-2">{{t('Activation')}} :</label>
             <select name="active" id="status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Active')}}</option>
@@ -91,13 +91,13 @@
             </select>
         </div>
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-            <label>{{ t('Activation Date') }}:</label>
+            <label class="mb-2">{{ t('Activation Date') }}:</label>
             <input id="active_to" class="form-control " placeholder="{{t('Select Activation Date')}}">
             <input type="hidden" id="start_active_to" name="start_active_to" value="">
             <input type="hidden" id="end_active_to" name="end_active_to" value="">
         </div>
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-            <label>{{ t('Login Date') }}:</label>
+            <label class="mb-2">{{ t('Login Date') }}:</label>
             <input id="login_at" class="form-control " placeholder="{{t('Select Login Date')}}">
             <input type="hidden" id="start_login_at" name="start_login_at" value="">
             <input type="hidden" id="end_login_at" name="end_login_at" value="">
@@ -146,7 +146,7 @@
                 <div class="modal-body d-flex flex-column">
                    <form id="activation_form">
                        <div class="mb-2">
-                           <label>{{t('Approved Status')}} :</label>
+                           <label class="mb-2">{{t('Approved Status')}} :</label>
                            <select name="approved" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                                <option></option>
                                <option value="1">{{t('Approved')}}</option>
@@ -154,7 +154,7 @@
                            </select>
                        </div>
                        <div class="mb-2">
-                           <label>{{t('Activation Status')}} :</label>
+                           <label class="mb-2">{{t('Activation Status')}} :</label>
                            <select name="active" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                                <option></option>
                                <option value="1">{{t('Activate')}}</option>
@@ -163,7 +163,7 @@
                        </div>
 
                        <div class="mb-2">
-                           <label>{{t('Active To')}} :</label>
+                           <label class="mb-2">{{t('Active To')}} :</label>
                            <input class="form-control form-control-solid" id="active_to_date" name="active_to" value="" placeholder="{{t('Active to')}}"/>
                        </div>
                    </form>
@@ -193,7 +193,7 @@
                 <div class="modal-body d-flex flex-column">
                    <form id="delete_students_form">
                        <div class="mb-2">
-                           <label>{{t('Students Type')}} :</label>
+                           <label class="mb-2">{{t('Students Type')}} :</label>
                            <select name="type" class="form-select" data-control="select2" data-placeholder="{{t('Select Type')}}" data-allow-clear="true">
                                <option></option>
                                <option value="1">{{t('All')}}</option>

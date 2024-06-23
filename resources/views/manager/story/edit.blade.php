@@ -127,7 +127,7 @@ WhatsApp +972592554320
 
                 <div class="col-6">
                     <div class="d-flex">
-                        <label>{{t('Video')}} :</label>
+                        <label class="mb-2">{{t('Video')}} :</label>
                         @if(isset($story) && $story->video)
                             <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
                                 <a data-type="video" class="btn btn-icon btn-danger deleteFile" style="height: 20px; width: 20px">
@@ -145,7 +145,7 @@ WhatsApp +972592554320
 
                 <div class="col-6">
                     <div class="d-flex">
-                        <label>{{t('Alternative video')}} :</label>
+                        <label class="mb-2">{{t('Alternative video')}} :</label>
                         @if(isset($story) && $story->alternative_video)
                             <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
                                 <a data-type="alternative_video" class="btn btn-icon btn-danger deleteFile" style="height: 20px; width: 20px">

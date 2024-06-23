@@ -19,26 +19,26 @@
     <div class="row">
         <input type="hidden" name="supervisor_id" value="{{Auth::user()->id}}">
         <div class="col-1 mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
         <div class="col-3 mb-2">
-            <label>{{t('Name')}}:</label>
+            <label class="mb-2">{{t('Name')}}:</label>
             <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}">
         </div>
 
         <div class="col-3 mb-2">
-            <label>{{t('Email')}}:</label>
+            <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
 
         <div class="col-2 mb-2">
-            <label>{{t('Mobile')}}:</label>
+            <label class="mb-2">{{t('Mobile')}}:</label>
             <input type="text" name="mobile" class="form-control" placeholder="{{t('Mobile')}}">
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Students')}} :</label>
+            <label class="mb-2">{{t('Students')}} :</label>
             <select name="student_status" id="student_status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Has students')}}</option>
@@ -48,7 +48,7 @@
             </select>
         </div>
         <div class="col-lg-2 mb-2">
-            <label>{{t('Approval')}} :</label>
+            <label class="mb-2">{{t('Approval')}} :</label>
             <select name="approved" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Approved')}}</option>
@@ -56,7 +56,7 @@
             </select>
         </div>
         <div class="col-lg-2 mb-2">
-            <label>{{t('Activation')}} :</label>
+            <label class="mb-2">{{t('Activation')}} :</label>
             <select name="active" id="status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="1">{{t('Active')}}</option>
@@ -64,13 +64,13 @@
             </select>
         </div>
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-            <label>{{ t('Activation Date') }}:</label>
+            <label class="mb-2">{{ t('Activation Date') }}:</label>
             <input id="active_to" class="form-control " placeholder="{{t('Select Activation Date')}}">
             <input type="hidden" id="start_active_to" name="start_active_to" value="">
             <input type="hidden" id="end_active_to" name="end_active_to" value="">
         </div>
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-            <label>{{ t('Login Date') }}:</label>
+            <label class="mb-2">{{ t('Login Date') }}:</label>
             <input id="login_at" class="form-control " placeholder="{{t('Select Login Date')}}">
             <input type="hidden" id="start_login_at" name="start_login_at" value="">
             <input type="hidden" id="end_login_at" name="end_login_at" value="">

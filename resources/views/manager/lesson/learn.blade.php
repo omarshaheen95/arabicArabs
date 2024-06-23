@@ -333,7 +333,7 @@
                     y++; //Increment field counter.
                     $(wrapper_row).append(
                         "<div class=\"col-lg-4 mt-3\">\n" +
-                        "<label>{{t('Video')}}  " + y + " : <a href='#' class='text-danger delete_input'>{{t('Delete')}}</a></label>\n" +
+                        "<label class="mb-2">{{t('Video')}}  " + y + " : <a href='#' class='text-danger delete_input'>{{t('Delete')}}</a></label>\n" +
                         "<input required class=\"form-control\" name=\"videos[]\" type=\"file\">\n"
                     ); //Add field html
                 }

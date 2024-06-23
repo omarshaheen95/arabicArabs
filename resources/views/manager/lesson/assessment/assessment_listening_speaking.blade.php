@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-lg-2">
                                 <div class="d-flex">
-                                    <label>{{t('Attachment')}} :</label>
+                                    <label class="mb-2">{{t('Attachment')}} :</label>
                                     @if($question->getFirstMediaUrl('imageQuestion'))
                                         <div class="ms-auto d-flex flex-row align-items-center gap-1 pb-1">
                                             <a data-id="{{$question->id}}" class="btn btn-icon btn-danger deleteRecord" style="height: 20px; width: 20px">
@@ -128,7 +128,7 @@
                             </div>
                             <div class="col-lg-2">
                                 <div class="d-flex">
-                                    <label>{{t('Attachment')}} :</label>
+                                    <label class="mb-2">{{t('Attachment')}} :</label>
                                 </div>
                                 <input type="file" name="attachment[{{$i}}]" class="form-control">
                             </div>
@@ -242,15 +242,15 @@
                             $(wrapper_row).append(
                                 "<div class=\"form-group row\">\n" +
                                 "<div class=\"col-8\">\n" +
-                                "<label>{{t('Q')}} " + y + ": </label></label>\n" +
+                                "<label class="mb-2">{{t('Q')}} " + y + ": </label></label>\n" +
                                 "<input required type='text' class=\"form-control\" name=\"questions[" + y + "]\">" +
                                 "</div>\n" +
                                 "<div class=\"col-1\">\n" +
-                                "<label>{{t('Mark')}} :</label>\n" +
+                                "<label class="mb-2">{{t('Mark')}} :</label>\n" +
                                 "<input type=\"number\" required name=\"mark[" + y + "]\" class=\"form-control\">\n" +
                                 "</div>\n" +
                                 "<div class=\"col-2\">\n" +
-                                "<label>{{t('Attachment')}} :</label>\n" +
+                                "<label class="mb-2">{{t('Attachment')}} :</label>\n" +
                                 "<input type=\"file\" name=\"attachment[" + y + "]\" class=\"form-control\">\n" +
                                 "</div>\n" +
                                 "<div class=\"col-1 d-flex align-items-center mt-3\">" +

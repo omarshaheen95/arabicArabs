@@ -21,24 +21,24 @@
 @section('filter')
     <div class="row">
         <div class="col-1  mb-2">
-            <label>{{t('ID')}}:</label>
+            <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
         <div class="col-2 mb-2">
-            <label>{{t('Student ID')}}:</label>
+            <label class="mb-2">{{t('Student ID')}}:</label>
             <input type="text" name="user_id" class="form-control direct-search" placeholder="{{t('Student ID')}}">
         </div>
         <div class="col-3 mb-2">
-            <label>{{t('Student Name')}}:</label>
+            <label class="mb-2">{{t('Student Name')}}:</label>
             <input type="text" name="user_name" class="form-control direct-search" placeholder="{{t('Student Name')}}">
         </div>
         <div class="col-lg-3  mb-2">
-            <label>{{t('Student Email')}}:</label>
+            <label class="mb-2">{{t('Student Email')}}:</label>
             <input type="text" name="user_email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
 
         <div class="col-3 mb-2">
-            <label class="">{{t('Section')}}:</label>
+            <label class="mb-2">{{t('Section')}}:</label>
             <select class="form-select" name="section" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Section')}}">
                 <option></option>
@@ -48,7 +48,7 @@
             </select>
         </div>
         <div class="col-3 mb-2">
-            <label class="">{{t('Activation')}}:</label>
+            <label class="mb-2">{{t('Activation')}}:</label>
             <select class="form-select" name="user_status" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Status')}}">
                 <option></option>
@@ -57,7 +57,7 @@
             </select>
         </div>
         <div class="col-lg-3 mb-2">
-            <label>{{t('Grade')}} :</label>
+            <label class="mb-2">{{t('Grade')}} :</label>
             <select name="grade_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}"
                     data-allow-clear="true">
                 <option></option>
@@ -69,14 +69,14 @@
 
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Lesson')}} :</label>
+            <label class="mb-2">{{t('Lesson')}} :</label>
             <select  name="lesson_id" id="lesson_id" class="form-select" data-control="select2" data-placeholder="{{t('Select Lesson')}}" data-allow-clear="true">
                 <option></option>
             </select>
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Status')}} :</label>
+            <label class="mb-2">{{t('Status')}} :</label>
             <select name="status" id="status" class="form-select" data-control="select2" data-placeholder="{{t('Select Status')}}" data-allow-clear="true">
                 <option></option>
                 <option value="Pass">{{t('Pass')}}</option>
@@ -85,7 +85,7 @@
         </div>
 
         <div class="col-lg-3 mb-2">
-            <label>{{t('Submitted Date')}} :</label>
+            <label class="mb-2">{{t('Submitted Date')}} :</label>
             <input autocomplete="disabled" class="form-control form-control-solid" name="date_range" value="" placeholder="{{t('Pick date range')}}" id="date_range"/>
             <input type="hidden" name="start_date" id="start_date_range" />
             <input type="hidden" name="end_date" id="end_date_range" />

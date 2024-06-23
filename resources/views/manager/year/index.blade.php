@@ -32,7 +32,7 @@
 
 @section('filter')
     <div class="col-lg-3 mb-lg-0 mb-6">
-        <label>{{t('Name')}}:</label>
+        <label class="mb-2">{{t('Name')}}:</label>
         <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Name')}}"
                data-col-index="0"/>
     </div>

@@ -18,14 +18,14 @@
             @endisset
             <div class="form-group row">
                 <div class="col-lg-6">
-                    <label>{{t('Name')}} : </label>
+                    <label class="mb-2">{{t('Name')}} : </label>
                     <input name="name" type="text" placeholder="{{t('Name')}}"
                            class="form-control"
                            value="{{ \Illuminate\Support\Facades\Auth::user()->name }}"
                     />
                 </div>
                 <div class="col-lg-6">
-                    <label>{{t('Email')}} :</label>
+                    <label class="mb-2">{{t('Email')}} :</label>
                     <input name="email" type="text" placeholder="{{t('Email')}}"
                            class="form-control"
                            value="{{ \Illuminate\Support\Facades\Auth::user()->email }}"/>

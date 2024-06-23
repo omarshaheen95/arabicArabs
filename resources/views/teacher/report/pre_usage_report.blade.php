@@ -20,7 +20,7 @@
             </div>
 
             <div class="col-12">
-                <label>{{ t('Sections') }}:</label>
+                <label class="mb-2">{{ t('Sections') }}:</label>
                 <select class="form-select sections" data-placeholder="{{t('Select sections')}}" data-control="select2" data-allow-clear="true" name="sections[]" multiple id="sections">
                     <option value="all" selected>{{t('All')}}</option>
                     @foreach(teacherSections(Auth::guard('teacher')->user()->id) as $section)
@@ -30,7 +30,7 @@
             </div>
 
             <div class="col-12">
-                <label>{{t('Date Range')}} :</label>
+                <label class="mb-2">{{t('Date Range')}} :</label>
                 <input autocomplete="disabled" class="form-control form-control-solid" name="date_range" value="" placeholder="{{t('Pick date range')}}" id="date_range"/>
                 <input type="hidden" name="start_date" id="start_date_range" />
                 <input type="hidden" name="end_date" id="end_date_range" />

@@ -23,25 +23,25 @@
                     @endisset
                 <div class="form-group row">
                     <div class="col-lg-3">
-                        <label>{{t('Name')}} : </label>
+                        <label class="mb-2">{{t('Name')}} : </label>
                         <input name="name" type="text" placeholder="{{t('Name')}}"
                                class="form-control"
                                value="{{ isset($manager) ? $manager->name : old("name") }}"
                         />
                     </div>
                     <div class="col-lg-4">
-                        <label>{{t('Email')}} :</label>
+                        <label class="mb-2">{{t('Email')}} :</label>
                         <input name="email" type="text" placeholder="{{t('Email')}}"
                                class="form-control" autocomplete="off"
                                value="{{ isset($manager) ? $manager->email : old("email") }}"/>
                     </div>
                     <div class="col-lg-3">
-                        <label>{{t('Password')}} :</label>
+                        <label class="mb-2">{{t('Password')}} :</label>
                         <input name="password" type="password" placeholder="{{t('Password')}}"
                                class="form-control"/>
                     </div>
                     <div class="col-lg-2">
-                        <label>{{t(' Status')}} :</label>
+                        <label class="mb-2">{{t(' Status')}} :</label>
 
                         <div class="form-check form-switch form-check-custom form-check-solid mt-1">
                             <input class="form-check-input" type="checkbox" value="1" id="flexSwitchDefault"
