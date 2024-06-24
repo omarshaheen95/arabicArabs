@@ -264,7 +264,7 @@
                     <form id="users_teacher_form">
                         <div class="mb-2">
                             <label class="mb-2">{{t('School')}} :</label>
-                            <select name="teacher_school_id" class="form-select" data-control="select2"
+                            <select name="teacher_school_id"  id="teacher_school_id" class="form-select" data-control="select2"
                                     data-placeholder="{{t('Select School')}}" data-allow-clear="true">
                                 <option></option>
                                 @foreach($schools as $school)
@@ -291,113 +291,7 @@
             </div>
         </div>
     </div>
-{{--    <div class="modal fade" tabindex="-1" id="users_update_grades_modal">--}}
-{{--        <div class="modal-dialog">--}}
-{{--            <div class="modal-content">--}}
-{{--                <div class="modal-header">--}}
-{{--                    <h3 class="modal-title">{{t('Users Grades')}}</h3>--}}
 
-{{--                    <!--begin::Close-->--}}
-{{--                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"--}}
-{{--                         aria-label="Close">--}}
-{{--                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>--}}
-{{--                    </div>--}}
-{{--                    <!--end::Close-->--}}
-{{--                </div>--}}
-
-{{--                <div class="modal-body d-flex flex-column">--}}
-{{--                    <form id="users_grades_form">--}}
-{{--                        <div class="mb-2">--}}
-{{--                            <label class="mb-2">{{t('Grade')}} :</label>--}}
-{{--                            <select name="grade" class="form-select" data-control="select2"--}}
-{{--                                    data-placeholder="{{t('Select Grade')}}" data-allow-clear="true">--}}
-{{--                                <option></option>--}}
-{{--                                <option value="15">{{t('KG')}}</option>--}}
-{{--                                <option value="1">{{t('Grade')}} 1 / {{t('Year')}} 2</option>--}}
-{{--                                <option value="2">{{t('Grade')}} 2 / {{t('Year')}} 3</option>--}}
-{{--                                <option value="3">{{t('Grade')}} 3 / {{t('Year')}} 4</option>--}}
-{{--                                <option value="4">{{t('Grade')}} 4 / {{t('Year')}} 5</option>--}}
-{{--                                <option value="5">{{t('Grade')}} 5 / {{t('Year')}} 6</option>--}}
-{{--                                <option value="6">{{t('Grade')}} 6 / {{t('Year')}} 7</option>--}}
-{{--                                <option value="7">{{t('Grade')}} 7 / {{t('Year')}} 8</option>--}}
-{{--                                <option value="8">{{t('Grade')}} 8 / {{t('Year')}} 9</option>--}}
-{{--                                <option value="9">{{t('Grade')}} 9 / {{t('Year')}} 10</option>--}}
-{{--                                <option value="10">{{t('Grade')}} 10 / {{t('Year')}} 11</option>--}}
-{{--                                <option value="11">{{t('Grade')}} 11 / {{t('Year')}} 12</option>--}}
-{{--                                <option value="12">{{t('Grade')}} 12 / {{t('Year')}} 13</option>--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                        <div class="mb-2">--}}
-{{--                            <label class="mb-2">{{t('Alternative Grade')}} :</label>--}}
-{{--                            <select name="alternate_grade" class="form-select" data-control="select2"--}}
-{{--                                    data-placeholder="{{t('Select Alternative Grade')}}" data-allow-clear="true">--}}
-{{--                                <option></option>--}}
-{{--                                <option value="15">{{t('KG')}}</option>--}}
-{{--                                <option value="1">{{t('Grade')}} 1 / {{t('Year')}} 2</option>--}}
-{{--                                <option value="2">{{t('Grade')}} 2 / {{t('Year')}} 3</option>--}}
-{{--                                <option value="3">{{t('Grade')}} 3 / {{t('Year')}} 4</option>--}}
-{{--                                <option value="4">{{t('Grade')}} 4 / {{t('Year')}} 5</option>--}}
-{{--                                <option value="5">{{t('Grade')}} 5 / {{t('Year')}} 6</option>--}}
-{{--                                <option value="6">{{t('Grade')}} 6 / {{t('Year')}} 7</option>--}}
-{{--                                <option value="7">{{t('Grade')}} 7 / {{t('Year')}} 8</option>--}}
-{{--                                <option value="8">{{t('Grade')}} 8 / {{t('Year')}} 9</option>--}}
-{{--                                <option value="9">{{t('Grade')}} 9 / {{t('Year')}} 10</option>--}}
-{{--                                <option value="10">{{t('Grade')}} 10 / {{t('Year')}} 11</option>--}}
-{{--                                <option value="11">{{t('Grade')}} 11 / {{t('Year')}} 12</option>--}}
-{{--                                <option value="12">{{t('Grade')}} 12 / {{t('Year')}} 13</option>--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                        <div class="mb-2">--}}
-{{--                            <label class="mb-2">{{t('Learning Years')}} :</label>--}}
-{{--                            <select name="learning_years" class="form-select" data-control="select2"--}}
-{{--                                    data-placeholder="{{t('Select Years')}}" data-allow-clear="true">--}}
-{{--                                <option></option>--}}
-{{--                                <option value="0">-</option>--}}
-{{--                                <option value="1">1</option>--}}
-{{--                                <option value="2">2</option>--}}
-{{--                                <option value="3">3</option>--}}
-{{--                                <option value="4">4</option>--}}
-{{--                                <option value="5">5</option>--}}
-{{--                                <option value="6">6</option>--}}
-{{--                                <option value="7">7</option>--}}
-{{--                                <option value="8">8</option>--}}
-{{--                                <option value="9">9</option>--}}
-{{--                                <option value="10">10</option>--}}
-{{--                                <option value="11">11</option>--}}
-{{--                                <option value="12">12</option>--}}
-{{--                                <option value="13">13</option>--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                        <div class="mb-2">--}}
-{{--                            <label class="mb-2">{{t('Assigned Year')}} :</label>--}}
-{{--                            <select name="assigned_year_id" class="form-select" data-control="select2"--}}
-{{--                                    data-placeholder="{{t('Select Year')}}" data-allow-clear="true">--}}
-{{--                                <option></option>--}}
-{{--                               @foreach($years as $year)--}}
-{{--                                   <option value="{{$year->id}}">{{$year->name}}</option>--}}
-{{--                               @endforeach--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                        <div class="mb-2">--}}
-{{--                            <label class="mb-2">{{t('Archived Status')}} :</label>--}}
-{{--                            <select name="archived" class="form-select" data-control="select2"--}}
-{{--                                    data-placeholder="{{t('Select Status')}}" data-allow-clear="true">--}}
-{{--                                <option></option>--}}
-{{--                                <option value="1">{{t('Archived')}}</option>--}}
-{{--                                <option value="2">{{t('Not Archived')}}</option>--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                    </form>--}}
-
-{{--                </div>--}}
-
-{{--                <div class="modal-footer">--}}
-{{--                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{t('Close')}}</button>--}}
-{{--                    <button type="button" class="btn btn-primary" id="btn_users_update_grades">{{t('Save')}}</button>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
 @endsection
 
 
@@ -441,6 +335,13 @@
             })
         }
         @endcan
+
+        $('.modal').on('shown.bs.modal', function() {
+            let parent = $(this)
+            $('.form-select').select2({
+                dropdownParent: parent
+            }).focus();
+        });
     </script>
 
     <script src="{{asset('assets_v1/js/datatable.js')}}?v={{time()}}"></script>
