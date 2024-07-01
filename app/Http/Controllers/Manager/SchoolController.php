@@ -45,7 +45,7 @@ class SchoolController extends Controller
                     return $row->name;
                 })
                 ->addColumn('last_login', function ($row){
-                    return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString():'';
+                    return $row->login_sessions->count() ? Carbon::parse($row->login_sessions->first()->created_at)->toDateTimeString() : '-';
                 })
                 ->addColumn('active', function ($row) {
                     return $row->active ? '<span class="badge badge-primary">'.t('Active').'</span>' : '<span class="badge badge-warning">'.t('Inactive').'</span>';

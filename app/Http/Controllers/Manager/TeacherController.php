@@ -47,7 +47,7 @@ class TeacherController extends Controller
                     return Carbon::parse($row->created_at)->toDateString();
                 })
                 ->addColumn('last_login', function ($row) {
-                    return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
+                    return $row->login_sessions->count() ? Carbon::parse($row->login_sessions->first()->created_at)->toDateTimeString() : '-';
                 })
                 ->addColumn('teacher', function ($row) {
                     return '<div class="d-flex flex-column">' .
@@ -75,7 +75,7 @@ class TeacherController extends Controller
                     return $row->active_to ? Carbon::parse($row->active_to)->toDateString() : '-';
                 })
                 ->addColumn('last_login', function ($row) {
-                    return $row->last_login ? Carbon::parse($row->last_login)->format('Y-m-d H:i') : '';
+                    return $row->login_sessions->count() ? Carbon::parse($row->login_sessions->first()->created_at)->toDateTimeString() : '-';
                 })
                 ->make();
         }

@@ -36,7 +36,7 @@ class SupervisorController extends Controller
                     return Carbon::parse($row->created_at)->toDateString();
                 })
                 ->addColumn('last_login', function ($row) {
-                    return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
+                    return $row->login_sessions->count() ? Carbon::parse($row->login_sessions->first()->created_at)->toDateTimeString() : '-';
                 })
                 ->addColumn('supervisor_data', function ($row){
                     return '<div class="d-flex flex-column">'.

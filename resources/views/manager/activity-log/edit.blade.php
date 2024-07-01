@@ -84,16 +84,16 @@
             </tr>
 
             <tr class="text-center">
-                <th scope="col" style="background-color: #ffd376">{{t('Column Name')}}</th>
-                <th scope="col" style="background-color: #d1e1ff">{{t('Old Data')}}</th>
+                <th scope="col" style="background-color: #d1e1ff">{{t('Column Name')}}</th>
+                <th scope="col" style="background-color: #ffd376">{{t('Old Data')}}</th>
                 <th scope="col" style="background-color: #beffd9">{{t('New Data')}}</th>
             </tr>
             </thead>
             <tbody>
             @foreach($new as $key=>$value)
                 <tr class="text-center">
-                    <th scope="row" style="background-color: #ffd376">{{$key}}</th>
-                    <td style="background-color: #d1e1ff">
+                    <th scope="row" style="background-color: #d1e1ff">{{$key}}</th>
+                    <td style="background-color: #ffd376">
                          <span class="text-overflow-dynamic-container">
                              <span class="text-overflow-dynamic-ellipsis" >
                                 @if(isset($old[$key]) && is_array($old[$key]))
