@@ -60,9 +60,9 @@ class ActivityLogController extends Controller
         //dd($log_obj);
 //        $new = json_encode($log_obj->attributes ?? '{No Data}');
 //        $old = json_encode($log_obj->old ?? '{No Data}');
-//
-        $new = collect($log_obj->attributes)->toArray();
-        $old = collect($log_obj->old)->toArray();
+
+        $new = (array)$log_obj->attributes;
+        $old = (array)$log_obj->old;
         return view('manager.activity-log.edit',compact('new','old', 'activity'));
     }
     public function destroy(Request $request)
