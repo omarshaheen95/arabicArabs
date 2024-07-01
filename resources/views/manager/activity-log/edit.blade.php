@@ -96,7 +96,11 @@
                     <td style="background-color: #d1e1ff">
                          <span class="text-overflow-dynamic-container">
                              <span class="text-overflow-dynamic-ellipsis" >
-                                {{$old[$key]}}
+                                @if(is_array($old[$key]))
+                                    {{json_encode($old[$key])}}
+                                 @else
+                                    {{$old[$key]}}
+                                @endif
                              </span>
                           </span>
                         </td>

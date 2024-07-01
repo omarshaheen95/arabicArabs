@@ -32,11 +32,13 @@ class ManagerController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $rows = Manager::query()->filter()->latest();
+            $rows = Manager::query()->with(['login_sessions' => function ($query) {
+                $query->latest()->limit(1);
+            }])->filter()->latest();
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('last_login', function ($row) {
-                    return $row->last_login ? Carbon::parse($row->last_login)->toDateTimeString() : '';
+                    return $row->login_sessions->count() ? Carbon::parse($row->login_sessions->first()->created_at)->toDateTimeString() : '-';
                 })
                 ->addColumn('active', function ($row) {
                     return $row->active ? '<div class="badge badge-primary">'.t('Active').'</div>' : '<div class="badge badge-warning">'.t('Non-Active').'</div>';

@@ -63,6 +63,7 @@ class ActivityLogController extends Controller
 
         $new = (array)$log_obj->attributes;
         $old = (array)$log_obj->old;
+//        dd($new,$old);
         return view('manager.activity-log.edit',compact('new','old', 'activity'));
     }
     public function destroy(Request $request)

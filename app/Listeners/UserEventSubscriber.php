@@ -13,10 +13,10 @@ class UserEventSubscriber
      * Handle user login events.
      */
     public function handleUserLogin($event) {
-        $event->user->update([
-            'last_login' => Carbon::now(),
-            'last_login_info' => 'IP : '.Request::ip() .'-'.request()->get('browserInfo', $event->user->last_login_info),
-        ]);
+//        $event->user->update([
+//            'last_login' => Carbon::now(),
+//            'last_login_info' => 'IP : '.Request::ip() .'-'.request()->get('browserInfo', $event->user->last_login_info),
+//        ]);
         $event->user->login_sessions()->create([
             'model_id'=>$event->user->id,
             'model_type'=>$event->user,

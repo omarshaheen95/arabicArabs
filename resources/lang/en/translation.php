@@ -720,4 +720,11 @@ return
  	'WritingResult' => 'WritingResult',
  	'Causer ID' => 'Causer ID',
  	'Subject ID' => 'Subject ID',
+
+ 	'System' => 'System',
+ 	'motivational certificate' => 'motivational certificate',
+ 	'show motivational certificate' => 'show motivational certificate',
+ 	'delete motivational certificate' => 'delete motivational certificate',
+ 	'add motivational certificate' => 'add motivational certificate',
+ 	'export motivational certificate' => 'export motivational certificate',
 ];
