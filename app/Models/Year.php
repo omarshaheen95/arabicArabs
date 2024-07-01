@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,15 +12,12 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Year extends Model
 {
-    use SoftDeletes,LogsActivity;
+    use SoftDeletes,LogsActivityTrait;
 
     protected $fillable = [
         'name' , 'slug','default'
     ];
 
-    protected static $logAttributes = ['name', 'slug', 'default'];
-    protected static $logOnlyDirty = true;
-    protected static $submitEmptyLogs = false;
     public function scopeFilter(Builder $query, Request $request)
     {
         return $query

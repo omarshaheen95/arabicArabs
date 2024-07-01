@@ -28,6 +28,21 @@ class Activity extends Model implements ActivityContract
 
     }
 
+    public function getClickableSubjectTypeAttribute()
+    {
+        $subject_name = class_basename($this->subject_type);
+        $subject_id = class_basename($this->subject_id);
+        $subject_name_sm  =strtolower($subject_name);
+        $route = '#';
+
+        if (in_array($subject_name,['Manager','Supervisor','User','School','Teacher','Lesson','Story'])){
+            $route = route('manager.'.$subject_name_sm.'.edit',$this->subject_id);
+        }
+
+        return '<a href="'.$route. '" target="blank" style="color:#332f27;">' .$subject_name.'</a>';
+
+    }
+
     //get action route according type of activity and subject
     public function getActionRouteAttribute()
     {
@@ -37,22 +52,13 @@ class Activity extends Model implements ActivityContract
                 return route('manager.manager.edit', $this->subject_id);
             }elseif (class_basename($this->subject_type) == 'School') {
                 return route('manager.school.edit', $this->subject_id);
-            }elseif (class_basename($this->subject_type) == 'Inspection') {
-                return route('manager.inspection.edit', $this->subject_id);
-            }elseif (class_basename($this->subject_type) == 'Student') {
-                return route('manager.student.edit', $this->subject_id);
+            }elseif (class_basename($this->subject_type) == 'Supervisor') {
+                return route('manager.supervisor.edit', $this->subject_id);
+            }elseif (class_basename($this->subject_type) == 'User') {
+                return route('manager.user.edit', $this->subject_id);
             }elseif (class_basename($this->subject_type) == 'Year') {
                 return route('manager.year.edit', $this->subject_id);
-            }elseif (class_basename($this->subject_type) == 'Level') {
-                return route('manager.level.edit', $this->subject_id);
-            }elseif (class_basename($this->subject_type)  == 'Term') {
-                return route('manager.term.edit', $this->subject_id);
-            }elseif (class_basename($this->subject_type) == 'StudentTerm') {
-                return route('manager.student_term.show', $this->subject_id);
             }
-//            elseif (class_basename($this->subject_type) == 'MarkingRequest') {
-//                return route('manager.marking_requests.edit', $this->subject_id);
-//            }
             else {
                 return null;
             }
@@ -134,13 +140,14 @@ public function __construct(array $attributes = [])
     {
         $request = \request();
         return $query
-            ->when($value = $request->get('causedByManager', false), function (Builder $query) use ($value) {
-                $query->where('causer_type', Manager::class)
-                    ->where('causer_id', $value);
-            })
-            ->when($value = $request->get('causedBySchool', false), function (Builder $query) use ($value) {
-                $query->where('causer_type', School::class)
-                    ->where('causer_id', $value);
+            ->when($value = $request->get('causer_type', false), function (Builder $query) use ($value) {
+                $query->where('causer_type', $value);
+            })->when($value = $request->get('causer_id', false), function (Builder $query) use ($value) {
+                $query->where('causer_id', $value);
+            })->when($value = $request->get('subject_type', false), function (Builder $query) use ($value) {
+                $query->where('subject_type', $value);
+            })->when($value = $request->get('subject_id', false), function (Builder $query) use ($value) {
+                $query->where('subject_id', $value);
             })
             ->when($value = $request->get('email', false), function (Builder $query) use ($value) {
             $query->where(function (Builder $query) use ($value){

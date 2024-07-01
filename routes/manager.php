@@ -216,42 +216,6 @@ Route::group(['namespace' => 'Manager'], function(){
 
     //old
 
-
-
-
-
-
-//    Route::get('getTeacherBySchool/{lid}', 'TeacherController@getTeacherBySchool')->name('getTeacherBySchool');
-//    Route::get('school-login/{id}', 'SchoolController@schoolLogin')->name('school.login');
-
-    //OLD LESSON ROUTES
-//    Route::get('lesson/{id}/learn', [LessonController::class,'lessonLearn'])->name('lesson.learn');
-//    Route::get('lesson/{id}/review/{step}', [LessonController::class,'lessonReview'])->name('lesson.review');
-//    Route::post('lesson/{id}/learn', [LessonController::class,'updateLessonLearn'])->name('lesson.update_learn');
-//    Route::post('lesson/{id}/remove_lesson_audio', [LessonController::class,'deleteLessonAudio'])->name('lesson.remove_lesson_audio');
-//    Route::post('lesson/{video_id}/remove_video_attachment', [LessonController::class,'deleteLessonVideo'])->name('lesson.remove_video_attachment');
-//
-//    Route::get('lesson/{id}/training', [TrainingController::class,'lessonTraining'])->name('lesson.training');
-//    Route::post('lesson/{id}/training/{type}', [TrainingController::class,'updateLessonTraining'])->name('lesson.update_training');
-//    Route::post('lesson/{id}/remove_t_question_attachment', [TrainingController::class,'deleteTQuestionAttachment'])->name('lesson.remove_t_question_attachment');
-//    Route::post('lesson/{id}/remove_t_match_image', [TrainingController::class,'deleteTMatchImage'])->name('lesson.remove_t_match_image');
-//    Route::post('lesson/{id}/remove_t_sort_word', [TrainingController::class,'removeTSortWord'])->name('lesson.remove_t_sort_word');
-//
-//    Route::get('lesson/{id}/assessment', [AssessmentController::class,'lessonAssessment'])->name('lesson.assessment');
-//    Route::post('lesson/{id}/assessment/{type}', [AssessmentController::class,'updateLessonAssessment'])->name('lesson.update_assessment');
-//    Route::post('lesson/{id}/remove_a_question_attachment', [AssessmentController::class,'deleteAQuestionAttachment'])->name('lesson.remove_a_question_attachment');
-//    Route::post('lesson/{id}/remove_a_match_image', [AssessmentController::class,'deleteAMatchImage'])->name('lesson.remove_a_match_image');
-//    Route::post('lesson/{id}/remove_a_sort_word', [AssessmentController::class,'removeASortWord'])->name('lesson.remove_a_sort_word');
-//
-//    Route::get('wrong_audio_lessons', [LessonController::class,'getLessonsMedia'])->name('lesson.wrong_audio_lessons');
-
-//
-//    //import Teachers
-//    Route::get('teachers_import', 'SettingController@importTeachersExcelView')->name('import.teachers_import_view');
-//    Route::post('teachers_import', 'SettingController@importTeachersExcel')->name('import.teachers_import');
-//
-
-
     Route::get('get_marks', function(){
         $lesson_assessment = Lesson::query()->withSum('questions', 'mark')->has('questions')->get()->where('questions_sum_mark', '>', 100)
             ->pluck('questions_sum_mark', 'id')->toArray();

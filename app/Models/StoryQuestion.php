@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use App\Traits\Pathable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,12 +11,13 @@ use Illuminate\Support\Facades\Auth;
 
 class StoryQuestion extends Model
 {
-    use SoftDeletes, Pathable;
+    use SoftDeletes, Pathable,LogsActivityTrait;
 
     //type : '1:true&false, 2:choose, 3:match, 4:sortWords'
     protected $fillable = [
         'story_id', 'content', 'attachment', 'type', 'mark'
     ];
+    protected static $recordEvents = ['updated'];
 
     public function story()
     {

@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TrueFalseResult extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,LogsActivityTrait;
     protected $fillable = [
         'question_id', 'result', 'user_test_id'
     ];
-
+    protected static $recordEvents = ['updated'];
     public function user_test()
     {
         return $this->belongsTo(UserTest::class);

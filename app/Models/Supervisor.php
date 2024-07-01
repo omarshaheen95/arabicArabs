@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\SupervisorResetPassword;
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Supervisor extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
+    use Notifiable, SoftDeletes,LogsActivityTrait;
 
     protected $fillable = [
         'name', 'email','image', 'password', 'school_id', 'active', 'active_to', 'approved','lang','last_login','last_login_info'
@@ -21,10 +22,6 @@ class Supervisor extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected static $recordEvents = ['created', 'updated','deleted'];
-    protected static $logAttributes = ['name', 'email','image', 'password', 'school_id', 'active', 'approved'];
-    protected static $logOnlyDirty = true;
-    protected static $submitEmptyLogs = false;
     public function getActionButtonsAttribute()
     {
         $actions = [];

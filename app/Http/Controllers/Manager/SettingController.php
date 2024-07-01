@@ -29,6 +29,11 @@ use Excel;
 
 class SettingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:show settings')->only(['settings']);
+        $this->middleware('permission:edit settings')->only(['updateSettings']);
+    }
     public function home()
     {
         $title = t('Dashboard');

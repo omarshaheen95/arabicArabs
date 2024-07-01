@@ -9,17 +9,24 @@ WhatsApp +972592554320
 
 
 @section('actions')
-    <a href="{{route('manager.lesson.create')}}" class="btn btn-primary btn-elevate btn-icon-sm me-2">
-        <i class="la la-plus"></i>
-        {{t('Add Lesson')}}
-    </a>
+    @can('add lessons')
+        <a href="{{route('manager.lesson.create')}}" class="btn btn-primary btn-elevate btn-icon-sm me-2">
+            <i class="la la-plus"></i>
+            {{t('Add Lesson')}}
+        </a>
+    @endcan
+
     <div class="dropdown with-filter">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{t('Actions')}}
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#!" onclick="excelExport('{{route('manager.lesson.export')}}')">{{t('Export')}}</a></li>
-            <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
+            @can('export lessons')
+                <li><a class="dropdown-item" href="#!" onclick="excelExport('{{route('manager.lesson.export')}}')">{{t('Export')}}</a></li>
+            @endcan
+            @can('delete lessons')
+                <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
+            @endcan
         </ul>
     </div>
 

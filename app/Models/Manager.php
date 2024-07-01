@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\ManagerResetPassword;
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Manager extends Authenticatable
 {
-    use Notifiable, SoftDeletes,HasRoles, LogsActivity;
+    use Notifiable, SoftDeletes,HasRoles, LogsActivityTrait;
 
 
     protected $fillable = [
@@ -22,10 +23,7 @@ class Manager extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    protected static $recordEvents = ['created', 'updated','deleted'];
-    protected static $logAttributes = ['name', 'email', 'password', 'active'];
-    protected static $logOnlyDirty = true;
-    protected static $submitEmptyLogs = false;
+
     public function scopeFilter(Builder $query,$request = null)
     {
         if (!$request){

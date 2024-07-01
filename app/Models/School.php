@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Notifications\SchoolResetPassword;
+use App\Traits\LogActivityTrait;
+use App\Traits\LogsActivityTrait;
 use App\Traits\Pathable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,20 +17,16 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class School extends Authenticatable
 {
-    use Notifiable, SoftDeletes,LogsActivity;
+    use Notifiable, SoftDeletes,LogsActivityTrait;
+
 
     protected $fillable = [
         'name', 'email', 'password', 'website', 'mobile', 'logo', 'active','lang', 'last_login','last_login_info'
     ];
-    protected static $logOnlyDirty = true;
-    protected static $submitEmptyLogs = false;
-    protected static $logAttributes = ['*'];
-
 
     protected $hidden = [
         'password', 'remember_token',
     ];
-
     public function scopeFilter(Builder $query, $request =null): Builder
     {
         if (!$request){

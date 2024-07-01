@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Carbon\Carbon;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, SoftDeletes, Notifiable,CascadeSoftDeletes;
+    use HasApiTokens, SoftDeletes, Notifiable,CascadeSoftDeletes,LogsActivityTrait;
 
     protected $fillable = [
         'name', 'email', 'password', 'mobile', 'school_id', 'grade_id', 'alternate_grade_id', 'year_learning',

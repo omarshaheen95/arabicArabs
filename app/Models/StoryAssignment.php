@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Http\Request;
 
 class StoryAssignment extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,LogsActivityTrait;
     protected $fillable = [
         'user_id', 'story_id', 'test_assignment', 'done_test_assignment', 'completed', 'deadline', 'completed_at', 'deadline', 'completed_at'
     ];
@@ -19,7 +20,10 @@ class StoryAssignment extends Model
     {
         $actions = [];
         if (\request()->is('manager/*')) {
-            $actions = [];
+            $actions = [
+                ['key' => 'delete', 'name' => t('Delete'), 'route' => $this->id,'permission'=>'delete story assignments'],
+
+            ];
         } elseif (\request()->is('school/*')) {
             $actions = [];
         } elseif (\request()->is('teacher/*')) {

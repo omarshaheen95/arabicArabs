@@ -46,7 +46,8 @@
                                         @php
                                             if (isset($story)){
                                             $matches = $question->matches->whereNotIn('id',$question->match_results->pluck('story_match_id'));                                            }elseif(isset($lesson)){
-                                            }elseif(isset($lesson)){
+                                            }
+                                            if(isset($lesson)){
                                             $matches = $question->matches->whereNotIn('id',$question->match_results->pluck('match_id'));                                            }elseif(isset($lesson)){
                                             }
                                         @endphp

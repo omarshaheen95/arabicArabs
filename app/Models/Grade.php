@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Grade extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,LogsActivityTrait;
     protected $fillable = [
         'name', 'grade_number', 'reading', 'writing', 'listening', 'speaking', 'grammar', 'dictation', 'rhetoric', 'active', 'ordered',
     ];

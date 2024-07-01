@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use App\Traits\Pathable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 
 class StoryUserRecord extends Model
 {
-    use SoftDeletes, Pathable;
+    use SoftDeletes, Pathable,LogsActivityTrait;
     //status 'pending', 'corrected', 'returned'
     protected $fillable = [
         'user_id', 'story_id', 'record', 'mark', 'approved', 'status'

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,11 +15,12 @@ use Spatie\MediaLibrary\Models\Media;
 
 class Question extends Model implements HasMedia
 {
-    use SoftDeletes, HasMediaTrait;
+    use SoftDeletes, HasMediaTrait,LogsActivityTrait;
     //type : 1:true&false, 2:choose, 3:match, 4:sortWords, 5:writing, 6:speaking
     protected $fillable = [
         'lesson_id', 'content', 'type', 'mark',
     ];
+    protected static $recordEvents = ['updated'];
 
     public function getTypeNameAttribute()
     {

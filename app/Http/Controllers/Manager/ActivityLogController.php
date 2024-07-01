@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\Manager;
+use App\Models\School;
+use App\Models\Supervisor;
+use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -21,7 +25,8 @@ class ActivityLogController extends Controller
     {
         $title = t('Activity Log');
         if ($request->ajax()) {
-            $rows = Activity::query()->with(['causer'])->filter()->latest();
+            $rows = Activity::query()->with(['causer','subject'])->filter()->latest();
+
             return DataTables::make($rows)
                 ->escapeColumns([])
                 ->addColumn('created_at', function ($row){
@@ -44,15 +49,20 @@ class ActivityLogController extends Controller
                 })
                 ->make();
         }
-        return view('manager.activity-log.index', compact('title'));
+        $models = getAllModels();
+        $causers = ['Manager'=>Manager::class,'School'=>School::class,'Teacher'=>Teacher::class,'Supervisor'=>Supervisor::class];
+        return view('manager.activity-log.index', compact('title','models','causers'));
     }
 
     public function show($id){
         $activity = Activity::query()->find($id);
         $log_obj = \GuzzleHttp\json_decode($activity->getAttribute('properties'));
         //dd($log_obj);
-        $new = json_encode($log_obj->attributes ?? '{No Data}');
-        $old = json_encode($log_obj->old ?? '{No Data}');
+//        $new = json_encode($log_obj->attributes ?? '{No Data}');
+//        $old = json_encode($log_obj->old ?? '{No Data}');
+//
+        $new = collect($log_obj->attributes)->toArray();
+        $old = collect($log_obj->old)->toArray();
         return view('manager.activity-log.edit',compact('new','old', 'activity'));
     }
     public function destroy(Request $request)

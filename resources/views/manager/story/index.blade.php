@@ -20,11 +20,11 @@ WhatsApp +972592554320
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{t('Actions')}}
         </button>
-        @can('delete stories')
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
+            @can('delete stories')
+                <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
+            @endcan
         </ul>
-        @endcan
 
     </div>
 

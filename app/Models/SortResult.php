@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SortResult extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,LogsActivityTrait;
     protected $fillable = [
         'question_id', 'sort_word_id', 'user_test_id'
     ];
-
+    protected static $recordEvents = ['updated'];
     public function user_test()
     {
         return $this->belongsTo(UserTest::class);

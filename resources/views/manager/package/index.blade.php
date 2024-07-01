@@ -4,16 +4,21 @@
 
 
 @section('actions')
-    <a href="{{route('manager.package.create')}}" class="btn btn-primary btn-elevate btn-icon-sm me-2">
-        <i class="la la-plus"></i>
-        {{t('Add Package')}}
-    </a>
+    @can('add packages')
+        <a href="{{route('manager.package.create')}}" class="btn btn-primary btn-elevate btn-icon-sm me-2">
+            <i class="la la-plus"></i>
+            {{t('Add Package')}}
+        </a>
+    @endcan
+
     <div class="dropdown with-filter">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{t('Actions')}}
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
+            @can('delete packages')
+                <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
+            @endcan
         </ul>
     </div>
 

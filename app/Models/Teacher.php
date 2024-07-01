@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\TeacherResetPassword;
+use App\Traits\LogsActivityTrait;
 use Carbon\Carbon;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Teacher extends Authenticatable
 {
-    use Notifiable, SoftDeletes,CascadeSoftDeletes;
+    use Notifiable, SoftDeletes,CascadeSoftDeletes,LogsActivityTrait;
 
     protected $fillable = [
         'name', 'email', 'password', 'image', 'school_id', 'mobile', 'pending_tasks', 'corrected_tasks', 'returned_tasks',

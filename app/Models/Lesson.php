@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +17,7 @@ use Spatie\MediaLibrary\Models\Media;
 
 class Lesson extends Model implements HasMedia
 {
-    use SoftDeletes, HasMediaTrait, CascadeSoftDeletes;
+    use SoftDeletes, HasMediaTrait, CascadeSoftDeletes,LogsActivityTrait;
 
     //lesson type : 'reading', 'writing', 'listening', 'speaking', 'grammar', 'dictation', 'rhetoric'
     //section type : 'informative', 'literary'

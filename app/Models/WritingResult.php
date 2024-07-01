@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use App\Traits\Pathable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,11 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WritingResult extends Model
 {
-    use SoftDeletes, Pathable;
+    use SoftDeletes, Pathable,LogsActivityTrait;
     protected $fillable = [
         'user_test_id', 'question_id', 'result', 'attachment'
     ];
-
+    protected static $recordEvents = ['updated'];
     protected $pathAttribute = [
         'attachment'
     ];

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 
 class UserTest extends Model
 {
-    use SoftDeletes,CascadeSoftDeletes;
+    use SoftDeletes,CascadeSoftDeletes,LogsActivityTrait;
 
     protected $fillable = [
         'user_id', 'lesson_id', 'corrected', 'total', 'notes', 'max_time', 'approved', 'start_at', 'end_at', 'status', 'feedback_message', 'feedback_record'

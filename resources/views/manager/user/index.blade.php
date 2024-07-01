@@ -6,10 +6,13 @@
 @section('actions')
 
     <div class="dropdown with-filter">
-        <a href="{{route('manager.user.create')}}" class="btn btn-primary btn-elevate btn-icon-sm me-2">
-            <i class="la la-plus"></i>
-            {{t('Add User')}}
-        </a>
+        @can('ad users')
+            <a href="{{route('manager.user.create')}}" class="btn btn-primary btn-elevate btn-icon-sm me-2">
+                <i class="la la-plus"></i>
+                {{t('Add User')}}
+            </a>
+        @endcan
+
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{t('Actions')}}
         </button>

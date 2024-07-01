@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Http\Request;
 
 class UserAssignment extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,LogsActivityTrait;
     protected $fillable = [
         'user_id', 'lesson_id', 'tasks_assignment', 'test_assignment', 'done_tasks_assignment', 'done_test_assignment', 'completed', 'deadline', 'completed_at'
     ];

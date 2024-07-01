@@ -11,6 +11,21 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Factory;
 use RLaurindo\TelegramLogger\Services\TelegramService;
 
+function getAllModels() {
+    $modelsPath = app_path('Models');
+    $modelFiles = \Illuminate\Support\Facades\File::allFiles($modelsPath);
+    $modelNames = [];
+
+    foreach ($modelFiles as $file) {
+        $relativePath = $file->getRelativePathname();
+        $className = 'App\\Models\\' . str_replace(['/', '.php'], ['\\', ''], $relativePath);
+        if (class_exists($className)) {
+            $modelNames[] = $className;
+        }
+    }
+
+    return $modelNames;
+}
 function schoolSections($school = false)
 {
     $sections = \App\Models\User::query()

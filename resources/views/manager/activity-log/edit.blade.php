@@ -13,28 +13,106 @@
         {{t('Show Activity Log')}}
     </li>
 @endpush
-
+@section('style')
+    <style>
+        .text-overflow-dynamic-container {
+            position: relative;
+            max-width: 100%;
+            padding: 0 !important;
+            display: -webkit-flex;
+            display: -moz-flex;
+            display: flex;
+            vertical-align: text-bottom !important;
+        }
+        .text-overflow-dynamic-ellipsis {
+            position: absolute;
+            white-space: nowrap;
+            overflow-y: visible;
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+            -ms-text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            max-width: 100%;
+            min-width: 0;
+            width:100%;
+            top: 0;
+            left: 0;
+        }
+        .text-overflow-dynamic-container:after,
+        .text-overflow-dynamic-ellipsis:after {
+            content: '-';
+            display: inline;
+            visibility: hidden;
+            width: 0;
+        }
+    </style>
+@endsection
 @section('content')
-    <div class="row">
-        <div class="col-6 fs-5">
-            <h6>{{t('Causer')}} : <label class="text-primary">{{ optional($activity->causer)->name}}</label></h6>
-        </div>
-        <div class="col-6 fs-5">
-            <h6>{{t('Action Date')}} : <label class="text-primary">{{$activity->created_at}}</label></h6>
-        </div>
-        <div class="col-12 fs-5">
-            <h6>{{t('New')}}</h6>
-        </div>
-        <div class="col-12 fs-5">
-            <pre class="p-3">{{$new}}</pre>
-        </div>
-        <div class="col-12 fs-5">
-            <h6>{{t('Old')}}</h6>
-        </div>
-        <div class="col-12 fs-5">
-            <pre class="p-3">{{$old}}</pre>
-        </div>
+    <div class="table-container">
+        <table class="table table-bordered">
+            <thead>
+            <tr class="" style="background-color: #4ad386">
+                <th scope="col" colspan="3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            {{t('Causer')}}: {{ optional($activity->causer)->name}}
+                        </div>
+                        <div>
+                            {{t('Date')}}: {{$activity->created_at}}
 
+                        </div>
+                    </div>
+
+                </th>
+
+            </tr>
+            <tr class="" style="background-color: #9dbaff">
+
+            <th scope="col" colspan="3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            {{t('Subject')}}: {!!$activity->clickable_subject_type!!}
+                        </div>
+                        <div>
+                            {{t('ID')}}: {{ $activity->subject_id}}
+                        </div>
+
+                    </div>
+
+                </th>
+
+            </tr>
+
+            <tr class="text-center">
+                <th scope="col" style="background-color: #ffd376">{{t('Column Name')}}</th>
+                <th scope="col" style="background-color: #d1e1ff">{{t('Old Data')}}</th>
+                <th scope="col" style="background-color: #beffd9">{{t('New Data')}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($new as $key=>$value)
+                <tr class="text-center">
+                    <th scope="row" style="background-color: #ffd376">{{$key}}</th>
+                    <td style="background-color: #d1e1ff">
+                         <span class="text-overflow-dynamic-container">
+                             <span class="text-overflow-dynamic-ellipsis" >
+                                {{$old[$key]}}
+                             </span>
+                          </span>
+                        </td>
+                    <td style="background-color: #beffd9">
+                        <span class="text-overflow-dynamic-container">
+                             <span class="text-overflow-dynamic-ellipsis" >
+                                {{$value}}
+                             </span>
+                          </span>
+                        </td>
+                </tr>
+            @endforeach
+
+            </tbody>
+
+        </table>
     </div>
 @endsection
 

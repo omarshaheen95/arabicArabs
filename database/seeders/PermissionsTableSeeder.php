@@ -106,6 +106,7 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'delete lessons', 'guard_name' => 'manager', 'group' => 'lessons'],
             ['name' => 'edit lesson learn', 'guard_name' => 'manager', 'group' => 'lessons'],
             ['name' => 'lesson review', 'guard_name' => 'manager', 'group' => 'lessons'],
+            ['name' => 'export lessons', 'guard_name' => 'manager', 'group' => 'lessons'],
 
             ['name' => 'show lesson training', 'guard_name' => 'manager', 'group' => 'lessons'],
             ['name' => 'edit lesson training', 'guard_name' => 'manager', 'group' => 'lessons'],

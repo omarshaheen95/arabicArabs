@@ -7,6 +7,7 @@ WhatsApp +972592554320
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class ImportFile extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,LogsActivityTrait;
     //Status : New,Uploading,Completed,Failures,Errors
     //Process Type : create,update,delete
     //Model Type : User,Teacher

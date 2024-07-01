@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,10 +13,11 @@ use Illuminate\Http\Request;
 
 class StudentStoryTest extends Model
 {
-    use SoftDeletes,CascadeSoftDeletes;
+    use SoftDeletes,CascadeSoftDeletes,LogsActivityTrait;
     protected $fillable = [
         'user_id', 'story_id', 'corrected', 'total', 'notes', 'max_time', 'approved', 'start_at', 'end_at', 'status'
     ];
+    protected static $recordEvents = ['updated'];
     protected $cascadeDeletes = ['storyMatchResults','storyOptionResults','storySortResults','storyTrueFalseResults'];
 
     //boot with query where has story

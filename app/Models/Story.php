@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use App\Traits\Pathable;
 use Astrotomic\Translatable\Translatable;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class Story extends Model
 {
-    use SoftDeletes,CascadeSoftDeletes, Pathable;
+    use SoftDeletes,CascadeSoftDeletes, Pathable,LogsActivityTrait;
     protected $fillable = [
         'name', 'image', 'video', 'alternative_video', 'content', 'grade', 'active', 'ordered',
     ];
@@ -31,7 +32,7 @@ class Story extends Model
         $actions = [];
         if (\request()->is('manager/*')) {
             $actions = [
-                ['key' => 'edit', 'name' => t('Edit'), 'route' => route('manager.story.edit', $this->id), 'permission' => 'show stories'],
+                ['key' => 'edit', 'name' => t('Edit'), 'route' => route('manager.story.edit', $this->id), 'permission' => 'edit stories'],
                 ['key' => 'practise', 'name' => t('Assessment'), 'route' => route('manager.story.assessment', $this->id), 'permission' => 'edit story assessment'],
                 ['key' => 'blank', 'name' => t('Assessment Preview'), 'route' => route('manager.story.review', $this->id), 'permission' => 'edit story assessment'],
                 ['key' => 'delete', 'name' => t('Delete'), 'route' => $this->id, 'permission' => 'delete stories'],

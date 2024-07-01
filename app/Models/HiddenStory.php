@@ -27,7 +27,7 @@ class HiddenStory extends Model
     public function getActionButtonsAttribute()
     {
         $actions = [
-            ['key' => 'delete', 'name' => t('Delete'), 'route' => $this->id],
+            ['key' => 'delete', 'name' => t('Delete'), 'route' => $this->id,'permission'=>'delete hidden stories'],
         ];
         return view('general.action_menu')->with('actions', $actions);
     }

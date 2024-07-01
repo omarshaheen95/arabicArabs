@@ -11,9 +11,21 @@
 @endsection
 @section('filter')
     <div class="row">
+        <div class="col-3 mb-2">
+            <label class="mb-2">{{t('Causer')}} :</label>
+            <select name="causer_type" class="form-select" data-control="select2" data-allow-clear="true" data-placeholder="{{t('Select Type')}}">
+                <option></option>
+                @foreach($causers as $name=>$causer)
+                    <option value="{{$causer}}">{{t($name)}}</option>
+                @endforeach
+
+            </select>
+        </div>
         <div class="col-lg-3 mb-2">
-            <input type="hidden" name="causedByManager" value="{{request()->get('causedByManager', false)}}">
-            <input type="hidden" name="causedBySchool" value="{{request()->get('causedBySchool', false)}}">
+            <label class="mb-2">{{t('Causer ID')}}:</label>
+            <input type="text"  name="causer_id" class="form-control" placeholder="{{t('Causer ID')}}">
+        </div>
+        <div class="col-lg-3 mb-2">
             <label class="mb-2">{{t('Name')}}:</label>
             <input type="text"  name="name" class="form-control" placeholder="{{t('Name')}}">
         </div>
@@ -23,6 +35,23 @@
             <input type="text"  name="email" class="form-control" placeholder="{{t('Email')}}">
         </div>
 
+
+
+
+        <div class="col-3 mb-2">
+            <label class="mb-2">{{t('Subject')}} :</label>
+            <select name="subject_type" class="form-select" data-control="select2" data-allow-clear="true" data-placeholder="{{t('Select Type')}}">
+                <option></option>
+                @foreach($models as $model)
+                    <option value="{{$model}}">{{t(class_basename($model))}}</option>
+                @endforeach
+
+            </select>
+        </div>
+        <div class="col-lg-2 mb-2">
+            <label class="mb-2">{{t('Subject ID')}}:</label>
+            <input type="text"  name="subject_id" class="form-control" placeholder="{{t('Subject ID')}}">
+        </div>
         <div class="col-3 mb-2">
             <label class="mb-2">{{t('Type')}} :</label>
             <select name="type" class="form-select" data-control="select2" data-allow-clear="true" data-placeholder="{{t('Select Type')}}">

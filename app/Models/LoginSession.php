@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -9,7 +10,10 @@ use Illuminate\Http\Request;
 
 class LoginSession extends Model
 {
+    use LogsActivityTrait;
+
     protected $fillable = ['model_id','model_type','data'];
+    protected static $recordEvents = ['deleted'];
 
     public function model(): MorphTo
     {

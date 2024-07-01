@@ -10,9 +10,13 @@
             {{t('Actions')}}
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#!"
-                   onclick="excelExport('{{route('manager.teacher.tracking_export')}}')">{{t('Export')}}</a></li>
+            @can('teachersTrackingExport')
+                <li><a class="dropdown-item" href="#!"
+                       onclick="excelExport('{{route('manager.teacher.tracking_export')}}')">{{t('Export')}}</a></li>
+            @endcan
+
         </ul>
+
     </div>
 
 @endsection
