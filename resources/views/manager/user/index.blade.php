@@ -6,7 +6,7 @@
 @section('actions')
 
     <div class="dropdown with-filter">
-        @can('ad users')
+        @can('add users')
             <a href="{{route('manager.user.create')}}" class="btn btn-primary btn-elevate btn-icon-sm me-2">
                 <i class="la la-plus"></i>
                 {{t('Add User')}}
