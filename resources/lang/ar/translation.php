@@ -727,4 +727,5 @@ return
  	'delete motivational certificate' => 'delete motivational certificate',
  	'add motivational certificate' => 'add motivational certificate',
  	'export motivational certificate' => 'export motivational certificate',
+ 	'Empty' => 'Empty',
 ];
