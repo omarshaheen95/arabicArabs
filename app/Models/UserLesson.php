@@ -79,10 +79,6 @@ class UserLesson extends Model
                     });
                 }
             });
-        })->when($value = $request->get('year_learning', false), function (Builder $query) use ($value) {
-            $query->whereHas('user', function (Builder $query) use ($value) {
-                $query->where('year_learning', $value);
-            });
         })->when($value = $request->get('section', false), function (Builder $query) use ($value) {
             $query->whereHas('user', function (Builder $query) use ($value) {
                 is_array($value) ? $query->whereIn('section', $value) : $query->where('section', $value);

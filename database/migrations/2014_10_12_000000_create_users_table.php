@@ -30,7 +30,7 @@ class CreateUsersTable extends Migration
 
 
 
-            $table->string('year_learning')->default(0);
+//            $table->string('year_learning')->default(0);
             $table->string('section')->nullable();
 
             $table->string('country_code')->nullable();

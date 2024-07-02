@@ -86,29 +86,7 @@
                                     </select>
                                 </div>
                             </div>
-{{--                            <div class="form-group">--}}
-{{--                                <label for="year_learning" class="form-label"> الصف </label>--}}
-{{--                                <div class="form-control-icon">--}}
-{{--                                    <div class="icon">--}}
-{{--                                        <img src="{{asset('web_assets/img/class.svg')}}" alt="">--}}
-{{--                                    </div>--}}
-{{--                                    <select name="year_learning" id="year_learning" class="form-control form-select" required>--}}
-{{--                                        <option value="" selected disabled> Select Grade </option>--}}
-{{--                                        <option value="1" {{isset($user) && $user->year_learning == 1 ? 'selected':''}}>1</option>--}}
-{{--                                        <option value="2" {{isset($user) && $user->year_learning == 2 ? 'selected':''}}>2</option>--}}
-{{--                                        <option value="3" {{isset($user) && $user->year_learning == 3 ? 'selected':''}}>3</option>--}}
-{{--                                        <option value="4" {{isset($user) && $user->year_learning == 4 ? 'selected':''}}>4</option>--}}
-{{--                                        <option value="5" {{isset($user) && $user->year_learning == 5 ? 'selected':''}}>5</option>--}}
-{{--                                        <option value="6" {{isset($user) && $user->year_learning == 6 ? 'selected':''}}>6</option>--}}
-{{--                                        <option value="7" {{isset($user) && $user->year_learning == 7 ? 'selected':''}}>7</option>--}}
-{{--                                        <option value="8" {{isset($user) && $user->year_learning == 8 ? 'selected':''}}>8</option>--}}
-{{--                                        <option value="9" {{isset($user) && $user->year_learning == 9 ? 'selected':''}}>9</option>--}}
-{{--                                        <option value="10" {{isset($user) && $user->year_learning == 10 ? 'selected':''}}>10</option>--}}
-{{--                                        <option value="11" {{isset($user) && $user->year_learning == 11 ? 'selected':''}}>11</option>--}}
-{{--                                        <option value="12" {{isset($user) && $user->year_learning == 12 ? 'selected':''}}>12</option>--}}
-{{--                                    </select>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
+
                             <div class="form-group">
                                 <button type="submit" class="btn btn-theme btn-submit">
                                     <span class="spinner-border d-none"></span>

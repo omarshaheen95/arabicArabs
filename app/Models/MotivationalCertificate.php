@@ -47,11 +47,7 @@ class MotivationalCertificate extends Model
                     $query->where('name', 'like', '%' . $value . '%');
                 });
             })
-            ->when($value = $request->get('year_learning', false), function (Builder $query) use ($value) {
-                $query->whereHas('user', function (Builder $query) use ($value) {
-                    $query->where('year_learning',  $value);
-                });
-            })
+
             ->when($value = $request->get('user_email', false), function (Builder $query) use ($value) {
                 $query->whereHas('user', function (Builder $query) use ($value) {
                     $query->where('email', $value);

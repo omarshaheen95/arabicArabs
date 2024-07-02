@@ -62,7 +62,7 @@ class StudentController extends Controller
                     $student = '<div class="d-flex flex-column">' .
                         '<div class="d-flex fw-bold">' . $row->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
-                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . ' - ' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div></div>';
+                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . '</span> : ' . '</div>' ;
                     return $student;
                 })
                 ->addColumn('dates', function ($row) {
@@ -130,7 +130,7 @@ class StudentController extends Controller
                     $student = '<div class="d-flex flex-column">' .
                         '<div class="d-flex fw-bold">' . $row->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
-                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . ' - ' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div></div>';
+                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . '</span> : ' . '</div>' ;
                     return $student;
                 })
                 ->addColumn('dates', function ($row) {
@@ -217,14 +217,7 @@ class StudentController extends Controller
         return $this->sendResponse(null,t('Successfully deleted'));
     }
 
-    public function updateLearningYears(Request $request)
-    {
-        $request->validate(['user_id'=>'required']);
-        $update = User::query()->filter($request)->whereIn('id',$request->get('user_id'))->update([
-            'year_learning' => $request->get('learning_years', false)
-        ]);
-        return $this->sendResponse(null,t('Successfully Updated Learning Years For:').'('.$update.')');
-    }
+
     public function review(Request $request, $id)
     {
         $general = new GeneralFunctions();

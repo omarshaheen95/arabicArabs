@@ -18,7 +18,7 @@ class User extends Authenticatable
     use HasApiTokens, SoftDeletes, Notifiable,CascadeSoftDeletes,LogsActivityTrait;
 
     protected $fillable = [
-        'name', 'email', 'password', 'mobile', 'school_id', 'grade_id', 'alternate_grade_id', 'year_learning',
+        'name', 'email', 'password', 'mobile', 'school_id', 'grade_id', 'alternate_grade_id',
         'section', 'country_code', 'short_country', 'id_number',
         'active', 'type','demo_grades', 'active_from', 'active_to', 'package_id', 'manager_id', 'year_id', 'last_login', 'image', 'import_file_id'
         ,'last_login_info'
@@ -69,8 +69,6 @@ class User extends Authenticatable
             is_array($value) ? $query->whereIn('section', $value) : $query->where('section', $value);
         })->when($value = $request->get('school_id', false), function (Builder $query) use ($value) {
             $query->where('school_id', $value);
-        })->when($value = $request->get('year_learning', false), function (Builder $query) use ($value) {
-            $query->where('year_learning', $value);
         })->when($value = $request->get('package_id', false), function (Builder $query) use ($value) {
             $query->where('package_id', $value);
         })->when($value = $request->get('active', false), function (Builder $query) use ($value) {

@@ -30,16 +30,6 @@
             <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
-        <div class="col-lg-2 mb-2">
-            <label class="mb-2">{{t('Learning Years')}} :</label>
-            <select name="year_learning" class="form-select" data-control="select2"
-                    data-placeholder="{{t('Select Year')}}" data-allow-clear="true">
-                <option></option>
-                @foreach(range(0,12) as $value)
-                    <option value="{{ $value }}">{{$value == 0 ? '-':$value }}</option>
-                @endforeach
-            </select>
-        </div>
 
         <div class="col-lg-3 mb-2">
             <label class="mb-2">{{t('Grade')}} :</label>
@@ -131,38 +121,6 @@
         </table>
     </div>
 
-    <div class="modal fade" tabindex="-1" id="update_learning_years_modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">{{t('Update Learning Years')}}</h3>
-
-                    <!--begin::Close-->
-                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-                    </div>
-                    <!--end::Close-->
-                </div>
-
-                <div class="modal-body d-flex flex-column">
-                    <div class="">
-                        <label class="mb-2">{{t('Learning Years')}} :</label>
-                        <select id="learning_years" class="form-select" data-control="select2" data-placeholder="{{t('Select Learning Year')}}" data-allow-clear="true">
-                            @foreach(range(0,12) as $value)
-                                <option value="{{ $value }}">{{$value}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{t('Close')}}</button>
-                    <button type="button" class="btn btn-primary" id="update_learning_year" >{{t('Update')}}</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
 @endsection
 
 

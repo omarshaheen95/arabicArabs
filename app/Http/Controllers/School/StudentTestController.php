@@ -300,7 +300,7 @@ class StudentTestController extends Controller
                     $student = '<div class="d-flex flex-column">' .
                         '<div class="d-flex fw-bold">' . $row->user->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->user->email . '</span></div>' .
-                        '<div class="d-flex"><span class="fw-bold ">' . $row->user->grade->name . ' - ' . t('Learning Years') . '</span> : ' . $row->user->year_learning . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . $row->user->grade->name . '</span> : ' . '</div>' .
                         '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
                     return $student;
                 })

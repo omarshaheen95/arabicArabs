@@ -19,7 +19,6 @@ class StoryAssignmentRequest extends FormRequest
             'students_grade' => ['required', ],
             'story_id.*' => ['required',  'exists:stories,id'],
             'section' => ['nullable', 'array'],
-            'years_learning' => ['required', 'array'],
             'students' => ['required', 'array',],
             'grade' => ['required'],
             'deadline' => ['nullable', 'after:today'],

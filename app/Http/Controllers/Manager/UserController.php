@@ -78,7 +78,6 @@ class UserController extends Controller
                         '<div class="d-flex fw-bold">' . $row->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold text-primary">' . $row->grade->name . '</div>' .
-                        '<div class="d-flex"><span class="fw-bold ">' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div>' .
                         '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
                     return $student;
                 })
@@ -125,10 +124,9 @@ class UserController extends Controller
         $title = t('Add User');
         $schools = School::query()->get();
         $grades = Grade::query()->get();
-        $years_learning = [0,1,2,3,4,5,6,7,8,9,10,11,12];
         $packages = Package::query()->get();
         $years = Year::query()->get();
-        return view('manager.user.edit', compact('schools', 'grades', 'title','years', 'packages', 'years_learning'));
+        return view('manager.user.edit', compact('schools', 'grades', 'title','years', 'packages'));
     }
 
     public function store(UserRequest $request)
@@ -163,11 +161,10 @@ class UserController extends Controller
         $user = User::query()->findOrFail($id);
         $schools = School::query()->get();
         $grades = Grade::query()->get();
-        $years_learning = [0,1,2,3,4,5,6,7,8,9,10,11,12];
         $packages = Package::query()->get();
         $teachers = Teacher::query()->where('school_id', $user->school_id)->get();
         $years = Year::query()->get();
-        return view('manager.user.edit', compact('user', 'schools', 'grades','years', 'title', 'packages', 'teachers', 'years_learning'));
+        return view('manager.user.edit', compact('user', 'schools', 'grades','years', 'title', 'packages', 'teachers'));
     }
 
     public function update(UserRequest $request, $id)
@@ -344,11 +341,6 @@ class UserController extends Controller
             $data['alternate_grade_id'] = $request['users_grades']['alternate_grade'];
         }
 
-        //check if learning_years is null and not false then update users
-        if (isset($request['users_grades']['learning_years']) && !is_null($request['users_grades']['learning_years'])) {
-            $data['year_learning'] = $request['users_grades']['learning_years'];
-        }
-
         //check if assigned_year_id is null and not false then update users
         if (isset($request['users_grades']['assigned_year_id']) && !is_null($request['users_grades']['assigned_year_id'])) {
             $data['year_id'] = $request['users_grades']['assigned_year_id'];
@@ -405,7 +397,6 @@ class UserController extends Controller
                         '<div class="d-flex fw-bold">' . $row->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold text-primary">' . $row->grade->name . '</div>' .
-                        '<div class="d-flex"><span class="fw-bold ">' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div>' .
                         '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
                     return $student;
                 })

@@ -197,10 +197,6 @@
                         <td width="40%">Grade</td>
                         <td>{{$student->grade}}</td>
                     </tr>
-                    <tr>
-                        <td width="40%">Year of Learning Arabic</td>
-                        <td>{{$student->year_learning == 0 ? "-":$student->year_learning}}</td>
-                    </tr>
                     </tbody>
                 </table>
             </div>

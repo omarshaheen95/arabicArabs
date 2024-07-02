@@ -331,7 +331,6 @@ class UserController extends Controller
         $schools = School::query()->get();
         $user = Auth::guard('web')->user();
         $this->validationRules["image"] = 'nullable|image';
-        $this->validationRules["year_learning"] = 'nullable';
         $this->validationRules["name"] = 'required';
         $this->validationRules["email"] = "required|unique:users,email,$user->id,id,deleted_at,NULL";
         $this->validationRules["mobile"] = 'required';
@@ -353,9 +352,8 @@ class UserController extends Controller
         $this->validationRules["short_country"] = 'required';
         $this->validationRules["mobile"] = ['required'];
 //        $this->validationRules["mobile"] = ['required', 'phone:'.request()->get('short_country')];
-        $this->validationRules["year_learning"] = 'nullable';
         $request->validate($this->validationRules);
-        $data = $request->only(['image','name','email','mobile', 'year_learning']);
+        $data = $request->only(['image','name','email','mobile']);
         $data['mobile'] = PhoneNumber::make($request->get('mobile'))->ofCountry($request->get('short_country'));
 
         if ($request->hasFile('image'))

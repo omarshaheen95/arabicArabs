@@ -166,17 +166,6 @@
                                             </div>
                                         </div>
                                     </div>
-{{--                                    <div class="col-sm-6">--}}
-{{--                                        <div class="form-group p">--}}
-{{--                                            <label for="years" class="form-label">سنوات تعلم اللغة العربية</label>--}}
-{{--                                            <div class="form-control-icon">--}}
-{{--                                                <div class="icon">--}}
-{{--                                                    <div id="range_count" class="range-count">6</div>--}}
-{{--                                                </div>--}}
-{{--                                                <input type="range" name="year_learning" min="1" max="12" step="1" value="6" class=" form-range" id="years" required>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-theme btn-submit">

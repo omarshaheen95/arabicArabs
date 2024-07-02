@@ -33,17 +33,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-group col-12 mb-2">
-                <label class="form-label">{{ t('Learning Years') }}</label>
-                <select class="form-select learning_years" data-control="select2"
-                        data-placeholder="{{t('Select Years')}}"
-                        data-allow-clear="true" name="years_learning[]" id="years_learning" multiple>
-                    <option></option>
-                    @foreach(range(0,12) as $year)
-                        <option value="{{$year}}" selected>{{$year}}</option>
-                    @endforeach
-                </select>
-            </div>
+
             <div class="form-group col-12 mb-2">
                 <label class="form-label">{{ t('Students') }}</label>
                 <select class="form-control assignment_students" data-control="select2"
@@ -117,7 +107,7 @@
 
 
 
-        $('select[name="students_grade"], #learning_years').change(function () {
+        $('select[name="students_grade"]').change(function () {
             var id = $(this).val();
             var teacher = $('select[name="teacher_id"]').val();
                 getStudentsData(teacher, id);
@@ -144,7 +134,6 @@
                     url: students_url,
                     data: {
                         teacher_id: "{{request()->get('teacher_id')}}",
-                        learning_years: $("#learning_years").val(),
                         section:$('#section').val()
                     }
                 }).done(function (student_data) {

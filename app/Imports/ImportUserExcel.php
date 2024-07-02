@@ -112,7 +112,6 @@ class ImportUserExcel implements ToModel, WithHeadingRow, WithValidation, SkipsO
                 'type' => 'member',
                 'active_from' => now(),
                 'active_to' => $this->req->get('active_to'),
-                'year_learning' => isset($row['years_learning']) & !empty($row['years_learning']) ? $row['years_learning'] : 1, //$grade,//
                 'section' => isset($row['section']) ? $row['section'] : $row['grade'],
                 'mobile' => isset($row['mobile']) & !empty($row['mobile']) ? $row['mobile'] : $this->req->get('default_mobile'),
                 'country_code' => $this->req->get('country_code'),
@@ -131,7 +130,6 @@ class ImportUserExcel implements ToModel, WithHeadingRow, WithValidation, SkipsO
                 'type' => 'member',
                 'active_from' => now(),
                 'active_to' => $this->req->get('active_to'),//Carbon::now()->addDays(60),
-                'year_learning' => $row['years_learning'] ?? 1, //$grade,//
                 'section' => isset($row['section']) ? $row['section'] : $row['grade'],
                 'mobile' => isset($row['mobile']) & !empty($row['mobile']) ? $row['mobile'] : $this->req->get('default_mobile'),
                 'country_code' => $this->req->get('country_code'),
@@ -260,7 +258,6 @@ class ImportUserExcel implements ToModel, WithHeadingRow, WithValidation, SkipsO
             'grade' => 'required',
 //            'year' => 'required',
 //            'phone' => 'required',
-//            'years_learning' => 'nullable',
         ];
     }
 }

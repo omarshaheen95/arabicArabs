@@ -44,7 +44,6 @@
                                             <div class="col-12 s-content"><span class="s-title">ID : </span>{{ $std->id_number ?? '-' }}</div>
                                             <div class="col-12 s-content"><span class="s-title"> Section : </span>{{ $std->section ?? '-' }}</div>
                                             <div class="col-12 s-content"><span class="s-title">Grade : </span> {{ $std->grade->name }}</div>
-                                            <div class="col-12 s-content"><span class="s-title">Years of learning:</span>{{ $std->year_learning == 0 ? "-":$std->year_learning}}</div>
                                         </div>
 
                                         <div class="col-5 mt-1 d-flex justify-content-end p-0 pe-1">

@@ -42,7 +42,7 @@ class StudentController extends Controller
                     $student = '<div class="d-flex flex-column">' .
                         '<div class="d-flex fw-bold">' . $row->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
-                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . ' - ' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . '</span> : ' . '</div>' .
                         '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
                     return $student;
                 })
@@ -108,8 +108,7 @@ class StudentController extends Controller
         $teachers = Teacher::query()->where('school_id', $school->id)->get();
         $grades = Grade::query()->get();
         $years = Year::query()->get();
-        $years_learning  = range(1,12);
-        return view('school.user.edit', compact('user', 'teachers', 'title','grades','years','years_learning'));
+        return view('school.user.edit', compact('user', 'teachers', 'title','grades','years'));
     }
 
     public function update(UserRequest $request, $id)

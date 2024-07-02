@@ -28,8 +28,6 @@ Route::group(['namespace' => 'Teacher'], function() {
     Route::post('student_assign', 'StudentController@studentAssign')->name('student.student_assign');
     Route::post('delete_student_assign', 'StudentController@deleteStudentAssign')->name('student.delete_student_assign');
 
-    Route::post('updateLearningYears', 'StudentController@updateLearningYears')->name('student.updateLearningYears');
-
     Route::get('student/{id}/review', 'StudentController@review')->name('user.review');
     Route::get('student/{id}/story_review', 'StudentController@storyReview')->name('user.story-review');
     Route::get('student/{id}/report', 'StudentController@report')->name('user.report');

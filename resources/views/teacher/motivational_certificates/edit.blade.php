@@ -110,7 +110,7 @@
         $('input[name="granted_in"]').flatpickr();
 
         @if($cer_type == 'lesson')
-        $('select[name="grade_id"], #learning_years').change(function () {
+        $('select[name="grade_id"]').change(function () {
             // var id = $('select[name="grade"]').val();
             var id = $(this).val();
 
@@ -146,7 +146,6 @@
                     url: students_url,
                     data: {
                         teacher_id: "{{request()->get('teacher_id')}}",
-                        learning_years: $("#learning_years").val(),
                         section:$('#section').val()
                     }
                 }).done(function (student_data) {

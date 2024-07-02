@@ -79,9 +79,6 @@ class GeneralController extends Controller
     public function getStudentsByGrade(Request $request, $id)
     {
         $rows = User::query()->filter($request)
-            ->when($value = $request->get('learning_years', []), function (Builder $query) use ($value) {
-                $query->whereIn('year_learning', $value);
-            })
             ->where(function (Builder $query) use ($id) {
                 $query->where('grade_id', $id)->orWhere('alternate_grade_id', $id);
             })

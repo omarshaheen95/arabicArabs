@@ -36,7 +36,6 @@ class StudentWorksController extends Controller
                     $gender = !is_null($row->user->gender) ? $row->gender : '<span class="text-danger">-</span>';
                     $html = '<div class="d-flex flex-column">' .
                         '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Teacher') . ' </span> : ' . '<span class="ps-1"> ' . $teacher . '</span></div>' .
-                        '<div class="d-flex"><span class="fw-bold text-primary">' . t('Learning Years') . '</span> : ' . '<span class="ps-1"> ' . $row->user->year_learning . '</span></div>' .
                         '</div>';
                     return $html;
                 })

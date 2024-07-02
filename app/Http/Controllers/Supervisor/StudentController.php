@@ -64,7 +64,7 @@ class StudentController extends Controller
                     $student = '<div class="d-flex flex-column">' .
                         '<div class="d-flex fw-bold">' . $row->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
-                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . ' - ' . t('Learning Years') . '</span> : ' . $row->year_learning . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . '</span> : ' . '</div>' .
                         '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
                     return $student;
                 })

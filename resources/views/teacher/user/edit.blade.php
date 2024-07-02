@@ -146,20 +146,6 @@
 
                 <div class="col-3 mb-2">
                     <div class="form-group">
-                        <label for="" class="form-label">{{t('Years of learning')}}</label>
-                        <select class="form-select" name="year_learning" data-control="select2" data-allow-clear="true"
-                                data-placeholder="{{t('Select Years')}}">
-                            @foreach(range(0,12) as $year)
-                                <option
-                                    value="{{$year}}" {{isset($user) && $user->year_learning == $year ? 'selected':''}}>
-                                    {{$year}}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-3 mb-2">
-                    <div class="form-group">
                         <label for="" class="form-label">{{t('Section')}}</label>
                         <input class="form-control" name="section" type="text"
                                value="{{ isset($user) ? $user->section : old("section") }}" placeholder="{{t('Section')}}">

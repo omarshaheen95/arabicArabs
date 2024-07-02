@@ -19,7 +19,6 @@ class LessonAssignmentRequest extends FormRequest
             'lesson_id' => ['required', 'array'],
             'lesson_id.*' => ['required',  'exists:lessons,id'],
             'section' => ['nullable', 'array'],
-            'year_learning' => ['required', 'array'],
             'students' => ['required', 'array', ''],
             'grade_id' => ['required'],
             'deadline' => ['nullable', 'after:today'],

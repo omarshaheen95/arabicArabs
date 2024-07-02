@@ -68,16 +68,6 @@
             <label class="mb-2">{{t('Email')}}:</label>
             <input type="text" name="email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
-        <div class="col-lg-2 mb-2">
-            <label class="mb-2">{{t('Learning Years')}} :</label>
-            <select name="year_learning" class="form-select" data-control="select2"
-                    data-placeholder="{{t('Select Year')}}" data-allow-clear="true">
-                <option></option>
-                @foreach(range(0,12) as $value)
-                    <option value="{{ $value }}">{{$value == 0 ? '-':$value }}</option>
-                @endforeach
-            </select>
-        </div>
 
         <div class="col-lg-3 mb-2">
             <label class="mb-2">{{t('Grade')}} :</label>

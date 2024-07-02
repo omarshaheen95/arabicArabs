@@ -59,17 +59,6 @@
             </div>
 
             <div class="form-group col-12 mb-2">
-                <label class="form-label">{{ t('Learning Years') }}</label>
-                <select class="form-select" data-control="select2"
-                        data-placeholder="{{t('Select Years')}}"
-                        data-allow-clear="true" name="year_learning[]" id="year_learning" multiple>
-                    <option></option>
-                    @foreach(range(0,12) as $year)
-                        <option value="{{$year}}" selected>{{$year}}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group col-12 mb-2">
                 <label class="form-label">{{ t('Students') }}</label>
                 <select class="form-control assignment_students" data-control="select2"
                         data-placeholder="{{t('Select Students')}}"
@@ -142,7 +131,7 @@
         $('input[name="deadline"]').flatpickr();
 
 
-        $('select[name="grade_id"], #year_learning').change(function () {
+        $('select[name="grade_id"]').change(function () {
             var id = $(this).val();
             var teacher = $('select[name="teacher_id"]').val();
             $.ajax({
@@ -179,7 +168,6 @@
                     url: students_url,
                     data: {
                         teacher_id: teacher,
-                        learning_years: $("#learning_years").val(),
                         section:$('#section').val()
                     }
                 }).done(function (student_data) {

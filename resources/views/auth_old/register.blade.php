@@ -88,15 +88,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-lg-12 mb-20px">
-                                            <div class="form-group">
-                                                <p class="mt-3">سنوات تعلم اللغة العربية</p>
-                                                <div class="range-wrap">
-                                                    <input name="year_learning" type="range" class="range" step="1" min="1" max="12" value="1">
-                                                    <output class="bubble" style="right: calc(41% + 1.85px);" >41</output>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <select class="form-control" name="package_id">
