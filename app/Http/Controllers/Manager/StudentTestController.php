@@ -58,9 +58,11 @@ class StudentTestController extends Controller
                     return $student;
                 })
                 ->addColumn('school', function ($row){
+                    $gender = !is_null($row->user->gender) ? $row->user->gender : '<span class="text-danger">-</span>';
                     $student =  '<div class="d-flex flex-column">'.
                         '<div class="d-flex"><span class="fw-bold text-primary pe-1">'.t('School').':</span>'.$row->user->school->name.'</div>'.
                         '<div class="d-flex"><span class="fw-bold text-primary pe-1">'.t('Grade').':</span>'.$row->user->grade->name.'<span class="fw-bold ms-2 text-primary pe-1">'.t('Section').':</span>'.$row->user->section.'</div>'.
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Gender') . ' </span> : ' . '<span class="ps-1"> ' . $gender . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold text-success pe-1">'.t('Submitted At').':</span>'.$row->created_at->format('Y-m-d H:i').'</div>'.
                         '</div>';
                     return $student;
@@ -161,9 +163,11 @@ class StudentTestController extends Controller
                     return $student;
                 })
                 ->addColumn('school', function ($row){
+                   $gender = !is_null($row->user->gender) ? $row->user->gender : '<span class="text-danger">-</span>';
                     $student =  '<div class="d-flex flex-column">'.
                         '<div class="d-flex"><span class="fw-bold text-primary pe-1">'.t('School').':</span>'.$row->user->school->name.'</div>'.
                         '<div class="d-flex"><span class="fw-bold text-primary pe-1">'.t('Grade').':</span>'.$row->user->grade->name.'<span class="fw-bold ms-2 text-primary pe-1">'.t('Section').':</span>'.$row->user->section.'</div>'.
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Gender') . ' </span> : ' . '<span class="ps-1"> ' . $gender . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold text-success pe-1">'.t('Submitted At').':</span>'.$row->created_at->format('Y-m-d H:i').'</div>'.
                         '</div>';
                     return $student;
@@ -264,9 +268,11 @@ class StudentTestController extends Controller
                     return $student;
                 })
                 ->addColumn('school', function ($row){
+                    $gender = !is_null($row->user->gender) ? $row->user->gender : '<span class="text-danger">-</span>';
                     $student =  '<div class="d-flex flex-column">'.
                         '<div class="d-flex"><span class="fw-bold text-primary pe-1">'.t('School').':</span>'.$row->user->school->name.'</div>'.
                         '<div class="d-flex"><span class="fw-bold text-primary pe-1">'.t('Grade').':</span>'.$row->user->grade->name.'<span class="fw-bold ms-2 text-primary pe-1">'.t('Section').':</span>'.$row->user->section.'</div>'.
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Gender') . ' </span> : ' . '<span class="ps-1"> ' . $gender . '</span></div>' .
                         '</div>';
                     return $student;
                 })

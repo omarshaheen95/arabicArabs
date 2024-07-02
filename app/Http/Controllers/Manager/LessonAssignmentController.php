@@ -41,12 +41,14 @@ class LessonAssignmentController extends Controller
                 })
                 ->addColumn('student', function ($row) {
                     $teacher = optional($row->user->teacher)->name ? optional($row->user->teacher)->name : '<span class="text-danger">' . t('Unsigned') . '</span>';
+                    $gender = !is_null($row->user->gender) ? $row->user->gender : '<span class="text-danger">-</span>';
                     $student = '<div class="d-flex flex-column">' .
                         '<div class="d-flex fw-bold">' . $row->user->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->user->email . '</span></div>' .
                         '<div class="d-flex">' . $row->user->school->name . '</div>' .
                         '<div class="d-flex"><span class="fw-bold text-primary pe-1">' . t('Teacher') . ':</span>' . $teacher . '</div>' .
                         '<div class="d-flex"><span class="fw-bold text-primary pe-1">' . t('Grade') . ':</span>' . $row->user->grade->name .'<span class="fw-bold text-primary pe-1 ms-2">' . t('Section') . ':</span>' . $row->user->section . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Gender') . ' </span> : ' . '<span> ' . $gender . '</span></div>' .
                         '</div>';
                     return $student;
                 })

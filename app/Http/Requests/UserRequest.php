@@ -46,6 +46,7 @@ class UserRequest extends FormRequest
                 'short_country' => 'required',
                 'section' => 'nullable',
                 "phone" => ['required'],
+                'gender' => 'nullable|in:Boy,Girl',
                 'mobile' => ['required', 'phone:'.request()->get('short_country')],
             ];
         }else{
@@ -65,6 +66,7 @@ class UserRequest extends FormRequest
                 'short_country' => 'required',
                 'section' => 'nullable',
                 "phone" => ['required'],
+                'gender' => 'nullable|in:Boy,Girl',
                 'mobile' => ['required', 'phone:'.request()->get('short_country')],
             ];
         }

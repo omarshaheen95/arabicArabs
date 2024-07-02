@@ -25,7 +25,7 @@
             <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
-        <div class="col-lg-3  mb-2">
+        <div class="col-lg-2  mb-2">
             <label class="mb-2">{{t('Student Name')}}:</label>
             <input type="text" name="name" class="form-control direct-search" placeholder="{{t('Student Name')}}">
         </div>
@@ -68,7 +68,7 @@
             </select>
         </div>
 
-        <div class="col-2 mb-2">
+        <div class="col-3 mb-2">
             <label class="mb-2">{{t('Section')}}:</label>
             <select class="form-select" name="section" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Section')}}">
@@ -80,6 +80,15 @@
         </div>
 
 
+        <div class="col-2 mb-2">
+            <label class="mb-2">{{t('Gender')}}:</label>
+            <select class="form-select" name="gender" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Gender')}}">
+                <option></option>
+                <option value="Boy">{{t('Boy')}}</option>
+                <option value="Girl">{{'Girl'}}</option>
+            </select>
+        </div>
         <div class="col-2 mb-2">
             <label class="mb-2">{{t('Activation')}}:</label>
             <select class="form-select" name="status" data-control="select2" data-allow-clear="true"
@@ -102,7 +111,7 @@
             <input type="hidden" id="start_login_at" name="start_login_at" value="">
             <input type="hidden" id="end_login_at" name="end_login_at" value="">
         </div>
-        <div class="col-2 mb-2">
+        <div class="col-3 mb-2">
             <label class="mb-1">{{t('Students Status')}}:</label>
             <select class="form-control form-select reset-no" data-hide-search="true" data-control="select2" data-placeholder="{{t('Select Student Status')}}" name="deleted_at" id="students_status">
                 <option value="1" selected>{{t('Not Deleted Students')}}</option>

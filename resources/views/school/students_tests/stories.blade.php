@@ -35,7 +35,7 @@
             <label class="mb-2">{{t('Student Email')}}:</label>
             <input type="text" name="user_email" class="form-control direct-search" placeholder="{{t('Email')}}">
         </div>
-        <div class="col-lg-2 mb-2">
+        <div class="col-lg-3 mb-2">
             <label class="mb-2">{{t('Student Grade')}} :</label>
             <select name="student_grade" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}"
                     data-allow-clear="true">
@@ -55,11 +55,21 @@
                     @endforeach
             </select>
         </div>
-        <div class="col-2 mb-2">
+        <div class="col-3 mb-2">
             <label class="mb-2">{{t('Section')}}:</label>
             <select class="form-select" name="section" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Section')}}">
                 <option></option>
+            </select>
+        </div>
+
+        <div class="col-2 mb-2">
+            <label class="mb-2">{{t('Gender')}}:</label>
+            <select class="form-select" name="gender" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Gender')}}">
+                <option></option>
+                <option value="Boy">{{t('Boy')}}</option>
+                <option value="Girl">{{'Girl'}}</option>
             </select>
         </div>
         <div class="col-2 mb-2">
@@ -72,7 +82,7 @@
             </select>
         </div>
         <div class="col-lg-2 mb-2">
-            <label class="mb-2">{{t('Level')}} :</label>
+            <label class="mb-2">{{t('Grade')}} :</label>
             <select name="grade" class="form-select" data-control="select2" data-placeholder="{{t('Select Grade')}}"
                     data-allow-clear="true">
                 <option></option>

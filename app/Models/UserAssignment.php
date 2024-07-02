@@ -50,6 +50,10 @@ class UserAssignment extends Model
             $query->whereHas('user', function (Builder $query) use ($value) {
                 $query->where('email', 'like', '%' . $value . '%');
             });
+        })->when($value = $request->get('gender', false), function (Builder $query) use ($value) {
+            $query->whereHas('user', function (Builder $query) use ($value) {
+                $query->where('gender', $value);
+            });
         })->when($value = $request->get('lesson_id', false), function (Builder $query) use ($value) {
             $query->where('lesson_id', $value);
         })->when($value = $request->get('start_date', false), function (Builder $query) use ($value) {

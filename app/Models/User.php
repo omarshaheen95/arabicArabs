@@ -19,7 +19,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name', 'email', 'password', 'mobile', 'school_id', 'grade_id', 'alternate_grade_id',
-        'section', 'country_code', 'short_country', 'id_number',
+        'section', 'country_code', 'short_country', 'id_number', 'gender',
         'active', 'type','demo_grades', 'active_from', 'active_to', 'package_id', 'manager_id', 'year_id', 'last_login', 'image', 'import_file_id'
         ,'last_login_info'
     ];
@@ -69,6 +69,8 @@ class User extends Authenticatable
             is_array($value) ? $query->whereIn('section', $value) : $query->where('section', $value);
         })->when($value = $request->get('school_id', false), function (Builder $query) use ($value) {
             $query->where('school_id', $value);
+        })->when($value = $request->get('gender', false), function (Builder $query) use ($value) {
+            $query->where('gender', $value);
         })->when($value = $request->get('package_id', false), function (Builder $query) use ($value) {
             $query->where('package_id', $value);
         })->when($value = $request->get('active', false), function (Builder $query) use ($value) {

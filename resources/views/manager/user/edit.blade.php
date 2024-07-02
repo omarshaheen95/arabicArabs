@@ -232,6 +232,18 @@
 
                 <div class="col-3 mb-2">
                     <div class="form-group">
+                        <label for="" class="form-label">{{t('Gender')}}</label>
+                        <select class="form-select" name="gender" data-control="select2" data-allow-clear="true"
+                                data-placeholder="{{t('Select Gender')}}">
+                            <option></option>
+                            <option value="Boy" {{isset($user) && $user->gender == 'Boy' ? 'selected':''}}>{{t('Boy')}}</option>
+                            <option value="Girl" {{isset($user) && $user->gender == 'Girl' ? 'selected':''}}>{{t('Girl')}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-3 mb-2">
+                    <div class="form-group">
                         <label for="" class="form-label">{{t('SID')}}</label>
                         <input class="form-control" name="id_number" type="text"
                                value="{{ isset($user) ? $user->id_number : old("id_number") }}" placeholder="{{t('SID')}}">

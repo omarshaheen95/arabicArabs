@@ -90,6 +90,15 @@
                 <option value="expire">{{'Expired'}}</option>
             </select>
         </div>
+        <div class="col-2 mb-2">
+            <label class="mb-2">{{t('Gender')}}:</label>
+            <select class="form-select" name="gender" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Gender')}}">
+                <option></option>
+                <option value="Boy">{{t('Boy')}}</option>
+                <option value="Girl">{{'Girl'}}</option>
+            </select>
+        </div>
         <div class="col-lg-2 mb-2">
             <label class="mb-2">{{t('Grades')}} :</label>
             <select name="grade" class="form-select" data-control="select2" data-placeholder="{{t('Select Grades')}}"

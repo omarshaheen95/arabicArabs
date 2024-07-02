@@ -128,7 +128,7 @@
                 <th class="text-start"></th>
                 {{--                <th class="text-start">{{ t('ID') }}</th>--}}
                 <th class="text-start">{{ t('Student') }}</th>
-                <th class="text-start">{{ t('School') }}</th>
+                <th class="text-start">{{ t('Information') }}</th>
                 <th class="text-start">{{ t('Story') }}</th>
                 <th class="text-start">{{ t('Status') }}</th>
             </tr>

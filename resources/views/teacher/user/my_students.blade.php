@@ -69,6 +69,15 @@
             </select>
         </div>
 
+        <div class="col-2 mb-2">
+            <label class="mb-2">{{t('Gender')}}:</label>
+            <select class="form-select" name="gender" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Gender')}}">
+                <option></option>
+                <option value="Boy">{{t('Boy')}}</option>
+                <option value="Girl">{{'Girl'}}</option>
+            </select>
+        </div>
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
             <label class="mb-2">{{ t('Register Date') }}:</label>
             <input id="register_date" class="form-control " placeholder="{{t('Select Register Date')}}">

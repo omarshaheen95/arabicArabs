@@ -721,4 +721,8 @@ return
  	'add motivational certificate' => 'add motivational certificate',
  	'export motivational certificate' => 'export motivational certificate',
  	'Empty' => 'Empty',
+
+ 	'Girl' => 'Girl',
+ 	'Not Active Account' => 'Not Active Account',
+ 	'Your account is not active, please contact support' => 'Your account is not active, please contact support',
 ];

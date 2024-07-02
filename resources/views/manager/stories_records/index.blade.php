@@ -83,6 +83,15 @@
             </select>
         </div>
         <div class="col-2 mb-2">
+            <label class="mb-2">{{t('Gender')}}:</label>
+            <select class="form-select" name="gender" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Gender')}}">
+                <option></option>
+                <option value="Boy">{{t('Boy')}}</option>
+                <option value="Girl">{{'Girl'}}</option>
+            </select>
+        </div>
+        <div class="col-2 mb-2">
             <label class="mb-2">{{t('Activation')}}:</label>
             <select class="form-select" name="user_status" data-control="select2" data-allow-clear="true"
                     data-placeholder="{{t('Select Status')}}">
@@ -145,7 +154,7 @@
                 <th class="text-start"></th>
                 {{--                <th class="text-start">{{ t('ID') }}</th>--}}
                 <th class="text-start">{{ t('Student') }}</th>
-                <th class="text-start">{{ t('School') }}</th>
+                <th class="text-start">{{ t('Information') }}</th>
                 <th class="text-start">{{ t('Story') }}</th>
                 <th class="text-start">{{ t('Status') }}</th>
                 <th class="text-start">{{ t('Actions') }}</th>

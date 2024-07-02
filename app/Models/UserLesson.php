@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 
 class UserLesson extends Model
 {
-    use SoftDeletes, Pathable,LogsActivityTrait;
+    use SoftDeletes, Pathable, LogsActivityTrait;
+
     //status 'pending', 'corrected', 'returned'
     protected $fillable = [
         'user_id', 'lesson_id', 'status', 'teacher_message', 'student_message', 'submitted_at'
@@ -65,60 +66,65 @@ class UserLesson extends Model
             $query->whereHas('user', function (Builder $query) use ($value) {
                 $query->where('email', $value);
             });
-        })->when($value = $request->get('user_id', false), function (Builder $query) use ($value) {
-            $query->whereHas('user', function (Builder $query) use ($value) {
-                $query->where('id', $value);
-            });
-        })->when($value = $request->get('user_status', false), function (Builder $query) use ($value) {
-            $query->whereHas('user', function (Builder $query) use ($value) {
-                if ($value == 'active') {
-                    $query->where('active_to', '>=', now());
-                } elseif ($value == 'expire') {
-                    $query->where(function ($q) {
-                        $q->where('active_to', '<', now())->orWhereNull('active_to');
-                    });
-                }
-            });
-        })->when($value = $request->get('section', false), function (Builder $query) use ($value) {
-            $query->whereHas('user', function (Builder $query) use ($value) {
-                is_array($value) ? $query->whereIn('section', $value) : $query->where('section', $value);
-            });
-        })->when($value = $request->get('grade_id', false), function (Builder $query) use ($value) {
-            $query->whereHas('user', function (Builder $query) use ($value) {
-                $query->where('grade_id', $value);
-            });
-        })->when($value = $request->get('teacher_id', false), function (Builder $query) use ($value) {
-            $query->whereHas('user', function (Builder $query) use ($value) {
-                $query->whereHas('teacherUser', function (Builder $query) use ($value) {
-                    $query->where('teacher_id', $value);
+        })->when($value = $request->get('gender', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('gender', $value);
                 });
-            });
-        })->when($value = $request->get('school_id', false), function (Builder $query) use ($value) {
-            $query->whereHas('user', function (Builder $query) use ($value) {
-                $query->where('school_id', $value);
-            });
-        })->when($value = $request->get('grade_id', false), function (Builder $query) use ($value) {
-            $query->whereHas('lesson', function (Builder $query) use ($value) {
-                $query->where('grade_id', $value);
-            });
-        })->when($value = $request->get('lesson_id', false), function (Builder $query) use ($value) {
-            $query->where('lesson_id', $value);
+            })->when($value = $request->get('user_id', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('id', $value);
+                });
+            })->when($value = $request->get('user_status', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    if ($value == 'active') {
+                        $query->where('active_to', '>=', now());
+                    } elseif ($value == 'expire') {
+                        $query->where(function ($q) {
+                            $q->where('active_to', '<', now())->orWhereNull('active_to');
+                        });
+                    }
+                });
+            })->when($value = $request->get('section', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    is_array($value) ? $query->whereIn('section', $value) : $query->where('section', $value);
+                });
+            })->when($value = $request->get('grade_id', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('grade_id', $value);
+                });
+            })->when($value = $request->get('teacher_id', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->whereHas('teacherUser', function (Builder $query) use ($value) {
+                        $query->where('teacher_id', $value);
+                    });
+                });
+            })->when($value = $request->get('school_id', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('school_id', $value);
+                });
+            })->when($value = $request->get('grade_id', false), function (Builder $query) use ($value) {
+                $query->whereHas('lesson', function (Builder $query) use ($value) {
+                    $query->where('grade_id', $value);
+                });
+            })->when($value = $request->get('lesson_id', false), function (Builder $query) use ($value) {
+                $query->where('lesson_id', $value);
 
-        })->when($value = $request->get('id', false), function (Builder $query) use ($value) {
-            $query->where('id', $value);
+            })->when($value = $request->get('id', false), function (Builder $query) use ($value) {
+                $query->where('id', $value);
 
-        })->when($value = $request->get('status', false), function (Builder $query) use ($value) {
-            $query->where('status', $value);
+            })->when($value = $request->get('status', false), function (Builder $query) use ($value) {
+                $query->where('status', $value);
 
-        })
-            ->when($value = $request->get('supervisor_id', false), function (Builder $query) use ($value){
-                $query->whereRelation('user.teacher.supervisor_teachers','supervisor_id',$value);
+            })
+            ->when($value = $request->get('supervisor_id', false), function (Builder $query) use ($value) {
+                $query->whereRelation('user.teacher.supervisor_teachers', 'supervisor_id', $value);
             })
             ->when($value = $request->get('row_id', []), function (Builder $query) use ($value) {
                 $query->whereIn('id', $value);
 
             });
     }
+
     public function lesson()
     {
         return $this->belongsTo(Lesson::class);
@@ -128,6 +134,7 @@ class UserLesson extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public static function lessonStatus()
     {
         return ['pending', 'corrected', 'returned'];
@@ -148,11 +155,11 @@ class UserLesson extends Model
     public function getStatusNameClassAttribute()
     {
         if ($this->status == 'pending') {
-            return '<span class="badge badge-primary">' . t(ucfirst('Waiting list')). '</span>';
+            return '<span class="badge badge-primary">' . t(ucfirst('Waiting list')) . '</span>';
         } else if ($this->status == 'corrected') {
-            return '<span class="badge badge-success">' . t(ucfirst('Marking Completed')). '</span>';
+            return '<span class="badge badge-success">' . t(ucfirst('Marking Completed')) . '</span>';
         } else {
-            return '<span class="badge badge-warning">' . t(ucfirst('Send back')). '</span>';
+            return '<span class="badge badge-warning">' . t(ucfirst('Send back')) . '</span>';
         }
     }
 

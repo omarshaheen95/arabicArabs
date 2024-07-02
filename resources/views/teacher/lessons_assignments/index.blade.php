@@ -92,7 +92,15 @@
                 <option value="2">{{t('UnCompleted')}}</option>
             </select>
         </div>
-
+        <div class="col-2 mb-2">
+            <label class="mb-2">{{t('Gender')}}:</label>
+            <select class="form-select" name="gender" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Gender')}}">
+                <option></option>
+                <option value="Boy">{{t('Boy')}}</option>
+                <option value="Girl">{{'Girl'}}</option>
+            </select>
+        </div>
         <div class="col-lg-3 mb-2">
             <label class="mb-2">{{t('Assigned in')}} :</label>
             <input autocomplete="disabled" class="form-control form-control-solid" name="date_range" value="" placeholder="{{t('Pick date range')}}" id="date_range"/>

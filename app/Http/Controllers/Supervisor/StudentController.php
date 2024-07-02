@@ -32,7 +32,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         if (request()->ajax()) {
-            $rows = User::query()->with(['package','grade', 'teacher'])->filter($request)->latest();
+            $rows = User::query()->with(['package', 'grade', 'teacher'])->filter($request)->latest();
 
             return DataTables::make($rows)
                 ->escapeColumns([])
@@ -49,6 +49,7 @@ class StudentController extends Controller
                     $html = '<div class="d-flex flex-column">' .
                         '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Teacher') . ' </span> : ' . '<span> ' . $teacher . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Package') . ' </span> : ' . '<span> ' . $package . '</span></div>' .
+                       '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Gender') . ' </span> : ' . '<span class="ps-1"> ' . $gender . '</span></div>' .
                         '</div>';
                     return $html;
                 })
@@ -60,7 +61,6 @@ class StudentController extends Controller
                 })
                 ->addColumn('student', function ($row) {
                     $section = !is_null($row->section) ? $row->section : '<span class="text-danger">-</span>';
-
                     $student = '<div class="d-flex flex-column">' .
                         '<div class="d-flex fw-bold">' . $row->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
@@ -99,7 +99,7 @@ class StudentController extends Controller
         }
         $title = t('Show Users');
         $packages = Package::query()->get();
-        $teachers = Teacher::query()->whereHas('supervisor_teachers', function (Builder $query){
+        $teachers = Teacher::query()->whereHas('supervisor_teachers', function (Builder $query) {
             $query->where('supervisor_id', Auth::guard('supervisor')->id());
         })->get();
         return view('supervisor.user.index', compact('title', 'packages', 'teachers'));
@@ -118,7 +118,7 @@ class StudentController extends Controller
 
     public function review(Request $request, $id)
     {
-        $user = User::with('grade','teacher','alternateGrade')->whereHas('school.supervisors', function (Builder $query){
+        $user = User::with('grade', 'teacher', 'alternateGrade')->whereHas('school.supervisors', function (Builder $query) {
             $query->where('id', Auth::guard('supervisor')->user()->id);
         })->findOrFail($id);
 
@@ -178,13 +178,13 @@ class StudentController extends Controller
         $guard = 'supervisor';
 
         return view('general.user.user_lesson_review', compact('user', 'teacher',
-            'tests', 'passed_tests', 'title', 'data', 'guard','grades'));
+            'tests', 'passed_tests', 'title', 'data', 'guard', 'grades'));
 
     }
 
     public function storyReview(Request $request, $id)
     {
-        $user = User::with('grade','teacher','alternateGrade')->whereHas('school.supervisors', function (Builder $query){
+        $user = User::with('grade', 'teacher', 'alternateGrade')->whereHas('school.supervisors', function (Builder $query) {
             $query->where('id', Auth::guard('supervisor')->user()->id);
         })->findOrFail($id);
 
@@ -248,14 +248,13 @@ class StudentController extends Controller
     {
         $request['teacher_id'] = Auth::guard('supervisor')->user()->teachers->pluck('id');
         $general = new GeneralFunctions();
-        return $general->userReport($request,$id);
+        return $general->userReport($request, $id);
     }
-
 
 
     public function studentsCards(Request $request)
     {
-        $request->validate(['teacher_id'=>'required']);
+        $request->validate(['teacher_id' => 'required']);
         $students = User::query()->filter($request)->get()->chunk(6);
         $qr = 1;//isset($request['qr-code']);
         $student_login_url = config('app.url') . '/login';

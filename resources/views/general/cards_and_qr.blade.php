@@ -47,7 +47,13 @@
                                         </div>
 
                                         <div class="col-5 mt-1 d-flex justify-content-end p-0 pe-1">
-                                            {!! QrCode::size(100)->generate(sysDomain()."/login?username=$std->email"); !!}
+                                            @if($std->gender == 'Girl')
+                                                {!! QrCode::color(255, 0, 194)->size(100)->generate(sysDomain()."/login?username=$std->email".'&password=123456'); !!}
+                                            @elseif($std->gender == 'Boy')
+                                                {!! QrCode::color(0, 166, 255)->size(100)->generate(sysDomain()."/login?username=$std->email".'&password=123456'); !!}
+                                            @else
+                                                {!! QrCode::color(30, 67, 151)->size(100)->generate(sysDomain()."/login?username=$std->email".'&password=123456'); !!}
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="row mt-1 px-1">

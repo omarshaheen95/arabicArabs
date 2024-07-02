@@ -39,7 +39,7 @@ WhatsApp +972592554320
             <label class="mb-2">{{t('ID')}}:</label>
             <input type="text" name="id" class="form-control direct-search" placeholder="{{t('ID')}}">
         </div>
-        <div class="col-lg-3  mb-2">
+        <div class="col-lg-2  mb-2">
             <label class="mb-2">{{t('Student Name')}}:</label>
             <input type="text" name="user_name" class="form-control direct-search" placeholder="{{t('Student Name')}}">
         </div>
@@ -119,7 +119,15 @@ WhatsApp +972592554320
 
             </select>
         </div>
-
+        <div class="col-2 mb-2">
+            <label class="mb-2">{{t('Gender')}}:</label>
+            <select class="form-select" name="gender" data-control="select2" data-allow-clear="true"
+                    data-placeholder="{{t('Select Gender')}}">
+                <option></option>
+                <option value="Boy">{{t('Boy')}}</option>
+                <option value="Girl">{{'Girl'}}</option>
+            </select>
+        </div>
 
 
 

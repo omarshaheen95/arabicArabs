@@ -38,11 +38,12 @@ class StudentController extends Controller
                 ->escapeColumns([])
                 ->addColumn('student', function ($row){
                     $section = !is_null($row->section) ? $row->section : '<span class="text-danger">-</span>';
-
+                    $gender = !is_null($row->gender) ? $row->gender : '<span class="text-danger">-</span>';
                     $student = '<div class="d-flex flex-column">' .
                         '<div class="d-flex fw-bold">' . $row->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold ">' . $row->grade->name . '</span> : ' . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold "> ' . t('Gender') . ' </span> : ' . '<span> ' . $gender . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
                     return $student;
                 })

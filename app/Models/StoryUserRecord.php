@@ -65,6 +65,10 @@ class StoryUserRecord extends Model
                 $query->whereHas('user', function (Builder $query) use ($value) {
                     $query->where('email', $value);
                 });
+            })->when($value = $request->get('gender', false), function (Builder $query) use ($value) {
+                $query->whereHas('user', function (Builder $query) use ($value) {
+                    $query->where('gender', $value);
+                });
             })->when($value = $request->get('school_id', false), function (Builder $query) use ($value) {
                 $query->whereHas('user', function (Builder $query) use ($value) {
                     $query->where('school_id', $value);

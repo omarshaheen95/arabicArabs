@@ -58,6 +58,7 @@ class UserController extends Controller
                     $school = optional($row->school)->name;
                     $teacher = optional($row->teacher)->name ? optional($row->teacher)->name : '<span class="text-danger">' . t('Unsigned') . '</span>';
                     $package = optional($row->package)->name;
+
                     $html = '<div class="d-flex flex-column">' .
                         '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('School') . ' </span> : ' . '<span> ' . $school . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Teacher') . ' </span> : ' . '<span> ' . $teacher . '</span></div>' .
@@ -73,11 +74,13 @@ class UserController extends Controller
                 })
                 ->addColumn('student', function ($row) {
                     $section = !is_null($row->section) ? $row->section : '<span class="text-danger">-</span>';
+                    $gender = !is_null($row->gender) ? $row->gender : '<span class="text-danger">-</span>';
 
                     $student = '<div class="d-flex flex-column">' .
                         '<div class="d-flex fw-bold">' . $row->name . '</div>' .
                         '<div class="d-flex text-danger"><span style="direction: ltr">' . $row->email . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold text-primary">' . $row->grade->name . '</div>' .
+                        '<div class="d-flex"><span class="fw-bold text-primary"> ' . t('Gender') . ' </span> : ' . '<span> ' . $gender . '</span></div>' .
                         '<div class="d-flex"><span class="fw-bold ">' . t('Section') . '</span> : ' . $section . '</div></div>';
                     return $student;
                 })
