@@ -425,7 +425,7 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                                 </a>
                             </div>
                         @endcan
-                        @can('import file')
+                        @can('import files')
                             <div class="menu-item">
                                 <a href="{{route('manager.import_files.index')}}"
                                    class="menu-link {{Request::is('manager/import_files*')?'active':''}}">
