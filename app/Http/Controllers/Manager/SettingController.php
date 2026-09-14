@@ -50,7 +50,7 @@ class SettingController extends Controller
             $data['supervisors'] = Supervisor::query()->count();
 
             //get data for chart statistics for students terms and students login
-            $students_login_data = LoginSession::query()->where('model_type', User::class)->groupBy('date')->orderBy('date')
+            $students_login_data = LoginSession::query()->where('status', 'success')->where('model_type', User::class)->groupBy('date')->orderBy('date')
                 ->whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])
                 ->get(array(
                     DB::raw('DATE_FORMAT(created_at, "%H:00") as date'),
@@ -147,7 +147,7 @@ class SettingController extends Controller
                     DB::raw('COUNT(*) as counts')
                 ));
         }elseif ($model == 'StudentsLogin') {
-            $items_data = LoginSession::query()->where('model_type', User::class)->groupBy('date')->orderBy('date')
+            $items_data = LoginSession::query()->where('status', 'success')->where('model_type', User::class)->groupBy('date')->orderBy('date')
                 ->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfDay(), Carbon::parse($request->end_date)->endOfDay()])
                 ->get(array(
                     DB::raw('DATE_FORMAT(created_at, "' . $format . '") as date'),

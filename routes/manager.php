@@ -110,6 +110,8 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::delete('year', 'YearController@destroy')->name('year.destroy');
 
     //Login Sessions
+
+    Route::post('login_sessions/export', [\App\Http\Controllers\Manager\LoginSessionController::class, 'export'])->name('login_sessions.export');
     Route::resource('login_sessions', 'LoginSessionController');
 
     //Text translation
@@ -219,4 +221,3 @@ Route::group(['namespace' => 'Manager'], function(){
 
 
 });
-

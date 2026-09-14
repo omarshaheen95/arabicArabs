@@ -23,3 +23,12 @@ public/teachers_imported_files
 public/uploads
 resources/lang
 /composer.lock
+
+!/resources/lang/
+/resources/lang/*
+!/resources/lang/ar/
+!/resources/lang/en/
+/resources/lang/ar/*
+/resources/lang/en/*
+!/resources/lang/ar/auth_log.php
+!/resources/lang/en/auth_log.php

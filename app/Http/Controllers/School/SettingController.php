@@ -39,7 +39,7 @@ class SettingController extends Controller
            $supervisors = Supervisor::query()->where('school_id', Auth::guard('school')->id())->count();
 
            //get data for chart statistics for students terms and students login
-           $students_login_data = LoginSession::query()
+           $students_login_data = LoginSession::query()->where('status', 'success')
                ->whereHasMorph('model', User::class, function (Builder $query) {
                    $query->where('school_id', Auth::guard('school')->id());
                })
@@ -136,7 +136,7 @@ class SettingController extends Controller
                     DB::raw('COUNT(*) as counts')
                 ));
         }  elseif ($model == 'StudentsLogin') {
-            $items_data = LoginSession::query()
+            $items_data = LoginSession::query()->where('status', 'success')
                 //where has user relation and user school_id equal to school id
                 ->whereHasMorph('model', User::class, function (Builder $query) {
                     $query->where('school_id', Auth::guard('school')->id());

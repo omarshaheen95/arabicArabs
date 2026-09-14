@@ -59,12 +59,13 @@ class LoginController extends Controller
 
         // Check if the user exists and if they are active
         if ($user && $user->archived) {
-            // Optionally, you can log this attempt or notify the user that their account is inactive
+            \App\Services\LoginActivityService::record('failed', 'web', $user, ['identifier' => $request->email, 'reason' => 'account_archived']);
             return false;
         }
 
         // Check if the user's school has suspended student login
         if ($user && $user->school_id && $user->school && $user->school->suspend_student_login) {
+            \App\Services\LoginActivityService::record('failed', 'web', $user, ['identifier' => $request->email, 'reason' => 'school_suspended']);
             throw ValidationException::withMessages([
                 $this->username() => ['حسابك معلق مؤقتا'],
             ]);

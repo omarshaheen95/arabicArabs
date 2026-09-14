@@ -72,7 +72,7 @@ class School extends Authenticatable
     }
     public function login_sessions()
     {
-        return $this->morphMany(LoginSession::class, 'model');
+        return $this->morphMany(LoginSession::class, 'model')->where('status', 'success');
     }
     public function students()
     {

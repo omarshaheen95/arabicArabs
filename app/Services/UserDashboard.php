@@ -93,7 +93,7 @@ class UserDashboard
         $user = Auth::guard('web')->user();
 
         // Get all login dates for this week
-        $loginDates = LoginSession::where('model_id', $user->id)
+        $loginDates = LoginSession::where('status', 'success')->where('model_id', $user->id)
             ->where('model_type', User::class)
             ->whereBetween('created_at', [
                 $startOfWeek->copy()->startOfDay(),
@@ -124,7 +124,7 @@ class UserDashboard
 
     private function getActiveDaysInMonth($userId)
     {
-        return LoginSession::where('model_id', $userId)
+        return LoginSession::where('status', 'success')->where('model_id', $userId)
             ->where('model_type', User::class)
             ->whereBetween('created_at', [
                 Carbon::now()->startOfMonth(),
@@ -194,7 +194,7 @@ class UserDashboard
         $today = Carbon::today();
 
         // Fetch all login dates in one query (last 366 days to be safe)
-        $loginDates = LoginSession::where('model_id', $userId)
+        $loginDates = LoginSession::where('status', 'success')->where('model_id', $userId)
             ->where('model_type', User::class)
             ->where('created_at', '>=', $today->copy()->subDays(366))
             ->selectRaw('DATE(created_at) as date')
@@ -247,7 +247,7 @@ class UserDashboard
     private function calculateLongestStreak($userId)
     {
         // Get all unique login dates
-        $loginDates = LoginSession::where('model_id', $userId)
+        $loginDates = LoginSession::where('status', 'success')->where('model_id', $userId)
             ->where('model_type', User::class)
             ->selectRaw('DATE(created_at) as date')
             ->distinct()

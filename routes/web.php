@@ -17,7 +17,7 @@ Route::get('/', 'WebController@home')->name('main');
 Route::get('page/{key}', 'WebController@page')->name('page');
 
 Route::get('/schools', 'WebController@schools')->name('schools');
-Route::get('students-cards-by-section', [\App\Http\Controllers\General\UserController::class,'cards']);
+Route::get('students-cards-by-section', [\App\Http\Controllers\General\UserController::class, 'cards']);
 
 //Route::get('lang/{locale}', function ($locale) {
 //    session(['lang' => $locale]);
@@ -42,70 +42,70 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['prefix' => 'manager','namespace' => 'ManagerAuth','as' => 'manager.'], function () {
-  Route::get('/login', 'LoginController@showLoginForm')->name('login');
-  Route::post('/login', 'LoginController@login');
-  Route::post('/logout', 'LoginController@logout')->name('logout');
+Route::group(['prefix' => 'manager', 'namespace' => 'ManagerAuth', 'as' => 'manager.'], function () {
+    Route::get('/login', 'LoginController@showLoginForm')->name('login');
+    Route::post('/login', 'LoginController@login');
+    Route::post('/logout', 'LoginController@logout')->name('logout');
 
 
-  Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.request');
-  Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.email');
-  Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
-  Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm');
+    Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.request');
+    Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.email');
+    Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+    Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm');
 });
 
-Route::group(['prefix' => 'school','namespace' => 'SchoolAuth','as' => 'school.'], function () {
-  Route::get('/login', 'LoginController@showLoginForm')->name('login');
-  Route::post('/login', 'LoginController@login');
-  Route::post('/logout', 'LoginController@logout')->name('logout');
+Route::group(['prefix' => 'school', 'namespace' => 'SchoolAuth', 'as' => 'school.'], function () {
+    Route::get('/login', 'LoginController@showLoginForm')->name('login');
+    Route::post('/login', 'LoginController@login');
+    Route::post('/logout', 'LoginController@logout')->name('logout');
 
 //  Route::get('/register', 'SchoolAuth\RegisterController@showRegistrationForm')->name('register');
 //  Route::post('/register', 'SchoolAuth\RegisterController@register');
 
-  Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.request');
-  Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.email');
-  Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
-  Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm');
+    Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.request');
+    Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.email');
+    Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+    Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm');
 });
 
-Route::group(['prefix' => 'teacher','namespace' => 'TeacherAuth','as' => 'teacher.'], function () {
-  Route::get('/login', 'LoginController@showLoginForm')->name('login');
-  Route::post('/login', 'LoginController@login');
-  Route::post('/logout', 'LoginController@logout')->name('logout');
+Route::group(['prefix' => 'teacher', 'namespace' => 'TeacherAuth', 'as' => 'teacher.'], function () {
+    Route::get('/login', 'LoginController@showLoginForm')->name('login');
+    Route::post('/login', 'LoginController@login');
+    Route::post('/logout', 'LoginController@logout')->name('logout');
 
 
-  Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.request');
-  Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.email');
-  Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
-  Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm');
+    Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.request');
+    Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.email');
+    Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+    Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm');
 });
 
-Route::group(['prefix' => 'supervisor','namespace' => 'SupervisorAuth','as' => 'supervisor.'], function () {
-  Route::get('/login', 'LoginController@showLoginForm')->name('login');
-  Route::post('/login', 'LoginController@login');
-  Route::post('/logout', 'LoginController@logout')->name('logout');
+Route::group(['prefix' => 'supervisor', 'namespace' => 'SupervisorAuth', 'as' => 'supervisor.'], function () {
+    Route::get('/login', 'LoginController@showLoginForm')->name('login');
+    Route::post('/login', 'LoginController@login');
+    Route::post('/logout', 'LoginController@logout')->name('logout');
 
 
-  Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.request');
-  Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.email');
-  Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
-  Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm');
+    Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.request');
+    Route::post('/password/reset', 'ResetPasswordController@reset')->name('password.email');
+    Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.reset');
+    Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm');
 });
 
-Route::get('migrate', function (){
+Route::get('migrate', function () {
     \Illuminate\Support\Facades\Artisan::call('migrate');
 });
-Route::get('view', function (){
+Route::get('view', function () {
     \Illuminate\Support\Facades\Artisan::call('view:clear');
 });
-Route::get('command', function (){
+Route::get('command', function () {
     \Illuminate\Support\Facades\Artisan::call('schedule:work');
 });
-Route::get('cache', function (){
+Route::get('cache', function () {
     \Illuminate\Support\Facades\Artisan::call('cache:clear');
     \Illuminate\Support\Facades\Artisan::call('config:cache');
 });
-Route::group(['namespace' => 'User', 'middleware' => [ 'auth','share_user_data']], function () {
+Route::group(['namespace' => 'User', 'middleware' => ['auth', 'share_user_data']], function () {
     //Lessons
     Route::get('/home', 'LessonController@lessonsLevels')->name('home');
     Route::get('/lessons/levels', 'LessonController@lessonsLevels')->name('lessons.levels');
@@ -238,7 +238,7 @@ Route::get('user/{id}/report', 'General\UserController@report')->name('user.repo
 
 Route::get('/lang/{local}', function ($local) {
     session(['lang' => $local]);
-    if (Auth::guard(getGuard())->check()){
+    if (Auth::guard(getGuard())->check()) {
         $user = Auth::guard(getGuard())->user()->update(['local' => $local,]);
     }
     app()->setLocale($local);

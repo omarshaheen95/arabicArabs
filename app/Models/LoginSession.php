@@ -1,8 +1,12 @@
 <?php
+/*
+Dev Omar Shaheen
+Devomar095@gmail.com
+WhatsApp +972592554320
+*/
 
 namespace App\Models;
 
-use App\Traits\LogsActivityTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -10,46 +14,71 @@ use Illuminate\Http\Request;
 
 class LoginSession extends Model
 {
-    use LogsActivityTrait;
-
-    protected $fillable = ['model_id','model_type','data'];
+    use \App\Traits\LogsActivityTrait;
     protected static $recordEvents = ['deleted'];
+    protected $fillable = ['model_id', 'model_type', 'data', 'status', 'guard', 'identifier', 'reason', 'ip', 'user_agent'];
+
+    public function getAccountNameAttribute(): ?string
+    {
+        return optional($this->model)->name;
+    }
+
+    public function getAccountIdentifierAttribute(): ?string
+    {
+        return optional($this->model)->email ?: $this->identifier;
+    }
+
+    public static function morphTypes(): array
+    {
+        return [Manager::class, School::class, Teacher::class, Supervisor::class, User::class];
+    }
 
     public function model(): MorphTo
     {
         return $this->morphTo();
     }
 
-    public function scopeFilter(Builder $query, $request =null): Builder
+    public function scopeFilter(Builder $query, Request $request = null): Builder
     {
-        if (!$request){
-            $request = \request();
-        }
+        $request = $request ?: request();
         return $query->when($value = $request->get('model_id'), function (Builder $query)use ($value) {
             $query->where('model_id',$value) ;
 
         })->when($value = $request->get('name'), function (Builder $query)use ($value) {
-            $query->whereHasMorph('model',[Manager::class,School::class,User::class,Supervisor::class],function ($query) use ($value){
+            $query->whereHasMorph('model',self::morphTypes(),function ($query) use ($value){
                 $query->where('name','LIKE','%'.$value.'%');
             }) ;
         })->when($value = $request->get('email'), function (Builder $query)use ($value) {
-            $query->whereHasMorph('model',[Manager::class,School::class,User::class,Supervisor::class],function ($query) use ($value){
-                $query->where('email',$value);
-            }) ;
+            $query->where(function (Builder $query) use ($value) {
+                $query->whereHasMorph('model', self::morphTypes(), function ($query) use ($value) {
+                    $query->where('email', $value);
+                })->orWhere('identifier', $value);
+            });
         })->when($value = $request->get('model_type'), function (Builder $query)use ($value) {
-            if ($value == 'Manager'){
-                $query->where('model_type','=',Manager::class) ;
-            }elseif ($value=='Student'){
-                $query->where('model_type','=',User::class) ;
-            }elseif ($value=='School'){
-                $query->where('model_type','=',School::class) ;
-            }elseif ($value=='Inspection'){
-                $query->where('model_type','=',Supervisor::class) ;
-            }
+                if ($value === 'Unknown') {
+                    $query->whereNull('model_type');
+                } else {
+                    $types = array_combine(array_map('class_basename', self::morphTypes()), self::morphTypes());
+                    $query->where('model_type', $types[$value] ?? (['Student' => User::class, 'Inspection' => Supervisor::class][$value] ?? $value));
+                }
+
+        })->when($value = $request->get('status'), function (Builder $query) use ($value) {
+            $query->where('status', $value);
+        })->when($value = $request->get('login_guard'), function (Builder $query) use ($value) {
+            $query->where('guard', $value);
+        })->when($value = $request->get('ip'), function (Builder $query) use ($value) {
+            $query->where('ip', 'LIKE', '%'.$value.'%');
+        })->when($value = $request->get('identifier'), function (Builder $query) use ($value) {
+            $query->where('identifier', 'LIKE', '%'.$value.'%');
+        })->when($value = $request->get('row_id', []), function (Builder $query) use ($value) {
+            $query->whereIn('id', (array) $value);
+        })->when($value = $request->get('id'), function (Builder $query) use ($value) {
+            $query->where('id', $value);
         })->when($value= $request->get('start_date',false),function (Builder $query) use ($value){
             $query->whereDate('created_at', '>=',$value);
         })->when($value= $request->get('end_date',false),function (Builder $query) use ($value){
             $query->whereDate('created_at', '<=',$value);
         });
     }
+
 }

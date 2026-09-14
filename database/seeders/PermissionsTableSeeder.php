@@ -243,6 +243,7 @@ class PermissionsTableSeeder extends Seeder
 
             ['name' => 'show statistics', 'guard_name' => 'manager', 'group' => 'dashboard'],
             ['name' => 'show login sessions', 'guard_name' => 'manager', 'group' => 'login_sessions'],
+            ['name' => 'export login sessions', 'guard_name' => 'manager', 'group' => 'login_sessions'],
 
             ['name' => 'import files', 'guard_name' => 'manager', 'group' => 'import_files'],
             ['name' => 'delete import files', 'guard_name' => 'manager', 'group' => 'import_files'],
