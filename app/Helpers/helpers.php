@@ -64,12 +64,45 @@ function getSections($school_id=null,$teacher_id=null)
     return $sections;
 }
 
+//the file names the system is allowed to store, the types are listed in config/filesystems.php
+//without types it returns them all => allowedUploadExtensions('pdf', 'excel')
+function allowedUploadExtensions(...$types)
+{
+    $types_extensions = config('filesystems.allowed_uploads.extensions', []);
+    if ($types) {
+        $types_extensions = array_intersect_key($types_extensions, array_flip($types));
+    }
+
+    $extensions = [];
+    foreach ($types_extensions as $type_extensions) {
+        $extensions = array_merge($extensions, $type_extensions);
+    }
+
+    return $extensions;
+}
+
+//the mime types of the given types, ready for the mimetypes rule => allowedUploadMimetypes('image', 'pdf')
+function allowedUploadMimetypes(...$types)
+{
+    $mimetypes = [];
+    foreach ($types as $type) {
+        $mimetypes = array_merge($mimetypes, config('filesystems.allowed_uploads.mimetypes.' . $type, []));
+    }
+
+    return implode(',', $mimetypes);
+}
+
 function uploadFile($file, $path, $with_date = true)
 {
     $fileName = $file->getClientOriginalName();
-    $file_exe = $file->getClientOriginalExtension();
+    $extension = strtolower(trim($file->getClientOriginalExtension()));
+
+    //the file name is what the web server executes, so never store an extension we do not allow
+    if (!in_array($extension, allowedUploadExtensions())) {
+        throw new \App\Exceptions\GeneralException(t('This file type is not allowed'));
+    }
     $file_size = $file->getSize();
-    $new_name = uniqid() . '.' . $file_exe;
+    $new_name = uniqid() . '.' . $extension;
     if ($with_date) {
         $directory = 'uploads' . '/' . $path . '/' . date("Y") . '/' . date("m") . '/' . date("d");
     } else {
@@ -80,7 +113,7 @@ function uploadFile($file, $path, $with_date = true)
     $data['path'] = $directory . '/' . $new_name;
     $data['name'] = $fileName;
     $data['new_name'] = $new_name;
-    $data['extension'] = $file_exe;
+    $data['extension'] = $extension;
 //    $data['size'] = formatBytes($file_size);
     $data['size_num'] = $file_size;
     return $data;
