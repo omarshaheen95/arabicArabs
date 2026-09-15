@@ -22,9 +22,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Proengsoft\JsValidation\Facades\JsValidatorFacade as JsValidator;
+use App\Traits\UpdatesPassword;
 
 class SettingController extends Controller
 {
+    use UpdatesPassword;
+
     public function home()
     {
         $title = t('Home');
@@ -74,21 +77,14 @@ class SettingController extends Controller
     public function editPassword()
     {
         $title = t('Change Password');
-        return view('teacher.profile.password', compact('title' ));
+        $reason = $this->passwordChangeReason('teacher');
+        $forced = $reason !== null;
+        return view('teacher.profile.password', compact('title', 'forced', 'reason'));
     }
 
     public function updatePassword(TeacherPasswordRequest $request)
     {
-        $user = Auth::guard('teacher')->user();
-        $request->validated();
-        if (Hash::check($request->get('old_password'), $user->password)) {
-            $data['password'] = bcrypt($request->get('password'));
-            $user->update($data);
-        } else {
-            return $this->redirectWith(true, null, 'Current Password Invalid', 'error');
-        }
-
-        return redirect()->route('teacher.home')->with('message', t('Successfully Updated'))->with('m-class', 'success');
+        return $this->applyPasswordUpdate($request, 'teacher');
     }
 
     public function preUsageReport()

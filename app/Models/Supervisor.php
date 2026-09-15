@@ -10,13 +10,23 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Traits\ManagesPasswordLifetime;
 
 class Supervisor extends Authenticatable
 {
-    use Notifiable, SoftDeletes,LogsActivityTrait,HasRoles;
+    use Notifiable, SoftDeletes,LogsActivityTrait,HasRoles, ManagesPasswordLifetime;
+
+    /** Guard this model authenticates with, read by ManagesPasswordLifetime. */
+    public static $passwordGuard = 'supervisor';
 
     protected $fillable = [
-        'name', 'email','image', 'password', 'school_id', 'active', 'active_to', 'approved','lang','last_login','last_login_info'
+        'name', 'email','image', 'password', 'school_id', 'active', 'active_to', 'approved','lang','last_login','last_login_info',
+        'force_password_change', 'password_changed_at',
+    ];
+
+    protected $casts = [
+        'force_password_change' => 'boolean',
+        'password_changed_at' => 'datetime',
     ];
 
     protected $hidden = [

@@ -17,7 +17,7 @@ Route::group(['namespace' => 'School'], function() {
     Route::get('profile/edit', 'SettingController@editProfile')->name('edit-profile');
     Route::post('profile/update', 'SettingController@updateProfile')->name('update-profile');
     Route::get('password/edit', 'SettingController@editPassword')->name('edit-password');
-    Route::post('password/update', 'SettingController@updatePassword')->name('update-password');
+    Route::post('password/update', 'SettingController@updatePassword')->middleware('throttle:10,1')->name('update-password');
 
 
     //Lesson And Story (Hidden Control)

@@ -17,7 +17,7 @@ Route::group(['namespace' => 'Supervisor'], function () {
         Route::get('profile/edit', 'SettingController@editProfile')->name('edit-profile');
         Route::post('profile/update', 'SettingController@updateProfile')->name('update-profile');
         Route::get('password/edit', 'SettingController@editPassword')->name('edit-password');
-        Route::post('password/update', 'SettingController@updatePassword')->name('update-password');
+        Route::post('password/update', 'SettingController@updatePassword')->middleware('throttle:10,1')->name('update-password');
 
         //Usage Report
         Route::get('pre_usage_report', 'SettingController@preUsageReport')->name('report.pre_usage_report');

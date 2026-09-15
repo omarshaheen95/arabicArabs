@@ -14,15 +14,25 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
+use App\Traits\ManagesPasswordLifetime;
 
 
 class School extends Authenticatable
 {
-    use Notifiable, SoftDeletes,LogsActivityTrait,HasRoles;
+    use Notifiable, SoftDeletes,LogsActivityTrait,HasRoles, ManagesPasswordLifetime;
+
+    /** Guard this model authenticates with, read by ManagesPasswordLifetime. */
+    public static $passwordGuard = 'school';
 
 
     protected $fillable = [
-        'name', 'email', 'password', 'website', 'mobile', 'logo', 'active','student_login','suspend_student_login','lang', 'last_login','last_login_info'
+        'name', 'email', 'password', 'website', 'mobile', 'logo', 'active','student_login','suspend_student_login','lang', 'last_login','last_login_info',
+        'force_password_change', 'password_changed_at',
+    ];
+
+    protected $casts = [
+        'force_password_change' => 'boolean',
+        'password_changed_at' => 'datetime',
     ];
 
     protected $hidden = [

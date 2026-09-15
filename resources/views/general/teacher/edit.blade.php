@@ -93,11 +93,13 @@
                 </div>
 
                 <div class="col-6 mb-2">
-                    <div class="form-group">
-                        <label for="password" class="form-label">{{t('Password')}}</label>
-                        <input type="text" id="password" name="password" class="form-control"
-                               placeholder="{{t('Password')}}" @if(!isset($teacher)) value="123456" @endif required>
-                    </div>
+                    @include('components.password-fields', [
+                        'confirm' => false,
+                        'col' => 'col-lg-4 mb-2',
+                        'required' => !isset($teacher),
+                        'simple' => true,
+                    ])
+                    @include('components.force-password-change', ['row' => $teacher ?? null])
                 </div>
 
                 <div class="col-6 mb-2">

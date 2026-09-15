@@ -34,6 +34,11 @@
             @endcan
 
             @can('delete supervisor')
+                @can('edit supervisors')
+                    <li><a class="dropdown-item text-warning" href="#!"
+                           data-filtered-action="{{route('supervisor.force-password-change')}}"
+                           data-confirm="{{t('Password change will be enforced on every account matching the current filters. Continue?')}}">{{t('Force Password Change')}}</a></li>
+                @endcan
                 <li><a class="dropdown-item text-danger d-none checked-visible" href="#!"
                        id="delete_rows">{{t('Delete')}}</a></li>
             @endcan

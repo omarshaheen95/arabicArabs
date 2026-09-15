@@ -69,7 +69,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapManagerRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'manager', 'auth:manager','checkIfActive','local'],
+            'middleware' => ['web', 'manager', 'auth:manager','checkIfActive','local', 'session.password:manager', 'force.password:manager'],
             'prefix' => 'manager',
             'as' => 'manager.',
             'namespace' => $this->namespace,
@@ -81,7 +81,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapSchoolRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'school', 'auth:school','checkIfActive','local'],
+            'middleware' => ['web', 'school', 'auth:school','checkIfActive','local', 'session.password:school', 'force.password:school'],
             'prefix' => 'school',
             'as' => 'school.',
             'namespace' => $this->namespace,
@@ -93,7 +93,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapSupervisorRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'supervisor', 'auth:supervisor','checkIfActive','local'],
+            'middleware' => ['web', 'supervisor', 'auth:supervisor','checkIfActive','local', 'session.password:supervisor', 'force.password:supervisor'],
             'prefix' => 'supervisor',
             'as' => 'supervisor.',
             'namespace' => $this->namespace,
@@ -105,7 +105,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapTeacherRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'teacher', 'auth:teacher','checkIfActive','local'],
+            'middleware' => ['web', 'teacher', 'auth:teacher','checkIfActive','local', 'session.password:teacher', 'force.password:teacher'],
             'prefix' => 'teacher',
             'as' => 'teacher.',
             'namespace' => $this->namespace,

@@ -35,10 +35,13 @@
                                class="form-control" autocomplete="off"
                                value="{{ isset($manager) ? $manager->email : old("email") }}"/>
                     </div>
-                    <div class="col-lg-3">
-                        <label class="mb-2">{{t('Password')}} :</label>
-                        <input name="password" type="text" placeholder="{{t('Password')}}" class="form-control" @if(!isset($manager)) value="123456" @endif/>
-                    </div>
+                    @include('components.password-fields', [
+                        'confirm' => false,
+                        'col' => 'col-lg-4 mb-2',
+                        'required' => !isset($manager),
+                        'simple' => true,
+                    ])
+                    @include('components.force-password-change', ['row' => $manager ?? null])
                     <div class="col-lg-2">
                         <label class="mb-2">{{t(' Status')}} :</label>
 

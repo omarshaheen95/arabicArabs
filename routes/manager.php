@@ -21,6 +21,7 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::delete('delete_school', 'SchoolController@destroy')->name('school.destroy');
     Route::post('school/activation', 'SchoolController@activation')->name('school.activation');
     Route::post('school/export', 'SchoolController@export')->name('school.export');
+    Route::post('school/force-password-change', 'SchoolController@forcePasswordChange')->name('school.force-password-change');
     Route::get('school/{id}/login', 'SchoolController@login')->name('school.login');
 
 
@@ -34,12 +35,13 @@ Route::group(['namespace' => 'Manager'], function(){
     Route::resource('manager', 'ManagerController')->except(['destroy']);
     Route::delete('manager/delete', 'ManagerController@destroy')->name('manager.destroy');
     Route::post('/manager/export', 'ManagerController@export')->name('manager.export');
+    Route::post('manager/force-password-change', 'ManagerController@forcePasswordChange')->name('manager.force-password-change');
 
     //Profile
     Route::get('profile/edit', 'ManagerController@editProfile')->name('edit-profile');
     Route::post('profile/update', 'ManagerController@updateProfile')->name('update-profile');
     Route::get('password/edit', 'ManagerController@editPassword')->name('edit-password');
-    Route::post('password/update', 'ManagerController@updatePassword')->name('update-password');
+    Route::post('password/update', 'ManagerController@updatePassword')->middleware('throttle:10,1')->name('update-password');
 
     //Activity Log Controller
     Route::get('activity-log', 'ActivityLogController@index')->name('activity-log.index');

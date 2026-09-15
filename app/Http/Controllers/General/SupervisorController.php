@@ -21,6 +21,7 @@ class SupervisorController extends Controller
 
     public function __construct(SupervisorRepositoryInterface $supervisorRepository)
     {
+        $this->middleware('permission:edit supervisors')->only('forcePasswordChange');
         $this->supervisorRepository = $supervisorRepository;
 
         $this->middleware('permission:show supervisors')->only('index');
@@ -84,6 +85,11 @@ class SupervisorController extends Controller
     public function resetPasswords(Request $request)
     {
         return $this->supervisorRepository->resetPasswords($request);
+    }
+
+    public function forcePasswordChange(Request $request)
+    {
+        return $this->supervisorRepository->forcePasswordChange($request);
     }
 
 }

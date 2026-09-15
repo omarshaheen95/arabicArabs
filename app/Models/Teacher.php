@@ -12,15 +12,25 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Traits\ManagesPasswordLifetime;
 
 class Teacher extends Authenticatable
 {
-    use Notifiable, SoftDeletes,CascadeSoftDeletes,LogsActivityTrait,HasRoles;
+    use Notifiable, SoftDeletes,CascadeSoftDeletes,LogsActivityTrait,HasRoles, ManagesPasswordLifetime;
+
+    /** Guard this model authenticates with, read by ManagesPasswordLifetime. */
+    public static $passwordGuard = 'teacher';
 
     protected $fillable = [
         'name', 'email', 'password', 'image', 'school_id', 'mobile', 'pending_tasks', 'corrected_tasks', 'returned_tasks',
         'passed_tests', 'failed_tests', 'approved', 'active','active_to','lang','last_login','last_login_info', 'passed_tests_lessons', 'failed_tests_lessons',
-        'import_file_id'
+        'import_file_id',
+        'force_password_change', 'password_changed_at',
+    ];
+
+    protected $casts = [
+        'force_password_change' => 'boolean',
+        'password_changed_at' => 'datetime',
     ];
 
     protected $hidden = [

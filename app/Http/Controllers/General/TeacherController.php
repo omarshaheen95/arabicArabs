@@ -14,6 +14,7 @@ class TeacherController extends Controller
 
     public function __construct(TeacherRepositoryInterface $teacherRepository)
     {
+        $this->middleware('permission:edit teachers')->only('forcePasswordChange');
         $this->teacherRepository = $teacherRepository;
         $this->middleware('permission:show teachers')->only('index');
         $this->middleware(['permission:add teachers'])->only(['create', 'store']);
@@ -98,6 +99,11 @@ class TeacherController extends Controller
     public function resetPasswords(Request $request)
     {
         return $this->teacherRepository->resetPasswords($request);
+    }
+
+    public function forcePasswordChange(Request $request)
+    {
+        return $this->teacherRepository->forcePasswordChange($request);
     }
 
 }

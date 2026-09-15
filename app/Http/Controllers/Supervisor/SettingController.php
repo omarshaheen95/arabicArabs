@@ -18,9 +18,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Proengsoft\JsValidation\Facades\JsValidatorFacade as JsValidator;
+use App\Traits\UpdatesPassword;
 
 class SettingController extends Controller
 {
+    use UpdatesPassword;
+
     public function home()
     {
         $title = t('Dashboard');
@@ -71,20 +74,14 @@ class SettingController extends Controller
     public function editPassword()
     {
         $title = t('Change Password');
-        return view('supervisor.profile.password', compact('title'));
+        $reason = $this->passwordChangeReason('supervisor');
+        $forced = $reason !== null;
+        return view('supervisor.profile.password', compact('title', 'forced', 'reason'));
     }
 
     public function updatePassword(SupervisorPasswordRequest $request)
     {
-        $data = $request->validated();
-        $user = Auth::guard('supervisor')->user();
-        if (Hash::check($request->get('old_password'), $user->password)) {
-            $data['password'] = bcrypt($request->get('password'));
-            $user->update($data);
-            return redirect()->back()->with('message', t('Successfully Updated'))->with('m-class', 'success');
-        } else {
-            return redirect()->back()->withErrors([t('Current Password Invalid')])->with('message', t('Current Password Invalid'))->with('m-class', 'error');
-        }
+        return $this->applyPasswordUpdate($request, 'supervisor');
     }
 
     public function preUsageReport()

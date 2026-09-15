@@ -17,6 +17,7 @@ Route::group(['namespace' => 'General'], function () {
     Route::post('supervisor/activation', 'SupervisorController@activation')->name('supervisor.activation');
     Route::get('supervisor/{id}/login', 'SupervisorController@login')->name('supervisor.login');
     Route::post('supervisor/reset-passwords', 'SupervisorController@resetPasswords')->name('supervisor.reset-passwords');
+    Route::post('supervisor/force-password-change', 'SupervisorController@forcePasswordChange')->name('supervisor.force-password-change');
 
 
     //Roles And Permission
@@ -41,6 +42,7 @@ Route::group(['namespace' => 'General'], function () {
     Route::post('tracking_teachers_export', 'TeacherController@teachersTrackingExport')->name('teacher.tracking_export');
     Route::get('tracking_teachers_report/{id}', 'TeacherController@teachersTrackingReport')->name('teacher.tracking_report');
     Route::post('teacher/reset-passwords', 'TeacherController@resetPasswords')->name('teacher.reset-passwords');
+    Route::post('teacher/force-password-change', 'TeacherController@forcePasswordChange')->name('teacher.force-password-change');
 
 
     //User

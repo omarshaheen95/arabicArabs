@@ -117,6 +117,8 @@ class TeacherRepository implements TeacherRepositoryInterface
         $data['active'] = $request->get('active', 0);
         $data['approved'] = $request->get('approved', 0);
         $data['password'] = bcrypt($request->get('password', 123456));
+        $data['force_password_change'] = $request->get('force_password_change', 0);
+        $data['password_changed_at'] = now();
         Teacher::create($data);
         return redirect()->route(getGuard().'.teacher.index')->with('message', t('Successfully Added'));
     }
@@ -147,7 +149,13 @@ class TeacherRepository implements TeacherRepositoryInterface
         if (guardIs('manager')){
             $data['approved'] = $request->get('approved', 0);
         }
-        $data['password'] = $request->get('password', false) ? bcrypt($request->get('password', 123456)) : $teacher->password;
+        $password_changed = (bool) $request->get('password', false);
+        $data['password'] = $password_changed ? bcrypt($request->get('password')) : $teacher->password;
+        if ($password_changed) {
+            $data['password_changed_at'] = now();
+        }
+        // a password handed over by a manager or a school is temporary by default
+        $data['force_password_change'] = $request->get('force_password_change', $password_changed ? 1 : 0);
         $teacher->update($data);
         return redirect()->route(getGuard().'.teacher.index')->with('message', t('Successfully Updated'));
     }
@@ -206,6 +214,7 @@ class TeacherRepository implements TeacherRepositoryInterface
             $query->where('school_id', \request()->get('school_id'));
         })->findOrFail($id);
         Auth::guard('teacher')->loginUsingId($id);
+        \App\Http\Middleware\ForcePasswordChange::impersonate('teacher', $id);
         return redirect()->route('teacher.home');
     }
 
@@ -295,8 +304,34 @@ class TeacherRepository implements TeacherRepositoryInterface
     {
         $request->validate(['password'=>'required|string']);
         $password = $request->get('password');
-        $update = Teacher::query()->filter()->update(['password' => bcrypt($password)]);
+        $update = Teacher::query()->filter()->update([
+            'password' => bcrypt($password),
+            'password_changed_at' => now(),
+            // a password handed over in bulk is temporary: the account
+            // is sent to the change screen on its next sign in
+            'force_password_change' => 1,
+        ]);
         return Response::response(t('Password Reset Successfully').': '.$password.' for ('.$update.') '.t('teacher'));
      }
 
+    /**
+     * Raise the forced password change flag on the teachers the table is
+     * currently showing. Same contract as the export: the filters come from the
+     * #filter form and row_id narrows it down to the checked rows.
+     */
+    public function forcePasswordChange(Request $request)
+    {
+        $query = Teacher::query()->filter($request);
+
+        // count the matched rows, not the changed ones: MySQL does not report a
+        // row that already carried the flag
+        $affected = (clone $query)->count();
+        $query->update(['force_password_change' => 1]);
+
+        return response()->json([
+            'status' => true,
+            'message' => t('Password change was enforced on :count account(s).', ['count' => $affected]),
+            'data' => ['affected' => $affected],
+        ]);
+    }
 }

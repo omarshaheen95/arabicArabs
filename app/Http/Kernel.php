@@ -81,6 +81,8 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'share_user_data' => \App\Http\Middleware\ShareUserDataToViewsMiddleware::class,
+        'force.password' => \App\Http\Middleware\ForcePasswordChange::class,
+        'session.password' => \App\Http\Middleware\ValidateSessionPassword::class,
 
 //        'cors' => \App\Http\Middleware\Cors::class,
 
