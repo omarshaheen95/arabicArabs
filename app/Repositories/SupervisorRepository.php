@@ -206,7 +206,7 @@ class SupervisorRepository implements SupervisorRepositoryInterface
     {
         $request->validate(['password'=>'required|string']);
         $password = $request->get('password');
-        $update = Supervisor::query()->filter()->update([
+        $update = $this->scopedSupervisors()->filter()->update([
             'password' => bcrypt($password),
             'password_changed_at' => now(),
             // a password handed over in bulk is temporary: the account
@@ -223,7 +223,7 @@ class SupervisorRepository implements SupervisorRepositoryInterface
      */
     public function forcePasswordChange(Request $request)
     {
-        $query = Supervisor::query()->filter($request);
+        $query = $this->scopedSupervisors()->filter($request);
 
         // count the matched rows, not the changed ones: MySQL does not report a
         // row that already carried the flag
@@ -235,5 +235,23 @@ class SupervisorRepository implements SupervisorRepositoryInterface
             'message' => t('Password change was enforced on :count account(s).', ['count' => $affected]),
             'data' => ['affected' => $affected],
         ]);
+    }
+
+    /**
+     * Base query for supervisor wide writes.
+     *
+     * The manager works across the platform, a school only over its own staff.
+     * The listing does not enforce this today, so anything that writes has to
+     * pin it here rather than trust the incoming filters.
+     */
+    protected function scopedSupervisors()
+    {
+        $query = Supervisor::query();
+
+        if (getGuard() === 'school' && ($school = Auth::guard('school')->user())) {
+            $query->where('school_id', $school->id);
+        }
+
+        return $query;
     }
 }

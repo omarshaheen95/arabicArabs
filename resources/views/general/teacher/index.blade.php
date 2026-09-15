@@ -39,12 +39,12 @@
                 <li><a class="dropdown-item" href="#!" data-bs-toggle="modal"
                        data-bs-target="#reset_passwords_modal">{{t('Reset Passwords')}}</a></li>
             @endcan
+            @can('edit teachers')
+                <li><a class="dropdown-item text-warning" href="#!"
+                       data-filtered-action="{{route(getGuard().'.teacher.force-password-change')}}"
+                       data-confirm="{{t('Password change will be enforced on every account matching the current filters. Continue?')}}">{{t('Force Password Change')}}</a></li>
+            @endcan
             @can('delete teachers')
-                @can('edit teachers')
-                    <li><a class="dropdown-item text-warning" href="#!"
-                           data-filtered-action="{{route('teacher.force-password-change')}}"
-                           data-confirm="{{t('Password change will be enforced on every account matching the current filters. Continue?')}}">{{t('Force Password Change')}}</a></li>
-                @endcan
                 <li><a class="dropdown-item text-danger d-none checked-visible" href="#!" id="delete_rows">{{t('Delete')}}</a></li>
             @endcan
 
